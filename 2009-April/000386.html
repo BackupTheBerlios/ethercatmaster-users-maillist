@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] BK 1250
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20BK%201250&In-Reply-To=%3COF1237A6A1.DC40468A-ONC1257591.002BD771-C1257591.002C0CD4%40datacon.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000385.html">
+   <LINK REL="Next"  HREF="000387.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] BK 1250</H1>
+    <B>henning.richter at besi.com</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20BK%201250&In-Reply-To=%3COF1237A6A1.DC40468A-ONC1257591.002BD771-C1257591.002C0CD4%40datacon.at%3E"
+       TITLE="[Ethercatmaster-users] BK 1250">henning.richter at besi.com
+       </A><BR>
+    <I>Tue Apr  7 10:01:10 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000385.html">[Ethercatmaster-users] BK 1250
+</A></li>
+        <LI>Next message: <A HREF="000387.html">[Ethercatmaster-users] BK 1250
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#386">[ date ]</a>
+              <a href="thread.html#386">[ thread ]</a>
+              <a href="subject.html#386">[ subject ]</a>
+              <a href="author.html#386">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+
+     On Mon, 6 Apr 2009, <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">henning.richter at besi.com</A> wrote:
+     [snip config]
+     &gt;&gt; Do you have access to TwinCAT, so you can verify the parameters
+     above
+     &gt; really work?  IIRC, there were some reports on this ML that
+     sometimes a
+     &gt; particular module has several 'versions', which have to be
+     configured
+     &gt; differently, so maybe the information you're using from the xml file
+     is not
+     &gt; completely correct.
+     &gt;
+     &gt; Unfortunately I don't have access to TwinCAT, as I use a Linux
+     machine.
+     &gt; The EML output said me to use configuration for revision 0x00100000
+     which I
+     &gt; used from the xml.
+     &gt;
+     &gt;&gt; Also, you might try to raise the value of
+     &gt;
+     &gt;&gt; src/al/ethercat_FSM.cxx:53:static const unsigned int
+     &gt; EC_ESM_OPS_MAX_RETRIES = 10;
+     &gt;
+     &gt;&gt; to make sure you've waited long enough.
+     &gt;
+     &gt; I already raised the max_retries-value before up to 50, so this
+     should be
+     &gt; long enough.
+
+     Jip, indeed.  Unfortunately, in that case, the only thing I can think
+     of in terms of debugging, is comparing the messages EML sends with
+     those of twincat (or another ethercat stack which works).  Is the
+     BK1250 the only module you have problems with?
+
+     Klaas
+
+     Yes, the BK1250 module is the only module causing problems in my ring.
+     The ring consists of: EK1100, 2x EL2202, EL1014, BK1250, KL2541 and
+     KL9010.
+     The stepper motor (KL2541) is not configured yet. The in- and outputs
+     (EL2202,EL1014) work fine.
+
+     Henning
+
+So it works now. I mixed sth. up in the configuration. But with the help of
+TwinCAT I found the mistakes.
+
+Henning
+
+_______________________________________________
+Ethercatmaster-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090407/fd7dd183/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090407/fd7dd183/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000385.html">[Ethercatmaster-users] BK 1250
+</A></li>
+	<LI>Next message: <A HREF="000387.html">[Ethercatmaster-users] BK 1250
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#386">[ date ]</a>
+              <a href="thread.html#386">[ thread ]</a>
+              <a href="subject.html#386">[ subject ]</a>
+              <a href="author.html#386">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,381 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] how to set outputs ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20how%20to%20set%20outputs%20%3F&In-Reply-To=%3C3BAF6399A0B7E644851E85779E60AC79618A%40dl145.triphase.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000358.html">
+   <LINK REL="Next"  HREF="000360.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] how to set outputs ?</H1>
+    <B>Frederik Bayart</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20how%20to%20set%20outputs%20%3F&In-Reply-To=%3C3BAF6399A0B7E644851E85779E60AC79618A%40dl145.triphase.local%3E"
+       TITLE="[Ethercatmaster-users] how to set outputs ?">fbayart at triphase.com
+       </A><BR>
+    <I>Fri Aug 22 17:18:47 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000358.html">[Ethercatmaster-users] Choosing the right master platform
+</A></li>
+        <LI>Next message: <A HREF="000360.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#359">[ date ]</a>
+              <a href="thread.html#359">[ thread ]</a>
+              <a href="subject.html#359">[ subject ]</a>
+              <a href="author.html#359">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hallo,
+
+Below I inserted the code of my master test. I have some input (EL1004,
+EL1008) and output (EL2008) modules. The program reads the input
+correctly, however I don't succeed to set the outputs. I looked already
+in the archives of this mailinglist, but I didn't found what I'm still
+doing wrong. Does anybody has a suggestion ?
+
+Thanks and kind regards,
+
+Frederik
+
+ 
+#include &lt;posix/pthread.h&gt;
+#include &lt;signal.h&gt;
+#include &lt;sys/mman.h&gt;
+
+#include &lt;al/ethercat_master.h&gt;
+#include &lt;al/ethercat_AL.h&gt;
+#include &lt;al/ethercat_process_data.h&gt;
+#include &lt;ethercat/ethercat_xenomai_drv.h&gt;
+#include &lt;ethercat/netif.h&gt;
+#include &lt;dll/ethercat_dll.h&gt;
+#include &lt;dll/ethercat_frame.h&gt;
+#include &lt;dll/ethercat_slave_memory.h&gt;
+#include &lt;al/ethercat_slave_conf.h&gt;
+#include &lt;al/ethercat_slave_handler.h&gt;
+
+struct netif *ni;
+
+//SlaveConfig EK1100
+EtherCAT_FMMU_Config fmmu_config_EK1100(0);
+EtherCAT_PD_Config pd_config_EK1100(0);
+EtherCAT_SlaveConfig
+EC_EK1100(0x044c2c52,0x00110000,0x03e9,&amp;fmmu_config_EK1100,&amp;pd_config_EK
+1100);
+
+//SlaveConfig EL1004
+EtherCAT_FMMU_Config fmmu_config_EL1004_1(1);
+EC_FMMU fmmu_EL1004_1(0x00010002      //logical start address
+                     ,1               //length
+                     ,0               //logical start bit
+                     ,3               //logical end bit
+                     ,0x1000          //physical start address
+                     ,0               //physical start bit
+                     ,true            //read enable
+                     ,false           //write enable
+                     ,true            //channel enable
+                     );
+EtherCAT_PD_Config pd_config_EL1004_1(1);
+EC_SyncMan syncman_EL1004_1(0x1000                  //physical start
+address
+                           ,1                       //length
+                           ,EC_BUFFERED             //buffer type
+{EC_BUFFERED | EC_QUEUED}
+                           ,EC_READ_FROM_MASTER     //direction
+{EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+                           ,true                    //AL event enable
+                           ,false                   //watchdog enable
+                           ,false                   //write event
+                           ,false                   //read event
+                           ,false                   //watchdog trigger
+                           ,false                   //queued state : not
+used for buffer type EC_BUFFERED
+                           ,EC_FIRST_BUFFER         //buffered state
+{EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER |
+EC_LOCKED_BUFFER}
+                           ,true                    //channel enable
+                           );
+EtherCAT_SlaveConfig EC_EL1004_1(0x03ec3052              //product code
+                                ,0x00100000              //revision
+                                ,0x03ea                  //fixed station
+address
+                                ,&amp;fmmu_config_EL1004_1
+                                ,&amp;pd_config_EL1004_1
+                                );
+
+//SlaveConfig EL1008
+EtherCAT_FMMU_Config fmmu_config_EL1008_2(1);
+EC_FMMU fmmu_EL1008_2(0x00010002      //logical start address
+                     ,2               //length
+                     ,4               //logical start bit
+                     ,3               //logical end bit
+                     ,0x1000          //physical start address
+                     ,0               //physical start bit
+                     ,true            //read enable
+                     ,false           //write enable
+                     ,true            //channel enable
+                     );
+EtherCAT_PD_Config pd_config_EL1008_2(1);
+EC_SyncMan syncman_EL1008_2(0x1000                  //physical start
+address
+                           ,1                       //length
+                           ,EC_BUFFERED             //buffer type
+{EC_BUFFERED | EC_QUEUED}
+                           ,EC_READ_FROM_MASTER     //direction
+{EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+                           ,true                    //AL event enable
+                           ,false                   //watchdog enable
+                           ,false                   //write event
+                           ,false                   //read event
+                           ,false                   //watchdog trigger
+                           ,false                   //queued state : not
+used for buffer type EC_BUFFERED
+                           ,EC_FIRST_BUFFER         //buffered state
+{EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER |
+EC_LOCKED_BUFFER}
+                           ,true                    //channel enable
+                           );
+EtherCAT_SlaveConfig EC_EL1008_2(0x03f03052              //product code
+                                ,0x00100000              //revision
+                                ,0x03eb                  //fixed station
+address
+                                ,&amp;fmmu_config_EL1008_2
+                                ,&amp;pd_config_EL1008_2
+                                );
+
+//SlaveConfig EL2008
+EtherCAT_FMMU_Config fmmu_config_EL2008_3(1);
+EC_FMMU fmmu_EL2008_3(0x00010000      //logical start address
+                     ,1               //length
+                     ,0               //logical start bit
+                     ,7               //logical end bit
+                     ,0x0f00          //physical start address
+                     ,0               //physical start bit
+                     ,false           //read enable
+                     ,true            //write enable
+                     ,true            //channel enable
+                     );
+EtherCAT_PD_Config pd_config_EL2008_3(1);
+EC_SyncMan syncman_EL2008_3(0x0f00                  //physical start
+address
+                           ,1                       //length
+                           ,EC_QUEUED               //buffer type
+{EC_BUFFERED | EC_QUEUED}
+                           ,EC_WRITTEN_FROM_MASTER  //direction
+{EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+                           ,true                    //AL event enable
+                           ,false                   //watchdog enable
+                           ,false                   //write event
+                           ,false                   //read event
+                           ,false                   //watchdog trigger
+                           ,false                   //queued state : not
+used for buffer type EC_BUFFERED
+                           ,EC_FIRST_BUFFER         //buffered state
+{EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER |
+EC_LOCKED_BUFFER}
+                           ,true                    //channel enable
+                           );
+EtherCAT_SlaveConfig EC_EL2008_3(0x07d83052              //product code
+                                ,0x00100000              //revision
+                                ,0x03ec                  //fixed station
+address
+                                ,&amp;fmmu_config_EL2008_3
+                                ,&amp;pd_config_EL2008_3
+                                );
+
+//SlaveConfig EL1008
+EtherCAT_FMMU_Config fmmu_config_EL1008_4(1);
+EC_FMMU fmmu_EL1008_4(0x00010003      //logical start address
+                     ,2               //length
+                     ,4               //logical start bit
+                     ,3               //logical end bit
+                     ,0x1000          //physical start address
+                     ,0               //physical start bit
+                     ,true            //read enable
+                     ,false           //write enable
+                     ,true            //channel enable
+                     );
+EtherCAT_PD_Config pd_config_EL1008_4(1);
+EC_SyncMan syncman_EL1008_4(0x1000                  //physical start
+address
+                           ,1                       //length
+                           ,EC_BUFFERED             //buffer type
+{EC_BUFFERED | EC_QUEUED}
+                           ,EC_READ_FROM_MASTER     //direction
+{EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+                           ,true                    //AL event enable
+                           ,false                   //watchdog enable
+                           ,false                   //write event
+                           ,false                   //read event
+                           ,false                   //watchdog trigger
+                           ,false                   //queued state : not
+used for buffer type EC_BUFFERED
+                           ,EC_FIRST_BUFFER         //buffered state
+{EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER |
+EC_LOCKED_BUFFER}
+                           ,true                    //channel enable
+                           );
+EtherCAT_SlaveConfig EC_EL1008_4(0x03f03052              //product code
+                                ,0x00100000              //revision
+                                ,0x03ed                  //fixed station
+address
+                                ,&amp;fmmu_config_EL1008_4
+                                ,&amp;pd_config_EL1008_4
+                                );
+
+static void init_slave_db() {
+	EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(5);
+	fmmu_config_EL1004_1[0]=fmmu_EL1004_1;
+	fmmu_config_EL1008_2[0]=fmmu_EL1008_2;
+	fmmu_config_EL2008_3[0]=fmmu_EL2008_3;
+	fmmu_config_EL1008_4[0]=fmmu_EL1008_4;
+	pd_config_EL1004_1[0] = syncman_EL1004_1;
+	pd_config_EL1008_2[0] = syncman_EL1008_2;
+	pd_config_EL2008_3[0] = syncman_EL2008_3;
+	pd_config_EL1008_4[0] = syncman_EL1008_4;
+	slave_db-&gt;set_conf(&amp;EC_EK1100,0);
+	slave_db-&gt;set_conf(&amp;EC_EL1004_1,1);
+	slave_db-&gt;set_conf(&amp;EC_EL1008_2,2);
+	slave_db-&gt;set_conf(&amp;EC_EL2008_3,3);
+	slave_db-&gt;set_conf(&amp;EC_EL1008_4,4);
+}
+
+static void* run_master(void * arg) {
+	
+	ni = init_ec((char*)arg);
+	init_slave_db();
+	if(ni != 0) {
+		EtherCAT_DataLinkLayer::instance()-&gt;attach(ni);
+		EtherCAT_Master * EM = EtherCAT_Master::instance();
+		EtherCAT_SlaveHandler * sh_ek1100 =
+EM-&gt;get_slave_handler(0x03e9);
+		//sleep(1);
+		printf(&quot;Setting EK1100 to OP STATE\n&quot;);
+		if(sh_ek1100-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EK1100 succesfully set in OP STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EK1100 in OP STATE\n&quot;);
+
+		EtherCAT_SlaveHandler * sh_el1004_1 =
+EM-&gt;get_slave_handler(0x03ea);
+		if(sh_el1004_1-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL1004_1 succesfully set in OP
+STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL1004_1 in OP
+STATE!!\n&quot;);
+
+		EtherCAT_SlaveHandler * sh_el1008_2 =
+EM-&gt;get_slave_handler(0x03eb);
+		if(sh_el1008_2-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL1008_2 succesfully set in OP
+STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL1008_2 in OP
+STATE!!\n&quot;);
+
+		EtherCAT_SlaveHandler * sh_el2008_3 =
+EM-&gt;get_slave_handler(0x03ec);
+		if(sh_el2008_3-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL2008_3 succesfully set in OP
+STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL2008_3 in OP
+STATE!!\n&quot;);
+
+		EtherCAT_SlaveHandler * sh_el1008_4 =
+EM-&gt;get_slave_handler(0x03ed);
+		if(sh_el1008_4-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL1008_4 succesfully set in OP
+STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL1008_4 in OP
+STATE!!\n&quot;);
+
+		EtherCAT_AL * AL = EtherCAT_AL::instance();
+		
+		unsigned char msg[5] = {0xff, 0xff, 0xff, 0xff, 0xff};
+		if(AL-&gt;isReady()) {
+				EM-&gt;txandrx_PD(sizeof(msg),msg);
+				sleep(1);
+				EM-&gt;txandrx_PD(sizeof(msg),msg);
+
+      for(int i = 0 ; i &lt; sizeof(msg); ++i)
+      {
+        printf(&quot;msg[%d]=0x%02x\n&quot;,i,msg[i]);
+      }
+		}
+		
+		close_socket(ni);
+		
+	}
+}
+
+void catch_signal(int sig)
+{
+   if(ni != 0)
+		close_socket(ni);
+	exit(1);
+}
+
+int main(int argc, char** argv)
+{
+
+	signal(SIGTERM, catch_signal);
+   signal(SIGINT, catch_signal);
+   signal(SIGHUP, catch_signal);
+	mlockall(MCL_CURRENT|MCL_FUTURE);
+
+	if (argc &lt; 2) {
+        printf(&quot;usage: %s &lt;interface&gt;\n&quot;, argv[0]);
+        return 0;
+    }
+
+	pthread_t xenothread;
+	pthread_attr_t xenothread_attr;
+
+	//Set attributes of thread
+	pthread_attr_init (&amp; xenothread_attr);
+
+	//Start thread
+	if(pthread_create(&amp;xenothread, &amp;xenothread_attr, run_master,
+argv[1]) != 0) {
+		printf(&quot;Cannot create thread EtherCatThread.\n&quot;);
+		exit(1);
+	}
+   pthread_join( xenothread, 0 );
+	return 0;
+}
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000358.html">[Ethercatmaster-users] Choosing the right master platform
+</A></li>
+	<LI>Next message: <A HREF="000360.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#359">[ date ]</a>
+              <a href="thread.html#359">[ thread ]</a>
+              <a href="subject.html#359">[ subject ]</a>
+              <a href="author.html#359">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

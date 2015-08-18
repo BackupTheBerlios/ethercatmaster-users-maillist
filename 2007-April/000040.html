@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Master create Error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Master%20create%20Error&In-Reply-To=%3CPine.LNX.4.64.0704021755570.1346%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000039.html">
+   <LINK REL="Next"  HREF="000042.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Master create Error</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Master%20create%20Error&In-Reply-To=%3CPine.LNX.4.64.0704021755570.1346%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] Master create Error">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Mon Apr  2 18:07:44 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000039.html">[Ethercatmaster-users] Master create Error
+</A></li>
+        <LI>Next message: <A HREF="000042.html">[Ethercatmaster-users] EML eCos example
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#40">[ date ]</a>
+              <a href="thread.html#40">[ thread ]</a>
+              <a href="subject.html#40">[ subject ]</a>
+              <a href="author.html#40">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Felix,
+
+[apologies for delays in responding, just returning from Norwegian
+snow and sun :-)]
+
+On Fri, 30 Mar 2007, Felix GMX wrote:
+&gt;<i> If I create an EtherCAT Master with
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_Master * EM = EtherCAT_Master::instance()
+</I>&gt;<i>
+</I>&gt;<i> the &quot;netif *m_if&quot; variable in the EtherCAT_DataLinkLayer class is
+</I>&gt;<i> set to &quot;0&quot;. Why is it initial with &quot;0&quot;.
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_DataLinkLayer::EtherCAT_DataLinkLayer()
+</I>&gt;<i>  : m_if(0)
+</I>&gt;<i> {
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> If the EtherCAT Master is searching a slave, the master can not send
+</I>&gt;<i> any messages because m_if is set to &quot;0&quot;.
+</I>&gt;<i>
+</I>&gt;<i> bool EtherCAT_DataLinkLayer::txandrx(EtherCAT_Frame * a_frame)
+</I>&gt;<i> {
+</I>&gt;<i> bool succeed = m_if-&gt;txandrx(a_frame, m_if);
+</I>&gt;<i> if (!succeed)
+</I>&gt;<i>  log(EC_LOG_INFO, &quot;DLL::txandrx() Error\n&quot;);
+</I>&gt;<i> return succeed;
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> How should I initiate the netit *m_if variable?
+</I>
+This should normally be done automagically when the NIC is
+&quot;initialized&quot; for etherCat by eCos.  It happens in
+
+packages/net/ethercatmaster/current/src/ecos/support.cxx
+
+The if_attach function is what you looking for.  However, the 0.1
+version of EML for eCos does not shout when thing go wrong during
+if_attach (which is probably the thing you are experiencing).  I fixed
+this a while ago in the SVN version, so can you try the following patch?
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">kgad at ampere</A> ~]$
+  svn diff -r8:10 <A HREF="https://gatefmtc/svn/ecos/trunk/">https://gatefmtc/svn/ecos/trunk/</A>
+Index: packages/net/ethercatmaster/current/src/ecos/support.cxx
+===================================================================
+--- packages/net/ethercatmaster/current/src/ecos/support.cxx
+  (revision 8)
++++ packages/net/ethercatmaster/current/src/ecos/support.cxx
+  (revision 10)
+@@ -160,4 +160,8 @@
+    // Only attach the selected device
+    if(strncmp(netif-&gt;device_name, CYGDAT_ETHERCATMASTER_ETH_DEVICE,
+  ETHERCAT_DEVICE_NAME_MAX_LENGTH) == 0)
+      EtherCAT_DataLinkLayer::instance()-&gt;attach(netif);
++  else {
++    log(EC_LOG_FATAL, &quot;Attach device failed, netif-&gt;device_name =
+  '%s'\n&quot;, netif-&gt;device_name);
++    exit(-1);
++  }
+  }
+
+regards,
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000039.html">[Ethercatmaster-users] Master create Error
+</A></li>
+	<LI>Next message: <A HREF="000042.html">[Ethercatmaster-users] EML eCos example
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#40">[ date ]</a>
+              <a href="thread.html#40">[ thread ]</a>
+              <a href="subject.html#40">[ subject ]</a>
+              <a href="author.html#40">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,449 @@
+From henning.richter at besi.com  Mon Mar 16 15:08:54 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Mon, 16 Mar 2009 15:08:54 +0100
+Subject: [Ethercatmaster-users]  some questions about the usage of eml
+Message-ID: <OF7BC88885.34F35113-ONC125757B.004CB5DF-C125757B.004DB695@datacon.at>
+
+
+
+Hi,
+
+I use the eml on a linux machine (with xenomai and rtnet) and want to
+coummunicate with my slave.
+The slave is a NXSTK 50-RE with a netx50 cpu (
+http://de.hilscher.com/products_details_hardware.html?p_id=P_47614930462d6)
+.
+The configuration of the slave is known by the master (i added a entry to
+the slave db from the xml-file).
+I connected the slave and the master directly with a TP Cat5 cable.
+When I run the master_test application the slave is found in the ring but
+the state will not be changed (from init to op state).
+EC_ESM_OPS::set_state():state trans. failed...
+
+
+so where is the mistake?
+
+Regards
+Henning
+
+
+
+
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090316/ea9ec660/attachment.html>
+
+From klaas.gadeyne at fmtc.be  Mon Mar 16 17:00:17 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 16 Mar 2009 17:00:17 +0100 (CET)
+Subject: [Ethercatmaster-users] some questions about the usage of eml
+In-Reply-To: <OF7BC88885.34F35113-ONC125757B.004CB5DF-C125757B.004DB695@datacon.at>
+References: <OF7BC88885.34F35113-ONC125757B.004CB5DF-C125757B.004DB695@datacon.at>
+Message-ID: <alpine.DEB.2.00.0903161657450.5229@ampere.labo01.fmtc.be>
+
+On Mon, 16 Mar 2009, henning.richter at besi.com wrote:
+> Hi,
+>
+> I use the eml on a linux machine (with xenomai and rtnet) and want to
+> coummunicate with my slave.
+> The slave is a NXSTK 50-RE with a netx50 cpu (
+> http://de.hilscher.com/products_details_hardware.html?p_id=P_47614930462d6)
+> .
+> The configuration of the slave is known by the master (i added a entry to
+> the slave db from the xml-file).
+> I connected the slave and the master directly with a TP Cat5 cable.
+> When I run the master_test application the slave is found in the ring but
+> the state will not be changed (from init to op state).
+> EC_ESM_OPS::set_state():state trans. failed...
+>
+>
+> so where is the mistake?
+
+If you want some help, you will have to provide more information I'm afraid.
+What does your debugger say, what happens if you try to go to pre-operational, ...
+
+Klaas
+
+
+
+From henning.richter at besi.com  Tue Mar 17 07:54:59 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Tue, 17 Mar 2009 07:54:59 +0100
+Subject: [Ethercatmaster-users] some questions about the usage of eml
+In-Reply-To: <alpine.DEB.2.00.0903161657450.5229@ampere.labo01.fmtc.be>
+Message-ID: <OFE4C783DC.6A79F04A-ONC125757C.0025139E-C125757C.0025FC5D@datacon.at>
+
+
+                                                                           
+             Klaas Gadeyne                                                 
+             <klaas.gadeyne at fm                                             
+             tc.be>                                                     To 
+                                       henning.richter at besi.com            
+             16.03.2009 17:00                                           cc 
+                                       ethercatmaster-users at lists.berlios. 
+                                       de                                  
+                                                                   Subject 
+                                       Re: [Ethercatmaster-users] some     
+                                       questions about the usage of eml    
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+
+
+
+
+
+
+>> Hi,
+>>
+>> I use the eml on a linux machine (with xenomai and rtnet) and want to
+>> coummunicate with my slave.
+>> The slave is a NXSTK 50-RE with a netx50 cpu (
+>>
+http://de.hilscher.com/products_details_hardware.html?p_id=P_47614930462d6)
+>> .
+>> The configuration of the slave is known by the master (i added a entry
+to
+>> the slave db from the xml-file).
+>> I connected the slave and the master directly with a TP Cat5 cable.
+>> When I run the master_test application the slave is found in the ring
+but
+>> the state will not be changed (from init to op state).
+>> EC_ESM_OPS::set_state():state trans. failed...
+>>
+>>
+>> so where is the mistake?
+
+> If you want some help, you will have to provide more information I'm
+afraid.
+> What does your debugger say, what happens if you try to go to
+pre-operational, ...
+
+> Klaas
+
+
+Hi,
+
+that happens if i try to set the slave to op-state (this also happens if i
+try pre-op-state):
+
+   ethercat at rd-ethercat:/usr/src/eml/eml-trunk$ sudo
+   tests/rtnet/master_test rteth0
+   Socket created: socket id: 896
+   Got interface: index: 0
+   Attach netif
+
+   Master initializing
+
+   EtherCAT AL: Ring contains 1 slaves
+   AL creating SlaveHandler: pos=0, adr=0x3ec, Prod. Code=0x8, rev=0x0
+   AL: resetting FMMUs
+   AL: resetting SMs
+   AL: Setting all slaves in init mode
+   Getting slave handler2
+   Setting NETX50 to OP State
+   EC_ESM_Ops::set_state() Warning: State trans. failed (try 0), desired=2,
+   status=1
+   [...]
+   EC_ESM_Ops::set_state() Warning: State trans. failed (try 49),
+   desired=2, status=1
+   EC_ESM_Ops::set_state() failed to set state after 50 triesfailes to set
+   NETX50 to OP State
+   AL initializing
+
+   Test: Set Channel 1 to 5V:
+
+   Test done.
+
+If i set the slave to the init state (as it should be) everything goes
+fine.
+
+   ethercat at rd-ethercat:/usr/src/eml/eml-trunk$ sudo
+   tests/rtnet/master_test rteth0
+   Socket created: socket id: 896
+   Got interface: index: 0
+   Attach netif
+
+   Master initializing
+
+   EtherCAT AL: Ring contains 1 slaves
+   AL creating SlaveHandler: pos=0, adr=0x3ec, Prod. Code=0x8, rev=0x0
+   AL: resetting FMMUs
+   AL: resetting SMs
+   AL: Setting all slaves in init mode
+   Getting slave handler2
+   Setting NETX50 to INIT State
+   NETX50 successfully set in INIT State
+   AL initializing
+
+   Test: Set Channel 1 to 5V:
+
+   Test done.
+
+
+The two attachements (hope that will work) show the debug prints of the
+makefile and a part of the source code.
+Hope that helps.
+
+(See attached file: sourcecode.doc)(See attached file: make.doc)
+
+Regards,
+Henning
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: graycol.gif
+Type: image/gif
+Size: 105 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment.gif>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: pic17807.gif
+Type: image/gif
+Size: 1255 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment-0001.gif>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: ecblank.gif
+Type: image/gif
+Size: 45 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment-0002.gif>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: sourcecode.doc
+Type: application/msword
+Size: 100352 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment.doc>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: make.doc
+Type: application/msword
+Size: 111104 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment-0001.doc>
+
+From klaas.gadeyne at fmtc.be  Mon Mar 23 09:51:16 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 23 Mar 2009 09:51:16 +0100 (CET)
+Subject: [Ethercatmaster-users] some questions about the usage of eml
+In-Reply-To: <OFE4C783DC.6A79F04A-ONC125757C.0025139E-C125757C.0025FC5D@datacon.at>
+References: <OFE4C783DC.6A79F04A-ONC125757C.0025139E-C125757C.0025FC5D@datacon.at>
+Message-ID: <alpine.DEB.2.00.0903230943040.21393@ampere.labo01.fmtc.be>
+
+On Tue, 17 Mar 2009, henning.richter at besi.com wrote:
+>>> I use the eml on a linux machine (with xenomai and rtnet) and want to
+>>> coummunicate with my slave.
+>>> The slave is a NXSTK 50-RE with a netx50 cpu (
+>>>
+> http://de.hilscher.com/products_details_hardware.html?p_id=P_47614930462d6)
+>>> .
+>>> The configuration of the slave is known by the master (i added a entry
+> to
+>>> the slave db from the xml-file).
+>>> I connected the slave and the master directly with a TP Cat5 cable.
+>>> When I run the master_test application the slave is found in the ring
+> but
+>>> the state will not be changed (from init to op state).
+>>> EC_ESM_OPS::set_state():state trans. failed...
+>>>
+>>>
+>>> so where is the mistake?
+>
+>> If you want some help, you will have to provide more information I'm
+> afraid.
+>> What does your debugger say, what happens if you try to go to
+> pre-operational, ...
+
+> that happens if i try to set the slave to op-state (this also happens if i
+> try pre-op-state):
+>
+>   ethercat at rd-ethercat:/usr/src/eml/eml-trunk$ sudo
+>   tests/rtnet/master_test rteth0
+>   Socket created: socket id: 896
+>   Got interface: index: 0
+>   Attach netif
+>
+>   Master initializing
+>
+>   EtherCAT AL: Ring contains 1 slaves
+>   AL creating SlaveHandler: pos=0, adr=0x3ec, Prod. Code=0x8, rev=0x0
+>   AL: resetting FMMUs
+>   AL: resetting SMs
+>   AL: Setting all slaves in init mode
+>   Getting slave handler2
+>   Setting NETX50 to OP State
+>   EC_ESM_Ops::set_state() Warning: State trans. failed (try 0), desired=2,
+>   status=1
+>   [...]
+>   EC_ESM_Ops::set_state() Warning: State trans. failed (try 49),
+>   desired=2, status=1
+>   EC_ESM_Ops::set_state() failed to set state after 50 triesfailes to set
+>   NETX50 to OP State
+>   AL initializing
+>
+>   Test: Set Channel 1 to 5V:
+>
+>   Test done.
+
+Can you step through the program with your debugger, and see what line fails exactly?
+
+Do you also have problems with other devices, or just this one (I'm not familiar with this one).  If this is the only one, does the manual say something about extra configuration steps which have to be taken?
+
+> The two attachements (hope that will work) show the debug prints of the
+> makefile and a part of the source code.
+
+Please don't put text output in MS word files (even more: don't use MS word files on public mailinglists).
+
+Klaas
+
+
+From henning.richter at besi.com  Mon Mar 23 11:38:02 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Mon, 23 Mar 2009 11:38:02 +0100
+Subject: [Ethercatmaster-users] some questions about the usage of eml
+In-Reply-To: <alpine.DEB.2.00.0903230943040.21393@ampere.labo01.fmtc.be>
+Message-ID: <OF2ED24E67.E86E3E3A-ONC1257582.003A2E1A-C1257582.003A691F@datacon.at>
+
+
+Hi Klaas,
+
+I switched from the Hilscher device to some beckhoff devices and everything
+went well.
+
+Cheers
+Henning
+
+
+
+
+                                                                           
+             Klaas Gadeyne                                                 
+             <klaas.gadeyne at fm                                             
+             tc.be>                                                     To 
+                                       henning.richter at besi.com            
+             23.03.2009 09:51                                           cc 
+                                       ethercatmaster-users at lists.berlios. 
+                                       de                                  
+                                                                   Subject 
+                                       Re: [Ethercatmaster-users] some     
+                                       questions about the usage of eml    
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+
+
+
+
+On Tue, 17 Mar 2009, henning.richter at besi.com wrote:
+>>> I use the eml on a linux machine (with xenomai and rtnet) and want to
+>>> coummunicate with my slave.
+>>> The slave is a NXSTK 50-RE with a netx50 cpu (
+>>>
+>
+http://de.hilscher.com/products_details_hardware.html?p_id=P_47614930462d6)
+>>> .
+>>> The configuration of the slave is known by the master (i added a entry
+> to
+>>> the slave db from the xml-file).
+>>> I connected the slave and the master directly with a TP Cat5 cable.
+>>> When I run the master_test application the slave is found in the ring
+> but
+>>> the state will not be changed (from init to op state).
+>>> EC_ESM_OPS::set_state():state trans. failed...
+>>>
+>>>
+>>> so where is the mistake?
+>
+>> If you want some help, you will have to provide more information I'm
+> afraid.
+>> What does your debugger say, what happens if you try to go to
+> pre-operational, ...
+
+> that happens if i try to set the slave to op-state (this also happens if
+i
+> try pre-op-state):
+>
+>   ethercat at rd-ethercat:/usr/src/eml/eml-trunk$ sudo
+>   tests/rtnet/master_test rteth0
+>   Socket created: socket id: 896
+>   Got interface: index: 0
+>   Attach netif
+>
+>   Master initializing
+>
+>   EtherCAT AL: Ring contains 1 slaves
+>   AL creating SlaveHandler: pos=0, adr=0x3ec, Prod. Code=0x8, rev=0x0
+>   AL: resetting FMMUs
+>   AL: resetting SMs
+>   AL: Setting all slaves in init mode
+>   Getting slave handler2
+>   Setting NETX50 to OP State
+>   EC_ESM_Ops::set_state() Warning: State trans. failed (try 0),
+desired=2,
+>   status=1
+>   [...]
+>   EC_ESM_Ops::set_state() Warning: State trans. failed (try 49),
+>   desired=2, status=1
+>   EC_ESM_Ops::set_state() failed to set state after 50 triesfailes to set
+>   NETX50 to OP State
+>   AL initializing
+>
+>   Test: Set Channel 1 to 5V:
+>
+>   Test done.
+
+Can you step through the program with your debugger, and see what line
+fails exactly?
+
+Do you also have problems with other devices, or just this one (I'm not
+familiar with this one).  If this is the only one, does the manual say
+something about extra configuration steps which have to be taken?
+
+> The two attachements (hope that will work) show the debug prints of the
+> makefile and a part of the source code.
+
+Please don't put text output in MS word files (even more: don't use MS word
+files on public mailinglists).
+
+Klaas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090323/97869762/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: graycol.gif
+Type: image/gif
+Size: 105 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090323/97869762/attachment.gif>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: pic27348.gif
+Type: image/gif
+Size: 1255 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090323/97869762/attachment-0001.gif>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: ecblank.gif
+Type: image/gif
+Size: 45 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090323/97869762/attachment-0002.gif>
+

@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] RE : Re: Non-persistent output of Beckhoff EL2004 moduels [Was: Re: netif.h]
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20Non-persistent%20output%20of%0A%20Beckhoff%20EL2004%20moduels%20%5BWas%3A%20Re%3A%20netif.h%5D&In-Reply-To=%3C46A46576.1030301%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000182.html">
+   <LINK REL="Next"  HREF="000181.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] RE : Re: Non-persistent output of Beckhoff EL2004 moduels [Was: Re: netif.h]</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20Non-persistent%20output%20of%0A%20Beckhoff%20EL2004%20moduels%20%5BWas%3A%20Re%3A%20netif.h%5D&In-Reply-To=%3C46A46576.1030301%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] RE : Re: Non-persistent output of Beckhoff EL2004 moduels [Was: Re: netif.h]">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Mon Jul 23 10:23:18 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000182.html">[Ethercatmaster-users] RE : Re:  Monitoring ethercat traffic
+</A></li>
+        <LI>Next message: <A HREF="000181.html">[Ethercatmaster-users] The EtherCAT Tarfic scan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#183">[ date ]</a>
+              <a href="thread.html#183">[ thread ]</a>
+              <a href="subject.html#183">[ subject ]</a>
+              <a href="author.html#183">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>HI Said		
+
+&gt;<i> Can you please tell the value of the reponse time of your AO ?
+</I>&gt;<i> Me i get between 1,85ms and 2ms (the time betwen when i turn on my DI 
+</I>&gt;<i> and the moment when my AO responde).
+</I>
+The reponse time between my master commanding and the outputs responding 
+seems to be less than 1ms. I manage to get perfect 1ms time-steps on a 
+scope.
+
+I have not yet done a test to measure the time delay between giving an 
+input and response on the AO. So I cannot answer your question at the 
+moment.
+
+
+
+&gt;<i>  
+</I>&gt;<i> In concerne the DO, i still trying all possibilites in order to get LEDs 
+</I>&gt;<i> saty up...
+</I>&gt;<i> tomorrow (monday) i going to poste here (for Klaas, Tom, Florian...and 
+</I>&gt;<i> you) my ethereal scan, i get too some warning messages from my linux 
+</I>&gt;<i> system when i use the switch, but i dont get any ethercat communication 
+</I>&gt;<i> errors...
+</I>Please post you scan I have already posted your previous scan but if you 
+can make a new one stating clearly what you are doing (along with the 
+Twincat scan for an identical experiment but where twincat keeps the 
+outputs up) then maybe Klaas or Tom can tell us what is wrong.
+
+
+Roland
+
+
+&gt;<i>  
+</I>&gt;<i> Thanks,
+</I>&gt;<i>  
+</I>&gt;<i> Said HARTI
+</I>&gt;<i> 
+</I>&gt;<i> */Roland Tollenaar &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">rwatollenaar at gmail.com</A>&gt;/* a &#233;crit :
+</I>&gt;<i> 
+</I>&gt;<i>     Hi,
+</I>&gt;<i> 
+</I>&gt;<i>     Another bit of light to shed on this problem.
+</I>&gt;<i> 
+</I>&gt;<i>     I have now included the analog output in the test and have placed this
+</I>&gt;<i>     on the scope. The response time is excellent (my xenomai system
+</I>&gt;<i>     maintains the 1ms update time perfectly as can be witnessed on the
+</I>&gt;<i>     scope) but moreover, the analog output stays up as it should.
+</I>&gt;<i> 
+</I>&gt;<i>     There should be no reason why the digital outputs don;t behave in a
+</I>&gt;<i>     similar fashion. Something is wrong, can it be with EML?
+</I>&gt;<i> 
+</I>&gt;<i>     Regards,
+</I>&gt;<i> 
+</I>&gt;<i>     Roland
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>     Klaas Gadeyne wrote:
+</I>&gt;<i>      &gt; On Fri, 20 Jul 2007, Roland Tollenaar wrote:
+</I>&gt;<i>      &gt;&gt;&gt; [Part 2 of my whining session: Please don't top quote on this
+</I>&gt;<i>      &gt;&gt;&gt; mailinglist]
+</I>&gt;<i>      &gt;&gt; No problem, I know I am sloppy with subjects. But you will have to
+</I>&gt;<i>      &gt;&gt; explain what you mean with top quote if you want me to stop doing
+</I>&gt;<i>      &gt;&gt; whatever it is you mean.
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; What you do in this email is better :-) Top quoting means answering
+</I>&gt;<i>      &gt; above the question. See e.g.
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt;&gt;&gt; I suppose you are now sleeping in your main thread between
+</I>&gt;<i>     consecutive
+</I>&gt;<i>      &gt;&gt;&gt; rtandtx calls?
+</I>&gt;<i>      &gt;&gt; I have no explicit sleep AFAIK. Simply a while loop.
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; Even that should work I guess.
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt;&gt;&gt; AFAIK (without looking at the code) this should only
+</I>&gt;<i>      &gt;&gt;&gt; influence the real-time behaviour of your application.
+</I>&gt;<i>      &gt;&gt; What are you saying? That you would also expect the outputs to
+</I>&gt;<i>     stay up?
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; Indeed. Can you (re)post a _minimal_ (i.e. without all the
+</I>&gt;<i>      &gt; configuration stuff of other slave modules) source example that
+</I>&gt;<i>      &gt; exhibits the problem [*]?
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; regards,
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; Klaas
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; [*] You will find this probably more easy anyway in order to analyse
+</I>&gt;<i>      &gt; the wireshark output if you're not used to using wireshark.
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt;
+</I>&gt;<i>     _______________________________________________
+</I>&gt;<i>     Ethercatmaster-users mailing list
+</I>&gt;<i>     <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i>     <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez aujourd'hui de 
+</I>&gt;<i> mail ! &lt;<A HREF="http://fr.promotions.yahoo.com/mail/nouveau_yahoomail2.html">http://fr.promotions.yahoo.com/mail/nouveau_yahoomail2.html</A>&gt;
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000182.html">[Ethercatmaster-users] RE : Re:  Monitoring ethercat traffic
+</A></li>
+	<LI>Next message: <A HREF="000181.html">[Ethercatmaster-users] The EtherCAT Tarfic scan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#183">[ date ]</a>
+              <a href="thread.html#183">[ thread ]</a>
+              <a href="subject.html#183">[ subject ]</a>
+              <a href="author.html#183">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%09framebuilding%20failed.&In-Reply-To=%3C46C09B86.3030709%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000258.html">
+   <LINK REL="Next"  HREF="000260.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.</H1>
+    <B>Jan Kiszka</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%09framebuilding%20failed.&In-Reply-To=%3C46C09B86.3030709%40web.de%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.">jan.kiszka at web.de
+       </A><BR>
+    <I>Mon Aug 13 19:57:26 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000258.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000260.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#259">[ date ]</a>
+              <a href="thread.html#259">[ thread ]</a>
+              <a href="subject.html#259">[ subject ]</a>
+              <a href="author.html#259">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Roland Tollenaar wrote:
+&gt;<i> Hi Jan,
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> thus network buffer allocation is ought to run
+</I>&gt;&gt;&gt;&gt;<i> against the real-time rtskb pool - which is by default empty :p. See
+</I>&gt;&gt;&gt;&gt;<i> README.pools from the RTnet documentation on this.
+</I>&gt;<i> I read this documentation. Together with an archive email of this list I
+</I>&gt;<i>  understand that if I load rtnet.ko like
+</I>&gt;<i> 
+</I>&gt;<i> insmod rtnet.ko rtskb_cache_size=64
+</I>&gt;<i> 
+</I>&gt;<i> (for the benfit of other poor souls in the future :))
+</I>&gt;<i> 
+</I>&gt;<i> it should help. And it does make a huge difference. Now instead of not
+</I>&gt;<i> giving a problem 1 out of 5 times its more like giving a problem 1 every
+</I>&gt;<i> 10 times.
+</I>&gt;<i> 
+</I>&gt;<i> The 64 is a value I got from the mailing list. How large can I make this
+</I>&gt;<i> and what am I compromising?
+</I>
+Each buffer is slightly more than 1.5 KB heavy. Do your maths :). How
+many buffers you need depend on how many incoming and outgoing frames
+might be queued into they are processed. And that depends on the frame
+rate and the time your EML stack has to handle it in the worst case. I
+can't give you numbers on this, that depends on _your_ setup.
+
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> I don't have the EML design at hand, but you might be able to avoid
+</I>&gt;&gt;&gt;&gt;<i> this
+</I>&gt;&gt;&gt;&gt;<i> by initialising before creating the shadow task or by explicitly
+</I>&gt;&gt;&gt;<i> In fact this is what I tried initially. IT does not work at all. so I
+</I>&gt;&gt;&gt;<i> ended up initializing in the thread. Problem?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Not necessarily. But it would have been nice to report the other issue
+</I>&gt;&gt;<i> as well, because maybe there is something to be fixed (either in the
+</I>&gt;&gt;<i> code or in the docs). Initialisation almost always happens in non-RT
+</I>&gt;&gt;<i> context, and you shouldn't be force to do this under RT constraints. If
+</I>&gt;&gt;<i> this is an RTnet and/or EML problem, please report it on the related
+</I>&gt;&gt;<i> lists!
+</I>&gt;<i> Will do so with your compliments and regards. :) I tried to initialize
+</I>&gt;<i> like I initialize rtcan in non-rt but it really does not work.
+</I>
+That sounds like a bug - of what component soever.
+
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Did you set the rtskb_cache_size module parameter for the rtnet.ko? Did
+</I>&gt;&gt;<i> you choose it appropriately large so that buffer pool do not exhaust if
+</I>&gt;&gt;<i> RTnet is blocked by other system activity? Again, check the
+</I>&gt;&gt;<i> documentation.
+</I>&gt;<i> As stated, this seems to mitigate the problem. What is not clear to me
+</I>&gt;<i> is why the default of the rtskb pool is zero?
+</I>
+Because you _normally_ don't need it and would thus wast the allocated
+memory.
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070813/62225ee3/attachment.pgp">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070813/62225ee3/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000258.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000260.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#259">[ date ]</a>
+              <a href="thread.html#259">[ thread ]</a>
+              <a href="subject.html#259">[ subject ]</a>
+              <a href="author.html#259">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] usage of an xml config file
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20usage%20of%20an%20xml%20config%20file&In-Reply-To=%3CPine.LNX.4.64.0706271005300.22622%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000114.html">
+   <LINK REL="Next"  HREF="000116.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] usage of an xml config file</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20usage%20of%20an%20xml%20config%20file&In-Reply-To=%3CPine.LNX.4.64.0706271005300.22622%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] usage of an xml config file">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Wed Jun 27 10:29:54 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000114.html">[Ethercatmaster-users] usage of an xml config file
+</A></li>
+        <LI>Next message: <A HREF="000116.html">[Ethercatmaster-users] usage of an xml config file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#115">[ date ]</a>
+              <a href="thread.html#115">[ thread ]</a>
+              <a href="subject.html#115">[ subject ]</a>
+              <a href="author.html#115">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, 27 Jun 2007, St&#233;phane ANCELOT wrote:
+Hi Stephane,
+
+[cc: and further follow-up to developers-ML]
+
+&gt;<i> It looks like it is possible to create the master setup using the xml
+</I>&gt;<i> file provided by beckhof setup tool . I may develop a parser for
+</I>&gt;<i> ethercat master.
+</I>
+Great news!
+
+&gt;<i> regarding the implementation of an xml parser for it, do you have some
+</I>&gt;<i> preference either for using a c program parsing the xml file and able to
+</I>&gt;<i> create on the fly the network setup in the C ethercat  master
+</I>[1]
+
+&gt;<i> or a parser that generates an obj code that you link with ethercat master ?
+</I>[2]
+
+I see both advantages and disadvantages to both solutions
+
+[1] PRO: would allow you to reduce the size of the resulting binary for
+     deeply embedded masters by just including the necessary
+     definitions (and e.g. keep the necessary xml-files in flash)
+
+[2] PRO: it would ofcourse be nice if EML comes with support for a lot
+     of devices out of the box, especially for those (RT-)linux users
+     having few constraints in terms of memory space.
+     CON: Given the fact that there are quite some xml-files out there
+     (see e.g.~a recent post of Roland about a different revision
+     number for a specific module), it might prove hard to provide the
+     user with object code that just works for (almost) every single
+     device.
+
+There might be other points to.
+
+Do you already have an idea which &quot;parser-helper&quot; library to use?
+
+FWIW, for the RTT part of orocos project, both the xerces-c library
+and the tinyxml library (included in the orocos source code) were
+used for parsing orocos &quot;property files&quot;. 
+See e.g. &lt;<A HREF="http://osdir.com/ml/science.robotics.orocos.devel/2006-08/msg00248.html">http://osdir.com/ml/science.robotics.orocos.devel/2006-08/msg00248.html</A>&gt;
+Both have pro's and cons (mainly size vs. functionality).
+
+Considering the fact that EML also has an eCos port, and the xerces-c
+parser requires support for exceptions not present in the standard
+toolchains available for eCos (see
+e.g.~&lt;<A HREF="http://zylin.com/pipermail/zylin-discuss_zylin.com/2006-October/000317.html">http://zylin.com/pipermail/zylin-discuss_zylin.com/2006-October/000317.html</A>&gt;)
+my first choice would be the tinyXML parser. [*]
+
+best regards,
+
+Klaas
+
+[*] Note that I finally succeeded using xerces-c for orocos-on-ecos,
+     but it really is a pain in the ass.
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000114.html">[Ethercatmaster-users] usage of an xml config file
+</A></li>
+	<LI>Next message: <A HREF="000116.html">[Ethercatmaster-users] usage of an xml config file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#115">[ date ]</a>
+              <a href="thread.html#115">[ thread ]</a>
+              <a href="subject.html#115">[ subject ]</a>
+              <a href="author.html#115">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

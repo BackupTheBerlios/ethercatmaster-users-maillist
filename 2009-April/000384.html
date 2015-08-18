@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] BK 1250
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20BK%201250&In-Reply-To=%3Calpine.DEB.2.00.0904061038200.14121%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000383.html">
+   <LINK REL="Next"  HREF="000385.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] BK 1250</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20BK%201250&In-Reply-To=%3Calpine.DEB.2.00.0904061038200.14121%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] BK 1250">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Mon Apr  6 10:41:36 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000383.html">[Ethercatmaster-users] BK 1250
+</A></li>
+        <LI>Next message: <A HREF="000385.html">[Ethercatmaster-users] BK 1250
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#384">[ date ]</a>
+              <a href="thread.html#384">[ thread ]</a>
+              <a href="subject.html#384">[ subject ]</a>
+              <a href="author.html#384">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Mon, 6 Apr 2009, <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">henning.richter at besi.com</A> wrote:
+[snip config]
+&gt;&gt;<i> Do you have access to TwinCAT, so you can verify the parameters above
+</I>&gt;<i> really work?  IIRC, there were some reports on this ML that sometimes a
+</I>&gt;<i> particular module has several 'versions', which have to be configured
+</I>&gt;<i> differently, so maybe the information you're using from the xml file is not
+</I>&gt;<i> completely correct.
+</I>&gt;<i>
+</I>&gt;<i> Unfortunately I don't have access to TwinCAT, as I use a Linux machine.
+</I>&gt;<i> The EML output said me to use configuration for revision 0x00100000 which I
+</I>&gt;<i> used from the xml.
+</I>&gt;<i>
+</I>&gt;&gt;<i> Also, you might try to raise the value of
+</I>&gt;<i>
+</I>&gt;&gt;<i> src/al/ethercat_FSM.cxx:53:static const unsigned int
+</I>&gt;<i> EC_ESM_OPS_MAX_RETRIES = 10;
+</I>&gt;<i>
+</I>&gt;&gt;<i> to make sure you've waited long enough.
+</I>&gt;<i>
+</I>&gt;<i> I already raised the max_retries-value before up to 50, so this should be
+</I>&gt;<i> long enough.
+</I>
+Jip, indeed.  Unfortunately, in that case, the only thing I can think of in terms of debugging, is comparing the messages EML sends with those of twincat (or another ethercat stack which works).  Is the BK1250 the only module you have problems with?
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000383.html">[Ethercatmaster-users] BK 1250
+</A></li>
+	<LI>Next message: <A HREF="000385.html">[Ethercatmaster-users] BK 1250
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#384">[ date ]</a>
+              <a href="thread.html#384">[ thread ]</a>
+              <a href="subject.html#384">[ subject ]</a>
+              <a href="author.html#384">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

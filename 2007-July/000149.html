@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] interacting with 1014 and 2004
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20interacting%20with%201014%20and%202004&In-Reply-To=%3C469BBBD6.30300%40skynet.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000131.html">
+   <LINK REL="Next"  HREF="000132.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] interacting with 1014 and 2004</H1>
+    <B>Tom Panis</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20interacting%20with%201014%20and%202004&In-Reply-To=%3C469BBBD6.30300%40skynet.be%3E"
+       TITLE="[Ethercatmaster-users] interacting with 1014 and 2004">tompanis at skynet.be
+       </A><BR>
+    <I>Mon Jul 16 20:41:26 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000131.html">[Ethercatmaster-users] interacting with 1014 and 2004
+</A></li>
+        <LI>Next message: <A HREF="000132.html">[Ethercatmaster-users] interacting with 1014 and 2004
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#149">[ date ]</a>
+              <a href="thread.html#149">[ thread ]</a>
+              <a href="subject.html#149">[ subject ]</a>
+              <a href="author.html#149">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+roland Tollenaar wrote:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I must be misunderstanding something. I have copied my modified
+</I>&gt;<i> master_test here where I try to set the outputs. There is
+</I>&gt;<i> communication, everything seems to be fine, but the outputs are not
+</I>&gt;<i> coming up. At least I don;t see the leds go on.
+</I>
+In your configuration, you assign your digital outputs starting from 
+address 0x0001000A. But in your main program, you put the process data 
+for the digital output at the first two bytes of your local buffer, 
+which represents address 0x00010000 and 0x00010001 from the logical 
+memory. So the main problem is you're putting the process data at a 
+certain location, but you're telling the modules to look somewhere else 
+for the process data.
+
+You have to make a bigger buffer and put the process data at the right 
+location. This would look something like this:
+
+unsigned char[13] msg;
+msg[10] = 0x01;   // This byte represents digital outputs EL2004_1 and 
+EL2004_2 (the size of a char is one byte)
+
+You've got the same problem for the inputs. As I mentioned in my 
+previous mail, you'll find the inputs at the 12th byte. This would look 
+something lik this:
+
+unsigned char input = msg[11];   //This byte represents digital inputs 
+EL1014_1 and EL1012_2
+
+&gt;<i>
+</I>&gt;<i> Surely this should work?
+</I>
+Quite sure :-)
+
+&gt;<i>
+</I>&gt;<i> Roland
+</I>&gt;<i>
+</I>&gt;<i> On 7/12/07, Tom Panis &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">tompanis at skynet.be</A>&gt; wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> roland Tollenaar wrote:
+</I>&gt;&gt;<i> &gt; Hi,
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Is there anyone with some code examples of how the process data is
+</I>&gt;&gt;<i> &gt; exchanged with eml with the DO modules 2004 and DI modules 1014?
+</I>&gt;&gt;<i> &gt; Possibly also the 4132 Analog output (+/-10V)
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; This would help tremendously.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In this example, there's put a sine at the analog output and one digital
+</I>&gt;&gt;<i> output is put on and off.
+</I>&gt;&gt;<i> First there's made a buffer. This buffer represents the logical memory
+</I>&gt;&gt;<i> starting from 0x0001000. (In the future we may change this, so you can
+</I>&gt;&gt;<i> chose yourself what the start address of this buffer is).
+</I>&gt;&gt;<i> Since, in this example, the logical start address of the analog output
+</I>&gt;&gt;<i> is 0x0001000 and the length of the process data is 4 byte, the first
+</I>&gt;&gt;<i> four bytes of the buffer have to be filled with the output values, 2
+</I>&gt;&gt;<i> bytes for every output. The resolution is 16 bit (65535 steps). -10 V
+</I>&gt;&gt;<i> corresponds with the decimal value -32769 or 0x8001, 0 V corresponds
+</I>&gt;&gt;<i> with the decimal value 0 or 0x0000, +10 V corresponds with the decimal
+</I>&gt;&gt;<i> value +32767 or 0x7FFF.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> All this information can be found in the chm files of the modules. These
+</I>&gt;&gt;<i> files can be found on the beckhoff website:
+</I>&gt;&gt;<i> <A HREF="http://www.beckhoff.com/english.asp?download/ethercat.htm">http://www.beckhoff.com/english.asp?download/ethercat.htm</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The last byte of the buffer is used to control the digital outputs The
+</I>&gt;&gt;<i> process data is 4 bit. Each bit controls a digital output. In this
+</I>&gt;&gt;<i> example only the one output is controlled during process.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If you want to read data from input modules (there isn't any in my
+</I>&gt;&gt;<i> example), you don't have to do much:
+</I>&gt;&gt;<i> While this frame with process data is send, the input modules will write
+</I>&gt;&gt;<i> there data to this frame. So when the frame returns, the input data from
+</I>&gt;&gt;<i> the modules will be in the received frame. If you've assigned the
+</I>&gt;&gt;<i> logical address 0x0001000C to a digital input, the digital input can be
+</I>&gt;&gt;<i> found on byte 12 of the local buffer (local buffer starts at
+</I>&gt;&gt;<i> 0x00010000). Note that you have to make sure the local buffer is big
+</I>&gt;&gt;<i> enough (13 bytes in this case).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Sending a buffer can be done with the txandrx function of the
+</I>&gt;&gt;<i> EtherCAT_Master.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I hope this helps you out a bit.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000131.html">[Ethercatmaster-users] interacting with 1014 and 2004
+</A></li>
+	<LI>Next message: <A HREF="000132.html">[Ethercatmaster-users] interacting with 1014 and 2004
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#149">[ date ]</a>
+              <a href="thread.html#149">[ thread ]</a>
+              <a href="subject.html#149">[ subject ]</a>
+              <a href="author.html#149">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

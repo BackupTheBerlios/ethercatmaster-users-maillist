@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users]  Antwort: Re: Low level device driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%20Antwort%3A%20Re%3A%20Low%20level%20device%20driver&In-Reply-To=%3C000501c776d1%24fc827900%242101a8c0%40FelixLaptop%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000047.html">
+   <LINK REL="Next"  HREF="000049.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users]  Antwort: Re: Low level device driver</H1>
+    <B>Felix GMX</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%20Antwort%3A%20Re%3A%20Low%20level%20device%20driver&In-Reply-To=%3C000501c776d1%24fc827900%242101a8c0%40FelixLaptop%3E"
+       TITLE="[Ethercatmaster-users]  Antwort: Re: Low level device driver">felix-erkert at gmx.de
+       </A><BR>
+    <I>Wed Apr  4 17:57:44 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000047.html">[Ethercatmaster-users] Antwort: Re: Low level device driver problem
+</A></li>
+        <LI>Next message: <A HREF="000049.html">[Ethercatmaster-users] Antwort: Re: Low level device driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#48">[ date ]</a>
+              <a href="thread.html#48">[ thread ]</a>
+              <a href="subject.html#48">[ subject ]</a>
+              <a href="author.html#48">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I found out that this function in the support.cxx file is waiting for the semaphore sem_delivery. Which function or where does this semaphore post? eCos waits for this semaphore but nowbody post it! eCos is exiting.
+
+static void ethercat_delivery(cyg_addrword_t)
+{
+    cyg_netdevtab_entry_t *t;
+
+    for(;;) {
+        // log(EC_LOG_INFO, &quot;delivery thread: waiting for semaphore\n&quot;);
+        cyg_semaphore_wait(&amp;sem_delivery);                                            =&gt; waiting for semaphore???
+        // log(EC_LOG_INFO, &quot;delivery thread: woken up by semaphore\n&quot;);
+        for (t = &amp;__NETDEVTAB__[0]; t != &amp;__NETDEVTAB_END__; t++) {
+            struct eth_drv_sc *sc = (struct eth_drv_sc *)t-&gt;device_instance;
+            if (sc-&gt;state &amp; ETH_DRV_NEEDS_DELIVERY) {
+                sc-&gt;state &amp;= ~ETH_DRV_NEEDS_DELIVERY;
+                (sc-&gt;funs-&gt;deliver) (sc); 
+            }
+        }
+    }
+}
+
+static void ethercat_delivery_request(struct netif * netif)
+{
+    cyg_semaphore_post(&amp;sem_delivery);    =&gt; Where does this function invoke???
+}
+
+extern &quot;C&quot; void if_attach(struct netif * netif) 
+{
+    netif-&gt;service_request_indication = ethercat_delivery_request;
+
+    // Only attach the selected device
+    if(strncmp(netif-&gt;device_name, CYGDAT_ETHERCATMASTER_ETH_DEVICE, ETHERCAT_DEVICE_NAME_MAX_LENGTH) == 0)
+        EtherCAT_DataLinkLayer::instance()-&gt;attach(netif);
+}
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070404/47c46707/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070404/47c46707/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000047.html">[Ethercatmaster-users] Antwort: Re: Low level device driver problem
+</A></li>
+	<LI>Next message: <A HREF="000049.html">[Ethercatmaster-users] Antwort: Re: Low level device driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#48">[ date ]</a>
+              <a href="thread.html#48">[ thread ]</a>
+              <a href="subject.html#48">[ subject ]</a>
+              <a href="author.html#48">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

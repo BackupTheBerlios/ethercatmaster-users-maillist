@@ -1,0 +1,59 @@
+From joern.hoffmann at scansonic.de  Wed Jan  9 10:27:23 2008
+From: joern.hoffmann at scansonic.de (=?iso-8859-1?Q?J=F6rn_Hoffmann?=)
+Date: Wed, 9 Jan 2008 10:27:23 +0100
+Subject: [Ethercatmaster-users] Using EL6731 Profibus-Slave with EML
+Message-ID: <07DEA4D856F65840BE7D961177B59E8409FF1D@xantippe.scansonic.de>
+
+Hi there, 
+
+i try to use a Beckhoff EL6731 to communicate with a Profibus-Network. So i have to change some Profibus-settings of the module such as station-address, baudrate, etc. Unfortunately i have no idea how to do this :( Are there any eml-methods to do this?? 
+Any information would be appreciated! 
+
+Thanks in advance, 
+Joern
+
+
+
+From manut at linutronix.de  Wed Jan  9 12:45:47 2008
+From: manut at linutronix.de (Manuel Traut)
+Date: Wed, 9 Jan 2008 12:45:47 +0100
+Subject: [Ethercatmaster-users] Using EL6731 Profibus-Slave with EML
+In-Reply-To: <07DEA4D856F65840BE7D961177B59E8409FF1D@xantippe.scansonic.de>
+References: <07DEA4D856F65840BE7D961177B59E8409FF1D@xantippe.scansonic.de>
+Message-ID: <20080109124547.7f80c2ec@linut.traut>
+
+> Hi there, 
+
+Hello Joern,
+
+> i try to use a Beckhoff EL6731 to communicate with a Profibus-Network. So i
+> have to change some Profibus-settings of the module such as station-address,
+> baudrate, etc. Unfortunately i have no idea how to do this :( Are there any
+> eml-methods to do this?? Any information would be appreciated! 
+
+I try to do the same at the moment. 
+
+We have to complete the CoE implementation. Then you can configure the EL6731
+parameters via CANopen over EtherCAT.
+
+I have prototyped some frames (according to EtherCAT Spec and reverse
+engineered with TwinCAT and wireshark) but i am actually not able to get
+a useful response from the EtherCAT Terminal.
+
+  Manuel
+
+
+From joern.hoffmann at scansonic.de  Wed Jan  9 13:23:55 2008
+From: joern.hoffmann at scansonic.de (=?iso-8859-1?Q?J=F6rn_Hoffmann?=)
+Date: Wed, 9 Jan 2008 13:23:55 +0100
+Subject: [Ethercatmaster-users]  Using EL6731 Profibus-Slave with EML
+Message-ID: <07DEA4D856F65840BE7D961177B59E8409FF1E@xantippe.scansonic.de>
+
+Hello Manuel,
+
+thank you for responding. It is the scary answer i almost expected;) So i think there's a bit of work to do and i have to get confident with CoE.
+
+Regards,
+Joern
+
+

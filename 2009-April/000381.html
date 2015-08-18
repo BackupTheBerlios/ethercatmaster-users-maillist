@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] BK 1250
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20BK%201250&In-Reply-To=%3COFFBA21448.F63D6023-ONC125758D.003AB829-C125758D.003B25CE%40datacon.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000382.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] BK 1250</H1>
+    <B>henning.richter at besi.com</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20BK%201250&In-Reply-To=%3COFFBA21448.F63D6023-ONC125758D.003AB829-C125758D.003B25CE%40datacon.at%3E"
+       TITLE="[Ethercatmaster-users] BK 1250">henning.richter at besi.com
+       </A><BR>
+    <I>Fri Apr  3 12:46:02 CEST 2009</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000382.html">[Ethercatmaster-users] BK 1250
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#381">[ date ]</a>
+              <a href="thread.html#381">[ thread ]</a>
+              <a href="subject.html#381">[ subject ]</a>
+              <a href="author.html#381">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi,
+
+I'd like to set the bus coupler BK1250 from Beckhoff to OP-State but this
+didn't work.
+Setting the bus coupler the Preoperation state works. So I guess there must
+be something wrong in my SyncManager configuration.
+I used the xml file from the beckhoff website for configuration.
+Maybe I did something wrong in the configuration that I don't see right
+now.
+
+Here is the corresponding source code:
+
+///BusKoppler BK1250
+
+EtherCAT_FMMU_Config fmmu_config_BK1250(2);
+EC_FMMU fmmu0_BK1250
+(0x00080000,0x0001,0x00,0x03,0x1600,0x00,true,false,true); //inputs
+EC_FMMU fmmu1_BK1250
+(0x00060000,0x0001,0x00,0x03,0x1000,0x00,false,true,true); //outputs
+
+EtherCAT_PD_Config pd_config_BK1250(2);
+
+EC_SyncMan syncman0_BK1250
+(0x1600,1,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);  //inputs
+EC_SyncMan syncman1_BK1250
+(0x1000,1,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); //outputs
+//Mailbox-config
+EC_SyncMan syncman_mbx1_BK1250
+(0x1e00,136,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);  //MboxIn
+EC_SyncMan syncman_mbx0_BK1250
+(0x1c00,136,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); //MboxOut
+EtherCAT_MbxConfig mbx_conf_BK1250 = {syncman_mbx0_BK1250,
+syncman_mbx1_BK1250};
+
+EtherCAT_SlaveConfig EC_BK1250
+(0x04E22C22,0x00100000,0x03f0,&amp;fmmu_config_BK1250,&amp;pd_config_BK1250,&amp;mbx_conf_BK1250);
+
+
+Henning
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090403/e217fd0d/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090403/e217fd0d/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000382.html">[Ethercatmaster-users] BK 1250
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#381">[ date ]</a>
+              <a href="thread.html#381">[ thread ]</a>
+              <a href="subject.html#381">[ subject ]</a>
+              <a href="author.html#381">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

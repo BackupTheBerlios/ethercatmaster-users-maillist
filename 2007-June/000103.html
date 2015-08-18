@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] getting started
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20getting%20started&In-Reply-To=%3C466EB3C8.2080406%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000101.html">
+   <LINK REL="Next"  HREF="000104.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] getting started</H1>
+    <B>Jan Kiszka</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20getting%20started&In-Reply-To=%3C466EB3C8.2080406%40web.de%3E"
+       TITLE="[Ethercatmaster-users] getting started">jan.kiszka at web.de
+       </A><BR>
+    <I>Tue Jun 12 16:55:04 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000101.html">[Ethercatmaster-users] getting started
+</A></li>
+        <LI>Next message: <A HREF="000104.html">[Ethercatmaster-users] getting started
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#103">[ date ]</a>
+              <a href="thread.html#103">[ thread ]</a>
+              <a href="subject.html#103">[ subject ]</a>
+              <a href="author.html#103">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>roland Tollenaar wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;&gt;<i> &gt; This is the output if I do not run
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt; ./rtnet start
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; before running master_test.:
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+</I>&gt;&gt;<i> ./master_test rteth0
+</I>&gt;&gt;<i> &gt; Socket created: socket id: 3
+</I>&gt;&gt;<i> &gt; Cannot get interface index: No such device
+</I>&gt;&gt;<i> &gt; Socket initialisation failed
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Did you configure rteth0? Something like modprobe &lt;my-rt-nic-driver&gt;,
+</I>&gt;&gt;<i> modprobe rtpacket, rtifconfig rteth0 up?
+</I>&gt;<i> 
+</I>&gt;<i> Where does it say something about this? AFAIK only the rtnet_conf in
+</I>&gt;<i> /rtnet/etc must be set up but its not clear to me how to set this up
+</I>&gt;<i> for the beckhoff node......
+</I>&gt;<i> As stated, if the Beckhoff node is to be the slave in the
+</I>&gt;<i> configuration, what ip adress does it have?
+</I>
+No IP addresses involved here.
+
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+</I>&gt;&gt;<i> ./master_test eth0
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> eth0 is obviously wrong. You want to use RTnet, don't you?
+</I>&gt;<i> I know, just thought I would post it for completeness.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> &gt; If I run rtnet start the output is
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Waiting for slaves.........
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Don't use this for EtherCAT setup, RTmac/TDMA is otherwise brought up
+</I>&gt;&gt;<i> which makes no sense here.
+</I>&gt;<i> Ah, see this is news that I can use!!
+</I>&gt;<i> 
+</I>&gt;<i> Isn't the EML documentation covering the
+</I>&gt;&gt;<i> required RTnet start-up sequence?
+</I>&gt;<i> As Klaas points out, not yet.......
+</I>&gt;<i> 
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+</I>&gt;&gt;<i> ./master_test rteth0
+</I>&gt;&gt;<i> &gt; Socket created: socket id: 896
+</I>&gt;&gt;<i> &gt; Got interface: index: 0
+</I>&gt;&gt;<i> &gt; Attach netif
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Master initializing
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Due to RTmac/TDMA, the master will not be able to send any packet on the
+</I>&gt;&gt;<i> wire...
+</I>&gt;<i> Ok.........
+</I>&gt;<i> 
+</I>&gt;<i> I know that I am infamous for not reading the correct documentation
+</I>&gt;<i> before asking silly questions, but I get the impression that there is
+</I>&gt;<i> information about starting up rtnet without RTmac/TDMA which i do not
+</I>&gt;<i> know about. Where can I find out?
+</I>&gt;<i> 
+</I>
+So far, you seem to have done the right thing asking here. Here is the
+required setup:
+
+Load modules: &lt;Xenomai&gt;, rtnet, rtpacket, rt_&lt;your-nic&gt;
+Configure rteth0: rtifconfig rteth0 up
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/86b62c47/attachment.pgp">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/86b62c47/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000101.html">[Ethercatmaster-users] getting started
+</A></li>
+	<LI>Next message: <A HREF="000104.html">[Ethercatmaster-users] getting started
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#103">[ date ]</a>
+              <a href="thread.html#103">[ thread ]</a>
+              <a href="subject.html#103">[ subject ]</a>
+              <a href="author.html#103">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

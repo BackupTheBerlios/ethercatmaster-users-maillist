@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Question about the usage of teh master_test	program
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Question%20about%20the%20usage%20of%20teh%20master_test%0A%09program&In-Reply-To=%3C770641.84692.qm%40web37313.mail.mud.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000153.html">
+   <LINK REL="Next"  HREF="000121.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Question about the usage of teh master_test	program</H1>
+    <B>said harti</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Question%20about%20the%20usage%20of%20teh%20master_test%0A%09program&In-Reply-To=%3C770641.84692.qm%40web37313.mail.mud.yahoo.com%3E"
+       TITLE="[Ethercatmaster-users] Question about the usage of teh master_test	program">harti_said at yahoo.fr
+       </A><BR>
+    <I>Thu Jul 12 09:26:13 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000153.html">[Ethercatmaster-users] RE : Re:  interacting with 1014 and 2004
+</A></li>
+        <LI>Next message: <A HREF="000121.html">[Ethercatmaster-users] Question about the usage of the master_test	program
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#139">[ date ]</a>
+              <a href="thread.html#139">[ thread ]</a>
+              <a href="subject.html#139">[ subject ]</a>
+              <a href="author.html#139">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I have some BeckHoff modules : 
+
+EK1100 (buscoupler)
+EL4102
+EL9010
+
+rtnet (0.99) is tested and working on a xenomai platform (2.3.0).
+
+EML is compiled and installed.
+
+The IO modules  group is connected to the PC by the ethernet cable
+(obviously) and I have 24V applied across pins 1 and 5 on the
+buscoupler. 
+
+BUT
+
+when i make :
+
+
+ifconfig eth0 down
+rmmod 8139too
+mknod /dev/rtnet c 10 240
+insmod /usr/local/rtnet/modules/rtnet.ko
+insmod /usr/local/rtnet/modules/rtpacket.ko
+insmod /usr/local/rtnet/modules/rt_loopback.ko
+insmod /usr/local/rtnet/modules/rt_8139too.ko
+/usr/local/rtnet/sbin/rtifconfig rtlo up
+/usr/local/rtnet/sbin/rtifconfig rteth0 up
+and in start ma master_test program
+
+./master_test rteth0
+
+I have could'nt get communication between the Beckhoff
+IO  modules and my master. 
+
+The tests that come with the EML library
+(master_test and eval_test) fail miserably. I get this error :
+
+Socket created: socket id: 3
+Got interface: index: 0
+Cannot set timout: Invalid argument
+Continue without timeout
+Attach netif
+
+Master initializing
+
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_txandrx: failed: MAX_TRIES_TX: Giving up
+DLL::txandrx() Error
+Error sending counter frame
+Something went wrong while scanning network
+EtherCAT_AL:: Can't init network
+Getting slave handler
+EtherCAT_AL: No such slave, returning NULL
+Setting EK1100 to OP STATE
+Segmentation fault
+
+
+Could I please tell me how can i get the
+communication up ? and resolve this problem 
+
+Best Regards
+
+
+Said HARTI
+
+       
+---------------------------------
+ Ne gardez plus qu'une seule adresse mail ! Copiez vos mails vers Yahoo! Mail 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070712/6c319444/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070712/6c319444/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000153.html">[Ethercatmaster-users] RE : Re:  interacting with 1014 and 2004
+</A></li>
+	<LI>Next message: <A HREF="000121.html">[Ethercatmaster-users] Question about the usage of the master_test	program
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#139">[ date ]</a>
+              <a href="thread.html#139">[ thread ]</a>
+              <a href="subject.html#139">[ subject ]</a>
+              <a href="author.html#139">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

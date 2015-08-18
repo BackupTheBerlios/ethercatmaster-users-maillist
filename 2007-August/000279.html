@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3CPine.LNX.4.64.0708161101590.18303%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000278.html">
+   <LINK REL="Next"  HREF="000275.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3CPine.LNX.4.64.0708161101590.18303%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Thu Aug 16 11:23:20 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000278.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000275.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#279">[ date ]</a>
+              <a href="thread.html#279">[ thread ]</a>
+              <a href="subject.html#279">[ subject ]</a>
+              <a href="author.html#279">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 16 Aug 2007, Jan Kiszka wrote:
+&gt;<i> Klaas Gadeyne wrote:
+</I>&gt;&gt;<i> On Tue, 14 Aug 2007, Jan Kiszka wrote:
+</I>&gt;&gt;&gt;<i> Roland Tollenaar wrote:
+</I>&gt;&gt;<i> [dropping some cc:'s]
+</I>&gt;&gt;&gt;&gt;&gt;<i> How many threads do you have sending process data, and what are there
+</I>&gt;&gt;&gt;&gt;&gt;<i> priorities? (/proc/xenomai/sched IIRC)
+</I>&gt;&gt;&gt;&gt;<i> I have 3 rt tasks running. Only one sends and receives process data. The
+</I>&gt;&gt;&gt;&gt;<i> priorities are:
+</I>&gt;&gt;&gt;&gt;<i> rt_task1 99
+</I>&gt;&gt;&gt;<i> Check the /proc output again, there should be also RTnet's stack manager
+</I>&gt;&gt;&gt;<i> at prio 98. Maybe that is too low for your scenario and causes prio
+</I>&gt;&gt;&gt;<i> inversions (note: every incoming Ethernet frame goes through its hands).
+</I>&gt;&gt;&gt;<i> Try lowering the prio of your rt_task1 beneath 98.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Indeed (see the lowlevel send code I copy/pasted yesterday to
+</I>&gt;&gt;<i> understand why), that should be documented somewhere!  Your
+</I>&gt;&gt;<i> application threads should have a lower priority than RTnet's stack
+</I>&gt;&gt;<i> manager.  Consider this lack of documentation as an EML bug and
+</I>&gt;&gt;<i> provide a patch...
+</I>&gt;<i>
+</I>&gt;<i> Klaas, does this mean that the EML stack has implicit ordering
+</I>&gt;<i> requirements between RTnet's RX task and applications threads in
+</I>&gt;<i> multi-user scenarios? I'm asking as this could easily fall apart again
+</I>&gt;<i> on SMP. Is there some lock lacking?
+</I>
+[Tom, correct me if I'm wrong here]
+
+I haven't sorted it out yet, but it shouldn't.  IIRC Tom's original
+implementation didn't contain the while loop in the txandrx call
+(grrrrrr, berlios still down).  Again, IIRC, he added it, because
+sometimes, during initialization (typically not done in a periodic
+thread), when frames got lost, EML just gave up completely.  Now,
+since this happened at a couple of places, he decided to put the while
+loop in the lower level txandrx code, instead of in several places in
+the higher level layers during initialization.
+
+Now, as explained in my previous message, when running this code in a
+periodic thread (when all stuff is in its operational state), things
+might go wrong when a message arrives after the timeout [*] due to
+a) You can have a periodic thread with a period smaller than the
+maxtries cycle it takes, which messes things up.
+b) the fact that the lock is in (and not around) the while loop.
+
+It seems to me (but I cannot conclude this 100% sure from what Roland
+reports) that somehow this scenario occurs:
+1/ tries = 0 A first frame is sent out
+2/ Somehow, this frame gets delayed more than the timeout [again *]
+3/ tries = 1 A second frame (identical to the first one) is sent out
+4/ The first frame has arrived back meanwhile and is captured by the
+    recv call (no error since they are identical), all seems well.
+5/ tries = 0 A third frame (different from the first two) is sent out
+6/ The recv call get the second frame back, detects the index is
+    wrong, and drops it.
+
+So, ATM I don't think we need another lock, but we (or someone else :)
+should get the above behaviour fixed first.
+Somehow (I think this is rather related to a) above) this gets solved
+(I noticed that my original reasoning about the priorities was not
+correct since I hadn't seen the timeout on the socket then) by
+altering the priorities, but I think that is not the basic problem here.
+
+Roland, what happens if you simply remove the while loop (make sure to
+put EtherCAT logging to verbose mode)?
+
+[*] Somebody should reread the docu in the spec about transmission
+rates/times...
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000278.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000275.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#279">[ date ]</a>
+              <a href="thread.html#279">[ thread ]</a>
+              <a href="subject.html#279">[ subject ]</a>
+              <a href="author.html#279">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

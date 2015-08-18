@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Monitoring ethercat traffic
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Monitoring%20ethercat%20traffic&In-Reply-To=%3C46A3863F.90207%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000176.html">
+   <LINK REL="Next"  HREF="000184.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Monitoring ethercat traffic</H1>
+    <B>Jan Kiszka</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Monitoring%20ethercat%20traffic&In-Reply-To=%3C46A3863F.90207%40web.de%3E"
+       TITLE="[Ethercatmaster-users] Monitoring ethercat traffic">jan.kiszka at web.de
+       </A><BR>
+    <I>Sun Jul 22 18:30:55 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000176.html">[Ethercatmaster-users] Monitoring ethercat traffic
+</A></li>
+        <LI>Next message: <A HREF="000184.html">[Ethercatmaster-users] Monitoring ethercat traffic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#178">[ date ]</a>
+              <a href="thread.html#178">[ thread ]</a>
+              <a href="subject.html#178">[ subject ]</a>
+              <a href="author.html#178">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Roland Tollenaar wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> I want to try monitor the ethernet traffic to sort out the 
+</I>&gt;<i> non-persistent digital output problem. Only both wireshark and 
+</I>&gt;<i> ether-real (I know they are the same but there are still older etherreal 
+</I>&gt;<i>   versions out there) crash on the windows system i want to monitor with.
+</I>&gt;<i> 
+</I>&gt;<i> Secondly I am not sure how to connect a monitoring machine to the 
+</I>&gt;<i> system. When I connect a switch the ethercat communication gives errors 
+</I>&gt;<i> through EML. How must the switch be placed in the network topology?
+</I>&gt;<i> 
+</I>&gt;<i> I cannot install the sniffer on the platform I am running EML on.
+</I>
+Why? It should work if you enable and load RTcap, see RTcap.README. Then
+you may save the traffic to a file (tcpdump -w) and load it later on
+into Wireshark, or sniff directly in &quot;real-time&quot; on rteth0.
+
+But I'm afraid the crash will not magically vanish that way. Maybe it is
+related to the Wireshark Ethercat plugin, then you should bug the guys
+at ETG with a report (and also urge them to merge their stuff into the
+official release - to make life easier for everyone, them included).
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070722/cbaea44b/attachment.pgp">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070722/cbaea44b/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000176.html">[Ethercatmaster-users] Monitoring ethercat traffic
+</A></li>
+	<LI>Next message: <A HREF="000184.html">[Ethercatmaster-users] Monitoring ethercat traffic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#178">[ date ]</a>
+              <a href="thread.html#178">[ thread ]</a>
+              <a href="subject.html#178">[ subject ]</a>
+              <a href="author.html#178">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

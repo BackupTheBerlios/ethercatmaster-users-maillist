@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Loosing time while sending Frames
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Loosing%20time%20while%20sending%20Frames&In-Reply-To=%3Calpine.DEB.2.00.0904301628520.14134%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000393.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Loosing time while sending Frames</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Loosing%20time%20while%20sending%20Frames&In-Reply-To=%3Calpine.DEB.2.00.0904301628520.14134%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] Loosing time while sending Frames">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Thu Apr 30 16:32:06 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000393.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#394">[ date ]</a>
+              <a href="thread.html#394">[ thread ]</a>
+              <a href="subject.html#394">[ subject ]</a>
+              <a href="author.html#394">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 28 Apr 2009, Jan Kiszka wrote:
+&gt;&gt;<i> In the main function of the EML a created and started a xenomai task.
+</I>&gt;&gt;<i> The cycle time of this task is set to 250 us.
+</I>&gt;&gt;<i> During this time I am sending one Frame to my slaves each cycle. In all I
+</I>&gt;&gt;<i> have 3 Frames (Frame1 = 60 byte, Frame 2 = 1217 byte, Frame3 = 1204 byte).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I am also measuring the time the send command from the low_level_output
+</I>&gt;&gt;<i> function in ethercat_xenomai_drv.c needs.
+</I>&gt;&gt;<i> This time is between 5 and 10 us. So passing the Frames to the network
+</I>&gt;&gt;<i> interface is quite fast.
+</I>&gt;&gt;<i> So far so good, now the problem:
+</I>&gt;&gt;<i> Measuring the elapsed time between 2 send commands (also @
+</I>&gt;&gt;<i> low_level_output) gives me values between 150 us and 350.
+</I>&gt;&gt;<i> This i too much I think.
+</I>
+Apart from Jan's suggestions, does that mean that your xenomai task indeed &quot;overruns&quot;?  Can you show some code?
+
+Klaas
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000393.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#394">[ date ]</a>
+              <a href="thread.html#394">[ thread ]</a>
+              <a href="subject.html#394">[ subject ]</a>
+              <a href="author.html#394">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

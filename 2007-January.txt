@@ -1,0 +1,193 @@
+From klaas.gadeyne at fmtc.be  Mon Jan  8 11:42:02 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 8 Jan 2007 11:42:02 +0100
+Subject: [Ethercatmaster-users] EML and RTNet/Xenomai
+In-Reply-To: <5B8954B873BFEF47949A325CD895B87F01EF7E94@mecoms1.MECO-AD.LOCAL>
+References: <5B8954B873BFEF47949A325CD895B87F01EF7E94@mecoms1.MECO-AD.LOCAL>
+Message-ID: <a7b55b4a0701080242s7e2483e3s51dfd5b0a3c52cb@mail.gmail.com>
+
+On 1/8/07, Ivo Pullens <ivo.pullens at ficosingulation.com> wrote:
+[...]
+> This morning I read your news item on EML being ported to RTNet/Xenomai.
+>
+> I am very interested in this port for the project I'm working on right now.
+>
+> It is a realtime motion control framework, based on Linux/Xenomai, which
+> controls multiple axis on the Linux host. The position control is done by
+> the realtime application and EtherCAT will be used as the motion bus.
+>
+> I was looking around for an open implementation of EtherCAT for Linux,
+> preferably based on RTNet, when I stumbled on your news-item!
+>
+> So my question is, when do you plan to release the EML port to
+> RTNet/Xenomai, or would it even be possible to receive a copy of it in
+> advance?
+
+The port has mainly been done by a master student (in cc:) . The 0.1
+version of the source code was portable so the xenomai port was not
+that hard, however the build system used must be revamped completely
+to get the ethercat stack out of the ecos tree.
+
+I have currently succeeded to recompile the ethercat source tree,
+using the cmake build system.   It is set up in a way that should also
+make it possible to integrate the xenomai port fairly easy.  You can
+find it in the subversion tree of eml
+<https://developer.berlios.de/svn/?group_id=6087>.  However, this is
+not yet well tested at all, and the ecos specific stuff is still in
+the eCos tree (and will probably remain there!
+Tom is studying for his exams now, and will start integrating his
+sources into the berlios svn tree in february I guess.  I don't have
+the sources here, so you'll have to ask him.
+
+ps.  This reminds me of the fact that the news item should have
+appeared on the devel mailinglist, but for some reason it did not come
+through.  So for the record:
+<https://developer.berlios.de/forum/forum.php?forum_id=23791>
+ps2.  Please redirect follow up posts to ethercatmaster-users
+Mailinglist only (so I don't have to put
+allinterestedpeople at thewholeworld.com in cc :-)
+
+regards,
+
+Klaas
+
+
+From ivo.pullens at ficosingulation.com  Tue Jan  9 10:40:16 2007
+From: ivo.pullens at ficosingulation.com (Ivo Pullens)
+Date: Tue, 9 Jan 2007 10:40:16 +0100
+Subject: [Ethercatmaster-users] EML License
+Message-ID: <5B8954B873BFEF47949A325CD895B87F01EF8187@mecoms1.MECO-AD.LOCAL>
+
+Hello all,
+
+ 
+
+The EML is distributed under the GPL license. Furthermore, the Ethercat
+Master license is in effect.
+
+However, every sourcefile states: "You can use "EtherCAT Master Library"
+for creating and/or selling or otherwise distributing an EtherCAT
+network master under the terms of the EtherCAT Master License."
+
+ 
+
+When a commercial product makes use of the EML and an EtherCat Master
+License has been signed, should the product's sourcecode be published
+under GPL, or can it just link against the EML without disclosing the
+code? (Like Xenomai which uses the LGPL for headers in user space).
+
+ 
+
+Thanks,  
+
+ 
+
+Ivo Pullens
+
+ 
+
+ 
+
+**********************************************************************************************
+IMPORTANT: The contents of this email and any attachments are confidential. They are intended for the 
+named recipient(s) only.
+If you have received this email in error, please notify the system manager or the sender immediately and do 
+not disclose the contents to anyone or make copies thereof.
+*** eSafe scanned this email for viruses, vandals, and malicious content. ***
+**********************************************************************************************
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070109/1f12f7d5/attachment.html>
+
+From bob.koninckx at fmtc.be  Tue Jan  9 14:25:15 2007
+From: bob.koninckx at fmtc.be (Bob Koninckx)
+Date: Tue, 09 Jan 2007 14:25:15 +0100
+Subject: [Ethercatmaster-users] EML License
+In-Reply-To: <5B8954B873BFEF47949A325CD895B87F01EF8187@mecoms1.MECO-AD.L OCAL>
+References: <5B8954B873BFEF47949A325CD895B87F01EF8187@mecoms1.MECO-AD.LOCAL>
+Message-ID: <6.2.1.2.0.20070109113002.01f18668@server04.site04.wtcm.be>
+
+Hi Ivo,
+
+The EtherCAT Master License states that EML source code may be licensed 
+against either GPL or L-GPL. The code that is available for download from 
+the website is licensed against GPL. In case you use that codebase for a 
+commercial product, you're right, you are obliged to release your 
+application code under GPL also. If you are interested in an L-GPL version 
+of the same codebase, this can be discussed. I think that we better keep 
+that disussion off-list though.
+Hope this clarifies things a little,
+
+Bob
+
+At 10:40 9/01/2007, Ivo Pullens wrote:
+>content-class: urn:content-classes:message
+>Content-Type: multipart/alternative;
+>         boundary="----_=_NextPart_001_01C733D2.2AFF8680"
+>
+>Hello all,
+>
+>The EML is distributed under the GPL license. Furthermore, the Ethercat 
+>Master license is in effect.
+>However, every sourcefile states: ?You can use "EtherCAT Master Library" 
+>for creating and/or selling or otherwise distributing an EtherCAT network 
+>master under the terms of the EtherCAT Master License.?
+>
+>When a commercial product makes use of the EML and an EtherCat Master 
+>License has been signed, should the product?s sourcecode be published 
+>under GPL, or can it just link against the EML without disclosing the 
+>code? (Like Xenomai which uses the LGPL for headers in user space).
+>
+>Thanks,
+>
+>Ivo Pullens
+>
+>
+>
+>----------
+>IMPORTANT: The contents of this email and any attachments are 
+>confidential. They are intended for the named recipient(s) only.
+>If you have received this email in error, please notify the system manager 
+>or the sender immediately and do not disclose the contents to anyone or 
+>make copies thereof.
+>*** eSafe scanned this email for viruses, vandals, and malicious content. ***
+>
+>----------
+>_______________________________________________
+>Ethercatmaster-users mailing list
+>Ethercatmaster-users at lists.berlios.de
+>https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+bob.koninckx at fmtc.be                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders? MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. Reyerslaan 80, B-1030 Brussel, 
+Belgi?
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain confidential information. It 
+is intended
+solely for the intended addressee(s). Any use of the information contained 
+herein by other
+persons is prohibited. FMTC does not accept any liability for the contents 
+of this e-mail
+and/or its attachments.
+********************  
+
+
+

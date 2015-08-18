@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] building redboot
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2006-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20building%20redboot&In-Reply-To=%3C39AB441B43BF19468361907ECD4937EB49F187%40hestia.ccm.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000005.html">
+   <LINK REL="Next"  HREF="000004.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] building redboot</H1>
+    <B>Jeroen Theelen</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20building%20redboot&In-Reply-To=%3C39AB441B43BF19468361907ECD4937EB49F187%40hestia.ccm.local%3E"
+       TITLE="[Ethercatmaster-users] building redboot">jeroen.theelen at ccm.nl
+       </A><BR>
+    <I>Fri Apr  7 14:37:49 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000005.html">[Ethercatmaster-users] Fwd: RE: EtherCAT master
+</A></li>
+        <LI>Next message: <A HREF="000004.html">[Ethercatmaster-users] building redboot
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3">[ date ]</a>
+              <a href="thread.html#3">[ thread ]</a>
+              <a href="subject.html#3">[ subject ]</a>
+              <a href="author.html#3">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear Mr. Koninckx and others,
+
+At first I want to apologize sending my questions directly to you and not to the mailing list. You're right that someone must be the first. Before I could translate my mail from Dutch to English I got your reply.
+
+Your answers are very clear, but still there are things go wrong. I open redboot.ecc with the eCos configtool (with # before the options I mentioned before) and create the build dirs. After that I close the configtool and change to the redboot_build dir. When I type make I get the following error:
+
+make[1]: Leaving directory `/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/redboot/redboot_build/services/memalloc/common/current'
+make -r -C hal/i386/arch/current build
+make[1]: Entering directory `/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/redboot/redboot_build/hal/i386/arch/current'
+i386-elf-gcc -c  -I/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/redboot/redboot_install/include -I/home/Administrator/ecos/packages/hal/i386/arch/current -I/home/Administrator/ecos/packages/hal/i386/arch/current/src -I/home/Administrator/ecos/packages/hal/i386/arch/current/tests -I. -I/home/Administrator/ecos/packages/hal/i386/arch/current/src/ -finline-limit=7000 -Wall -Wpointer-arith -Wstrict-prototypes -Winline -Wundef  -g -O2 -ffunction-sections -fdata-sections  -fno-exceptions   -Wp,-MD,src/hal_misc.tmp -o src/hal_i386_arch_hal_misc.o /home/Administrator/ecos/packages/hal/i386/arch/current/src/hal_misc.c
+cc1: Invalid option `-finline-limit=7000'
+make[1]: Leaving directory `/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/redboot/redboot_build/hal/i386/arch/current'
+make[1]: *** [src/hal_misc.o.d] Error 1
+make: Leaving directory `/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/redboot/redboot_build'
+make: *** [build] Error 2
+
+I do not exactly know how to solve this error. Is there something wrong in my makedefs file? How can I solve this problem?
+
+A second question I have is about how to change the configuration. I have changed the pc target with RTL8139 to a target with a Intel network card. But where can I find the second network card? I notice that when I use the realtek target I can use a second Ethernet port device under common Ethernet support. By a Intel card I don't have that option. Is this because of a &quot;hack&quot; from your side? How can I use to Intel cards?
+
+As soon as I have everything working I will look if it's possible to write an implementation for the EK1100. Of course I can release it, when I succeed. My main goal is to see how easy I can port it to other RTOS (mainly xPC target). I'm not sure if I will use the eCos implementation or the master sample code, but if it's possible I want to write an example in eCos. Also when this is only for the fun (and learn more about EtherCAT en eCos).
+
+By the way, I use the most recent CVS version (ecos-trunk-full-060402.tar.bz2) I also have 060310 downloaded, but I can't find I place where I can get 210206. Maybe it's possible to put it on the ethercat side. I think my version will also work fine, but it's always more reliable to have the same versions as in the example.
+
+
+With kind regards,
+Jeroen Theelen
+
+
+
+CCM Centre for Concepts in Mechatronics B.V.
+P.O. Box 12, NL-5670 AA  Nuenen 
+De Pinckart 24, NL-5674 CC Nuenen 
+Phone +31 (0)40-263 50 00 
+Fax       +31 (0)40-263 55 55 
+
+Op dit e-mailbericht, inclusief bijlagen, is de e-mail disclaimer van toepassing zoals gepubliceerd op de website van CCM Centre for Concepts in Mechatronics B.V.: www.ccm.nl  
+
+This e-mail message and its attachments are subject to the disclaimer published at the website of CCM Centre for Concepts in Mechatronics B.V.: www.ccm.nl 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20060407/6f7d4af9/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20060407/6f7d4af9/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000005.html">[Ethercatmaster-users] Fwd: RE: EtherCAT master
+</A></li>
+	<LI>Next message: <A HREF="000004.html">[Ethercatmaster-users] building redboot
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3">[ date ]</a>
+              <a href="thread.html#3">[ thread ]</a>
+              <a href="subject.html#3">[ subject ]</a>
+              <a href="author.html#3">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

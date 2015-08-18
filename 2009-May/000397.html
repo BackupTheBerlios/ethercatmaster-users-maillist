@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Loosing time while sending Frames
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Loosing%20time%20while%20sending%20Frames&In-Reply-To=%3C49FF53D8.6000002%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000396.html">
+   <LINK REL="Next"  HREF="000399.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Loosing time while sending Frames</H1>
+    <B>Jan Kiszka</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Loosing%20time%20while%20sending%20Frames&In-Reply-To=%3C49FF53D8.6000002%40web.de%3E"
+       TITLE="[Ethercatmaster-users] Loosing time while sending Frames">jan.kiszka at web.de
+       </A><BR>
+    <I>Mon May  4 22:45:12 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000396.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+        <LI>Next message: <A HREF="000399.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#397">[ date ]</a>
+              <a href="thread.html#397">[ thread ]</a>
+              <a href="subject.html#397">[ subject ]</a>
+              <a href="author.html#397">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Klaas Gadeyne wrote:
+&gt;<i> On Mon, 4 May 2009, <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">henning.richter at besi.com</A> wrote:
+</I>&gt;&gt;&gt;&gt;<i> In the main function of the EML a created and started a xenomai task.
+</I>&gt;&gt;&gt;&gt;<i> The cycle time of this task is set to 250 us.
+</I>&gt;&gt;&gt;&gt;<i> During this time I am sending one Frame to my slaves each cycle. In all
+</I>&gt;&gt;<i> I
+</I>&gt;&gt;&gt;&gt;<i> have 3 Frames (Frame1 = 60 byte, Frame 2 = 1217 byte, Frame3 = 1204
+</I>&gt;&gt;<i> byte).
+</I>&gt;&gt;&gt;&gt;<i> I am also measuring the time the send command from the low_level_output
+</I>&gt;&gt;&gt;&gt;<i> function in ethercat_xenomai_drv.c needs.
+</I>&gt;&gt;&gt;&gt;<i> This time is between 5 and 10 us. So passing the Frames to the network
+</I>&gt;&gt;&gt;&gt;<i> interface is quite fast.
+</I>&gt;&gt;&gt;&gt;<i> So far so good, now the problem:
+</I>&gt;&gt;&gt;&gt;<i> Measuring the elapsed time between 2 send commands (also @
+</I>&gt;&gt;&gt;&gt;<i> low_level_output) gives me values between 150 us and 350.
+</I>&gt;&gt;&gt;&gt;<i> This i too much I think.
+</I>&gt;&gt;<i> Apart from Jan's suggestions, does that mean that your xenomai task indeed
+</I>&gt;&gt;<i> &quot;overruns&quot;?  Can you show some code?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Klaas
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So here is some code:
+</I>&gt;<i> 
+</I>&gt;<i> I can't see from your code below how you actually _measure_ the time while your thread runs periodically (after the rt_task_set_periodic)?
+</I>&gt;<i> However, it's been a very long time since I've worked with xenomai, but your (real-time) code is full of printf (and new) statements, which in the good old times would make your thread switch to 'secondary mode' -&gt; which could explain the latencies you're seeing...
+</I>
+Doing new or malloc, thus acquiring glibc-internal locks and issuing
+mmap from time to time, can cause nasty latencies on any real time kernel.
+
+printf shouldn't be issued either if latency matters. Xenomai offers
+rt_printf as an alternative for doing lock-less printing from RT threads
+- still typically only used for debugging purposes, and typically
+rate-limited.
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 257 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090504/fbfd8fb3/attachment.pgp">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090504/fbfd8fb3/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000396.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+	<LI>Next message: <A HREF="000399.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#397">[ date ]</a>
+              <a href="thread.html#397">[ thread ]</a>
+              <a href="subject.html#397">[ subject ]</a>
+              <a href="author.html#397">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

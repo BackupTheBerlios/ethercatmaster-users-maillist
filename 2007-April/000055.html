@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users]  Antwort: Re: Low level device  driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%20Antwort%3A%20Re%3A%20Low%20level%20device%20%20driver&In-Reply-To=%3C001e01c77760%24d45e63f0%242101a8c0%40FelixLaptop%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000054.html">
+   <LINK REL="Next"  HREF="000056.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users]  Antwort: Re: Low level device  driver</H1>
+    <B>Felix GMX</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%20Antwort%3A%20Re%3A%20Low%20level%20device%20%20driver&In-Reply-To=%3C001e01c77760%24d45e63f0%242101a8c0%40FelixLaptop%3E"
+       TITLE="[Ethercatmaster-users]  Antwort: Re: Low level device  driver">felix-erkert at gmx.de
+       </A><BR>
+    <I>Thu Apr  5 11:00:15 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000054.html">[Ethercatmaster-users] Antwort: Re: Low level device  driver
+</A></li>
+        <LI>Next message: <A HREF="000056.html">[Ethercatmaster-users] Antwort: Re: Low level device   driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#55">[ date ]</a>
+              <a href="thread.html#55">[ thread ]</a>
+              <a href="subject.html#55">[ subject ]</a>
+              <a href="author.html#55">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+- The NiosII Processor System is a Little Endian System!
+
+- Thats my traced EtherCAT frame (Why are there so many &quot;0&quot; at the end):
+
+   0000   ff ff ff ff ff ff 00 07 ed 0a 58 49 88 a4 0d 10              ..........XI....
+   0010   01 c0 00 00 00 00 01 00 00 00 3a 74 00 00 00 00  ..........:t....
+   0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+   0030   00 00 00 00 00 00 00 00 00 00 00 00                    ............
+
+   Destination: ff ff ff ff ff ff
+   Source:       00 07 ed 0a 58 49 
+   Type:          88a4
+
+   EtherCAT Protcol: 'APRD', Len: 1, Adp 0x0, Ado 0x0, Wc 116 
+    Sub Frame: Cmd: 'APRD' (1), Len: 1, Adp 0x0, Ado 0x0, Cnt 116
+       Header
+        Command:    APRD (0x01)
+        Index:            0xc0
+        Slave Addr:    0x0000
+        Offset Addr:   0x0000
+        Length:          1(0x1) - No Roundtrip - Last Sub Command
+        Interrupt:        0x0000
+       Data      : 3A(0x3a)
+       Working Cnt: 116
+
+- What does the EtherCAT Master do if he doesn&#180;t get a frame back?
+
+- What does IIRC mean and where can I find this switches (DI, DO, DIO, AO etc.)?
+
+Sorry for my stupied questions any thanks a lot for your fast answers! 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070405/e5619ffb/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070405/e5619ffb/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000054.html">[Ethercatmaster-users] Antwort: Re: Low level device  driver
+</A></li>
+	<LI>Next message: <A HREF="000056.html">[Ethercatmaster-users] Antwort: Re: Low level device   driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#55">[ date ]</a>
+              <a href="thread.html#55">[ thread ]</a>
+              <a href="subject.html#55">[ subject ]</a>
+              <a href="author.html#55">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

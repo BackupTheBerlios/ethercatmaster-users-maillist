@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] netif.h
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20netif.h&In-Reply-To=%3C469FC263.2070808%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000161.html">
+   <LINK REL="Next"  HREF="000163.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] netif.h</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20netif.h&In-Reply-To=%3C469FC263.2070808%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] netif.h">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Thu Jul 19 21:58:27 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000161.html">[Ethercatmaster-users] netif.h
+</A></li>
+        <LI>Next message: <A HREF="000163.html">[Ethercatmaster-users] netif.h
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#162">[ date ]</a>
+              <a href="thread.html#162">[ thread ]</a>
+              <a href="subject.html#162">[ subject ]</a>
+              <a href="author.html#162">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Klaas,
+
+
+Cannot tell you how glad your holidays are over. I'll forgive you if you 
+don;t share my sentiments ;)
+
+You may be right about the src/ installed includes. I'll have to check 
+which one I used. But certainly not one for the eCos OS. Of that I am sure.
+
+If you have a chance to look at the problem we are having with the 
+outputs that don't want to stay up. Its the last problem before the EML 
+connection is working 100%. I hope those aren't famous lasts words.....
+
+Kind regards,
+
+Roland.
+
+
+Klaas Gadeyne wrote:
+&gt;<i> On Thu, 12 Jul 2007, roland Tollenaar wrote:
+</I>&gt;&gt;<i> On incorporating EML communication in to my xenomai/Qt project, I
+</I>&gt;&gt;<i> discovered that there are two netif.h files in the EML trunk. They
+</I>&gt;&gt;<i> seem to be identical except for an #ifdef __cplusplus section.
+</I>&gt;<i> 
+</I>&gt;<i> There's one for each OS EML supports (so currently one for eCos and
+</I>&gt;<i> one for Xenomai/RTnet)
+</I>&gt;<i> 
+</I>&gt;&gt;<i> This does not give problems when compiling the master_test example but
+</I>&gt;&gt;<i> does when compiling in my project. I made them both the same now since
+</I>&gt;&gt;<i> I see no reason why this was not so in the first place.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Would it be possible to change the svn trunk like this so that I don;t
+</I>&gt;&gt;<i> pick up the same problem when i checkout in the future? Or am I doing
+</I>&gt;&gt;<i> something wrong?
+</I>&gt;<i> 
+</I>&gt;<i> I think you should not have this problem when your project uses the
+</I>&gt;<i> _installed_ headers of EML (and not the source tree)?
+</I>&gt;<i> 
+</I>&gt;<i> regards,
+</I>&gt;<i> 
+</I>&gt;<i> Klaas
+</I>&gt;<i> 
+</I>&gt;<i> ps.  It seems you have been working hard during my holidays :-)
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000161.html">[Ethercatmaster-users] netif.h
+</A></li>
+	<LI>Next message: <A HREF="000163.html">[Ethercatmaster-users] netif.h
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#162">[ date ]</a>
+              <a href="thread.html#162">[ thread ]</a>
+              <a href="subject.html#162">[ subject ]</a>
+              <a href="author.html#162">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] building redboot
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2006-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20building%20redboot&In-Reply-To=%3C6.2.1.2.0.20060407171955.01d77328%40server04.site04.wtcm.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000003.html">
+   <LINK REL="Next"  HREF="000006.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] building redboot</H1>
+    <B>Bob Koninckx</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20building%20redboot&In-Reply-To=%3C6.2.1.2.0.20060407171955.01d77328%40server04.site04.wtcm.be%3E"
+       TITLE="[Ethercatmaster-users] building redboot">bob.koninckx at fmtc.be
+       </A><BR>
+    <I>Fri Apr  7 17:32:11 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000003.html">[Ethercatmaster-users] building redboot
+</A></li>
+        <LI>Next message: <A HREF="000006.html">[Ethercatmaster-users] building redboot
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4">[ date ]</a>
+              <a href="thread.html#4">[ thread ]</a>
+              <a href="subject.html#4">[ subject ]</a>
+              <a href="author.html#4">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>At 14:37 7/04/2006, Jeroen Theelen wrote:
+
+&gt;<i>Dear Mr. Koninckx and others,
+</I>&gt;<i>
+</I>&gt;<i>At first I want to apologize sending my questions directly to you and not 
+</I>&gt;<i>to the mailing list. You're right that someone must be the first. Before I 
+</I>&gt;<i>could translate my mail from Dutch to English I got your reply.
+</I>&gt;<i>
+</I>&gt;<i>Your answers are very clear, but still there are things go wrong. I open 
+</I>&gt;<i>redboot.ecc with the eCos configtool (with # before the options I 
+</I>&gt;<i>mentioned before) and create the build dirs. After that I close the 
+</I>&gt;<i>configtool and change to the redboot_build dir. When I type make I get the 
+</I>&gt;<i>following error:
+</I>&gt;<i>
+</I>&gt;<i>make[1]: Leaving directory 
+</I>&gt;<i>`/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/redboot/redboot_build/services/memalloc/common/current'
+</I>&gt;<i>
+</I>&gt;<i>make -r -C hal/i386/arch/current build
+</I>&gt;<i>make[1]: Entering directory 
+</I>&gt;<i>`/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/redboot/redboot_build/hal/i386/arch/current'
+</I>&gt;<i>
+</I>&gt;<i>i386-elf-gcc 
+</I>&gt;<i>-c 
+</I>&gt;<i>-I/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/redboot/redboot_install/include 
+</I>&gt;<i>-I/home/Administrator/ecos/packages/hal/i386/arch/current 
+</I>&gt;<i>-I/home/Administrator/ecos/packages/hal/i386/arch/current/src 
+</I>&gt;<i>-I/home/Administrator/ecos/packages/hal/i386/arch/current/tests -I. 
+</I>&gt;<i>-I/home/Administrator/ecos/packages/hal/i386/arch/current/src/ 
+</I>&gt;<i>-finline-limit=7000 -Wall -Wpointer-arith -Wstrict-prototypes -Winline 
+</I>&gt;<i>-Wundef  -g -O2 -ffunction-sections 
+</I>&gt;<i>-fdata-sections  -fno-exceptions   -Wp,-MD,src/hal_misc.tmp -o 
+</I>&gt;<i>src/hal_i386_arch_hal_misc.o 
+</I>&gt;<i>/home/Administrator/ecos/packages/hal/i386/arch/current/src/hal_misc.c
+</I>&gt;<i>
+</I>&gt;<i>cc1: Invalid option `-finline-limit=7000'
+</I>&gt;<i>make[1]: Leaving directory 
+</I>&gt;<i>`/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/redboot/redboot_build/hal/i386/arch/current'
+</I>
+
+Seems to be a problem with the cygwin version of the compiler. What happens 
+if you remove the -finline-limit=7000 compiler switch ? (you can tweak 
+compiler options with configtool, or by manually removing it from the ecc 
+file, dont forget to recreate the build dirs, in order to get makefiles 
+rebuild)
+
+
+&gt;<i>make[1]: *** [src/hal_misc.o.d] Error 1
+</I>&gt;<i>make: Leaving directory 
+</I>&gt;<i>`/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/redboot/redboot_build'
+</I>&gt;<i>make: *** [build] Error 2
+</I>&gt;<i>
+</I>&gt;<i>I do not exactly know how to solve this error. Is there something wrong in 
+</I>&gt;<i>my makedefs file? How can I solve this problem?
+</I>&gt;<i>
+</I>&gt;<i>A second question I have is about how to change the configuration. I have 
+</I>&gt;<i>changed the pc target with RTL8139 to a target with a Intel network card. 
+</I>&gt;<i>But where can I find the second network card? I notice that when I use the 
+</I>&gt;<i>realtek target I can use a second Ethernet port device under common 
+</I>&gt;<i>Ethernet support. By a Intel card I don't have that option. Is this 
+</I>&gt;<i>because of a &quot;hack&quot; from your side? How can I use to Intel cards?
+</I>
+
+We had to change something in order to get two ethernet cards operational, 
+don't remember exactly what it was. Maybe Klaas does ?
+
+
+&gt;<i>As soon as I have everything working I will look if it's possible to write 
+</I>&gt;<i>an implementation for the EK1100. Of course I can release it, when I succeed.
+</I>
+
+That would be great.
+
+
+&gt;<i>  My main goal is to see how easy I can port it to other RTOS (mainly xPC 
+</I>&gt;<i> target).
+</I>
+
+That would be even greater! The more RTOS we can support, the better.
+
+
+&gt;<i>  I'm not sure if I will use the eCos implementation or the master sample 
+</I>&gt;<i> code, but if it's possible I want to write an example in eCos. Also when 
+</I>&gt;<i> this is only for the fun (and learn more about EtherCAT en eCos).
+</I>&gt;<i>
+</I>&gt;<i>By the way, I use the most recent CVS version 
+</I>&gt;<i>(ecos-trunk-full-060402.tar.bz2) I also have 060310 downloaded, but I 
+</I>&gt;<i>can't find I place where I can get 210206.
+</I>
+
+You can specify a date when checking out from CVS. cvs co -rdate (IIRC). 
+However, I would be surprised if that would be the problem. We checked 
+everything against the latest anonCVS the day before we released it and 
+everything just worked fine.
+
+
+&gt;<i>Maybe it's possible to put it on the ethercat side. I think my version 
+</I>&gt;<i>will also work fine, but it's always more reliable to have the same 
+</I>&gt;<i>versions as in the example.
+</I>
+
+It should, the problems most probably come from using cygwin, where we used 
+linux for our developments.
+
+
+&gt;<i>With kind regards,
+</I>&gt;<i>Jeroen Theelen
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>----------
+</I>&gt;<i>CCM Centre for Concepts in Mechatronics B.V.
+</I>&gt;<i>P.O. Box 12, NL-5670 AA Nuenen
+</I>&gt;<i>De Pinckart 24, NL-5674 CC Nuenen
+</I>&gt;<i>Phone +31 (0)40-263 50 00
+</I>&gt;<i>Fax +31 (0)40-263 55 55
+</I>&gt;<i>
+</I>&gt;<i>Op dit e-mailbericht, inclusief bijlagen, is de e-mail disclaimer van 
+</I>&gt;<i>toepassing zoals gepubliceerd op de website van CCM Centre for Concepts in 
+</I>&gt;<i>Mechatronics B.V.: www.ccm.nl
+</I>&gt;<i>
+</I>&gt;<i>This e-mail message and its attachments are subject to the disclaimer 
+</I>&gt;<i>published at the website of CCM Centre for Concepts in Mechatronics B.V.: 
+</I>&gt;<i>www.ccm.nl
+</I>
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">bob.koninckx at fmtc.be</A>                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders&#146; MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. Reyerslaan 80, B-1030 Brussel, 
+Belgi&#235;
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain confidential information. It 
+is intended
+solely for the intended addressee(s). Any use of the information contained 
+herein by other
+persons is prohibited. FMTC does not accept any liability for the contents 
+of this e-mail
+and/or its attachments.
+********************  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000003.html">[Ethercatmaster-users] building redboot
+</A></li>
+	<LI>Next message: <A HREF="000006.html">[Ethercatmaster-users] building redboot
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4">[ date ]</a>
+              <a href="thread.html#4">[ thread ]</a>
+              <a href="subject.html#4">[ subject ]</a>
+              <a href="author.html#4">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%09framebuilding%20failed.&In-Reply-To=%3C46C0A332.2040701%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000260.html">
+   <LINK REL="Next"  HREF="000262.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.</H1>
+    <B>Jan Kiszka</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%09framebuilding%20failed.&In-Reply-To=%3C46C0A332.2040701%40web.de%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.">jan.kiszka at web.de
+       </A><BR>
+    <I>Mon Aug 13 20:30:10 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000260.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000262.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#261">[ date ]</a>
+              <a href="thread.html#261">[ thread ]</a>
+              <a href="subject.html#261">[ subject ]</a>
+              <a href="author.html#261">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Roland Tollenaar wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> The 64 is a value I got from the mailing list. How large can I make this
+</I>&gt;&gt;&gt;<i> and what am I compromising?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Each buffer is slightly more than 1.5 KB heavy. Do your maths :). How
+</I>&gt;&gt;<i> many buffers you need depend on how many incoming and outgoing frames
+</I>&gt;&gt;<i> might be queued into they are processed. And that depends on the frame
+</I>
+s/into/until/ (my brain-based dictionary must be broken)
+
+&gt;&gt;<i> rate and the time your EML stack has to handle it in the worst case. I
+</I>&gt;&gt;<i> can't give you numbers on this, that depends on _your_ setup.
+</I>&gt;<i> 
+</I>&gt;<i> That much is clear. Will make it big out of shear inability to
+</I>&gt;<i> calculate. The lost memory is of almost no concern.
+</I>
+Just make sure that picking an arbitrary large pool size doesn't paper
+over some real system design issue that may manifests in huge latencies.
+Again, I don't know your numbers, so I cannot tell what is reasonable
+and what an indication of a problem. A system-level analysis of the
+event flows would be a good job for LTTng now - if it only worked already...
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070813/66b2c647/attachment.pgp">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070813/66b2c647/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000260.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000262.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#261">[ date ]</a>
+              <a href="thread.html#261">[ thread ]</a>
+              <a href="subject.html#261">[ subject ]</a>
+              <a href="author.html#261">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] EtherCAT Master Library and Altera Nios II
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EtherCAT%20Master%20Library%20and%20Altera%20Nios%20II&In-Reply-To=%3COFD236773D.C0209187-ONC1257299.0056F4C5-C1257299.005855CC%40MAIL.DE.FESTO.NET%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000017.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] EtherCAT Master Library and Altera Nios II</H1>
+    <B>Felix Erkert</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EtherCAT%20Master%20Library%20and%20Altera%20Nios%20II&In-Reply-To=%3COFD236773D.C0209187-ONC1257299.0056F4C5-C1257299.005855CC%40MAIL.DE.FESTO.NET%3E"
+       TITLE="[Ethercatmaster-users] EtherCAT Master Library and Altera Nios II">ERFE at DE.FESTO.COM
+       </A><BR>
+    <I>Fri Mar  9 17:04:49 CET 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000017.html">[Ethercatmaster-users] EtherCAT Master Library and Altera	Nios	II
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#16">[ date ]</a>
+              <a href="thread.html#16">[ thread ]</a>
+              <a href="subject.html#16">[ subject ]</a>
+              <a href="author.html#16">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hello,
+
+I want to implement an EtherCAT Master on a Altera Development Board with a
+Nios II Prozessor and eCos as
+Operating System. Now, when I want to include the EtherCAT Master package
+to eCos and build the system then
+I get some errors.
+
+make[1]: Entering directory
+`/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_build/net/ethercatmaster/current'
+nios2-elf-gcc -c
+-I/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_install/include
+-I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current
+
+-I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src
+
+-I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/tests
+ -I.
+-I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/
+ -finline-limit=7000 -g -O3 -ffunction-sections -fdata-sections -fno-rtti
+-fno-exceptions  -DSYSTEM_BUS_WIDTH=32 -mhw-mul -mhw-mulx -mno-hw-div
+-Wp,-MD,src/ecos/support.tmp -o src/ecos/net_ethercatmaster_support.o
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:33:31:
+ cyg/io/eth/netdev.h: No such file or directory
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:34:32:
+ cyg/io/eth/eth_drv.h: No such file or directory
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:47:
+ error: expected constructor, destructor, or type conversion before '('
+token
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:47:
+ error: expected `,' or `;' before '(' token
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:48:
+ error: expected constructor, destructor, or type conversion before '('
+token
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:48:
+ error: expected `,' or `;' before '(' token
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:
+ In function `void cyg_net_init_devs()':
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:70:
+ error: `cyg_netdevtab_entry_t' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:70:
+ error: (Each undeclared identifier is reported only once for each function
+it appears in.)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:70:
+ error: `t' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:72:
+ error: `__NETDEVTAB__' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:72:
+ error: `__NETDEVTAB_END__' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:75:
+ error: `CYG_NETDEVTAB_STATUS_AVAIL' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:
+ In function `void ethercat_delivery(cyg_addrword_t)':
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:118:
+ error: `cyg_netdevtab_entry_t' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:118:
+ error: `t' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:124:
+ error: `__NETDEVTAB__' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:124:
+ error: `__NETDEVTAB_END__' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:126:
+ error: invalid use of undefined type `struct eth_drv_sc'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:125:
+ error: forward declaration of `struct eth_drv_sc'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:126:
+ error: `ETH_DRV_NEEDS_DELIVERY' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:127:
+ error: invalid use of undefined type `struct eth_drv_sc'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:125:
+ error: forward declaration of `struct eth_drv_sc'
+make[1]: Leaving directory
+`/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_build/net/ethercatmaster/current'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:128:
+ error: invalid use of undefined type `struct eth_drv_sc'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:125:
+ error: forward declaration of `struct eth_drv_sc'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:
+ In function `void if_attach(netif*)':
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:158:
+ error: invalid use of undefined type `struct netif'
+/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_install/include/dll/ethercat_dll.h:38:
+ error: forward declaration of `struct netif'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:161:
+ error: invalid use of undefined type `struct netif'
+/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_install/include/dll/ethercat_dll.h:38:
+ error: forward declaration of `struct netif'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:161:
+ error: `ETHERCAT_DEVICE_NAME_MAX_LENGTH' undeclared (first use this
+function)
+make[1]: *** [src/ecos/support.o.d] Error 1
+make: *** [build] Error 2
+
+The Altera Development Board has an SMSC LAN91c111 Ethernet Controller.
+What I have to do to porting the EtherCAT Master Library to the SMSC
+LAN91c111
+Ethernet Controller?
+
+thanks,
+Felix Erkert
+
+
+Bitte beachten Sie meine neue eMail Adresse: <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ERFE at DE.FESTO.COM</A>
+
+My new email address is: <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ERFE at DE.FESTO.COM</A>
+
+Festo AG &amp; Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra&#223;e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+<A HREF="http://www.festo.com">http://www.festo.com</A>
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000017.html">[Ethercatmaster-users] EtherCAT Master Library and Altera	Nios	II
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#16">[ date ]</a>
+              <a href="thread.html#16">[ thread ]</a>
+              <a href="subject.html#16">[ subject ]</a>
+              <a href="author.html#16">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

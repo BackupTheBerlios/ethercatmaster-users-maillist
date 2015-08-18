@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%09framebuilding%20failed.&In-Reply-To=%3C46C1B498.8060600%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000261.html">
+   <LINK REL="Next"  HREF="000263.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%09framebuilding%20failed.&In-Reply-To=%3C46C1B498.8060600%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Tue Aug 14 15:56:40 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000261.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000263.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#262">[ date ]</a>
+              <a href="thread.html#262">[ thread ]</a>
+              <a href="subject.html#262">[ subject ]</a>
+              <a href="author.html#262">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+Some new insight:
+
+I have included the rtnet list because I think this is of interest and I 
+don;t know exactly where the problem arises. Most likely EML but which 
+goes unnecessarily haywire when xenomai has a latency glitch which seems 
+to be caused by rtcan but may also be rtnet (so the rest of you can stop 
+reading here :) )
+
+To refresh, I am running EML and rtcan together and separately they 
+appear to function perfectly but when combined, EML sometimes starts 
+ejecting the error:
+
+EC_Telegram::index_check() : index not the same,
+low_level_input() :  framebuilding failed.
+
+Or something pretty closely to that effect.
+
+Despite EML warning that the frame could not be built, the inputs (which 
+rely on the framebuilding being succesful pretty stringently) seem to 
+function perfectly. It seems as though EML is emitting a false warning.
+
+I have now killed the warning from EML with the following hack:
+
+In EC_Telegram::check_index() I have effectively killed the check by 
+snubbing the holler and always returning true. Now the application no 
+longer emits warnings and everything functions well (or so it seems). I 
+have a sawtooth analog output on a scope which triggers well. It 
+fluttered sometimes when EML emitted the warning. Presumably the 
+fluttering is caused by some latency which I thought might be the result 
+of EML emitting the warnings. However even without the warnings from EML 
+this fluttering incidentally takes place. Generally I can increase the 
+chance of this flutter (I will confirm this with a latency test later 
+on) by clicking about in the user interface of my application (QT).
+
+
+So EML seems to go haywire when there is latency and there seems to be 
+latency when I am using rtcan. (Bit of latency can also be caused by 
+clicking about but I think it is mainly rtcan causing the latency spikes 
+and the clicking about just knocks it over the edge more often.)
+
+I have also made the index that is supposedly not the same visible. For 
+the EML chaps: index and m_idx and the output seems to be something like 
+this
+
+index	m_idx
+0	1
+0	0
+1	2
+2	3
+2	3
+3	4
+4	5
+:<i>	:
+</I>:<i>	:
+</I>253	254
+0	2
+
+or something to that effect. Can anyone comment on this?
+
+
+P.S.
+
+Everything else is sorted out now, application closes neatly all 
+sockets, no buffer overruns, no errors in syslog etc.
+
+Also I have managed to get the initialization of the socket to the non 
+real-time context but the problem persists in exactly the same manner.
+
+I have increased the rtskbf_cache_size. The problem occurs less 
+frequently but certainly does not subside completely. Irrespective of 
+how big I make it after that.  There is no mention of any problem in 
+this regard in any of the logs anymore (dmesg syslog etc)
+
+Roland.
+
+
+
+
+
+
+
+
+
+These are the comments that have been made which may be relevant:
+
+
+
+Jan Kiszka wrote:
+&gt;<i> In 9 of 10 cases (if not more): timing. Running both alone doesn't
+</I>&gt;<i> expose some timing issue (race) or transient overload. I can't help with
+</I>&gt;<i> EML complaints, maybe the FMTC guys have an idea what can trigger this
+</I>&gt;<i> and how to debug it.
+</I>
+&gt;&gt;&gt;&gt;&gt;&gt;<i> RTnet:rtskb allocation from real-time cache failed.
+</I>
+&gt;<i> You have created the socket for some/all EML activity from primary mode
+</I>&gt;<i> of some Xenomai thread, thus network buffer allocation is ought to run
+</I>&gt;<i> against the real-time rtskb pool - which is by default empty :p. See
+</I>&gt;<i> README.pools from the RTnet documentation on this.
+</I>
+Although this was a problem
+
+
+&gt;<i> 
+</I>&gt;<i> I don't have the EML design at hand, but you might be able to avoid this
+</I>&gt;<i> by initialising before creating the shadow task or by explicitly
+</I>&gt;<i> switching to secondary mode before initialising. [Sorry for this issue,
+</I>&gt;<i> it's at least partly due to some outdated RTnet design.]
+</I>&gt;<i> 
+</I>&gt;<i> Jan
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000261.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000263.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#262">[ date ]</a>
+              <a href="thread.html#262">[ thread ]</a>
+              <a href="subject.html#262">[ subject ]</a>
+              <a href="author.html#262">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

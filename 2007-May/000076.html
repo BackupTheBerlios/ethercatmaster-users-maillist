@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Period of two in a row sending frames
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-May/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Period%20of%20two%20in%20a%20row%20sending%20frames&In-Reply-To=%3CPine.LNX.4.64.0705081619210.1681%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000075.html">
+   <LINK REL="Next"  HREF="000077.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Period of two in a row sending frames</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Period%20of%20two%20in%20a%20row%20sending%20frames&In-Reply-To=%3CPine.LNX.4.64.0705081619210.1681%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] Period of two in a row sending frames">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Tue May  8 16:23:41 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000075.html">[Ethercatmaster-users] Period of two in a row sending frames
+</A></li>
+        <LI>Next message: <A HREF="000077.html">[Ethercatmaster-users] xenomai/EML
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#76">[ date ]</a>
+              <a href="thread.html#76">[ thread ]</a>
+              <a href="subject.html#76">[ subject ]</a>
+              <a href="author.html#76">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 8 May 2007, Felix Erkert wrote:
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> I have still the same problem! My ethercat master cycle times is about in
+</I>&gt;<i> millisecounds, but it should be in microsecounds (I use the EVA-Board and
+</I>&gt;<i> eCos to measure the cycle times). On the EVA-Board, I connected the input
+</I>&gt;<i> pins with the output pins. So the first frame set an input pin and the next
+</I>&gt;<i> frame reads the output pin. My oscilloscop is measured the time how long a
+</I>&gt;<i> pin is set! Thats my application.
+</I>
+How does _reading_ the value of the output pin toggle it?
+
+&gt;<i> - cycle time = period between two frames
+</I>
+&gt;<i> static void timeMeasure( cyg_addrword_t )
+</I>
+Are you running this function in a high priority thread?
+
+&gt;<i> {
+</I>&gt;<i>    unsigned char msg[2] = { 0x00, 0x00 };
+</I>&gt;<i>    unsigned int counter = 0;
+</I>&gt;<i>
+</I>&gt;<i>    // EtherCAT_Master zeiger holen
+</I>&gt;<i>    EtherCAT_Master * EM = EtherCAT_Master::instance();
+</I>&gt;<i>    while(true)
+</I>&gt;<i>    {
+</I>&gt;<i>        // Signal setzen
+</I>&gt;<i>        cyg_thread_delay( (cyg_tick_count_t)0 );
+</I>
+What's the use of this piece of code?
+
+&gt;<i>        if( counter &gt;= 0 )
+</I>&gt;<i>        {
+</I>&gt;<i>            if( msg[0] == 0x00 )
+</I>&gt;<i>            {
+</I>&gt;<i>                msg[0] = 0x01;
+</I>&gt;<i>            }
+</I>&gt;<i>            else if( msg[0] == 0x01 )
+</I>&gt;<i>            {
+</I>&gt;<i>                msg[0] = 0x00;
+</I>&gt;<i>            }
+</I>&gt;<i>            counter = 0;
+</I>&gt;<i>        }
+</I>&gt;<i>        counter++;
+</I>&gt;<i>        // Signal r&#252;cksetzen
+</I>&gt;<i>        EM-&gt;txandrx_PD( 2, msg );
+</I>&gt;<i>    }
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> 1.) I send process data (0x01, 0x00). These process datas set an input pin
+</I>&gt;<i> and the appropriate output pin (Because the input pin and the output pin
+</I>&gt;<i> are connected together)
+</I>
+How can you set an input pin?
+
+&gt;<i> 2.) The next process data frame sends (0x00,0x00) and fetchs the output
+</I>&gt;<i> process data.
+</I>&gt;<i> 3.) Now I measured how long the pin is set! The time is in millisecounds.
+</I>&gt;<i> But it should be in microsecounds.
+</I>
+I can't follow your reasoning :-(
+
+&gt;<i> =&gt; So i have measured how long it takes to sending two frames in a row!!!
+</I>
+&gt;<i> Can you test this Thread/Application with your Master and your
+</I>&gt;<i>        EVA-Board!
+</I>
+This is not an application, it is merely a function.
+
+Klaas
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000075.html">[Ethercatmaster-users] Period of two in a row sending frames
+</A></li>
+	<LI>Next message: <A HREF="000077.html">[Ethercatmaster-users] xenomai/EML
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#76">[ date ]</a>
+              <a href="thread.html#76">[ thread ]</a>
+              <a href="subject.html#76">[ subject ]</a>
+              <a href="author.html#76">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] EtherCAT Master Library and Altera	Nios	II
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EtherCAT%20Master%20Library%20and%20Altera%0A%09Nios%09II&In-Reply-To=%3C20070309233041.52yndsh24feokcc4%40www.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000016.html">
+   <LINK REL="Next"  HREF="000018.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] EtherCAT Master Library and Altera	Nios	II</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EtherCAT%20Master%20Library%20and%20Altera%0A%09Nios%09II&In-Reply-To=%3C20070309233041.52yndsh24feokcc4%40www.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] EtherCAT Master Library and Altera	Nios	II">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Fri Mar  9 23:30:41 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000016.html">[Ethercatmaster-users] EtherCAT Master Library and Altera Nios II
+</A></li>
+        <LI>Next message: <A HREF="000018.html">[Ethercatmaster-users] EtherCAT Master Library and Altera Nios II
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#17">[ date ]</a>
+              <a href="thread.html#17">[ thread ]</a>
+              <a href="subject.html#17">[ subject ]</a>
+              <a href="author.html#17">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Quoting Felix Erkert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ERFE at DE.FESTO.COM</A>&gt;:
+&gt;<i> I want to implement an EtherCAT Master on a Altera Development Board with a
+</I>&gt;<i> Nios II Prozessor and eCos as
+</I>&gt;<i> Operating System. Now, when I want to include the EtherCAT Master package
+</I>&gt;<i> to eCos and build the system then
+</I>&gt;<i> I get some errors.
+</I>&gt;<i>
+</I>&gt;<i> make[1]: Entering directory
+</I>&gt;<i> `/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_build/net/ethercatmaster/current'
+</I>&gt;<i> nios2-elf-gcc -c
+</I>&gt;<i> -I/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_install/include
+</I>&gt;<i> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current
+</I>&gt;<i> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src
+</I>&gt;<i> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/tests
+</I>&gt;<i> -I.
+</I>&gt;<i> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/
+</I>&gt;<i> -finline-limit=7000 -g -O3 -ffunction-sections -fdata-sections -fno-rtti
+</I>&gt;<i> -fno-exceptions  -DSYSTEM_BUS_WIDTH=32 -mhw-mul -mhw-mulx -mno-hw-div
+</I>&gt;<i> -Wp,-MD,src/ecos/support.tmp -o src/ecos/net_ethercatmaster_support.o
+</I>&gt;<i> /cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx
+</I>&gt;<i> /cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:33:31:
+</I>&gt;<i> cyg/io/eth/netdev.h: No such file or directory
+</I>
+Did you load the package CYGPKG_IO_ETH_DRIVERS (common ethernet 
+support)?  It's probably a missing dependency in the ethercat cdl logic.
+
+&gt;<i> The Altera Development Board has an SMSC LAN91c111 Ethernet Controller.
+</I>&gt;<i> What I have to do to porting the EtherCAT Master Library to the SMSC
+</I>&gt;<i> LAN91c111
+</I>&gt;<i> Ethernet Controller?
+</I>
+Normally, there shouldn't be any dependencies to particular NIC, but - 
+We never tested other NICS than the realtek one
+- I notice you are using cygwin: We never tested that too.
+
+So, in case you encounter any further problems, don't hesitate to 
+report them on the Mailing list.
+
+ps.  Note that we are changing the EML build system to cmake ATM, but I 
+wouldn't advise you to use it for the ecos build right now.
+
+regards,
+
+Klaas
+
+
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000016.html">[Ethercatmaster-users] EtherCAT Master Library and Altera Nios II
+</A></li>
+	<LI>Next message: <A HREF="000018.html">[Ethercatmaster-users] EtherCAT Master Library and Altera Nios II
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#17">[ date ]</a>
+              <a href="thread.html#17">[ thread ]</a>
+              <a href="subject.html#17">[ subject ]</a>
+              <a href="author.html#17">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

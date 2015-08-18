@@ -1,0 +1,1179 @@
+From henning.richter at besi.com  Mon May  4 09:41:53 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Mon, 4 May 2009 09:41:53 +0200
+Subject: [Ethercatmaster-users] Loosing time while sending Frames
+In-Reply-To: <alpine.DEB.2.00.0904301628520.14134@ampere.labo01.fmtc.be>
+Message-ID: <OFB65B2275.4EC68E13-ONC12575AC.0028AFCC-C12575AC.002A48E0@datacon.at>
+
+
+
+>> In the main function of the EML a created and started a xenomai task.
+>> The cycle time of this task is set to 250 us.
+>> During this time I am sending one Frame to my slaves each cycle. In all
+I
+>> have 3 Frames (Frame1 = 60 byte, Frame 2 = 1217 byte, Frame3 = 1204
+byte).
+>>
+>> I am also measuring the time the send command from the low_level_output
+>> function in ethercat_xenomai_drv.c needs.
+>> This time is between 5 and 10 us. So passing the Frames to the network
+>> interface is quite fast.
+>> So far so good, now the problem:
+>> Measuring the elapsed time between 2 send commands (also @
+>> low_level_output) gives me values between 150 us and 350.
+>> This i too much I think.
+
+Apart from Jan's suggestions, does that mean that your xenomai task indeed
+"overruns"?  Can you show some code?
+
+Klaas
+
+
+So here is some code:
+
+
+void signalhandler(int signo, EC_Ethernet_Frame &frame)
+   {
+   /* Do something every INTERVAL microseconds */
+
+///------------------------SEND FRAMES------------------------------------
+
+//       rtStart = rt_timer_read();
+   bool send = EtherCAT_DataLinkLayer::instance()->txandrx(&frame);
+//       rtEnd = rt_timer_read();
+//       printf("txandrx Frame: %ld\n",(rt_timer_ticks2ns
+(rtEnd-rtStart))/1000);
+
+   }
+
+
+void run_cyclic(void * arg)
+   {
+   printf("run_cyclic started");
+
+   // prepare master
+   if (!startupMaster((char*)arg))
+         {
+         printf("failed to start master.");
+         return;
+         }
+///--------------build Frames and Datagrams-----------------
+
+   //Initialisation of some variables;             (left out here)
+
+   ///Mailbox-Kommunikation mit BK1250
+   ///NPWR Telegram an BK1250 in Mailbox --> MbxOut (written from master)
+
+   ///get mbx config bk1250 --Mailbox WRITE--
+   // get length of SM0
+   EtherCAT_SlaveHandler * sh_bk1250 = g_pEMcyclic->get_slave_handler
+(0x03f0);
+   const EC_UINT datalen = sh_bk1250->get_mbx_config()->SM0.Length;
+   const EC_UINT datalen2 = 68;
+   const EC_UINT datalen3 = 46;
+
+   int fc;
+   index = 0x01;
+   int anz = 20;
+   class NPWR_Telegram *telegram[anz];
+   EC_Telegram *ECT=NULL;
+
+
+///-----------------1. Frame---------------
+   rtStart = rt_timer_read();
+   Logical_Addressing_Telegram *LAT = new LWR_Telegram
+(0x00,0x00010006,0xFFFF,1,pucharmsg1);
+   EC_Ethernet_Frame oFrame(LAT);
+   ECT = oFrame.get_telegram();	///get first telegram
+
+   NPRD_Telegram NPRDtelegram1(0x03,0x03ee,0x1000,0xffff,1,&puchargetmsg2);
+   ECT=ECT->next=&NPRDtelegram1;	///pointer to next Telegram
+
+   NPWR_Telegram NPWRtelegram1(0x09,0x03f0,0x1000,0xffff,1,pucharmsg2);
+   ECT=ECT->next=&NPWRtelegram1;	///pointer to next Telegram
+
+   rtEnd = rt_timer_read();
+   printf("Frame1 gebaut in %ld us\n",(rt_timer_ticks2ns(rtEnd -
+rtStart))/1000);
+
+///-------------------------2.
+Frame-------------------------------------------
+
+   rtStart = rt_timer_read();
+   ///Mailbox --WRITE---
+   unsigned char uchWrBuffer2[datalen3];
+   for(int i=0; i<datalen3; ++i) uchWrBuffer2[i] = 0;
+   EC_MbxMsgHdr mbxheader2(datalen3-6,0x03f0,0x03,EC_EoE);
+   EtherCAT_MbxMsg wrmbxmsg2(mbxheader2,mbxfillmsg);
+   unsigned char *pDump = wrmbxmsg2.dump(uchWrBuffer2);
+   NPWR_Telegram MbxWRtelegram
+(0x0c,0x03f0,0x1c00,0x0ffff,datalen3,uchWrBuffer2);
+
+   EC_Ethernet_Frame oFrame2(&MbxWRtelegram);
+   NPRD_Telegram NPRDtelegram2(0x0c,0x03f0,0x1600,0xffff,1,&puchargetmsg2);
+   ECT=oFrame2.get_telegram();	///pointer to next Telegram
+
+   for( fc=0;fc<4*anz;fc++){
+       telegram[fc] = new NPWR_Telegram
+(index,0x03ec,0x0f00,0xffff,1,pucharmsg11);
+       ECT=ECT->next=telegram[fc];
+       index++;
+   }
+
+   ECT=ECT->next=&NPRDtelegram2;
+   rtEnd = rt_timer_read();
+
+   printf("Frame2 gebaut in %ld us\n",(rt_timer_ticks2ns(rtEnd -
+rtStart))/1000);
+
+///---------------------3. Frame------------------------------------
+
+   rtStart = rt_timer_read();
+   unsigned char uchWrBuffer[datalen2];
+   for ( int i = 0; i < datalen2; ++i ) uchWrBuffer[i] = 0;
+   //length of mbxmsg,address,priority,type
+   EC_MbxMsgHdr mbxheader(datalen2-6,0x03f0,0x03,EC_EoE);
+   EtherCAT_MbxMsg wrmbxmsg(mbxheader,ucharmbxwrmsg4);
+   pDump = wrmbxmsg.dump(uchWrBuffer);
+   NPWR_Telegram MbxFillTelegram
+(0x0c,0x03f0,0x1c44,0x0ffff,datalen2,uchWrBuffer);
+
+   NPRD_Telegram NPRDtelegram3(0x02,0x03ee,0x1000,0xffff,1,&puchargetmsg3);
+   EC_Ethernet_Frame oFrame3(&MbxFillTelegram);
+   ECT=oFrame3.get_telegram();	///pointer to next Telegram
+   ECT=ECT->next=&NPRDtelegram3;
+   for(fc=0;fc<4*anz;fc++){
+     telegram[fc] = new NPWR_Telegram
+(index,0x03ec,0x0f00,0xffff,1,pucharmsg7);
+     ECT=ECT->next=telegram[fc];
+     index++;
+   }
+
+   rtEnd = rt_timer_read();
+   printf("Frame3 gebaut in %ld us\n",(rt_timer_ticks2ns(rtEnd -
+rtStart))/1000);
+
+///---------------------4. Frame------------------------------------
+
+   rtStart = rt_timer_read();
+   ///Mailbox --READ---
+   unsigned char uchRdBuffer[datalen];
+   EC_MbxMsgHdr rdmbxheader(datalen-6,0x03f0,3,EC_EoE);
+   EtherCAT_MbxMsg rdmbxmsg(rdmbxheader,uchargetmsg4);
+   pDump = rdmbxmsg.dump(uchRdBuffer);
+
+   NPRD_Telegram MbxRDtelegram
+(0x0c,0x03f0,0x1e00,0xffff,datalen,uchargetmsg4);
+   EC_Ethernet_Frame oFrame4(&MbxRDtelegram);
+   ECT=oFrame4.get_telegram();
+   for(fc=0;fc<4*anz;fc++){
+     telegram[fc] = new NPWR_Telegram
+(index,0x03ec,0x0f00,0xffff,1,pucharmsg7);
+     ECT=ECT->next=telegram[fc];
+     index++;
+   }
+   rtEnd = rt_timer_read();
+   printf("Frame4 gebaut in %ld us\n",(rt_timer_ticks2ns(rtEnd -
+rtStart))/1000);
+
+
+
+#define DURATION 40000 // secs
+#define CYCLETIME 250  // us
+
+   rt_task_set_periodic(NULL, TM_NOW, CYCLETIME *1000); // us to ns (for
+xenomai)
+
+   for (unsigned long ulCount = DURATION*(1000000/CYCLETIME); ulCount > 0;
+--ulCount)
+   //for (unsigned long ulCount = 0; ulCount < 100; ++ulCount)
+   {
+
+       rt_task_wait_period(NULL);
+       signalhandler(0,oFrame);
+       signalhandler(0,oFrame2);
+       signalhandler(0,oFrame3);
+       signalhandler(0,oFrame4);
+   }
+   printf("\n\n");
+
+   }
+
+
+int main(int argc, char** argv)
+   {
+   signal(SIGTERM, catch_signal);
+   signal(SIGINT, catch_signal);
+   signal(SIGHUP, catch_signal);
+   mlockall(MCL_CURRENT|MCL_FUTURE);
+
+   RT_TASK my_rt_task;
+
+   rt_task_create(&my_rt_task,"myRtTask",0,90,T_JOINABLE);
+
+   //Start thread
+   rt_task_start(&my_rt_task, &run_cyclic, argv[1]);
+
+   //wait until finished
+   rt_task_join(&my_rt_task);
+
+   rt_task_delete(&my_rt_task);
+
+   return 0;
+}
+
+
+Henning
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090504/dede33a9/attachment.html>
+
+From klaas.gadeyne at fmtc.be  Mon May  4 16:28:05 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 4 May 2009 16:28:05 +0200 (CEST)
+Subject: [Ethercatmaster-users] Loosing time while sending Frames
+In-Reply-To: <OFB65B2275.4EC68E13-ONC12575AC.0028AFCC-C12575AC.002A48E0@datacon.at>
+References: <OFB65B2275.4EC68E13-ONC12575AC.0028AFCC-C12575AC.002A48E0@datacon.at>
+Message-ID: <alpine.DEB.2.00.0905041622130.7589@ampere.labo01.fmtc.be>
+
+On Mon, 4 May 2009, henning.richter at besi.com wrote:
+>>> In the main function of the EML a created and started a xenomai task.
+>>> The cycle time of this task is set to 250 us.
+>>> During this time I am sending one Frame to my slaves each cycle. In all
+> I
+>>> have 3 Frames (Frame1 = 60 byte, Frame 2 = 1217 byte, Frame3 = 1204
+> byte).
+>>>
+>>> I am also measuring the time the send command from the low_level_output
+>>> function in ethercat_xenomai_drv.c needs.
+>>> This time is between 5 and 10 us. So passing the Frames to the network
+>>> interface is quite fast.
+>>> So far so good, now the problem:
+>>> Measuring the elapsed time between 2 send commands (also @
+>>> low_level_output) gives me values between 150 us and 350.
+>>> This i too much I think.
+>
+> Apart from Jan's suggestions, does that mean that your xenomai task indeed
+> "overruns"?  Can you show some code?
+>
+> Klaas
+>
+>
+> So here is some code:
+
+I can't see from your code below how you actually _measure_ the time while your thread runs periodically (after the rt_task_set_periodic)?
+However, it's been a very long time since I've worked with xenomai, but your (real-time) code is full of printf (and new) statements, which in the good old times would make your thread switch to 'secondary mode' -> which could explain the latencies you're seeing...
+
+Klaas
+
+> void signalhandler(int signo, EC_Ethernet_Frame &frame)
+>   {
+>   /* Do something every INTERVAL microseconds */
+>
+> ///------------------------SEND FRAMES------------------------------------
+>
+> //       rtStart = rt_timer_read();
+>   bool send = EtherCAT_DataLinkLayer::instance()->txandrx(&frame);
+> //       rtEnd = rt_timer_read();
+> //       printf("txandrx Frame: %ld\n",(rt_timer_ticks2ns
+> (rtEnd-rtStart))/1000);
+>
+>   }
+>
+>
+> void run_cyclic(void * arg)
+>   {
+>   printf("run_cyclic started");
+>
+>   // prepare master
+>   if (!startupMaster((char*)arg))
+>         {
+>         printf("failed to start master.");
+>         return;
+>         }
+> ///--------------build Frames and Datagrams-----------------
+>
+>   //Initialisation of some variables;             (left out here)
+>
+>   ///Mailbox-Kommunikation mit BK1250
+>   ///NPWR Telegram an BK1250 in Mailbox --> MbxOut (written from master)
+>
+>   ///get mbx config bk1250 --Mailbox WRITE--
+>   // get length of SM0
+>   EtherCAT_SlaveHandler * sh_bk1250 = g_pEMcyclic->get_slave_handler
+> (0x03f0);
+>   const EC_UINT datalen = sh_bk1250->get_mbx_config()->SM0.Length;
+>   const EC_UINT datalen2 = 68;
+>   const EC_UINT datalen3 = 46;
+>
+>   int fc;
+>   index = 0x01;
+>   int anz = 20;
+>   class NPWR_Telegram *telegram[anz];
+>   EC_Telegram *ECT=NULL;
+>
+>
+> ///-----------------1. Frame---------------
+>   rtStart = rt_timer_read();
+>   Logical_Addressing_Telegram *LAT = new LWR_Telegram
+> (0x00,0x00010006,0xFFFF,1,pucharmsg1);
+>   EC_Ethernet_Frame oFrame(LAT);
+>   ECT = oFrame.get_telegram();	///get first telegram
+>
+>   NPRD_Telegram NPRDtelegram1(0x03,0x03ee,0x1000,0xffff,1,&puchargetmsg2);
+>   ECT=ECT->next=&NPRDtelegram1;	///pointer to next Telegram
+>
+>   NPWR_Telegram NPWRtelegram1(0x09,0x03f0,0x1000,0xffff,1,pucharmsg2);
+>   ECT=ECT->next=&NPWRtelegram1;	///pointer to next Telegram
+>
+>   rtEnd = rt_timer_read();
+>   printf("Frame1 gebaut in %ld us\n",(rt_timer_ticks2ns(rtEnd -
+> rtStart))/1000);
+>
+> ///-------------------------2.
+> Frame-------------------------------------------
+>
+>   rtStart = rt_timer_read();
+>   ///Mailbox --WRITE---
+>   unsigned char uchWrBuffer2[datalen3];
+>   for(int i=0; i<datalen3; ++i) uchWrBuffer2[i] = 0;
+>   EC_MbxMsgHdr mbxheader2(datalen3-6,0x03f0,0x03,EC_EoE);
+>   EtherCAT_MbxMsg wrmbxmsg2(mbxheader2,mbxfillmsg);
+>   unsigned char *pDump = wrmbxmsg2.dump(uchWrBuffer2);
+>   NPWR_Telegram MbxWRtelegram
+> (0x0c,0x03f0,0x1c00,0x0ffff,datalen3,uchWrBuffer2);
+>
+>   EC_Ethernet_Frame oFrame2(&MbxWRtelegram);
+>   NPRD_Telegram NPRDtelegram2(0x0c,0x03f0,0x1600,0xffff,1,&puchargetmsg2);
+>   ECT=oFrame2.get_telegram();	///pointer to next Telegram
+>
+>   for( fc=0;fc<4*anz;fc++){
+>       telegram[fc] = new NPWR_Telegram
+> (index,0x03ec,0x0f00,0xffff,1,pucharmsg11);
+>       ECT=ECT->next=telegram[fc];
+>       index++;
+>   }
+>
+>   ECT=ECT->next=&NPRDtelegram2;
+>   rtEnd = rt_timer_read();
+>
+>   printf("Frame2 gebaut in %ld us\n",(rt_timer_ticks2ns(rtEnd -
+> rtStart))/1000);
+>
+> ///---------------------3. Frame------------------------------------
+>
+>   rtStart = rt_timer_read();
+>   unsigned char uchWrBuffer[datalen2];
+>   for ( int i = 0; i < datalen2; ++i ) uchWrBuffer[i] = 0;
+>   //length of mbxmsg,address,priority,type
+>   EC_MbxMsgHdr mbxheader(datalen2-6,0x03f0,0x03,EC_EoE);
+>   EtherCAT_MbxMsg wrmbxmsg(mbxheader,ucharmbxwrmsg4);
+>   pDump = wrmbxmsg.dump(uchWrBuffer);
+>   NPWR_Telegram MbxFillTelegram
+> (0x0c,0x03f0,0x1c44,0x0ffff,datalen2,uchWrBuffer);
+>
+>   NPRD_Telegram NPRDtelegram3(0x02,0x03ee,0x1000,0xffff,1,&puchargetmsg3);
+>   EC_Ethernet_Frame oFrame3(&MbxFillTelegram);
+>   ECT=oFrame3.get_telegram();	///pointer to next Telegram
+>   ECT=ECT->next=&NPRDtelegram3;
+>   for(fc=0;fc<4*anz;fc++){
+>     telegram[fc] = new NPWR_Telegram
+> (index,0x03ec,0x0f00,0xffff,1,pucharmsg7);
+>     ECT=ECT->next=telegram[fc];
+>     index++;
+>   }
+>
+>   rtEnd = rt_timer_read();
+>   printf("Frame3 gebaut in %ld us\n",(rt_timer_ticks2ns(rtEnd -
+> rtStart))/1000);
+>
+> ///---------------------4. Frame------------------------------------
+>
+>   rtStart = rt_timer_read();
+>   ///Mailbox --READ---
+>   unsigned char uchRdBuffer[datalen];
+>   EC_MbxMsgHdr rdmbxheader(datalen-6,0x03f0,3,EC_EoE);
+>   EtherCAT_MbxMsg rdmbxmsg(rdmbxheader,uchargetmsg4);
+>   pDump = rdmbxmsg.dump(uchRdBuffer);
+>
+>   NPRD_Telegram MbxRDtelegram
+> (0x0c,0x03f0,0x1e00,0xffff,datalen,uchargetmsg4);
+>   EC_Ethernet_Frame oFrame4(&MbxRDtelegram);
+>   ECT=oFrame4.get_telegram();
+>   for(fc=0;fc<4*anz;fc++){
+>     telegram[fc] = new NPWR_Telegram
+> (index,0x03ec,0x0f00,0xffff,1,pucharmsg7);
+>     ECT=ECT->next=telegram[fc];
+>     index++;
+>   }
+>   rtEnd = rt_timer_read();
+>   printf("Frame4 gebaut in %ld us\n",(rt_timer_ticks2ns(rtEnd -
+> rtStart))/1000);
+>
+>
+>
+> #define DURATION 40000 // secs
+> #define CYCLETIME 250  // us
+>
+>   rt_task_set_periodic(NULL, TM_NOW, CYCLETIME *1000); // us to ns (for
+> xenomai)
+>
+>   for (unsigned long ulCount = DURATION*(1000000/CYCLETIME); ulCount > 0;
+> --ulCount)
+>   //for (unsigned long ulCount = 0; ulCount < 100; ++ulCount)
+>   {
+>
+>       rt_task_wait_period(NULL);
+>       signalhandler(0,oFrame);
+>       signalhandler(0,oFrame2);
+>       signalhandler(0,oFrame3);
+>       signalhandler(0,oFrame4);
+>   }
+>   printf("\n\n");
+>
+>   }
+>
+>
+> int main(int argc, char** argv)
+>   {
+>   signal(SIGTERM, catch_signal);
+>   signal(SIGINT, catch_signal);
+>   signal(SIGHUP, catch_signal);
+>   mlockall(MCL_CURRENT|MCL_FUTURE);
+>
+>   RT_TASK my_rt_task;
+>
+>   rt_task_create(&my_rt_task,"myRtTask",0,90,T_JOINABLE);
+>
+>   //Start thread
+>   rt_task_start(&my_rt_task, &run_cyclic, argv[1]);
+>
+>   //wait until finished
+>   rt_task_join(&my_rt_task);
+>
+>   rt_task_delete(&my_rt_task);
+>
+>   return 0;
+> }
+>
+>
+> Henning
+
+
+From jan.kiszka at web.de  Mon May  4 22:45:12 2009
+From: jan.kiszka at web.de (Jan Kiszka)
+Date: Mon, 04 May 2009 22:45:12 +0200
+Subject: [Ethercatmaster-users] Loosing time while sending Frames
+In-Reply-To: <alpine.DEB.2.00.0905041622130.7589@ampere.labo01.fmtc.be>
+References: <OFB65B2275.4EC68E13-ONC12575AC.0028AFCC-C12575AC.002A48E0@datacon.at>
+	<alpine.DEB.2.00.0905041622130.7589@ampere.labo01.fmtc.be>
+Message-ID: <49FF53D8.6000002@web.de>
+
+Klaas Gadeyne wrote:
+> On Mon, 4 May 2009, henning.richter at besi.com wrote:
+>>>> In the main function of the EML a created and started a xenomai task.
+>>>> The cycle time of this task is set to 250 us.
+>>>> During this time I am sending one Frame to my slaves each cycle. In all
+>> I
+>>>> have 3 Frames (Frame1 = 60 byte, Frame 2 = 1217 byte, Frame3 = 1204
+>> byte).
+>>>> I am also measuring the time the send command from the low_level_output
+>>>> function in ethercat_xenomai_drv.c needs.
+>>>> This time is between 5 and 10 us. So passing the Frames to the network
+>>>> interface is quite fast.
+>>>> So far so good, now the problem:
+>>>> Measuring the elapsed time between 2 send commands (also @
+>>>> low_level_output) gives me values between 150 us and 350.
+>>>> This i too much I think.
+>> Apart from Jan's suggestions, does that mean that your xenomai task indeed
+>> "overruns"?  Can you show some code?
+>>
+>> Klaas
+>>
+>>
+>> So here is some code:
+> 
+> I can't see from your code below how you actually _measure_ the time while your thread runs periodically (after the rt_task_set_periodic)?
+> However, it's been a very long time since I've worked with xenomai, but your (real-time) code is full of printf (and new) statements, which in the good old times would make your thread switch to 'secondary mode' -> which could explain the latencies you're seeing...
+
+Doing new or malloc, thus acquiring glibc-internal locks and issuing
+mmap from time to time, can cause nasty latencies on any real time kernel.
+
+printf shouldn't be issued either if latency matters. Xenomai offers
+rt_printf as an alternative for doing lock-less printing from RT threads
+- still typically only used for debugging purposes, and typically
+rate-limited.
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 257 bytes
+Desc: OpenPGP digital signature
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090504/fbfd8fb3/attachment.pgp>
+
+From henning.richter at besi.com  Tue May  5 07:58:09 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Tue, 5 May 2009 07:58:09 +0200
+Subject: [Ethercatmaster-users] Loosing time while sending Frames
+In-Reply-To: <alpine.DEB.2.00.0905041622130.7589@ampere.labo01.fmtc.be>
+Message-ID: <OF078FF2B8.CC0EF1FE-ONC12575AD.002011E4-C12575AD.0020CA26@datacon.at>
+
+
+
+
+
+> I can't see from your code below how you actually _measure_ the time
+while your thread runs periodically (after the rt_task_set_periodic)?
+
+> void signalhandler(int signo, EC_Ethernet_Frame &frame)
+>   {
+>   /* Do something every INTERVAL microseconds */
+>
+> ///------------------------SEND
+FRAMES------------------------------------
+>
+>        rtStart = rt_timer_read();
+>   bool send = EtherCAT_DataLinkLayer::instance()->txandrx(&frame);
+>        rtEnd = rt_timer_read();
+>        printf("txandrx Frame: %ld\n",(rt_timer_ticks2ns
+> (rtEnd-rtStart))/1000);
+>
+>   }
+
+I measure the time with the xenomai function rt_timer_read() from timer.h
+library. The timer starts short before the frame will be send and stops
+immediately afterwards.
+
+
+Henning
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090505/9cecc333/attachment.html>
+
+From henning.richter at besi.com  Tue May  5 07:16:29 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Tue, 5 May 2009 07:16:29 +0200
+Subject: [Ethercatmaster-users] Loosing time while sending Frames
+In-Reply-To: <49FF53D8.6000002@web.de>
+Message-ID: <OFAFC8DCF0.BAA452C9-ONC12575AD.001C338F-C12575AD.001CF967@datacon.at>
+
+
+
+
+
+Klaas Gadeyne wrote:
+>> On Mon, 4 May 2009, henning.richter at besi.com wrote:
+>>>>> In the main function of the EML a created and started a xenomai task.
+>>>>> The cycle time of this task is set to 250 us.
+>>>>> During this time I am sending one Frame to my slaves each cycle. In
+all
+>>> I
+>>>>> have 3 Frames (Frame1 = 60 byte, Frame 2 = 1217 byte, Frame3 = 1204
+>>> byte).
+>>>>> I am also measuring the time the send command from the
+low_level_output
+>>>>> function in ethercat_xenomai_drv.c needs.
+>>>>> This time is between 5 and 10 us. So passing the Frames to the
+network
+>>>>> interface is quite fast.
+>>>>> So far so good, now the problem:
+>>>>> Measuring the elapsed time between 2 send commands (also @
+>>>>> low_level_output) gives me values between 150 us and 350.
+>>>>> This i too much I think.
+>>> Apart from Jan's suggestions, does that mean that your xenomai task
+indeed
+>>> "overruns"?  Can you show some code?
+>>>
+>>> Klaas
+>>>
+>>>
+>>> So here is some code:
+>>
+>> I can't see from your code below how you actually _measure_ the time
+while your thread runs periodically (after the rt_task_set_periodic)?
+>> However, it's been a very long time since I've worked with xenomai, but
+your (real-time) code is full of printf (and new) statements, which in the
+good old times would make your thread switch to 'secondary mode' -> which
+could explain the latencies you're seeing...
+>
+> Doing new or malloc, thus acquiring glibc-internal locks and issuing
+> mmap from time to time, can cause nasty latencies on any real time
+kernel.
+>
+> printf shouldn't be issued either if latency matters. Xenomai offers
+> rt_printf as an alternative for doing lock-less printing from RT threads
+> - still typically only used for debugging purposes, and typically
+> rate-limited.
+>
+> Jan
+
+Could there still something be wrong in Xenomai (configuration) ?
+Below I paste the output of the 'xeno-test', even it did not run through
+completely (it stops while generating loads).
+
+Henning
+
+Here the results of the 'xeno-test':
+
+xeno-test: started
+withBusybox is 0
+xeno-test: running tests
+
+Di 5. Mai 07:12:40 CEST 2009
+running: ./xeno-config --verbose
+xeno-config --verbose
+        --version="2.4.6.1"
+        --cc="gcc"
+        --arch="x86"
+        --prefix="/usr/xenomai"
+        --xeno-cflags="-I/usr/xenomai/include -D_GNU_SOURCE -D_REENTRANT
+-D__XENO__"
+        --xeno-ldflags="-L/usr/xenomai/lib -lpthread "
+        --posix-cflags="-I/usr/xenomai/include -I/usr/xenomai/include/posix
+-D_GNU_SOURCE -D_REENTRANT -D__XENO__"
+        --posix-ldflags="-Wl,@/usr/xenomai/lib/posix.wrappers
+-L/usr/xenomai/lib -lpthread_rt -lpthread -lrt "
+        --library-dir="/usr/xenomai/lib"
+
+Di 5. Mai 07:12:40 CEST 2009
+running: ./xeno-info
+If some fields are empty or look unusual you may have an old version.
+Compare to the current minimal requirements in Documentation/Changes.
+
+Linux rd-ethercat 2.6.27.7-xe #1 SMP Wed Apr 29 12:00:19 CEST 2009 i686
+GNU/Linux
+Gnu C                  4.3.2-1ubuntu12)
+Gnu make               3.81
+util-linux             ng 2.14)
+mount                  ng 2.14 (with libvolume_id and selinux support)
+module-init-tools      3.3-pre11
+e2fsprogs              1.41.3
+Linux C Library        2.8.90
+Dynamic linker (ldd)   2.8.90
+Procps                 3.2.7
+Net-tools              1.60
+Kbd                    1.14.1
+Sh-utils               6.10
+Modules Loaded         e100 rt_eepro100 rtpacket rtnet af_packet i915 drm
+bridge stp bnep rfcomm sco l2cap bluetooth ppdev ipv6 iptable_filter
+ip_tables x_tables parport_pc lp parport sr_mod cdrom isp1760 com20020_pci
+com20020 arcnet evdev serio_raw iTCO_wdt psmouse iTCO_vendor_support
+intel_agp shpchp pci_hotplug agpgart ext3 jbd mbcache sd_mod crc_t10dif sg
+usb_storage libusual ata_piix ata_generic libata mii uhci_hcd ehci_hcd
+scsi_mod usbcore fuse
+
+Di 5. Mai 07:12:41 CEST 2009
+running: cat /proc/cpuinfo
+processor       : 0
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 9
+model name      : Mobile Genuine Intel(R) processor       1100MHz
+stepping        : 5
+cpu MHz         : 1099.881
+cache size      : 1024 KB
+fdiv_bug        : no
+hlt_bug         : no
+f00f_bug        : no
+coma_bug        : no
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 2
+wp              : yes
+flags           : fpu vme de pse tsc msr mce cx8 apic sep mtrr pge mca cmov
+pat clflush dts acpi mmx fxsr sse sse2 tm pbe up bts est tm2
+bogomips        : 2199.76
+clflush size    : 64
+power management:
+
+
+Di 5. Mai 07:12:41 CEST 2009
+running: md5sum /proc/cpuinfo # cpuinfo fingerprint
+3f1cac044dfe9caf955d09d7612b905f  /proc/cpuinfo
+CONFIG_PREEMPT_NOTIFIERS=y
+# CONFIG_PREEMPT_NONE is not set
+CONFIG_PREEMPT_VOLUNTARY=y
+# CONFIG_PREEMPT is not set
+CONFIG_IPIPE=y
+CONFIG_IPIPE_DOMAINS=4
+CONFIG_IPIPE_COMPAT=y
+CONFIG_IPIPE_DELAYED_ATOMICSW=y
+# CONFIG_PM is not set
+# CONFIG_CPU_FREQ is not set
+# CONFIG_IPIPE_DEBUG is not set
+# CONFIG_DEBUG_SPINLOCK is not set
+# CONFIG_DEBUG_SPINLOCK_SLEEP is not set
+
+Di 5. Mai 07:12:41 CEST 2009
+running: cat /proc/ipipe/Linux
+       +----- Handling ([A]ccepted, [G]rabbed, [W]ired, [D]iscarded)
+       |+---- Sticky
+       ||+--- Locked
+       |||+-- Exclusive
+       ||||+- Virtual
+[IRQ]  |||||
+   0:  A....
+   1:  A....
+   2:  A....
+   3:  A.L..
+   4:  A.L..
+   5:  A....
+   6:  A....
+   7:  A....
+   8:  A....
+   9:  A....
+  10:  A.L..
+  11:  A.L..
+  12:  A....
+  13:  A....
+  14:  A....
+  15:  A....
+  16:  A....
+  17:  A....
+  18:  A....
+  19:  A....
+  20:  A....
+  21:  A....
+  22:  A....
+  23:  A....
+  24:  A....
+  25:  A....
+  26:  A....
+  27:  A....
+  28:  A....
+  29:  A....
+  30:  A....
+  31:  A....
+  32:  A....
+  33:  A....
+  34:  A....
+  35:  A....
+  36:  A....
+  37:  A....
+  38:  A....
+  39:  A....
+  40:  A....
+  41:  A....
+  42:  A....
+  43:  A....
+  44:  A....
+  45:  A....
+  46:  A....
+  47:  A....
+  48:  A....
+  49:  A....
+  50:  A....
+  51:  A....
+  52:  A....
+  53:  A....
+  54:  A....
+  55:  A....
+  56:  A....
+  57:  A....
+  58:  A....
+  59:  A....
+  60:  A....
+  61:  A....
+  62:  A....
+  63:  A....
+  64:  A....
+  65:  A....
+  66:  A....
+  67:  A....
+  68:  A....
+  69:  A....
+  70:  A....
+  71:  A....
+  72:  A....
+  73:  A....
+  74:  A....
+  75:  A....
+  76:  A....
+  77:  A....
+  78:  A....
+  79:  A....
+  80:  A....
+  81:  A....
+  82:  A....
+  83:  A....
+  84:  A....
+  85:  A....
+  86:  A....
+  87:  A....
+  88:  A....
+  89:  A....
+  90:  A....
+  91:  A....
+  92:  A....
+  93:  A....
+  94:  A....
+  95:  A....
+  96:  A....
+  97:  A....
+  98:  A....
+  99:  A....
+ 100:  A....
+ 101:  A....
+ 102:  A....
+ 103:  A....
+ 104:  A....
+ 105:  A....
+ 106:  A....
+ 107:  A....
+ 108:  A....
+ 109:  A....
+ 110:  A....
+ 111:  A....
+ 112:  A....
+ 113:  A....
+ 114:  A....
+ 115:  A....
+ 116:  A....
+ 117:  A....
+ 118:  A....
+ 119:  A....
+ 120:  A....
+ 121:  A....
+ 122:  A....
+ 123:  A....
+ 124:  A....
+ 125:  A....
+ 126:  A....
+ 127:  A....
+ 128:  A....
+ 129:  A....
+ 130:  A....
+ 131:  A....
+ 132:  A....
+ 133:  A....
+ 134:  A....
+ 135:  A....
+ 136:  A....
+ 137:  A....
+ 138:  A....
+ 139:  A....
+ 140:  A....
+ 141:  A....
+ 142:  A....
+ 143:  A....
+ 144:  A....
+ 145:  A....
+ 146:  A....
+ 147:  A....
+ 148:  A....
+ 149:  A....
+ 150:  A....
+ 151:  A....
+ 152:  A....
+ 153:  A....
+ 154:  A....
+ 155:  A....
+ 156:  A....
+ 157:  A....
+ 158:  A....
+ 159:  A....
+ 160:  A....
+ 161:  A....
+ 162:  A....
+ 163:  A....
+ 164:  A....
+ 165:  A....
+ 166:  A....
+ 167:  A....
+ 168:  A....
+ 169:  A....
+ 170:  A....
+ 171:  A....
+ 172:  A....
+ 173:  A....
+ 174:  A....
+ 175:  A....
+ 176:  A....
+ 177:  A....
+ 178:  A....
+ 179:  A....
+ 180:  A....
+ 181:  A....
+ 182:  A....
+ 183:  A....
+ 184:  A....
+ 185:  A....
+ 186:  A....
+ 187:  A....
+ 188:  A....
+ 189:  A....
+ 190:  A....
+ 191:  A....
+ 192:  A....
+ 193:  A....
+ 194:  A....
+ 195:  A....
+ 196:  A....
+ 197:  A....
+ 198:  A....
+ 199:  A....
+ 200:  A....
+ 201:  A....
+ 202:  A....
+ 203:  A....
+ 204:  A....
+ 205:  A....
+ 206:  A....
+ 207:  A....
+ 208:  A....
+ 209:  A....
+ 210:  A....
+ 211:  A....
+ 212:  A....
+ 213:  A....
+ 214:  A....
+ 215:  A....
+ 216:  A....
+ 217:  A....
+ 218:  A....
+ 219:  A....
+ 220:  A....
+ 221:  A....
+ 222:  A....
+ 223:  A....
+ 224:  A....
+ 230:  A....
+ 231:  A....
+ 232:  A....
+ 233:  A....
+ 234:  GS...
+ 235:  A....
+ 236:  A....
+ 237:  A....
+ 238:  A....
+ 239:  A....
+ 240:  A....
+ 256:  G...V
+ 257:  G...V
+ 259:  G...V
+[Domain info]
+id=0x00000000
+priority=100
+
+Di 5. Mai 07:12:41 CEST 2009
+running: cat /proc/ipipe/Xenomai
+       +----- Handling ([A]ccepted, [G]rabbed, [W]ired, [D]iscarded)
+       |+---- Sticky
+       ||+--- Locked
+       |||+-- Exclusive
+       ||||+- Virtual
+[IRQ]  |||||
+   9:  W..X.
+ 230:  W....
+ 233:  W..X.
+ 234:  GS...
+ 258:  W...V
+[Domain info]
+id=0x58454e4f
+priority=topmost
+
+Di 5. Mai 07:12:41 CEST 2009
+running: cat /proc/ipipe/version
+2.1-02
+
+Di 5. Mai 07:12:41 CEST 2009
+running: generate_loads 1
+dd workload started, pids 5100 stored in /var/lock/xeno-test.4960.pids
+ 5100 pts/2    00:00:00 dd
+something died a 5100 or
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090505/e19c8e93/attachment.html>
+
+From klaas.gadeyne at fmtc.be  Tue May  5 09:00:59 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 5 May 2009 09:00:59 +0200 (CEST)
+Subject: [Ethercatmaster-users] Loosing time while sending Frames
+In-Reply-To: <OF078FF2B8.CC0EF1FE-ONC12575AD.002011E4-C12575AD.0020CA26@datacon.at>
+References: <OF078FF2B8.CC0EF1FE-ONC12575AD.002011E4-C12575AD.0020CA26@datacon.at>
+Message-ID: <alpine.DEB.2.00.0905050859290.7589@ampere.labo01.fmtc.be>
+
+On Tue, 5 May 2009, henning.richter at besi.com wrote:
+>> I can't see from your code below how you actually _measure_ the time
+> while your thread runs periodically (after the rt_task_set_periodic)?
+>
+>> void signalhandler(int signo, EC_Ethernet_Frame &frame)
+>>   {
+>>   /* Do something every INTERVAL microseconds */
+>>
+>> ///------------------------SEND
+> FRAMES------------------------------------
+>>
+>>        rtStart = rt_timer_read();
+>>   bool send = EtherCAT_DataLinkLayer::instance()->txandrx(&frame);
+>>        rtEnd = rt_timer_read();
+>>        printf("txandrx Frame: %ld\n",(rt_timer_ticks2ns
+>> (rtEnd-rtStart))/1000);
+>>
+>>   }
+>
+> I measure the time with the xenomai function rt_timer_read() from timer.h
+> library. The timer starts short before the frame will be send and stops
+> immediately afterwards.
+
+I see now (but that code was commented out originally).  However, as we said yesterday, the printf() statement is probably the culprit causing latencies here.
+
+Klaas
+
+
+From klaas.gadeyne at fmtc.be  Tue May  5 09:03:29 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 5 May 2009 09:03:29 +0200 (CEST)
+Subject: [Ethercatmaster-users] Loosing time while sending Frames
+In-Reply-To: <OFAFC8DCF0.BAA452C9-ONC12575AD.001C338F-C12575AD.001CF967@datacon.at>
+References: <OFAFC8DCF0.BAA452C9-ONC12575AD.001C338F-C12575AD.001CF967@datacon.at>
+Message-ID: <alpine.DEB.2.00.0905050901550.7589@ampere.labo01.fmtc.be>
+
+Hi Henning,
+
+On Tue, 5 May 2009, henning.richter at besi.com wrote:
+> Could there still something be wrong in Xenomai (configuration) ?
+> Below I paste the output of the 'xeno-test', even it did not run throug=
+> h
+> completely (it stops while generating loads).
+
+[snip]
+
+Although Jan is listening on this ML :-), I suggest you move this topic to xenomai-help.
+
+Klaas
+
+
+From klaas.gadeyne at fmtc.be  Fri May  8 16:48:30 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Fri, 8 May 2009 16:48:30 +0200 (CEST)
+Subject: [Ethercatmaster-users] EtherCAT motor drives enquiry
+Message-ID: <alpine.DEB.2.00.0905081022460.11886@ampere.labo01.fmtc.be>
+
+Hi all,
+
+At FMTC we are currently designing a new robotic system and equipping
+it with EtherCAT compatible drives is one option.  Therefore, I would
+like to know if anybody listening on this list has experience with
+using EtherCAT drives [*].
+
+If so, can you tell us
+
+- which drives you have used or are using? from Beckhoff? from Copley
+   Controls?  which one, what model, ...
+   What protocol did you (or better: the drive) use (CoE, SoE, ...)?
+
+- what libraries / support is available for those drives [note that
+   you shouldn't limit yourself to EML :-) ]
+   E.g. you did it with twincat, or used another EtherCAT Master implementation.
+
+[I've saved the hardest question for the last :-] 
+- if you have an idea what would be the effort/tasks to support a
+   possibly currently unsupported  drive (using CanOpen over Ethercat
+   like Accelnet EtherCat from CopleyControls or the one from Beckoff, if
+   those are not supported), starting from the current EML code base
+   e.g. (and reusing parts of the CanFestival CANOpen layer fi.)
+
+TIA,
+
+Klaas
+
+[*] To make things more clear, I mean drives which have (and use) an
+ethernet connector and not the usage scheme in which you would connect
+an EtherCAT bus to some IO modules which are in turn connected to the
+drive.
+
+
+From sancelot at free.fr  Fri May  8 19:06:24 2009
+From: sancelot at free.fr (s. ancelot)
+Date: Fri, 08 May 2009 19:06:24 +0200
+Subject: [Ethercatmaster-users] EtherCAT motor drives enquiry
+In-Reply-To: <alpine.DEB.2.00.0905081022460.11886@ampere.labo01.fmtc.be>
+References: <alpine.DEB.2.00.0905081022460.11886@ampere.labo01.fmtc.be>
+Message-ID: <op.utme4ymrl2rahm@pc-de-acer>
+
+Hi,
+
+Quick response :
+CoE, is only used mainly for setting parameters, you would need only a  
+writesdo func, and may be manage emergency messages.
+I think it is only a commercial argument,since ethercat protocol is mainly  
+used in drives.
+
+The major problem with drive manufacturers : ethercat drive them , but you  
+need another protocol usb/serial to set it up with their sofware!!
+
+Most drives I have seen are using CoE   (SoE for beckhoff)
+Regarding technology used, I can not talk of it by email,  for  
+professional reasons.
+
+Regarding using it with EML, I think it would be hard , we first tried it  
+and finally found it was easier(for us) developping our own ethercat  
+master.
+
+We developped the basics ethercat func BRD,BRW,LRW, .... and made a parser  
+of the twincat XML config filE.
+
+We may follow this discussion in private with msn, if you like. I may have  
+some questions to ask you regarding orocos and motion control.I believe  
+you are involved in it.
+
+Regarding CanFestival, this may be a VERY good idea, but as I said first,  
+I think it is a luxurious solution !!!
+
+Best Regards
+Steph
+
+
+Le Fri, 08 May 2009 16:48:30 +0200, Klaas Gadeyne <klaas.gadeyne at fmtc.be>  
+a ?crit:
+
+> Hi all,
+>
+> At FMTC we are currently designing a new robotic system and equipping
+> it with EtherCAT compatible drives is one option.  Therefore, I would
+> like to know if anybody listening on this list has experience with
+> using EtherCAT drives [*].
+>
+> If so, can you tell us
+>
+> - which drives you have used or are using? from Beckhoff? from Copley
+>    Controls?  which one, what model, ...
+>    What protocol did you (or better: the drive) use (CoE, SoE, ...)?
+>
+> - what libraries / support is available for those drives [note that
+>    you shouldn't limit yourself to EML :-) ]
+>    E.g. you did it with twincat, or used another EtherCAT Master  
+> implementation.
+>
+> [I've saved the hardest question for the last :-]
+> - if you have an idea what would be the effort/tasks to support a
+>    possibly currently unsupported  drive (using CanOpen over Ethercat
+>    like Accelnet EtherCat from CopleyControls or the one from Beckoff, if
+>    those are not supported), starting from the current EML code base
+>    e.g. (and reusing parts of the CanFestival CANOpen layer fi.)
+>
+> TIA,
+>
+> Klaas
+>
+> [*] To make things more clear, I mean drives which have (and use) an
+> ethernet connector and not the usage scheme in which you would connect
+> an EtherCAT bus to some IO modules which are in turn connected to the
+> drive.
+> _______________________________________________
+> Ethercatmaster-users mailing list
+> Ethercatmaster-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+
+
+-- 
+Utilisant le client e-mail r?volutionnaire d'Opera :  
+http://www.opera.com/mail/
+
+

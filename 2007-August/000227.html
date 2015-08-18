@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] connecting the slave over a switch
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20connecting%20the%20slave%20over%20a%20switch&In-Reply-To=%3Cbc4264770708020317v7353044bn5469a09ecec0331c%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000226.html">
+   <LINK REL="Next"  HREF="000230.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] connecting the slave over a switch</H1>
+    <B>roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20connecting%20the%20slave%20over%20a%20switch&In-Reply-To=%3Cbc4264770708020317v7353044bn5469a09ecec0331c%40mail.gmail.com%3E"
+       TITLE="[Ethercatmaster-users] connecting the slave over a switch">rolandtollenaar at gmail.com
+       </A><BR>
+    <I>Thu Aug  2 12:17:57 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000226.html">[Ethercatmaster-users] RE : Re: understanding the datagrams
+</A></li>
+        <LI>Next message: <A HREF="000230.html">[Ethercatmaster-users] connecting the slave over a switch
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#227">[ date ]</a>
+              <a href="thread.html#227">[ thread ]</a>
+              <a href="subject.html#227">[ subject ]</a>
+              <a href="author.html#227">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I now have a client which happily runs wireshark. I can see the
+communication attempt between my EML master and the slave ( think I
+can even see the slave responding) but the master_test fails to
+perform as it does when i only have a direct link between the master
+and the slave. Somewhere the switch is doing something not so nice
+witht he packets. Below is the master_test output and the scan is
+attached. can anyone possibly make out what i am doing wrong?
+
+Regards,
+
+Roland.
+
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/mnt/appusb/Packages/eml/modtrunk/build-rtnet/tests/rtnet#
+./master_test rteth0
+Socket created: socket id: 896
+Got interface: index: 0
+Attach netif
+
+Master initializing
+
+EtherCAT AL: Ring contains 10 slaves
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, rev=0x10000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=1, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=2, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=3, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=4, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=5, Product Code=0x10243052, rev=0x0
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=6, adr=0x3ec, Prod. Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=7, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=8, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=9, Product Code=0x7d43052, rev=0x100000
+AL: resetting FMMUs
+AL: resetting SMs
+EC_Telegram::check_index(): Index field does not correspond with received data
+low_level_input: framebuilding failed!
+AL: Setting all slaves in init mode
+building frame: checkheader failed
+low_level_input: framebuilding failed!
+master_test: /mnt/appusb/Packages/eml/trunk/src/dll/ethercat_device_addressed_telegram.cxx:110:
+virtual const unsigned char* APRD_Telegram::build_command_field(const
+unsigned char*): Assertion `a_buffer[0] == APRD' failed.
+Aborted
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: eml_over_switch.pcap
+Type: application/octet-stream
+Size: 14880 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070802/9c5e6ac6/attachment.obj">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070802/9c5e6ac6/attachment.obj</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000226.html">[Ethercatmaster-users] RE : Re: understanding the datagrams
+</A></li>
+	<LI>Next message: <A HREF="000230.html">[Ethercatmaster-users] connecting the slave over a switch
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#227">[ date ]</a>
+              <a href="thread.html#227">[ thread ]</a>
+              <a href="subject.html#227">[ subject ]</a>
+              <a href="author.html#227">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

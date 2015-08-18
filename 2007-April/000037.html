@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Master create Error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Master%20create%20Error&In-Reply-To=%3C460F8A58.9070908%40skynet.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000038.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Master create Error</H1>
+    <B>Tom Panis</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Master%20create%20Error&In-Reply-To=%3C460F8A58.9070908%40skynet.be%3E"
+       TITLE="[Ethercatmaster-users] Master create Error">tompanis at skynet.be
+       </A><BR>
+    <I>Sun Apr  1 12:32:56 CEST 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000038.html">[Ethercatmaster-users] (no subject)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#37">[ date ]</a>
+              <a href="thread.html#37">[ thread ]</a>
+              <a href="subject.html#37">[ subject ]</a>
+              <a href="author.html#37">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+Felix GMX wrote:
+&gt;<i> Hello,
+</I>&gt;<i>  
+</I>&gt;<i> If I create an EtherCAT Master with
+</I>&gt;<i>  
+</I>&gt;<i> EtherCAT_Master * EM = EtherCAT_Master::instance()
+</I>&gt;<i>  
+</I>&gt;<i> the &quot;netif *m_if&quot; variable in the EtherCAT_DataLinkLayer class is
+</I>&gt;<i> set to &quot;0&quot;. Why is it initial with &quot;0&quot;.
+</I>&gt;<i>  
+</I>&gt;<i> EtherCAT_DataLinkLayer::EtherCAT_DataLinkLayer()
+</I>&gt;<i>   : m_if(0)
+</I>&gt;<i> {
+</I>&gt;<i> }
+</I>&gt;<i>  
+</I>&gt;<i> If the EtherCAT Master is searching a slave, the master can not send
+</I>&gt;<i> any messages because m_if is set to &quot;0&quot;.
+</I>&gt;<i>  
+</I>&gt;<i> bool EtherCAT_DataLinkLayer::txandrx(EtherCAT_Frame * a_frame)
+</I>&gt;<i> {
+</I>&gt;<i>  bool succeed = m_if-&gt;txandrx(a_frame, m_if);
+</I>&gt;<i>  if (!succeed)
+</I>&gt;<i>   log(EC_LOG_INFO, &quot;DLL::txandrx() Error\n&quot;);
+</I>&gt;<i>  return succeed;
+</I>&gt;<i> }
+</I>&gt;<i>  
+</I>&gt;<i> How should I initiate the netit *m_if variable?
+</I>
+Would you like to create an etharcatmaster for eCos or RTnet/Xenomai?
+
+If it's RTnet you're working with, you should first initialise the
+network and create an EtherCAT network interface with init_ec(char *
+interface). The argument is the name of the real time network interface
+eg. init_ec(rteth0). Then you have to attach this EtherCAT network
+interface to the EtherCAT_DataLinkLayer with
+EtherCAT_DataLinkLayer::instance()-&gt;attach(struct netif * netif ).
+There's an example at
+&lt;<A HREF="http://svn.berlios.de/wsvn/ethercatmaster/trunk/tests/rtnet/master_test.cpp?op=file&amp;rev=0&amp;sc=0">http://svn.berlios.de/wsvn/ethercatmaster/trunk/tests/rtnet/master_test.cpp?op=file&amp;rev=0&amp;sc=0</A>&gt;. 
+
+
+
+Tom
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000038.html">[Ethercatmaster-users] (no subject)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#37">[ date ]</a>
+              <a href="thread.html#37">[ thread ]</a>
+              <a href="subject.html#37">[ subject ]</a>
+              <a href="author.html#37">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

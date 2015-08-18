@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3CPine.LNX.4.64.0708160951040.18303%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000271.html">
+   <LINK REL="Next"  HREF="000273.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3CPine.LNX.4.64.0708160951040.18303%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Thu Aug 16 09:55:52 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000271.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000273.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#272">[ date ]</a>
+              <a href="thread.html#272">[ thread ]</a>
+              <a href="subject.html#272">[ subject ]</a>
+              <a href="author.html#272">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 14 Aug 2007, Jan Kiszka wrote:
+&gt;<i> Roland Tollenaar wrote:
+</I>[dropping some cc:'s]
+&gt;&gt;&gt;<i> How many threads do you have sending process data, and what are there
+</I>&gt;&gt;&gt;<i> priorities? (/proc/xenomai/sched IIRC)
+</I>&gt;&gt;<i> I have 3 rt tasks running. Only one sends and receives process data. The
+</I>&gt;&gt;<i> priorities are:
+</I>&gt;&gt;<i> rt_task1 99
+</I>&gt;<i>
+</I>&gt;<i> Check the /proc output again, there should be also RTnet's stack manager
+</I>&gt;<i> at prio 98. Maybe that is too low for your scenario and causes prio
+</I>&gt;<i> inversions (note: every incoming Ethernet frame goes through its hands).
+</I>&gt;<i> Try lowering the prio of your rt_task1 beneath 98.
+</I>
+Indeed (see the lowlevel send code I copy/pasted yesterday to
+understand why), that should be documented somewhere!  Your
+application threads should have a lower priority than RTnet's stack
+manager.  Consider this lack of documentation as an EML bug and
+provide a patch...
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000271.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000273.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#272">[ date ]</a>
+              <a href="thread.html#272">[ thread ]</a>
+              <a href="subject.html#272">[ subject ]</a>
+              <a href="author.html#272">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

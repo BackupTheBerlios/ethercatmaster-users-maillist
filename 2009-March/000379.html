@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] some questions about the usage of eml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3Calpine.DEB.2.00.0903230943040.21393%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000378.html">
+   <LINK REL="Next"  HREF="000380.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] some questions about the usage of eml</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3Calpine.DEB.2.00.0903230943040.21393%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] some questions about the usage of eml">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Mon Mar 23 09:51:16 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000378.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+        <LI>Next message: <A HREF="000380.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#379">[ date ]</a>
+              <a href="thread.html#379">[ thread ]</a>
+              <a href="subject.html#379">[ subject ]</a>
+              <a href="author.html#379">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 17 Mar 2009, <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">henning.richter at besi.com</A> wrote:
+&gt;&gt;&gt;<i> I use the eml on a linux machine (with xenomai and rtnet) and want to
+</I>&gt;&gt;&gt;<i> coummunicate with my slave.
+</I>&gt;&gt;&gt;<i> The slave is a NXSTK 50-RE with a netx50 cpu (
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i> <A HREF="http://de.hilscher.com/products_details_hardware.html?p_id=P_47614930462d6">http://de.hilscher.com/products_details_hardware.html?p_id=P_47614930462d6</A>)
+</I>&gt;&gt;&gt;<i> .
+</I>&gt;&gt;&gt;<i> The configuration of the slave is known by the master (i added a entry
+</I>&gt;<i> to
+</I>&gt;&gt;&gt;<i> the slave db from the xml-file).
+</I>&gt;&gt;&gt;<i> I connected the slave and the master directly with a TP Cat5 cable.
+</I>&gt;&gt;&gt;<i> When I run the master_test application the slave is found in the ring
+</I>&gt;<i> but
+</I>&gt;&gt;&gt;<i> the state will not be changed (from init to op state).
+</I>&gt;&gt;&gt;<i> EC_ESM_OPS::set_state():state trans. failed...
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> so where is the mistake?
+</I>&gt;<i>
+</I>&gt;&gt;<i> If you want some help, you will have to provide more information I'm
+</I>&gt;<i> afraid.
+</I>&gt;&gt;<i> What does your debugger say, what happens if you try to go to
+</I>&gt;<i> pre-operational, ...
+</I>
+&gt;<i> that happens if i try to set the slave to op-state (this also happens if i
+</I>&gt;<i> try pre-op-state):
+</I>&gt;<i>
+</I>&gt;<i>   <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ethercat at rd-ethercat</A>:/usr/src/eml/eml-trunk$ sudo
+</I>&gt;<i>   tests/rtnet/master_test rteth0
+</I>&gt;<i>   Socket created: socket id: 896
+</I>&gt;<i>   Got interface: index: 0
+</I>&gt;<i>   Attach netif
+</I>&gt;<i>
+</I>&gt;<i>   Master initializing
+</I>&gt;<i>
+</I>&gt;<i>   EtherCAT AL: Ring contains 1 slaves
+</I>&gt;<i>   AL creating SlaveHandler: pos=0, adr=0x3ec, Prod. Code=0x8, rev=0x0
+</I>&gt;<i>   AL: resetting FMMUs
+</I>&gt;<i>   AL: resetting SMs
+</I>&gt;<i>   AL: Setting all slaves in init mode
+</I>&gt;<i>   Getting slave handler2
+</I>&gt;<i>   Setting NETX50 to OP State
+</I>&gt;<i>   EC_ESM_Ops::set_state() Warning: State trans. failed (try 0), desired=2,
+</I>&gt;<i>   status=1
+</I>&gt;<i>   [...]
+</I>&gt;<i>   EC_ESM_Ops::set_state() Warning: State trans. failed (try 49),
+</I>&gt;<i>   desired=2, status=1
+</I>&gt;<i>   EC_ESM_Ops::set_state() failed to set state after 50 triesfailes to set
+</I>&gt;<i>   NETX50 to OP State
+</I>&gt;<i>   AL initializing
+</I>&gt;<i>
+</I>&gt;<i>   Test: Set Channel 1 to 5V:
+</I>&gt;<i>
+</I>&gt;<i>   Test done.
+</I>
+Can you step through the program with your debugger, and see what line fails exactly?
+
+Do you also have problems with other devices, or just this one (I'm not familiar with this one).  If this is the only one, does the manual say something about extra configuration steps which have to be taken?
+
+&gt;<i> The two attachements (hope that will work) show the debug prints of the
+</I>&gt;<i> makefile and a part of the source code.
+</I>
+Please don't put text output in MS word files (even more: don't use MS word files on public mailinglists).
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000378.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+	<LI>Next message: <A HREF="000380.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#379">[ date ]</a>
+              <a href="thread.html#379">[ thread ]</a>
+              <a href="subject.html#379">[ subject ]</a>
+              <a href="author.html#379">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

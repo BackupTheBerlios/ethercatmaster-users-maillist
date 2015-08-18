@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] low_level_input: Cannot receive msg: -1
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20low_level_input%3A%20Cannot%20receive%20msg%3A%20-1&In-Reply-To=%3C1195248567.16196.57.camel%40dieutan.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000316.html">
+   <LINK REL="Next"  HREF="000318.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] low_level_input: Cannot receive msg: -1</H1>
+    <B>Dennis Nguyen</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20low_level_input%3A%20Cannot%20receive%20msg%3A%20-1&In-Reply-To=%3C1195248567.16196.57.camel%40dieutan.org%3E"
+       TITLE="[Ethercatmaster-users] low_level_input: Cannot receive msg: -1">dennisnguy at sbcglobal.net
+       </A><BR>
+    <I>Fri Nov 16 22:29:26 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000316.html">[Ethercatmaster-users] How to build Master as a Slave or establish communication between two Masters
+</A></li>
+        <LI>Next message: <A HREF="000318.html">[Ethercatmaster-users] low_level_input: Cannot receive msg: -1
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#317">[ date ]</a>
+              <a href="thread.html#317">[ thread ]</a>
+              <a href="subject.html#317">[ subject ]</a>
+              <a href="author.html#317">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello all,
+
+I'm using linux i386 kernel 2.6.22-12,
+adeos-ipipe-2.6.22-i386-1.10-12.patch, xenomai-2.4-rc6, rtnet trunk 1140
+as 11/15/2007, eml trunk 31 as of 11/15/2007.
+Beckhoff EL1100, and one EL2004.
+I didn't use the El4102. I modified the master_test.cpp using Tom and
+Haris example for EL2004. I set EtherCAT_SlaveDb::instance(2).
+there are 2 RTL 8139 on the PC.
+
+I inserted modules:
+sudo mknod /dev/rtnet c 10 240
+sudo ifconfig eth0 down
+sudo ifconfig eth1 down
+sudo rmmod 8139cp
+sudo rmmod 8139too
+sudo
+insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/nucleus/xeno_nucleus.ko
+sudo
+insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/native/xeno_native.ko
+sudo
+insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/posix/xeno_posix.ko
+sudo
+insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/rtdm/xeno_rtdm.ko
+sudo insmod /usr/local/rtnet/modulesmodules/rtnet.ko;
+sudo insmod /usr/local/rtnet/modulesmodules/rtipv4.ko;
+sudo insmod /usr/local/rtnet/modulesmodules/rtpacket.ko;
+sudo insmod /usr/local/rtnet/modulesmodules/rt_8139.ko;
+sudo insmod /usr/local/rtnet/modulesmodules/rt_loopback.ko;
+sudo /usr/local/rtnet/modules/sbin/rtifconfig rtlo up 127.0.0.1
+sudo /usr/local/rtnet/modules/sbin/rtifconfig rteth0 up 10.0.0.1 netmask
+255.255.255.0;
+
+I got the error messages when running the master_test:
+low_level_input: Cannot receive msg: -1
+low_level_txandrx: failed: MAX_TRIES_TX: giving up
+DLL::txandrx() Error
+Error sending counter frame
+Something went wrong while scanning network
+EtherCAT_AL&quot;&quot; Can't init network
+
+There are 20 frames capture while I ran the master_test. The following
+are 2 of the frames.
+ffffffffffff00000000000088a40d10010000000000010000000000000000010000000000000a000001000000000000000000000000000000000000
+ffffffffffff02000000000088a40d10010002000000010000000301000000010000000000000a000001000000000000000000000000000000000000
+(Does the second frame come from Slave?)
+
+I got this from dmesg:
+rt_8139too Fast Ethernet driver 0.9.24-rt0.7
+RTnet: registered rteth0
+Xenomai: xnintr_shirq_handler: IRQ11 not handled: Disable IRQ line.
+
+I don't know if the xenomai disable IRQ line caused EML couldn't receive
+the reply.
+
+Any suggestion to solve the master initiation please.
+
+Thanks in advance,
+Dennis
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000316.html">[Ethercatmaster-users] How to build Master as a Slave or establish communication between two Masters
+</A></li>
+	<LI>Next message: <A HREF="000318.html">[Ethercatmaster-users] low_level_input: Cannot receive msg: -1
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#317">[ date ]</a>
+              <a href="thread.html#317">[ thread ]</a>
+              <a href="subject.html#317">[ subject ]</a>
+              <a href="author.html#317">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

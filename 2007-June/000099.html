@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] getting started
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20getting%20started&In-Reply-To=%3C466E98B7.6070500%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000098.html">
+   <LINK REL="Next"  HREF="000100.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] getting started</H1>
+    <B>Jan Kiszka</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20getting%20started&In-Reply-To=%3C466E98B7.6070500%40web.de%3E"
+       TITLE="[Ethercatmaster-users] getting started">jan.kiszka at web.de
+       </A><BR>
+    <I>Tue Jun 12 14:59:35 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000098.html">[Ethercatmaster-users] getting started
+</A></li>
+        <LI>Next message: <A HREF="000100.html">[Ethercatmaster-users] getting started
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#99">[ date ]</a>
+              <a href="thread.html#99">[ thread ]</a>
+              <a href="subject.html#99">[ subject ]</a>
+              <a href="author.html#99">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>roland Tollenaar wrote:
+&gt;<i> Hi Klaas,
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Please post relevant output from running the test programs.  Normally,
+</I>&gt;&gt;<i> you should get further when running the master_test now.
+</I>&gt;<i> 
+</I>&gt;<i> This is the output if I do not run
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> ./rtnet start
+</I>&gt;<i> 
+</I>&gt;<i> before running master_test.:
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+</I>&gt;<i> Socket created: socket id: 3
+</I>&gt;<i> Cannot get interface index: No such device
+</I>&gt;<i> Socket initialisation failed
+</I>
+Did you configure rteth0? Something like modprobe &lt;my-rt-nic-driver&gt;,
+modprobe rtpacket, rtifconfig rteth0 up?
+
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test eth0
+</I>
+eth0 is obviously wrong. You want to use RTnet, don't you?
+
+&gt;<i> Socket created: socket id: 3
+</I>&gt;<i> Got interface: index: 0
+</I>&gt;<i> Cannot set timout: Invalid argument
+</I>&gt;<i> Continue without timeout
+</I>&gt;<i> Attach netif
+</I>&gt;<i> 
+</I>&gt;<i> Master initializing
+</I>&gt;<i> 
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_txandrx: failed: MAX_TRIES_TX: Giving up
+</I>&gt;<i> DLL::txandrx() Error
+</I>&gt;<i> Error sending counter frame
+</I>&gt;<i> Something went wrong while scanning network
+</I>&gt;<i> EtherCAT_AL:: Can't init network
+</I>&gt;<i> Getting slave handler
+</I>&gt;<i> EtherCAT_AL: No such slave, returning NULL
+</I>&gt;<i> Setting EK1100 to OP STATE
+</I>&gt;<i> Segmentation fault
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> If I run rtnet start the output is
+</I>&gt;<i> 
+</I>&gt;<i> Waiting for slaves.........
+</I>
+Don't use this for EtherCAT setup, RTmac/TDMA is otherwise brought up
+which makes no sense here. Isn't the EML documentation covering the
+required RTnet start-up sequence?
+
+&gt;<i> 
+</I>&gt;<i> (My slave IP is set to 10.0.0.2) I have not yet discovered what the
+</I>&gt;<i> correct IP of the remote IO station is ?
+</I>&gt;<i> 
+</I>&gt;<i> I end the &quot;Waiting for slaves....&quot; with ^C.
+</I>&gt;<i> 
+</I>&gt;<i> Then run master_test, the output is:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+</I>&gt;<i> Socket created: socket id: 896
+</I>&gt;<i> Got interface: index: 0
+</I>&gt;<i> Attach netif
+</I>&gt;<i> 
+</I>&gt;<i> Master initializing
+</I>
+Due to RTmac/TDMA, the master will not be able to send any packet on the
+wire...
+
+&gt;<i> 
+</I>&gt;<i> low_level_txandrx: failed: MAX_TRIES_TX: Giving up
+</I>&gt;<i> DLL::txandrx() Error
+</I>&gt;<i> Error sending counter frame
+</I>&gt;<i> Something went wrong while scanning network
+</I>&gt;<i> EtherCAT_AL:: Can't init network
+</I>&gt;<i> Getting slave handler
+</I>&gt;<i> EtherCAT_AL: No such slave, returning NULL
+</I>&gt;<i> Setting EK1100 to OP STATE
+</I>&gt;<i> Segmentation fault
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+</I>&gt;<i> 
+</I>&gt;<i> Hope this tells us what I am doing wrong?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Kind regards.
+</I>&gt;<i> 
+</I>&gt;<i> Roland.
+</I>&gt;<i> 
+</I>
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/372991fb/attachment.pgp">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/372991fb/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000098.html">[Ethercatmaster-users] getting started
+</A></li>
+	<LI>Next message: <A HREF="000100.html">[Ethercatmaster-users] getting started
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#99">[ date ]</a>
+              <a href="thread.html#99">[ thread ]</a>
+              <a href="subject.html#99">[ subject ]</a>
+              <a href="author.html#99">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

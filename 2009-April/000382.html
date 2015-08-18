@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] BK 1250
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20BK%201250&In-Reply-To=%3Calpine.DEB.2.00.0904060911220.14121%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000381.html">
+   <LINK REL="Next"  HREF="000383.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] BK 1250</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20BK%201250&In-Reply-To=%3Calpine.DEB.2.00.0904060911220.14121%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] BK 1250">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Mon Apr  6 09:19:54 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000381.html">[Ethercatmaster-users] BK 1250
+</A></li>
+        <LI>Next message: <A HREF="000383.html">[Ethercatmaster-users] BK 1250
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#382">[ date ]</a>
+              <a href="thread.html#382">[ thread ]</a>
+              <a href="subject.html#382">[ subject ]</a>
+              <a href="author.html#382">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Fri, 3 Apr 2009, <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">henning.richter at besi.com</A> wrote:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I'd like to set the bus coupler BK1250 from Beckhoff to OP-State but this
+</I>&gt;<i> didn't work.
+</I>&gt;<i> Setting the bus coupler the Preoperation state works. So I guess there must
+</I>&gt;<i> be something wrong in my SyncManager configuration.
+</I>
+Or you've found a bug :-)
+
+&gt;<i> I used the xml file from the beckhoff website for configuration.
+</I>&gt;<i> Maybe I did something wrong in the configuration that I don't see right
+</I>&gt;<i> now.
+</I>&gt;<i>
+</I>&gt;<i> Here is the corresponding source code:
+</I>&gt;<i>
+</I>&gt;<i> ///BusKoppler BK1250
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_FMMU_Config fmmu_config_BK1250(2);
+</I>&gt;<i> EC_FMMU fmmu0_BK1250
+</I>&gt;<i> (0x00080000,0x0001,0x00,0x03,0x1600,0x00,true,false,true); //inputs
+</I>&gt;<i> EC_FMMU fmmu1_BK1250
+</I>&gt;<i> (0x00060000,0x0001,0x00,0x03,0x1000,0x00,false,true,true); //outputs
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_PD_Config pd_config_BK1250(2);
+</I>&gt;<i>
+</I>&gt;<i> EC_SyncMan syncman0_BK1250
+</I>&gt;<i> (0x1600,1,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);  //inputs
+</I>&gt;<i> EC_SyncMan syncman1_BK1250
+</I>&gt;<i> (0x1000,1,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); //outputs
+</I>&gt;<i> //Mailbox-config
+</I>&gt;<i> EC_SyncMan syncman_mbx1_BK1250
+</I>&gt;<i> (0x1e00,136,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);  //MboxIn
+</I>&gt;<i> EC_SyncMan syncman_mbx0_BK1250
+</I>&gt;<i> (0x1c00,136,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); //MboxOut
+</I>&gt;<i> EtherCAT_MbxConfig mbx_conf_BK1250 = {syncman_mbx0_BK1250,
+</I>&gt;<i> syncman_mbx1_BK1250};
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_SlaveConfig EC_BK1250
+</I>&gt;<i> (0x04E22C22,0x00100000,0x03f0,&amp;fmmu_config_BK1250,&amp;pd_config_BK1250,&amp;mbx_conf_BK1250);
+</I>
+It's hard to read this for breakfast :-)
+
+Do you have access to TwinCAT, so you can verify the parameters above really work?  IIRC, there were some reports on this ML that sometimes a particular module has several 'versions', which have to be configured differently, so maybe the information you're using from the xml file is not completely correct.
+
+Also, you might try to raise the value of
+
+src/al/ethercat_FSM.cxx:53:static const unsigned int EC_ESM_OPS_MAX_RETRIES = 10;
+
+to make sure you've waited long enough.
+
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000381.html">[Ethercatmaster-users] BK 1250
+</A></li>
+	<LI>Next message: <A HREF="000383.html">[Ethercatmaster-users] BK 1250
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#382">[ date ]</a>
+              <a href="thread.html#382">[ thread ]</a>
+              <a href="subject.html#382">[ subject ]</a>
+              <a href="author.html#382">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

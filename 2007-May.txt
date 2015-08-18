@@ -1,0 +1,1000 @@
+From klaas.gadeyne at fmtc.be  Thu May  3 10:13:50 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 3 May 2007 10:13:50 +0200 (CEST)
+Subject: [Ethercatmaster-users] [Xenomai-help] HELP!!
+In-Reply-To: <46399580.7020600@gmail.com>
+References: <46388DCC.5070303@gmail.com> <46389325.7080200@web.de>
+	<4638A368.9040705@gmail.com> <4638A574.5020706@web.de>
+	<Pine.LNX.4.64.0705030901250.31536@ampere.labo01.fmtc.be>
+	<46399580.7020600@gmail.com>
+Message-ID: <Pine.LNX.4.64.0705031010080.31536@ampere.labo01.fmtc.be>
+
+On Thu, 3 May 2007, Roland Tollenaar wrote:
+[adding eml-users to cc:]
+[..]
+>>>> But my next problem will be to get xenomai to work with ethercat. You
+>>>> say I can try using the Ethercat Master library with RTnet. But why
+>>>> would I need RTnet? How will the layering look in this case? IOW what
+>>>> functionality will the ethernet master library provide and what will the
+>>>> RTnet provide?
+>>>> 
+>>>> Has anyone done this before?
+>> 
+>> We did.  We used it to drive a 2-dof table.
+>
+> But if I check out the link, it seems that EML has mainly (exclusively?) been 
+> used on eCos/RTnet platform. Not yet on a linux/xemonai/RTNet combination. 
+> Correct?
+
+No, which sentence or paragraph did you understand that from.
+Currently there are two options
+
+- EML + eCos (using the network stack provided with eCos)
+- EML + Xenomai + RTNET
+
+The latter one was used to drive the 2-dof table.
+
+Klaas
+
+
+
+
+From klaas.gadeyne at fmtc.be  Thu May  3 10:15:43 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 3 May 2007 10:15:43 +0200 (CEST)
+Subject: [Ethercatmaster-users] [Xenomai-help] HELP!!
+In-Reply-To: <Pine.LNX.4.64.0705031010080.31536@ampere.labo01.fmtc.be>
+References: <46388DCC.5070303@gmail.com> <46389325.7080200@web.de>
+	<4638A368.9040705@gmail.com> <4638A574.5020706@web.de>
+	<Pine.LNX.4.64.0705030901250.31536@ampere.labo01.fmtc.be>
+	<46399580.7020600@gmail.com>
+	<Pine.LNX.4.64.0705031010080.31536@ampere.labo01.fmtc.be>
+Message-ID: <Pine.LNX.4.64.0705031015140.31536@ampere.labo01.fmtc.be>
+
+On Thu, 3 May 2007, Klaas Gadeyne wrote:
+> On Thu, 3 May 2007, Roland Tollenaar wrote:
+> [adding eml-users to cc:]
+> [..]
+>>>>> But my next problem will be to get xenomai to work with ethercat. You
+>>>>> say I can try using the Ethercat Master library with RTnet. But why
+>>>>> would I need RTnet? How will the layering look in this case? IOW what
+>>>>> functionality will the ethernet master library provide and what will the
+>>>>> RTnet provide?
+>>>>>
+>>>>> Has anyone done this before?
+>>>
+>>> We did.  We used it to drive a 2-dof table.
+>>
+>> But if I check out the link, it seems that EML has mainly (exclusively?) been
+>> used on eCos/RTnet platform. Not yet on a linux/xemonai/RTNet combination.
+>> Correct?
+>
+> No, which sentence or paragraph did you understand that from.
+
+sed /./?/ , that is :-)
+
+> Currently there are two options
+>
+> - EML + eCos (using the network stack provided with eCos)
+> - EML + Xenomai + RTNET
+>
+> The latter one was used to drive the 2-dof table.
+>
+> Klaas
+>
+>
+> _______________________________________________
+> Ethercatmaster-users mailing list
+> Ethercatmaster-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+>
+
+
+From ERFE at DE.FESTO.COM  Tue May  8 13:24:32 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Tue, 8 May 2007 13:24:32 +0200
+Subject: [Ethercatmaster-users] Period of two in a row sending frames
+In-Reply-To: <Pine.LNX.4.64.0704261545110.14720@ampere.labo01.fmtc.be>
+Message-ID: <OFF1BA7D23.F4AC4AFC-ONC12572D5.003BD8B1-C12572D5.003EAC33@MAIL.DE.FESTO.NET>
+
+Hello,
+
+I have still the same problem! My ethercat master cycle times is about in
+millisecounds, but it should be in microsecounds (I use the EVA-Board and
+eCos to measure the cycle times). On the EVA-Board, I connected the input
+pins with the output pins. So the first frame set an input pin and the next
+frame reads the output pin. My oscilloscop is measured the time how long a
+pin is set! Thats my application.
+
+- cycle time = period between two frames
+
+static void timeMeasure( cyg_addrword_t )
+{
+    unsigned char msg[2] = { 0x00, 0x00 };
+    unsigned int counter = 0;
+
+    // EtherCAT_Master zeiger holen
+    EtherCAT_Master * EM = EtherCAT_Master::instance();
+    while(true)
+    {
+        // Signal setzen
+        cyg_thread_delay( (cyg_tick_count_t)0 );
+        if( counter >= 0 )
+        {
+            if( msg[0] == 0x00 )
+            {
+                msg[0] = 0x01;
+            }
+            else if( msg[0] == 0x01 )
+            {
+                msg[0] = 0x00;
+            }
+            counter = 0;
+        }
+        counter++;
+        // Signal r?cksetzen
+        EM->txandrx_PD( 2, msg );
+    }
+}
+
+1.) I send process data (0x01, 0x00). These process datas set an input pin
+and the appropriate output pin (Because the input pin and the output pin
+are connected together)
+2.) The next process data frame sends (0x00,0x00) and fetchs the output
+process data.
+3.) Now I measured how long the pin is set! The time is in millisecounds.
+But it should be in microsecounds.
+
+=> So i have measured how long it takes to sending two frames in a row!!!
+
+Can you test this Thread/Application with your Master and your EVA-Board!
+What cylce times (How long is the period between two frames) do you get?
+
+regards,
+Felix Erkert
+
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+Rechtsform: Kommanditgesellschaft
+Sitz: Esslingen a.N.
+Registergericht Stuttgart HRA 211583
+Umsatzsteuerident-Nummer: DE 145339206
+
+Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+Sitz: Stuttgart
+Registergericht Stuttgart HRB 18535
+
+Vorstand:
+Dr. Ekkehard Gericke,
+Lothar Kempf,
+Dipl.-Ing. Rudi Menrad
+Dr. Thomas Rubbe
+Dr. Eberhard Veit (Sprecher)
+Dr. Ulrich Walker
+Aufsichtsratsvorsitzender:
+Dr. Wilfried Stoll
+
+
+
+From klaas.gadeyne at fmtc.be  Tue May  8 16:23:41 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 8 May 2007 16:23:41 +0200 (CEST)
+Subject: [Ethercatmaster-users] Period of two in a row sending frames
+In-Reply-To: <OFF1BA7D23.F4AC4AFC-ONC12572D5.003BD8B1-C12572D5.003EAC33@MAIL.DE.FESTO.NET>
+References: <OFF1BA7D23.F4AC4AFC-ONC12572D5.003BD8B1-C12572D5.003EAC33@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0705081619210.1681@ampere.labo01.fmtc.be>
+
+On Tue, 8 May 2007, Felix Erkert wrote:
+> Hello,
+>
+> I have still the same problem! My ethercat master cycle times is about in
+> millisecounds, but it should be in microsecounds (I use the EVA-Board and
+> eCos to measure the cycle times). On the EVA-Board, I connected the input
+> pins with the output pins. So the first frame set an input pin and the next
+> frame reads the output pin. My oscilloscop is measured the time how long a
+> pin is set! Thats my application.
+
+How does _reading_ the value of the output pin toggle it?
+
+> - cycle time = period between two frames
+
+> static void timeMeasure( cyg_addrword_t )
+
+Are you running this function in a high priority thread?
+
+> {
+>    unsigned char msg[2] = { 0x00, 0x00 };
+>    unsigned int counter = 0;
+>
+>    // EtherCAT_Master zeiger holen
+>    EtherCAT_Master * EM = EtherCAT_Master::instance();
+>    while(true)
+>    {
+>        // Signal setzen
+>        cyg_thread_delay( (cyg_tick_count_t)0 );
+
+What's the use of this piece of code?
+
+>        if( counter >= 0 )
+>        {
+>            if( msg[0] == 0x00 )
+>            {
+>                msg[0] = 0x01;
+>            }
+>            else if( msg[0] == 0x01 )
+>            {
+>                msg[0] = 0x00;
+>            }
+>            counter = 0;
+>        }
+>        counter++;
+>        // Signal r?cksetzen
+>        EM->txandrx_PD( 2, msg );
+>    }
+> }
+>
+> 1.) I send process data (0x01, 0x00). These process datas set an input pin
+> and the appropriate output pin (Because the input pin and the output pin
+> are connected together)
+
+How can you set an input pin?
+
+> 2.) The next process data frame sends (0x00,0x00) and fetchs the output
+> process data.
+> 3.) Now I measured how long the pin is set! The time is in millisecounds.
+> But it should be in microsecounds.
+
+I can't follow your reasoning :-(
+
+> => So i have measured how long it takes to sending two frames in a row!!!
+
+> Can you test this Thread/Application with your Master and your
+>        EVA-Board!
+
+This is not an application, it is merely a function.
+
+Klaas
+
+From rolandtollenaar at gmail.com  Sun May 13 09:41:11 2007
+From: rolandtollenaar at gmail.com (roland Tollenaar)
+Date: Sun, 13 May 2007 07:41:11 +0000
+Subject: [Ethercatmaster-users] xenomai/EML
+Message-ID: <bc4264770705130041r13bd22eet2685926199982c09@mail.gmail.com>
+
+Hi,
+
+I have a linux/xenomai/rtnet installation prepared with the intention
+of using EML. I have downloaded the EML tarball but see no
+instructions to install on xenomai. The home site suggests a
+xenomai-EML beta versions but I cannot find the location.
+
+Could anyone help?
+
+Thanks,
+
+Regards,
+
+Roland
+
+
+From tompanis at skynet.be  Sun May 13 13:24:44 2007
+From: tompanis at skynet.be (Tom Panis)
+Date: Sun, 13 May 2007 13:24:44 +0200
+Subject: [Ethercatmaster-users] xenomai/EML
+In-Reply-To: <bc4264770705130041r13bd22eet2685926199982c09@mail.gmail.com>
+References: <bc4264770705130041r13bd22eet2685926199982c09@mail.gmail.com>
+Message-ID: <4646F57C.8090608@skynet.be>
+
+
+> Hi,
+>
+> I have a linux/xenomai/rtnet installation prepared with the intention
+> of using EML. I have downloaded the EML tarball but see no
+> instructions to install on xenomai. The home site suggests a
+> xenomai-EML beta versions but I cannot find the location.
+>
+>
+>   
+You can find the the xenomai-EML version in SVN:  
+https://developer.berlios.de/svn/?group_id=6087
+The install instructions are described in the README
+
+Tom
+
+
+From klaas.gadeyne at fmtc.be  Mon May 14 08:57:32 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 14 May 2007 08:57:32 +0200 (CEST)
+Subject: [Ethercatmaster-users] EML and xenomai/rtnet
+In-Reply-To: <bc4264770705130242u5e03870apeb06f33cd8b86347@mail.gmail.com>
+References: <bc4264770705130242u5e03870apeb06f33cd8b86347@mail.gmail.com>
+Message-ID: <Pine.LNX.4.64.0705140850360.17993@ampere.labo01.fmtc.be>
+
+On Sun, 13 May 2007, roland Tollenaar wrote:
+> I have a linux platform prepared with xenomai and rtnet waiting for
+> EML to complete the setup. The download from your site seems to be
+> specifically for eCos only. Trying to get hold of the xenomai
+> compatiable version via the SVN repository is proving very difficult.
+
+Can you be more specific?  What goes wrong exactly?
+
+> Is there any manner in which I can get hold of a EML package that will
+> work for xenomai/rtnet in an easier manner?
+
+Since we consider the EML port still to be in, I would _strongly_
+advise you trying to use SVN, that will make things far more easy if
+we discover and fix errors you might encounter...
+
+If SVN _really_ (REALLY?) doesn't work, I've exported the latest trunk at 
+<http://ethercatmaster.berlios.de/files/eml-trunk-r28.tar.bz2>
+
+Klaas
+
+
+
+From rwatollenaar at gmail.com  Mon May 14 09:21:25 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Mon, 14 May 2007 09:21:25 +0200
+Subject: [Ethercatmaster-users] EML and xenomai/rtnet
+In-Reply-To: <Pine.LNX.4.64.0705140850360.17993@ampere.labo01.fmtc.be>
+References: <bc4264770705130242u5e03870apeb06f33cd8b86347@mail.gmail.com>
+	<Pine.LNX.4.64.0705140850360.17993@ampere.labo01.fmtc.be>
+Message-ID: <46480DF5.5090404@gmail.com>
+
+Hi Klaas,
+
+> Can you be more specific?  What goes wrong exactly?
+I don;t understand the instructions? :) Either its very simple and I am 
+overlooking something, or it is very complicated. What does not help is 
+that I am completely unfamiliar with the SVN concept.
+
+> If SVN _really_ (REALLY?) doesn't work, I've exported the latest trunk 
+> at <http://ethercatmaster.berlios.de/files/eml-trunk-r28.tar.bz2>
+
+Thanks, downloaded it for a quick start. I am more than happy to use the 
+SVN mechanism but will need some help there. I can get into he trunk and 
+view the files but I don't understand how to download them.
+
+
+Regards,
+
+Roland
+
+> 
+> Klaas
+> 
+> 
+
+
+From klaas.gadeyne at fmtc.be  Mon May 14 09:46:04 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 14 May 2007 09:46:04 +0200 (CEST)
+Subject: [Ethercatmaster-users] EML and xenomai/rtnet
+In-Reply-To: <46480DF5.5090404@gmail.com>
+References: <bc4264770705130242u5e03870apeb06f33cd8b86347@mail.gmail.com>
+	<Pine.LNX.4.64.0705140850360.17993@ampere.labo01.fmtc.be>
+	<46480DF5.5090404@gmail.com>
+Message-ID: <Pine.LNX.4.64.0705140945010.17993@ampere.labo01.fmtc.be>
+
+On Mon, 14 May 2007, Roland Tollenaar wrote:
+> Hi Klaas,
+>
+>> Can you be more specific?  What goes wrong exactly?
+> I don;t understand the instructions? :) Either its very simple and I am
+> overlooking something, or it is very complicated. What does not help is
+> that I am completely unfamiliar with the SVN concept.
+>
+>> If SVN _really_ (REALLY?) doesn't work, I've exported the latest trunk
+>> at <http://ethercatmaster.berlios.de/files/eml-trunk-r28.tar.bz2>
+>
+> Thanks, downloaded it for a quick start. I am more than happy to use the
+> SVN mechanism but will need some help there. I can get into he trunk and
+> view the files but I don't understand how to download them.
+
+Once you have an svn client, it boils down to
+
+cd /my/sources/
+svn checkout http://svn.berlios.de/svnroot/repos/ethercatmaster/trunk eml-trunk
+
+Klaas
+
+
+
+From rwatollenaar at gmail.com  Mon May 14 09:56:37 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Mon, 14 May 2007 09:56:37 +0200
+Subject: [Ethercatmaster-users] EML and xenomai/rtnet
+In-Reply-To: <Pine.LNX.4.64.0705140945010.17993@ampere.labo01.fmtc.be>
+References: <bc4264770705130242u5e03870apeb06f33cd8b86347@mail.gmail.com>
+	<Pine.LNX.4.64.0705140850360.17993@ampere.labo01.fmtc.be>
+	<46480DF5.5090404@gmail.com>
+	<Pine.LNX.4.64.0705140945010.17993@ampere.labo01.fmtc.be>
+Message-ID: <46481635.5010402@gmail.com>
+
+Hi Klaas,
+> 
+> Once you have an svn client, it boils down to
+> 
+> cd /my/sources/
+> svn checkout http://svn.berlios.de/svnroot/repos/ethercatmaster/trunk 
+> eml-trunk
+
+Ah. Ok this changes matters. What is the best SVN client to use and 
+where can I download it?
+
+Roland
+
+> 
+> Klaas
+> 
+> 
+
+
+From klaas.gadeyne at fmtc.be  Mon May 14 10:04:13 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 14 May 2007 10:04:13 +0200 (CEST)
+Subject: [Ethercatmaster-users] EML and xenomai/rtnet
+In-Reply-To: <46481635.5010402@gmail.com>
+References: <bc4264770705130242u5e03870apeb06f33cd8b86347@mail.gmail.com>
+	<Pine.LNX.4.64.0705140850360.17993@ampere.labo01.fmtc.be>
+	<46480DF5.5090404@gmail.com>
+	<Pine.LNX.4.64.0705140945010.17993@ampere.labo01.fmtc.be>
+	<46481635.5010402@gmail.com>
+Message-ID: <Pine.LNX.4.64.0705141003140.17993@ampere.labo01.fmtc.be>
+
+On Mon, 14 May 2007, Roland Tollenaar wrote:
+> Hi Klaas,
+>> 
+>> Once you have an svn client, it boils down to
+>> 
+>> cd /my/sources/
+>> svn checkout http://svn.berlios.de/svnroot/repos/ethercatmaster/trunk 
+>> eml-trunk
+>
+> Ah. Ok this changes matters. What is the best SVN client to use and where can 
+> I download it?
+
+Your favourite distro will normally provide one...
+
+Klaas
+
+
+From rwatollenaar at gmail.com  Mon May 21 14:05:55 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Mon, 21 May 2007 14:05:55 +0200
+Subject: [Ethercatmaster-users] library linking and testing
+Message-ID: <46518B23.9080308@gmail.com>
+
+Hi,
+
+I have managed to compile the rtnet trunk version successfully (or so it 
+seems)
+
+I need some advice on how to install the library (ldconfig under linux 
+was it not? And in what directory must I place libeml.so?)
+
+And on how to test it.
+
+I have not yet got an ethernet slave.
+
+Thanks in advance.
+
+Kind regards,
+
+Roland Tollenaar
+
+
+From rwatollenaar at gmail.com  Mon May 21 14:08:58 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Mon, 21 May 2007 14:08:58 +0200
+Subject: [Ethercatmaster-users] Beckhoff hardware and EML
+Message-ID: <46518BDA.7030909@gmail.com>
+
+Hi,
+
+Just to make sure I am not going to try the impossible I have listed 
+below the hardware (remote IO configuration) that we are planning to use 
+on this project and with which we want to communicate using EML.
+
+If there are any modules that are unsupported by EML please let me know.
+
+
+BK5150	Compact kopstation voor CAN-open
+KM1002-0004	16 (2 x 8) dig. in 24 V DC, filter 3.0 ms, 3-draad connector 
+met LEDs
+KM2002-0004	16 (2 x 8) dig. uit 24 V DC, 0.5 A, 3-draad connector met LEDs
+KL5111	Incremental encoder, 24 VDC; 1 MHz
+KL4031	1 Analoge uitgang -10 ?. +10 V (12 bits)
+KL9010	Bus afsluitklem
+
+Thanks kindly,
+
+Regards,
+
+Roland.
+
+
+
+From klaas.gadeyne at fmtc.be  Mon May 21 15:32:11 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 21 May 2007 15:32:11 +0200 (CEST)
+Subject: [Ethercatmaster-users] library linking and testing
+In-Reply-To: <46518B23.9080308@gmail.com>
+References: <46518B23.9080308@gmail.com>
+Message-ID: <Pine.LNX.4.64.0705211529020.32430@ampere.labo01.fmtc.be>
+
+On Mon, 21 May 2007, Roland Tollenaar wrote:
+> Hi,
+>
+> I have managed to compile the rtnet trunk version successfully (or so it
+> seems)
+>
+> I need some advice on how to install the library (ldconfig under linux
+> was it not?
+
+how about running "make install"?
+
+> And in what directory must I place libeml.so?)
+
+That's up to you...
+
+> And on how to test it.
+> I have not yet got an ethernet slave.
+
+Then you cannot really test it ATM.  We have no virtual slave
+available.
+
+Klaas
+
+
+From klaas.gadeyne at fmtc.be  Mon May 21 15:39:02 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 21 May 2007 15:39:02 +0200 (CEST)
+Subject: [Ethercatmaster-users] Beckhoff hardware and EML
+In-Reply-To: <46518BDA.7030909@gmail.com>
+References: <46518BDA.7030909@gmail.com>
+Message-ID: <Pine.LNX.4.64.0705211532260.32430@ampere.labo01.fmtc.be>
+
+On Mon, 21 May 2007, Roland Tollenaar wrote:
+> Just to make sure I am not going to try the impossible I have listed
+> below the hardware (remote IO configuration) that we are planning to use
+> on this project and with which we want to communicate using EML.
+
+> If there are any modules that are unsupported by EML please let me know.
+> BK5150	Compact kopstation voor CAN-open
+> KM1002-0004	16 (2 x 8) dig. in 24 V DC, filter 3.0 ms, 3-draad connector
+> met LEDs
+> KM2002-0004	16 (2 x 8) dig. uit 24 V DC, 0.5 A, 3-draad connector met LEDs
+> KL5111	Incremental encoder, 24 VDC; 1 MHz
+> KL4031	1 Analoge uitgang -10 ?. +10 V (12 bits)
+> KL9010	Bus afsluitklem
+
+EML does not support beckhoff modules "out of the box" (yet).  Tom is
+(or has already, I haven't check) preparing a "README" file that
+specifies how to get started with a particular module.  Tom, can you
+provide an update of the status of that file?
+
+[please note that you are very lucky I happen to understand some
+dutch :-), however please use english only on this ML]
+However, the fact your first module specifies it is a coupler for
+CAN-open somehow worries me a bit, so this might be "trying the
+impossible"?
+
+Klaas
+
+
+From rolandtollenaar at gmail.com  Mon May 21 15:55:29 2007
+From: rolandtollenaar at gmail.com (roland Tollenaar)
+Date: Mon, 21 May 2007 13:55:29 +0000
+Subject: [Ethercatmaster-users] library linking and testing
+In-Reply-To: <Pine.LNX.4.64.0705211529020.32430@ampere.labo01.fmtc.be>
+References: <46518B23.9080308@gmail.com>
+	<Pine.LNX.4.64.0705211529020.32430@ampere.labo01.fmtc.be>
+Message-ID: <bc4264770705210655u6b555c54rf66a90f6a5668860@mail.gmail.com>
+
+Hi,
+
+> how about running "make install"?
+Ah, perhaps update the README in the package with this wisdom. I
+simply put it in
+/usr/local/eml-trunk/build_rtnet/src. Which is kind of where it ends
+up in if one unpacks in /usr/local.
+
+Then ldconfig <above path>.
+
+But will try the make install thing soon.
+
+
+> > And on how to test it.
+> > I have not yet got an ethernet slave.
+>
+> Then you cannot really test it ATM.  We have no virtual slave
+> available.
+
+Pity. Just to get some feedback (I am still absolutely out of touch
+with this ethercat everything helps)
+
+I start rtnet in loopback mode shich seems to be successful. Then run
+the master_test.
+
+
+root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+Socket created: socket id: 896
+Got interface: index: 0
+Attach netif
+
+Master initializing
+
+low_level_txandrx: failed: MAX_TRIES_TX: Giving up
+DLL::txandrx() Error
+Error sending counter frame
+Something went wrong while scanning network
+EtherCAT_AL:: Can't init network
+Getting slave handler
+EtherCAT_AL: No such slave, returning NULL
+Setting EK1100 to OP STATE
+Segmentation fault
+
+Does this look like normal behavior given nothing attached to the
+network adaptor?
+I assume the program Master_test IS finding the library lib_eml.so though.
+
+
+Kind regards,
+
+Roland
+
+
+
+
+
+
+>
+> Klaas
+>
+
+
+From klaas.gadeyne at fmtc.be  Mon May 21 16:17:03 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 21 May 2007 16:17:03 +0200 (CEST)
+Subject: [Ethercatmaster-users] library linking and testing
+In-Reply-To: <bc4264770705210655u6b555c54rf66a90f6a5668860@mail.gmail.com>
+References: <46518B23.9080308@gmail.com>
+	<Pine.LNX.4.64.0705211529020.32430@ampere.labo01.fmtc.be>
+	<bc4264770705210655u6b555c54rf66a90f6a5668860@mail.gmail.com>
+Message-ID: <Pine.LNX.4.64.0705211613270.32430@ampere.labo01.fmtc.be>
+
+On Mon, 21 May 2007, roland Tollenaar wrote:
+> Hi,
+>
+>> how about running "make install"?
+> Ah, perhaps update the README in the package with this wisdom. I
+> simply put it in
+> /usr/local/eml-trunk/build_rtnet/src. Which is kind of where it ends
+> up in if one unpacks in /usr/local.
+>
+> Then ldconfig <above path>.
+
+ldconfig is only necessary if you're building a dynamic library and
+changed the default installation path (but this is out of scope on eml-users)
+
+[...]
+>> Then you cannot really test it ATM.  We have no virtual slave
+>> available.
+>
+> Pity. Just to get some feedback (I am still absolutely out of touch
+> with this ethercat everything helps)
+>
+> I start rtnet in loopback mode shich seems to be successful. Then run
+> the master_test.
+>
+>
+> root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+> Socket created: socket id: 896
+> Got interface: index: 0
+> Attach netif
+>
+> Master initializing
+>
+> low_level_txandrx: failed: MAX_TRIES_TX: Giving up
+> DLL::txandrx() Error
+> Error sending counter frame
+> Something went wrong while scanning network
+> EtherCAT_AL:: Can't init network
+> Getting slave handler
+> EtherCAT_AL: No such slave, returning NULL
+> Setting EK1100 to OP STATE
+> Segmentation fault
+>
+> Does this look like normal behavior given nothing attached to the
+> network adaptor?
+> I assume the program Master_test IS finding the library lib_eml.so though.
+
+Yes, it is.  This seems likes Tom forgot to exit the program after
+initializing the network went wrong.  What you're actually see is the
+fact that no slave responds to the master, so the AL can't init the
+network.  After that, it should abort further effort.
+Without looking at the code, I suppose getting the slave handler now
+returns a null pointer, with the above consequence :-)
+
+Klaas
+
+
+From tompanis at skynet.be  Mon May 21 21:28:11 2007
+From: tompanis at skynet.be (Tom Panis)
+Date: Mon, 21 May 2007 21:28:11 +0200
+Subject: [Ethercatmaster-users] Beckhoff hardware and EML
+In-Reply-To: <Pine.LNX.4.64.0705211532260.32430@ampere.labo01.fmtc.be>
+References: <46518BDA.7030909@gmail.com>
+	<Pine.LNX.4.64.0705211532260.32430@ampere.labo01.fmtc.be>
+Message-ID: <4651F2CB.5040106@skynet.be>
+
+Klaas Gadeyne wrote:
+> On Mon, 21 May 2007, Roland Tollenaar wrote:
+>   
+>> Just to make sure I am not going to try the impossible I have listed
+>> below the hardware (remote IO configuration) that we are planning to use
+>> on this project and with which we want to communicate using EML.
+>>     
+>
+>   
+>> If there are any modules that are unsupported by EML please let me know.
+>> BK5150	Compact kopstation voor CAN-open
+>> KM1002-0004	16 (2 x 8) dig. in 24 V DC, filter 3.0 ms, 3-draad connector
+>> met LEDs
+>> KM2002-0004	16 (2 x 8) dig. uit 24 V DC, 0.5 A, 3-draad connector met LEDs
+>> KL5111	Incremental encoder, 24 VDC; 1 MHz
+>> KL4031	1 Analoge uitgang -10 ?. +10 V (12 bits)
+>> KL9010	Bus afsluitklem
+>>     
+>
+> EML does not support beckhoff modules "out of the box" (yet).  Tom is
+> (or has already, I haven't check) preparing a "README" file that
+> specifies how to get started with a particular module.  Tom, can you
+> provide an update of the status of that file?
+>
+>   
+I'm still working on it, it will most likely be written next week.
+> [please note that you are very lucky I happen to understand some
+> dutch :-), however please use english only on this ML]
+> However, the fact your first module specifies it is a coupler for
+> CAN-open somehow worries me a bit, so this might be "trying the
+> impossible"?
+
+
+From rwatollenaar at gmail.com  Tue May 22 07:08:41 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Tue, 22 May 2007 07:08:41 +0200
+Subject: [Ethercatmaster-users] Beckhoff hardware and EML
+In-Reply-To: <4651F2CB.5040106@skynet.be>
+References: <46518BDA.7030909@gmail.com>
+	<Pine.LNX.4.64.0705211532260.32430@ampere.labo01.fmtc.be>
+	<4651F2CB.5040106@skynet.be>
+Message-ID: <46527AD9.3080601@gmail.com>
+
+Hi
+
+[The README file on how to get started with Beckhoff modules]
+> I'm still working on it, it will most likely be written next week.
+
+Great. Thanks.
+
+Regards,
+
+Roland
+
+
+
+From klaas.gadeyne at fmtc.be  Tue May 22 08:37:22 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 22 May 2007 08:37:22 +0200 (CEST)
+Subject: [Ethercatmaster-users] library linking and testing
+In-Reply-To: <4651AFEF.5070208@gmail.com>
+References: <46518B23.9080308@gmail.com>
+	<Pine.LNX.4.64.0705211529020.32430@ampere.labo01.fmtc.be>
+	<bc4264770705210655u6b555c54rf66a90f6a5668860@mail.gmail.com>
+	<Pine.LNX.4.64.0705211613270.32430@ampere.labo01.fmtc.be>
+	<4651AFEF.5070208@gmail.com>
+Message-ID: <Pine.LNX.4.64.0705220832140.32430@ampere.labo01.fmtc.be>
+
+On Mon, 21 May 2007, Roland Tollenaar wrote:
+>>>> how about running "make install"?
+>>> Ah, perhaps update the README in the package with this wisdom. I
+>>> simply put it in
+>>> /usr/local/eml-trunk/build_rtnet/src. Which is kind of where it ends
+>>> up in if one unpacks in /usr/local.
+>>> 
+>>> Then ldconfig <above path>.
+>> 
+>> ldconfig is only necessary if you're building a dynamic library and
+>> changed the default installation path (but this is out of scope on 
+>> eml-users)
+> Ok, I just re-emphasize that you may want to fix the readme with the make 
+> install bit. Small change but if I am not mistaken it is missing.
+
+Oh, I already fixed id, but forgot to put that in my previous reply
+:-(
+
+#  svn commit -m "add make install" README
+Sending        README
+Transmitting file data .
+Committed revision 29.
+
+> Ok looks promising then. I have no idea whether there is some generic 
+> response of EC slaves to the master and whether if I connect the Beckhoff 
+> buscoupler this master_test should execute successfully?
+
+Not succesfully I guess (since you won't have the same slaves as in
+the example, but you should see a different output at least (ic. the
+master should detect some slave)
+
+> My next step would have to be to understand how to communicate with the 
+> Beckhoff buscoupler.
+
+You will probably need a real slave (and not a bus coupler) in order
+to do something really useful...
+
+> Could I get some advice of which EML src/test programs 
+> might be most useful to study in this regards?
+
+master_test, together with Tom's "getting started" document seems like
+the best place to start.
+
+Klaas
+
+
+From klaas.gadeyne at fmtc.be  Tue May 22 08:52:42 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 22 May 2007 08:52:42 +0200 (CEST)
+Subject: [Ethercatmaster-users] Beckhoff hardware and EML
+In-Reply-To: <4651AE6A.5010500@gmail.com>
+References: <46518BDA.7030909@gmail.com>
+	<Pine.LNX.4.64.0705211532260.32430@ampere.labo01.fmtc.be>
+	<4651AE6A.5010500@gmail.com>
+Message-ID: <Pine.LNX.4.64.0705220838550.32430@ampere.labo01.fmtc.be>
+
+On Mon, 21 May 2007, Roland Tollenaar wrote:
+[..]
+>> [please note that you are very lucky I happen to understand some
+>> dutch :-), however please use english only on this ML]
+>
+> I will not bet on my luck anymore. Here is the english translation
+>
+> EK1100	EtherCAT Coupler for E-Bus Terminals ELxxxx, Direct Mode (not to be 
+> used with a switch)
+> EL1014	Digital Input Terminal, 4 DI, 24V, 10?s, 2 wire connection
+> EL2004	Digital Output Terminal, 4 DO, 24V, 0,5A, 2 wire connection
+> EL5101	Incremental Encoder, differential inputs, 16 bit, 1 Mhz
+> EL4132	Analog Output Terminal, 2 AO, +/- 10V, 16 bit
+> EL9011	Bus end cap
+
+We've got almost an exact setup like this in our lab (the only
+differency being the 4132 module, because we misordered that one and got
+analog output between 0 and 10 V instead :-) to drive a 2DOF XY table,
+so you shouldn't expect any problems here.
+
+For his master thesis, Tom integrated this with the orocos
+<http://www.orocos.org> device interface
+<http://www.orocos.org/stable/documentation/rtt/v1.2.x/api/html/group__DeviceInterface.html>,
+so you can make abstraction of using ethercat.  But expect a
+cleanup version of that code in the repository no earlier than august.
+
+> Yes. Oops. Notice in the above that the English translation of CAN-Open is 
+> EtherCat ;).
+
+I'm still learning new stuff every day :-)
+
+k
+
+From rwatollenaar at gmail.com  Tue May 22 09:11:05 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Tue, 22 May 2007 09:11:05 +0200
+Subject: [Ethercatmaster-users] Beckhoff hardware and EML
+In-Reply-To: <Pine.LNX.4.64.0705220838550.32430@ampere.labo01.fmtc.be>
+References: <46518BDA.7030909@gmail.com>
+	<Pine.LNX.4.64.0705211532260.32430@ampere.labo01.fmtc.be>
+	<4651AE6A.5010500@gmail.com>
+	<Pine.LNX.4.64.0705220838550.32430@ampere.labo01.fmtc.be>
+Message-ID: <46529789.5010205@gmail.com>
+
+Hi,
+
+>> EK1100    EtherCAT Coupler for E-Bus Terminals ELxxxx, Direct Mode 
+>> (not to be used with a switch)
+>> EL1014    Digital Input Terminal, 4 DI, 24V, 10?s, 2 wire connection
+>> EL2004    Digital Output Terminal, 4 DO, 24V, 0,5A, 2 wire connection
+>> EL5101    Incremental Encoder, differential inputs, 16 bit, 1 Mhz
+>> EL4132    Analog Output Terminal, 2 AO, +/- 10V, 16 bit
+>> EL9011    Bus end cap
+> 
+> We've got almost an exact setup like this in our lab (the only
+> differency being the 4132 module, because we misordered that one and got
+> analog output between 0 and 10 V instead :-) to drive a 2DOF XY table,
+> so you shouldn't expect any problems here.
+
+Hmmm this IS a stroke of luck. Will I find the master-test source 
+showing rather accurately how to address my slave then?
+
+> For his master thesis, Tom integrated this with the orocos
+> <http://www.orocos.org> device interface
+> <http://www.orocos.org/stable/documentation/rtt/v1.2.x/api/html/group__DeviceInterface.html>, 
+> 
+> so you can make abstraction of using ethercat.  But expect a
+> cleanup version of that code in the repository no earlier than august.
+Looks very interesting will keep an eye on it.
+
+Regards,
+
+Roland
+
+
+> 
+>> Yes. Oops. Notice in the above that the English translation of 
+>> CAN-Open is EtherCat ;).
+> 
+> I'm still learning new stuff every day :-)
+> 
+> k
+
+
+From klaas.gadeyne at fmtc.be  Tue May 22 11:33:11 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 22 May 2007 11:33:11 +0200 (CEST)
+Subject: [Ethercatmaster-users] Beckhoff hardware and EML
+In-Reply-To: <46529789.5010205@gmail.com>
+References: <46518BDA.7030909@gmail.com>
+	<Pine.LNX.4.64.0705211532260.32430@ampere.labo01.fmtc.be>
+	<4651AE6A.5010500@gmail.com>
+	<Pine.LNX.4.64.0705220838550.32430@ampere.labo01.fmtc.be>
+	<46529789.5010205@gmail.com>
+Message-ID: <Pine.LNX.4.64.0705221132250.32430@ampere.labo01.fmtc.be>
+
+On Tue, 22 May 2007, Roland Tollenaar wrote:
+[...]
+>>> EK1100    EtherCAT Coupler for E-Bus Terminals ELxxxx, Direct Mode
+>>> (not to be used with a switch)
+>>> EL1014    Digital Input Terminal, 4 DI, 24V, 10?s, 2 wire connection
+>>> EL2004    Digital Output Terminal, 4 DO, 24V, 0,5A, 2 wire connection
+>>> EL5101    Incremental Encoder, differential inputs, 16 bit, 1 Mhz
+>>> EL4132    Analog Output Terminal, 2 AO, +/- 10V, 16 bit
+>>> EL9011    Bus end cap
+>>
+>> We've got almost an exact setup like this in our lab (the only
+>> differency being the 4132 module, because we misordered that one and got
+>> analog output between 0 and 10 V instead :-) to drive a 2DOF XY table,
+>> so you shouldn't expect any problems here.
+>
+> Hmmm this IS a stroke of luck. Will I find the master-test source
+> showing rather accurately how to address my slave then?
+
+If Tom committed al his stuff, you should.
+
+Klaas
+

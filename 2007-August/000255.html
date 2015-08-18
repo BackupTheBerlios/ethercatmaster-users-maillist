@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%09framebuilding%20failed.&In-Reply-To=%3C46C07005.8000504%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000254.html">
+   <LINK REL="Next"  HREF="000256.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.</H1>
+    <B>Jan Kiszka</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%09framebuilding%20failed.&In-Reply-To=%3C46C07005.8000504%40web.de%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.">jan.kiszka at web.de
+       </A><BR>
+    <I>Mon Aug 13 16:51:49 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000254.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000256.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#255">[ date ]</a>
+              <a href="thread.html#255">[ thread ]</a>
+              <a href="subject.html#255">[ subject ]</a>
+              <a href="author.html#255">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Roland Tollenaar wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> All closing &amp; shutting down has been perfected. There are no more errors 
+</I>&gt;<i> on closing my application.
+</I>&gt;<i> 
+</I>&gt;<i> Yet the problem persists very explicitly. Rtcan and EML can run 
+</I>&gt;<i> separately and never throw up any errors. As soon as they are used in 
+</I>&gt;<i> combination then in 50% of the cases the framebuilding in EML gets 
+</I>&gt;<i> messed up (as per the error message)
+</I>&gt;<i> 
+</I>&gt;<i> There is definitely something between the two that is not right.
+</I>&gt;<i> 
+</I>
+In 9 of 10 cases (if not more): timing. Running both alone doesn't
+expose some timing issue (race) or transient overload. I can't help with
+EML complaints, maybe the FMTC guys have an idea what can trigger this
+and how to debug it.
+
+&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> RTnet:rtskb allocation from real-time cache failed.
+</I>&gt;<i> 
+</I>&gt;<i> Could I get some tips as to what I can do about this? I seem to get it 
+</I>&gt;<i> even when I do not have rtcan activity running in my application and 
+</I>&gt;<i> (because I am clueless) I would like to prevent this message which may 
+</I>&gt;<i> signify the root of the problem.
+</I>
+You have created the socket for some/all EML activity from primary mode
+of some Xenomai thread, thus network buffer allocation is ought to run
+against the real-time rtskb pool - which is by default empty :p. See
+README.pools from the RTnet documentation on this.
+
+I don't have the EML design at hand, but you might be able to avoid this
+by initialising before creating the shadow task or by explicitly
+switching to secondary mode before initialising. [Sorry for this issue,
+it's at least partly due to some outdated RTnet design.]
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070813/ce6c908f/attachment.pgp">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070813/ce6c908f/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000254.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000256.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#255">[ date ]</a>
+              <a href="thread.html#255">[ thread ]</a>
+              <a href="subject.html#255">[ subject ]</a>
+              <a href="author.html#255">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

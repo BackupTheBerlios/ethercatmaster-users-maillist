@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Antwort: Re:  Package error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20%20Package%20error&In-Reply-To=%3CPine.LNX.4.64.0703121342470.7897%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000021.html">
+   <LINK REL="Next"  HREF="000026.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Antwort: Re:  Package error</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20%20Package%20error&In-Reply-To=%3CPine.LNX.4.64.0703121342470.7897%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] Antwort: Re:  Package error">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Mon Mar 12 13:46:18 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000021.html">[Ethercatmaster-users] Package error
+</A></li>
+        <LI>Next message: <A HREF="000026.html">[Ethercatmaster-users] Antwort: Re: Antwort: Re:  Package error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#22">[ date ]</a>
+              <a href="thread.html#22">[ thread ]</a>
+              <a href="subject.html#22">[ subject ]</a>
+              <a href="author.html#22">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Felix,
+
+[please keep the ML in cc:]
+
+&gt;<i> The errors occurs, if I include the packages &quot;common ethernet support&quot; and
+</I>&gt;<i> &quot;EtherCATMaster&quot; into the eCos Library. Now, when I want to build the eCos
+</I>&gt;<i> library
+</I>&gt;<i> I get some (2 errors) errors.
+</I>&gt;<i>
+</I>&gt;<i> redefinition error:
+</I>&gt;<i> nios2-elf-gcc -c
+</I>&gt;<i> -I/cygdrive/c/altera/projects/eCosMaster/eCos_install/include
+</I>&gt;<i> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current
+</I>&gt;<i>
+</I>&gt;<i> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src
+</I>&gt;<i>
+</I>&gt;<i> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/tests
+</I>&gt;<i> -I.
+</I>&gt;<i> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/
+</I>&gt;<i> -finline-limit=7000 -g -O3 -ffunction-sections -fdata-sections
+</I>&gt;<i> -fno-exceptions  -DSYSTEM_BUS_WIDTH=32 -mhw-mul -mhw-mulx -mno-hw-div
+</I>&gt;<i> -D_KERNEL -D__ECOS -Wp,-MD,src/if_lan91cxx.tmp -o
+</I>&gt;<i> src/devs_eth_smsc_lan91cxx_if_lan91cxx.o
+</I>&gt;<i> /cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/if_lan91cxx.c
+</I>&gt;<i> make[1]: Leaving directory
+</I>&gt;<i> `/cygdrive/c/altera/projects/eCosMaster/eCos_build/devs/eth/smsc/lan91cxx/current'
+</I>&gt;<i> In file included from
+</I>&gt;<i> /cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/if_lan91cxx.c:92:
+</I>&gt;<i> make: Leaving directory `/cygdrive/c/altera/projects/eCosMaster/eCos_build'
+</I>&gt;<i> /cygdrive/c/altera/projects/eCosMaster/eCos_install/include/cyg/io/eth/eth_drv.h:165:
+</I>&gt;<i> error: redefinition of `
+</I>&gt;<i> struct arpcom'
+</I>&gt;<i> In file included from
+</I>&gt;<i> /cygdrive/c/altera/projects/eCosMaster/eCos_install/include/cyg/sopc/altera_avalon_lan91c111.inl:185,
+</I>&gt;<i>                 from
+</I>&gt;<i> /cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/smsc_lan91cxx.h:340,
+</I>&gt;<i>                 from
+</I>&gt;<i> /cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/if_lan91cxx.c:153:
+</I>&gt;<i> /cygdrive/c/altera/projects/eCosMaster/eCos_install/include/cyg/hal/devices.h:149:
+</I>&gt;<i> warning: initialization makes pointer from integer without a cast
+</I>&gt;<i> make[1]: *** [src/if_lan91cxx.o.d] Error 1
+</I>&gt;<i> make: *** [build] Error 2
+</I>&gt;<i>
+</I>
+As I told in a previous mail, you can/must safely disable the LWIP stack in
+your configuration to solve that issue.
+
+&gt;<i> Do you know what&#180;s wrong? Does the redefinition error above anything to do
+</I>&gt;<i> with this package errors below?
+</I>
+&gt;<i> Package error:
+</I>&gt;&gt;&gt;<i> CYGNUM_ETHERCATMASTER_TIMEOUT_DELAY_TICKS | Exception |
+</I>&gt;<i>
+</I>&gt;<i> Calculated((CYGNUM_ETHERCATMASTER_TIMEOUT_DELAY*CYGNUM_HAL_RTC_DENOMINATOR)/CYGNUM_HAL_RTC_ENUMERATOR)
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i> CYGNUM_ETHERCATMASTER_ROUTE_PERIOD_TICKS  | Exception |
+</I>&gt;<i> Calculated((CYGNUM_ETHERCATMASTER_ROUTE_PERIOD_TICKS*CYGNUM_HAL_RTC_DENOMINATOR)/CYGNUM_HAL_RTC_ENUMERATOR)
+</I>
+At what stage do you get these &quot;packages error&quot;?  Is this at compile
+time or when using configtool?
+
+ps. Don't forget to run &quot;ecosconfig tree&quot; after updating your configuration...
+
+Klaas
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000021.html">[Ethercatmaster-users] Package error
+</A></li>
+	<LI>Next message: <A HREF="000026.html">[Ethercatmaster-users] Antwort: Re: Antwort: Re:  Package error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#22">[ date ]</a>
+              <a href="thread.html#22">[ thread ]</a>
+              <a href="subject.html#22">[ subject ]</a>
+              <a href="author.html#22">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

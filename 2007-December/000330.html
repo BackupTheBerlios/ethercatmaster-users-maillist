@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] undefined reference to `rt_task_create'
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-December/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20undefined%20reference%20to%20%60rt_task_create%27&In-Reply-To=%3CPine.LNX.4.64.0712041706260.28703%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000329.html">
+   <LINK REL="Next"  HREF="000331.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] undefined reference to `rt_task_create'</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20undefined%20reference%20to%20%60rt_task_create%27&In-Reply-To=%3CPine.LNX.4.64.0712041706260.28703%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] undefined reference to `rt_task_create'">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Tue Dec  4 17:09:08 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000329.html">[Ethercatmaster-users] undefined reference to `rt_task_create'
+</A></li>
+        <LI>Next message: <A HREF="000331.html">[Ethercatmaster-users] Read and write etherCAT frames separatly	question.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#330">[ date ]</a>
+              <a href="thread.html#330">[ thread ]</a>
+              <a href="subject.html#330">[ subject ]</a>
+              <a href="author.html#330">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 4 Dec 2007, Dennis Nguyen wrote:
+&gt;<i> Klaas Gadeyne wrote:
+</I>&gt;&gt;<i> On Mon, 3 Dec 2007, Dennis Nguyen wrote:
+</I>&gt;&gt;&gt;<i> I'm using linux x386 kernel 2.6.23.9, xenomai 2.4-rc7,
+</I>&gt;&gt;&gt;<i> adeos-ipipe-2.6.23-i386-1.11-00, rtnet trunk dated 11/27/2007, eml_trunk
+</I>&gt;&gt;&gt;<i> dated 11/27/2007.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I got the undefined reference to `rt_task_...' errors while trying to
+</I>&gt;&gt;&gt;<i> make EML with Tom's test example:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> which example do you mean exactly?
+</I>&gt;&gt;<i>
+</I>&gt;<i> example from the EML users list archives.  Tom used rt_task_... and sine
+</I>&gt;<i> signal on an analog output IO module.
+</I>&gt;&gt;&gt;<i> undefined reference to `rt_task_create'
+</I>&gt;&gt;&gt;<i> undefined reference to `rt_task_set_periodic'
+</I>&gt;&gt;&gt;<i> undefined reference to `rt_task_start'
+</I>&gt;&gt;&gt;<i> undefined reference to `rt_task_join'
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I included: #include &lt;native/task.h&gt;, selected &quot;Native API&quot; as module
+</I>&gt;&gt;&gt;<i> from kernel configuration. I have /usr/xenomai/include/native/ task.h
+</I>&gt;&gt;&gt;<i> and /usr/xenomai/lib/libnative.so files.
+</I>&gt;&gt;&gt;<i> (note: I am being able to run the master_test.)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What is the exact command line you get while running make (link
+</I>&gt;&gt;<i> stage), it seems there's a missing &quot;-lnative &quot; somewhere.
+</I>&gt;&gt;<i>
+</I>&gt;<i> Yes, you right. It was missing -lnative.  How can I add the native
+</I>&gt;<i> library to the configuration for Makefile? (which file can I add it in).
+</I>
+That depends on the build system your using.  The current svn of EML
+uses the posix skin instead of the native one.  E.g. for the cmake
+build system this results in
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at einstein</A>:~/SVN/eml-trunk/tests/rtnet #
+   grep POSIX CMakeLists.txt
+SET (CMAKE_C_FLAGS &quot;${CMAKE_CFLAGS} ${XNPOSIX_USER_CFLAGS}&quot;)
+SET_TARGET_PROPERTIES(master_test eval_test PROPERTIES LINK_FLAGS &quot;${XNPOSIX_USER_LDFLAGS}&quot;)
+
+regards,
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000329.html">[Ethercatmaster-users] undefined reference to `rt_task_create'
+</A></li>
+	<LI>Next message: <A HREF="000331.html">[Ethercatmaster-users] Read and write etherCAT frames separatly	question.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#330">[ date ]</a>
+              <a href="thread.html#330">[ thread ]</a>
+              <a href="subject.html#330">[ subject ]</a>
+              <a href="author.html#330">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

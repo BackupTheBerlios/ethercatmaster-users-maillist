@@ -1,0 +1,404 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] RE : Re: RE : Re: RE : Re: RE : Re: understanding the datagrams
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%0A%20understanding%20the%20datagrams&In-Reply-To=%3C46B33CD2.1020204%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000235.html">
+   <LINK REL="Next"  HREF="000237.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: RE : Re: understanding the datagrams</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%0A%20understanding%20the%20datagrams&In-Reply-To=%3C46B33CD2.1020204%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: RE : Re: understanding the datagrams">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Fri Aug  3 16:33:54 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000235.html">[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: understanding the	datagrams
+</A></li>
+        <LI>Next message: <A HREF="000237.html">[Ethercatmaster-users] non-persistent outputs ETG suggestions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#236">[ date ]</a>
+              <a href="thread.html#236">[ thread ]</a>
+              <a href="subject.html#236">[ subject ]</a>
+              <a href="author.html#236">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Said,
+
+Thanks. I did. The conclusion I think is that TwinCat always sends in 
+lrd and lwr. This means that they may know that there is some problem 
+with LRW.
+
+
+This might be serious.
+
+
+I think what we must now try is to send LWR from EML. That may be no 
+trivial task. Initially a crude hack into the frame may be easiest. Just 
+to check the response. Problem is that life is not made easier by the 
+bug in EML that cuts out my communication when I have a switch in between.
+
+It would be nice if the EML guys had some advice but I think this will 
+be up to us.
+
+Regards,
+
+Roland.
+
+said harti wrote:
+&gt;<i> do you have receive my Traffics scans ?
+</I>&gt;<i> 
+</I>&gt;<i> */Roland Tollenaar &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">rwatollenaar at gmail.com</A>&gt;/* a &#233;crit :
+</I>&gt;<i> 
+</I>&gt;<i>     Hi Said,
+</I>&gt;<i> 
+</I>&gt;<i>     good question. I would do all of them.
+</I>&gt;<i> 
+</I>&gt;<i>     RR
+</I>&gt;<i> 
+</I>&gt;<i>     said harti wrote:
+</I>&gt;<i>      &gt; ok, iam going to do that very soon,
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; but i have a bad question, i must set just the EL2004 DO on
+</I>&gt;<i>     LRD/LWR or
+</I>&gt;<i>      &gt; all modules ???
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; */Roland Tollenaar /* a &#233;crit :
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; Hi Said,
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; I agree with you, i have already discovered this. Can you confirm
+</I>&gt;<i>      &gt; with a
+</I>&gt;<i>      &gt; scan that when you tick on the LRD/LWR that the ethercat message is
+</I>&gt;<i>      &gt; different to when that box is NOT ticked. Then we can see if that
+</I>&gt;<i>      &gt; selection does anything at all in twincat?
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; Regards,
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; Roland
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; said harti wrote:
+</I>&gt;<i>      &gt; &gt; Hi,
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; if there is : Use LRD/LWR instead of LRW on the advanced setting
+</I>&gt;<i>      &gt; menu,
+</I>&gt;<i>      &gt; &gt; that is meen that the fhe default mode is LRW , are you agree
+</I>&gt;<i>      &gt; with me???!!!
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; if not, can evryone tell me how can i set the TwinCAT config to
+</I>&gt;<i>      &gt; LRW mode
+</I>&gt;<i>      &gt; &gt; ?? i have looked for that, but i dont find this function...
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; Said
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; */roland tollenaar /* a &#233;crit :
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; Hi Said,
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; Are you still around? Have you had any luck with twincat in LRW
+</I>&gt;<i>     mode?
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; Regards,
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; Roland
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; On 8/2/07, *roland tollenaar* &lt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">rwatollenaar at gmail.com</A>
+</I>&gt;<i>      &gt; &gt; &gt; wrote:
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; Hi Said,
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; please let me know as soon as possible what the result is. In
+</I>&gt;<i>      &gt; &gt; the mean time I am going to figure out how to hack the frames
+</I>&gt;<i>      &gt; &gt; that EML puts on the wire to try LWR as well. But it is very
+</I>&gt;<i>      &gt; &gt; imoprtant to know how TwinCat behaves in LRW.
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; But you have it wrong below!!! It is already in LRD/LWR you
+</I>&gt;<i>      &gt; &gt; must set it TO!! LRW.
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; Roland
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; On 8/2/07, *said harti* &lt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">harti_said at yahoo.fr</A>
+</I>&gt;<i>      &gt; &gt; &gt; wrote:
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; Hi,
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; We can change the configure of the Twincat from LRW to LRD/LWR
+</I>&gt;<i>      &gt; &gt; we choose the specific module (EL2004 for example) :
+</I>&gt;<i>      &gt; &gt; Adevanced Setting..&gt;General&gt;Behavior&gt; and we can choose :
+</I>&gt;<i>      &gt; &gt; Use LRD/LWR instead of LRW,
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; I am going to realize the scan...
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; Said
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; */ Tom Panis
+</I>&gt;<i>      &gt; &gt; &gt;/* a &#233;crit :
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; Roland Tollenaar schreef:
+</I>&gt;<i>      &gt; &gt; &gt; Hi,
+</I>&gt;<i>      &gt; &gt; &gt;
+</I>&gt;<i>      &gt; &gt; &gt; Thanks for the insight. I had not noticed that. Am I
+</I>&gt;<i>      &gt; &gt; correct in
+</I>&gt;<i>      &gt; &gt; &gt; stating that the EML frame has a single telegram all
+</I>&gt;<i>      &gt; &gt; LWR? Its surely
+</I>&gt;<i>      &gt; &gt; &gt; getting my digital inputs so there seems to be no
+</I>&gt;<i>      &gt; &gt; problem there. Still
+</I>&gt;<i>      &gt; &gt; &gt; the command in the header of the data for the ouputs
+</I>&gt;<i>      &gt; &gt; is different to
+</I>&gt;<i>      &gt; &gt; &gt; that in the EML one 0x0b as opposed to 0x0c so are you
+</I>&gt;<i>      &gt; &gt; /sure/ that
+</I>&gt;<i>      &gt; &gt; &gt; EML is operating LWR on the outputs? What am I missing?
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; EML doesn't use a LWR command (= logical write) but a
+</I>&gt;<i>      &gt; &gt; LRW command (=
+</I>&gt;<i>      &gt; &gt; logical read write). With this LRW command there can be
+</I>&gt;<i>      &gt; &gt; read from and
+</I>&gt;<i>      &gt; &gt; written to the slaves at the same time and using the
+</I>&gt;<i>      &gt; &gt; same telegram.
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; 0x0b stands for LWR and 0x0c stands for LRW. So because
+</I>&gt;<i>      &gt; &gt; EML uses only
+</I>&gt;<i>      &gt; &gt; one telegram, it has to be 0x0c. Twincat splits the read
+</I>&gt;<i>      &gt; &gt; and write
+</I>&gt;<i>      &gt; &gt; commands and therefore you'll see 0x0b at a Twincat
+</I>&gt;<i>      &gt; &gt; scan. And I'm pretty
+</I>&gt;<i>      &gt; &gt; sure you'll also see 0x0a (LRD) in another frame of the
+</I>&gt;<i>      &gt; &gt; same telegram
+</I>&gt;<i>      &gt; &gt; for reading data. An overview of all the Ethercat
+</I>&gt;<i>      &gt; &gt; commands can be found
+</I>&gt;<i>      &gt; &gt; in the spec at page 69 ff.
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; Ps. I'm not 100% sure but I think somewhere in the
+</I>&gt;<i>      &gt; &gt; configuration of
+</I>&gt;<i>      &gt; &gt; TwinCAT, you can choose between using LRW commands or
+</I>&gt;<i>      &gt; &gt; LRD and LWR commands.
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; &gt;
+</I>&gt;<i>      &gt; &gt; &gt; Roland
+</I>&gt;<i>      &gt; &gt; &gt;
+</I>&gt;<i>      &gt; &gt; &gt; Tom Panis wrote:
+</I>&gt;<i>      &gt; &gt; &gt; &gt; Roland Tollenaar wrote:
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt; Hi Klaas,
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt; Thanks. The LWR should be fine but its a bit strange
+</I>&gt;<i>      &gt; &gt; that Twincat
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt; does a logical RD. That would imply that no data is
+</I>&gt;<i>      &gt; &gt; written to the
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt; slaves but this does not correspond to the outputs
+</I>&gt;<i>      &gt; &gt; being set?
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt; Ethercat usually sends frames with a couple of
+</I>&gt;<i>      &gt; &gt; telegrams inside.
+</I>&gt;<i>      &gt; &gt; &gt; &gt; Looking at the scan Sa&#239;d posted you'll see that there
+</I>&gt;<i>      &gt; &gt; is a LWR
+</I>&gt;<i>      &gt; &gt; &gt; &gt; telegram for the analog and digital outputs a LRD for
+</I>&gt;<i>      &gt; &gt; the digital
+</I>&gt;<i>      &gt; &gt; &gt; &gt; inputs, a second LRD for the mailbox and a BRD.
+</I>&gt;<i>      &gt; &gt; &gt; &gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt; Have you received the mail about the watchdog timer?
+</I>&gt;<i>      &gt; &gt; Could you
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt; advise on how to read/ set this with EML?
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt; Regards,
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt; Roland
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt; Klaas Gadeyne wrote:
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt; On Tue, 31 Jul 2007, Roland Tollenaar wrote:
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; Hi,
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; Please give some assistance wrt to the ethercat
+</I>&gt;<i>      &gt; &gt; dataframes. I am
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; having
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; trouble with the documentation.
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; In particular at the moment the EC datagram header
+</I>&gt;<i>      &gt; &gt; is what I am
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; interested in.
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; This is what the header looks like.
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; Cmd /Idx /Addr /Offset /11bit length/R/C/R/M /IRQ
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; TC 0b 00 00 00 01 00 05 80 00 00
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; EML 0c 46 00 00 01 00 05 00 00 00
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; Now the questions are:
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; Where do I find documentation on the Cmd values
+</I>&gt;<i>      &gt; &gt; that must be used.
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; Why
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; would EML have a different command? (0xc instead
+</I>&gt;<i>      &gt; &gt; of 0x0b)
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt; So it seems you (or EML code, since I don't know
+</I>&gt;<i>      &gt; &gt; _when_ this frame is
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt; send)) are performing a logical read-write, while
+</I>&gt;<i>      &gt; &gt; twincat is doing a
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt; logical read.
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; The Index Idx has 0x46 instead of 00. Again I have
+</I>&gt;<i>      &gt; &gt; missed (cannot for
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; the life of me find it this morning because I
+</I>&gt;<i>      &gt; &gt; think I have seen
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; something about it) the part in the documentation
+</I>&gt;<i>      &gt; &gt; that tells me
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; what the
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; index does. Why will EML have a different value here?
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt; AFAIK (please check in the spec) the spec only says
+</I>&gt;<i>      &gt; &gt; that the master
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt; should check if the index is unaltered when a
+</I>&gt;<i>      &gt; &gt; message returns, its
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt; real value doesn't matter.
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; Then we see a difference in the RCRM part of the
+</I>&gt;<i>      &gt; &gt; header. I have no
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; idea
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; what they mean. C is recirculating, M means More
+</I>&gt;<i>      &gt; &gt; datagrams.
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt; Me neither, I guess that is the module specific data?
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; Finally my question is how to establish the lenght
+</I>&gt;<i>      &gt; &gt; out of the 11 bit
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; length. This may be obvious but what confuses me
+</I>&gt;<i>      &gt; &gt; is the part in the
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; Ethercat Header (main header not the one in the
+</I>&gt;<i>      &gt; &gt; datagram)
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; This part is
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; TC 0x39 0x10
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; EML 0x11 0x10
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; Which I don;t understnad because according to the
+</I>&gt;<i>      &gt; &gt; documentation
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; the last
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; 4 bits indicate the type and 1 should be Ethercat.
+</I>&gt;<i>      &gt; &gt; But neither TC nor
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; EML have a 1 in that position? Or is LSB and MSB
+</I>&gt;<i>      &gt; &gt; turned around?
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt; I don't understand your question here, but ethercat
+</I>&gt;<i>      &gt; &gt; is little
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt; endian IIRC
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; I get a feeling that the differences in this
+</I>&gt;<i>      &gt; &gt; header may be the
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; cause for
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; the problem. It may even be the length which IMHO
+</I>&gt;<i>      &gt; &gt; seems to differ
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; but I
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt; am not sure because there is so much info I am
+</I>&gt;<i>      &gt; &gt; lacking.
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt; _______________________________________________
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt; Ethercatmaster-users mailing list
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;
+</I>&gt;<i>      &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;&gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt; _______________________________________________
+</I>&gt;<i>      &gt; &gt; &gt; &gt; Ethercatmaster-users mailing list
+</I>&gt;<i>      &gt; &gt; &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;
+</I>&gt;<i>      &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; &gt; &gt;
+</I>&gt;<i>      &gt; &gt; &gt;
+</I>&gt;<i>      &gt; &gt; _______________________________________________
+</I>&gt;<i>      &gt; &gt; Ethercatmaster-users mailing list
+</I>&gt;<i>      &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt;
+</I>&gt;<i>     ------------------------------------------------------------------------
+</I>&gt;<i>      &gt; &gt; Ne gardez plus qu'une seule adresse mail ! Copiez vos mails
+</I>&gt;<i>      &gt; &gt; vers Yahoo! Mail
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; _______________________________________________
+</I>&gt;<i>      &gt; &gt; Ethercatmaster-users mailing list
+</I>&gt;<i>      &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt; &gt;
+</I>&gt;<i>      &gt;
+</I>&gt;<i>     ------------------------------------------------------------------------
+</I>&gt;<i>      &gt; &gt; Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez
+</I>&gt;<i>      &gt; aujourd'hui de
+</I>&gt;<i>      &gt; &gt; mail !
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt;
+</I>&gt;<i>     ------------------------------------------------------------------------
+</I>&gt;<i>      &gt; Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez
+</I>&gt;<i>     aujourd'hui de
+</I>&gt;<i>      &gt; mail !
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez aujourd'hui de 
+</I>&gt;<i> mail ! &lt;<A HREF="http://fr.promotions.yahoo.com/mail/nouveau_yahoomail2.html">http://fr.promotions.yahoo.com/mail/nouveau_yahoomail2.html</A>&gt;
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000235.html">[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: understanding the	datagrams
+</A></li>
+	<LI>Next message: <A HREF="000237.html">[Ethercatmaster-users] non-persistent outputs ETG suggestions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#236">[ date ]</a>
+              <a href="thread.html#236">[ thread ]</a>
+              <a href="subject.html#236">[ subject ]</a>
+              <a href="author.html#236">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Read and write etherCAT frames separatly question.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-December/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Read%20and%20write%20etherCAT%20frames%20separatly%0A%20question.&In-Reply-To=%3C476A8753.2080406%40sbcglobal.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000333.html">
+   <LINK REL="Next"  HREF="000335.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Read and write etherCAT frames separatly question.</H1>
+    <B>Dennis Nguyen</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Read%20and%20write%20etherCAT%20frames%20separatly%0A%20question.&In-Reply-To=%3C476A8753.2080406%40sbcglobal.net%3E"
+       TITLE="[Ethercatmaster-users] Read and write etherCAT frames separatly question.">dennisnguy at sbcglobal.net
+       </A><BR>
+    <I>Thu Dec 20 16:16:35 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000333.html">[Ethercatmaster-users] Read and write etherCAT frames separatly question.
+</A></li>
+        <LI>Next message: <A HREF="000335.html">[Ethercatmaster-users] Read and write etherCAT frames separatly question.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#334">[ date ]</a>
+              <a href="thread.html#334">[ thread ]</a>
+              <a href="subject.html#334">[ subject ]</a>
+              <a href="author.html#334">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks for the information,
+In this case, should I use low_level_output for sending  and 
+low_level_input for receiving data? I'm using RTnet, Xenomai, and Linux 
+i386.
+Dennis
+
+Klaas Gadeyne wrote:
+&gt;<i> On Thu, 20 Dec 2007, Roland Tollenaar wrote:
+</I>&gt;&gt;&gt;<i> Are there any separated read and write functions besides txandrd_PD 
+</I>&gt;&gt;&gt;<i> when
+</I>&gt;&gt;&gt;<i> transmit etherCAT frames?
+</I>&gt;&gt;&gt;<i> I'm using:
+</I>&gt;&gt;&gt;<i> EtherCAT_Master * EM = EtherCAT_Master::instance();
+</I>&gt;&gt;&gt;<i> EM-&gt;txandrx_PD(number, buffer);
+</I>&gt;&gt;<i> AFAIK this is predominantly the function to use. But the inputs and
+</I>&gt;&gt;<i> outputs can be transmitted in the same buffer. That is at least how I
+</I>&gt;&gt;<i> use the library. This means that if the inputs are available for sending
+</I>&gt;&gt;<i> you will get them in the same call as you send your outputs in.
+</I>&gt;<i>
+</I>&gt;<i> Indeed (although the short description of txandrx only mentions
+</I>&gt;<i> sending process data).
+</I>&gt;<i> See
+</I>&gt;<i> &lt;<A HREF="http://ethercatmaster.berlios.de/doxygen/html/classEtherCAT__Master.html#EtherCAT__Mastera2">http://ethercatmaster.berlios.de/doxygen/html/classEtherCAT__Master.html#EtherCAT__Mastera2</A>&gt; 
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Klaas
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000333.html">[Ethercatmaster-users] Read and write etherCAT frames separatly question.
+</A></li>
+	<LI>Next message: <A HREF="000335.html">[Ethercatmaster-users] Read and write etherCAT frames separatly question.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#334">[ date ]</a>
+              <a href="thread.html#334">[ thread ]</a>
+              <a href="subject.html#334">[ subject ]</a>
+              <a href="author.html#334">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

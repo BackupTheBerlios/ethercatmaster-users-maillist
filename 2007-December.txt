@@ -1,0 +1,465 @@
+From dennisnguy at sbcglobal.net  Mon Dec  3 23:16:09 2007
+From: dennisnguy at sbcglobal.net (Dennis Nguyen)
+Date: Mon, 03 Dec 2007 14:16:09 -0800
+Subject: [Ethercatmaster-users] undefined reference to `rt_task_create'
+Message-ID: <1196720169.22401.12.camel@dalat.org>
+
+Hello,
+
+I'm using linux x386 kernel 2.6.23.9, xenomai 2.4-rc7,
+adeos-ipipe-2.6.23-i386-1.11-00, rtnet trunk dated 11/27/2007, eml_trunk
+dated 11/27/2007.
+
+I got the undefined reference to `rt_task_...' errors while trying to
+make EML with Tom's test example:
+undefined reference to `rt_task_create'
+undefined reference to `rt_task_set_periodic'
+undefined reference to `rt_task_start'
+undefined reference to `rt_task_join'
+
+I included: #include <native/task.h>, selected "Native API" as module
+from kernel configuration. I have /usr/xenomai/include/native/ task.h
+and /usr/xenomai/lib/libnative.so files.
+(note: I am being able to run the master_test.)
+
+Do I missing something? How to solve the "undefined reference to
+`rt_task_...'"?
+
+Thanks in advance,
+Dennis
+
+
+
+From klaas.gadeyne at fmtc.be  Tue Dec  4 08:45:15 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 4 Dec 2007 08:45:15 +0100 (CET)
+Subject: [Ethercatmaster-users] undefined reference to `rt_task_create'
+In-Reply-To: <1196720169.22401.12.camel@dalat.org>
+References: <1196720169.22401.12.camel@dalat.org>
+Message-ID: <alpine.DEB.0.99999.0712040843400.18554@watt.labo01.fmtc.be>
+
+On Mon, 3 Dec 2007, Dennis Nguyen wrote:
+> Hello,
+>
+> I'm using linux x386 kernel 2.6.23.9, xenomai 2.4-rc7,
+> adeos-ipipe-2.6.23-i386-1.11-00, rtnet trunk dated 11/27/2007, eml_trunk
+> dated 11/27/2007.
+>
+> I got the undefined reference to `rt_task_...' errors while trying to
+> make EML with Tom's test example:
+
+which example do you mean exactly?
+
+> undefined reference to `rt_task_create'
+> undefined reference to `rt_task_set_periodic'
+> undefined reference to `rt_task_start'
+> undefined reference to `rt_task_join'
+>
+> I included: #include <native/task.h>, selected "Native API" as module
+> from kernel configuration. I have /usr/xenomai/include/native/ task.h
+> and /usr/xenomai/lib/libnative.so files.
+> (note: I am being able to run the master_test.)
+
+What is the exact command line you get while running make (link
+stage), it seems there's a missing "-lnative " somewhere.
+
+Klaas
+
+
+
+From dennisnguy at sbcglobal.net  Tue Dec  4 15:59:59 2007
+From: dennisnguy at sbcglobal.net (Dennis Nguyen)
+Date: Tue, 04 Dec 2007 06:59:59 -0800
+Subject: [Ethercatmaster-users] undefined reference to `rt_task_create'
+In-Reply-To: <alpine.DEB.0.99999.0712040843400.18554@watt.labo01.fmtc.be>
+References: <1196720169.22401.12.camel@dalat.org>
+	<alpine.DEB.0.99999.0712040843400.18554@watt.labo01.fmtc.be>
+Message-ID: <47556B6F.5020405@sbcglobal.net>
+
+Thanks Klaas,
+
+Klaas Gadeyne wrote:
+> On Mon, 3 Dec 2007, Dennis Nguyen wrote:
+>> Hello,
+>>
+>> I'm using linux x386 kernel 2.6.23.9, xenomai 2.4-rc7,
+>> adeos-ipipe-2.6.23-i386-1.11-00, rtnet trunk dated 11/27/2007, eml_trunk
+>> dated 11/27/2007.
+>>
+>> I got the undefined reference to `rt_task_...' errors while trying to
+>> make EML with Tom's test example:
+>
+> which example do you mean exactly?
+>
+example from the EML users list archives.  Tom used rt_task_... and sine 
+signal on an analog output IO module.
+>> undefined reference to `rt_task_create'
+>> undefined reference to `rt_task_set_periodic'
+>> undefined reference to `rt_task_start'
+>> undefined reference to `rt_task_join'
+>>
+>> I included: #include <native/task.h>, selected "Native API" as module
+>> from kernel configuration. I have /usr/xenomai/include/native/ task.h
+>> and /usr/xenomai/lib/libnative.so files.
+>> (note: I am being able to run the master_test.)
+>
+> What is the exact command line you get while running make (link
+> stage), it seems there's a missing "-lnative " somewhere.
+>
+Yes, you right. It was missing -lnative.  How can I add the native 
+library to the configuration for Makefile? (which file can I add it in).
+> Klaas
+>
+>
+
+
+From klaas.gadeyne at fmtc.be  Tue Dec  4 17:09:08 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 4 Dec 2007 17:09:08 +0100 (CET)
+Subject: [Ethercatmaster-users] undefined reference to `rt_task_create'
+In-Reply-To: <47556B6F.5020405@sbcglobal.net>
+References: <1196720169.22401.12.camel@dalat.org>
+	<alpine.DEB.0.99999.0712040843400.18554@watt.labo01.fmtc.be>
+	<47556B6F.5020405@sbcglobal.net>
+Message-ID: <Pine.LNX.4.64.0712041706260.28703@ampere.labo01.fmtc.be>
+
+On Tue, 4 Dec 2007, Dennis Nguyen wrote:
+> Klaas Gadeyne wrote:
+>> On Mon, 3 Dec 2007, Dennis Nguyen wrote:
+>>> I'm using linux x386 kernel 2.6.23.9, xenomai 2.4-rc7,
+>>> adeos-ipipe-2.6.23-i386-1.11-00, rtnet trunk dated 11/27/2007, eml_trunk
+>>> dated 11/27/2007.
+>>>
+>>> I got the undefined reference to `rt_task_...' errors while trying to
+>>> make EML with Tom's test example:
+>>
+>> which example do you mean exactly?
+>>
+> example from the EML users list archives.  Tom used rt_task_... and sine
+> signal on an analog output IO module.
+>>> undefined reference to `rt_task_create'
+>>> undefined reference to `rt_task_set_periodic'
+>>> undefined reference to `rt_task_start'
+>>> undefined reference to `rt_task_join'
+>>>
+>>> I included: #include <native/task.h>, selected "Native API" as module
+>>> from kernel configuration. I have /usr/xenomai/include/native/ task.h
+>>> and /usr/xenomai/lib/libnative.so files.
+>>> (note: I am being able to run the master_test.)
+>>
+>> What is the exact command line you get while running make (link
+>> stage), it seems there's a missing "-lnative " somewhere.
+>>
+> Yes, you right. It was missing -lnative.  How can I add the native
+> library to the configuration for Makefile? (which file can I add it in).
+
+That depends on the build system your using.  The current svn of EML
+uses the posix skin instead of the native one.  E.g. for the cmake
+build system this results in
+
+root at einstein:~/SVN/eml-trunk/tests/rtnet #
+   grep POSIX CMakeLists.txt
+SET (CMAKE_C_FLAGS "${CMAKE_CFLAGS} ${XNPOSIX_USER_CFLAGS}")
+SET_TARGET_PROPERTIES(master_test eval_test PROPERTIES LINK_FLAGS "${XNPOSIX_USER_LDFLAGS}")
+
+regards,
+
+Klaas
+
+
+From dennisnguy at sbcglobal.net  Wed Dec 19 19:44:34 2007
+From: dennisnguy at sbcglobal.net (Dennis Nguyen)
+Date: Wed, 19 Dec 2007 10:44:34 -0800
+Subject: [Ethercatmaster-users] Read and write etherCAT frames separatly
+	question.
+Message-ID: <1198089874.19538.13.camel@dalat.org>
+
+Hello,
+
+Are there any separated read and write functions besides txandrd_PD when
+transmit etherCAT frames?
+I'm using:
+EtherCAT_Master * EM = EtherCAT_Master::instance();
+EM->txandrx_PD(number, buffer);
+to send a message but I need to wait for a few micro seconds before I
+can read an input back. If I call trandrd_PD function again to read a
+frame back after few micro seconds then it will write the message one
+more time. I don't want to write twice, just write one, wait, then read
+back.
+
+Thank you in advance,
+Dennis
+
+
+
+
+From rwatollenaar at gmail.com  Thu Dec 20 09:42:04 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Thu, 20 Dec 2007 09:42:04 +0100
+Subject: [Ethercatmaster-users] Read and write etherCAT frames separatly
+ question.
+In-Reply-To: <1198089874.19538.13.camel@dalat.org>
+References: <1198089874.19538.13.camel@dalat.org>
+Message-ID: <476A2ADC.4070605@gmail.com>
+
+> Are there any separated read and write functions besides txandrd_PD when
+> transmit etherCAT frames?
+> I'm using:
+> EtherCAT_Master * EM = EtherCAT_Master::instance();
+> EM->txandrx_PD(number, buffer);
+AFAIK this is predominantly the function to use. But the inputs and 
+outputs can be transmitted in the same buffer. That is at least how I 
+use the library. This means that if the inputs are available for sending 
+you will get them in the same call as you send your outputs in.
+
+HTH.
+
+Roland Tollenaar
+
+
+> to send a message but I need to wait for a few micro seconds before I
+> can read an input back. If I call trandrd_PD function again to read a
+> frame back after few micro seconds then it will write the message one
+> more time. I don't want to write twice, just write one, wait, then read
+> back.
+> 
+> Thank you in advance,
+> Dennis
+> 
+> 
+> _______________________________________________
+> Ethercatmaster-users mailing list
+> Ethercatmaster-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+> 
+
+
+From klaas.gadeyne at fmtc.be  Thu Dec 20 11:20:35 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 20 Dec 2007 11:20:35 +0100 (CET)
+Subject: [Ethercatmaster-users] Read and write etherCAT frames separatly
+ question.
+In-Reply-To: <476A2ADC.4070605@gmail.com>
+References: <1198089874.19538.13.camel@dalat.org> <476A2ADC.4070605@gmail.com>
+Message-ID: <Pine.LNX.4.64.0712201119400.17736@ampere.labo01.fmtc.be>
+
+On Thu, 20 Dec 2007, Roland Tollenaar wrote:
+>> Are there any separated read and write functions besides txandrd_PD when
+>> transmit etherCAT frames?
+>> I'm using:
+>> EtherCAT_Master * EM = EtherCAT_Master::instance();
+>> EM->txandrx_PD(number, buffer);
+> AFAIK this is predominantly the function to use. But the inputs and
+> outputs can be transmitted in the same buffer. That is at least how I
+> use the library. This means that if the inputs are available for sending
+> you will get them in the same call as you send your outputs in.
+
+Indeed (although the short description of txandrx only mentions
+sending process data).
+See
+<http://ethercatmaster.berlios.de/doxygen/html/classEtherCAT__Master.html#EtherCAT__Mastera2>
+
+Klaas
+
+
+From dennisnguy at sbcglobal.net  Thu Dec 20 16:16:35 2007
+From: dennisnguy at sbcglobal.net (Dennis Nguyen)
+Date: Thu, 20 Dec 2007 07:16:35 -0800
+Subject: [Ethercatmaster-users] Read and write etherCAT frames separatly
+ question.
+In-Reply-To: <Pine.LNX.4.64.0712201119400.17736@ampere.labo01.fmtc.be>
+References: <1198089874.19538.13.camel@dalat.org> <476A2ADC.4070605@gmail.com>
+	<Pine.LNX.4.64.0712201119400.17736@ampere.labo01.fmtc.be>
+Message-ID: <476A8753.2080406@sbcglobal.net>
+
+Thanks for the information,
+In this case, should I use low_level_output for sending  and 
+low_level_input for receiving data? I'm using RTnet, Xenomai, and Linux 
+i386.
+Dennis
+
+Klaas Gadeyne wrote:
+> On Thu, 20 Dec 2007, Roland Tollenaar wrote:
+>>> Are there any separated read and write functions besides txandrd_PD 
+>>> when
+>>> transmit etherCAT frames?
+>>> I'm using:
+>>> EtherCAT_Master * EM = EtherCAT_Master::instance();
+>>> EM->txandrx_PD(number, buffer);
+>> AFAIK this is predominantly the function to use. But the inputs and
+>> outputs can be transmitted in the same buffer. That is at least how I
+>> use the library. This means that if the inputs are available for sending
+>> you will get them in the same call as you send your outputs in.
+>
+> Indeed (although the short description of txandrx only mentions
+> sending process data).
+> See
+> <http://ethercatmaster.berlios.de/doxygen/html/classEtherCAT__Master.html#EtherCAT__Mastera2> 
+>
+>
+> Klaas
+>
+
+
+From klaas.gadeyne at fmtc.be  Fri Dec 21 11:37:34 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Fri, 21 Dec 2007 11:37:34 +0100 (CET)
+Subject: [Ethercatmaster-users] Read and write etherCAT frames separatly
+ question.
+In-Reply-To: <476A8753.2080406@sbcglobal.net>
+References: <1198089874.19538.13.camel@dalat.org> <476A2ADC.4070605@gmail.com>
+	<Pine.LNX.4.64.0712201119400.17736@ampere.labo01.fmtc.be>
+	<476A8753.2080406@sbcglobal.net>
+Message-ID: <Pine.LNX.4.64.0712211136290.18735@ampere.labo01.fmtc.be>
+
+On Thu, 20 Dec 2007, Dennis Nguyen wrote:
+> Thanks for the information,
+> In this case, should I use low_level_output for sending  and
+> low_level_input for receiving data? I'm using RTnet, Xenomai, and Linux
+> i386.
+
+No, please reread the documentation below.  Notice the pointer arguments...
+
+>> See
+>> <http://ethercatmaster.berlios.de/doxygen/html/classEtherCAT__Master.html#EtherCAT__Mastera2>
+
+
+From dennisnguy at sbcglobal.net  Fri Dec 21 18:44:40 2007
+From: dennisnguy at sbcglobal.net (Dennis Nguyen)
+Date: Fri, 21 Dec 2007 09:44:40 -0800
+Subject: [Ethercatmaster-users] Read and write etherCAT frames	separatly
+	question.
+In-Reply-To: <Pine.LNX.4.64.0712211136290.18735@ampere.labo01.fmtc.be>
+References: <1198089874.19538.13.camel@dalat.org> <476A2ADC.4070605@gmail.com>
+	<Pine.LNX.4.64.0712201119400.17736@ampere.labo01.fmtc.be>
+	<476A8753.2080406@sbcglobal.net>
+	<Pine.LNX.4.64.0712211136290.18735@ampere.labo01.fmtc.be>
+Message-ID: <1198259080.10190.14.camel@dalat.org>
+
+Thanks for the information,
+I'm sorry I didn't write clearly in the previous email.  I meant should
+I use the low_level_input and low_level_output function after I add some
+code into the ethercat_xenomai_drv.c and other related modules. In other
+words, could I write some code similar to: "static bool ec_rtdm_txandrc"
+function.  For example: "static bool ec_rtdm_tx" and "static ec_rtdm_rx"
+for sending and receiving respectively?  the "static bool ec_rtdm_tx"
+contents low_level_output and "static bool ec_rtdm_rx" contents
+low_level_output function.
+I understand that it couldn't call low_level_input and low_level_output
+directly from the application. I think it could use the functions after
+adding some code to take care the pointer arguments.
+Thanks
+Dennis
+
+
+On Fri, 2007-12-21 at 11:37 +0100, Klaas Gadeyne wrote:
+> On Thu, 20 Dec 2007, Dennis Nguyen wrote:
+> > Thanks for the information,
+> > In this case, should I use low_level_output for sending  and
+> > low_level_input for receiving data? I'm using RTnet, Xenomai, and Linux
+> > i386.
+> 
+> No, please reread the documentation below.  Notice the pointer arguments...
+> 
+> >> See
+> >> <http://ethercatmaster.berlios.de/doxygen/html/classEtherCAT__Master.html#EtherCAT__Mastera2>
+
+
+
+From tom.panis at dommel.be  Fri Dec 21 22:35:58 2007
+From: tom.panis at dommel.be (Tom Panis)
+Date: Fri, 21 Dec 2007 22:35:58 +0100
+Subject: [Ethercatmaster-users] Read and write etherCAT frames	separatly
+ question.
+In-Reply-To: <1198259080.10190.14.camel@dalat.org>
+References: <1198089874.19538.13.camel@dalat.org>
+	<476A2ADC.4070605@gmail.com>	<Pine.LNX.4.64.0712201119400.17736@ampere.labo01.fmtc.be>	<476A8753.2080406@sbcglobal.net>	<Pine.LNX.4.64.0712211136290.18735@ampere.labo01.fmtc.be>
+	<1198259080.10190.14.camel@dalat.org>
+Message-ID: <476C31BE.1050902@dommel.be>
+
+Dennis Nguyen wrote:
+> Thanks for the information,
+> I'm sorry I didn't write clearly in the previous email.  I meant should
+> I use the low_level_input and low_level_output function after I add some
+> code into the ethercat_xenomai_drv.c and other related modules. In other
+> words, could I write some code similar to: "static bool ec_rtdm_txandrc"
+> function.  For example: "static bool ec_rtdm_tx" and "static ec_rtdm_rx"
+> for sending and receiving respectively?  the "static bool ec_rtdm_tx"
+> contents low_level_output and "static bool ec_rtdm_rx" contents
+> low_level_output function.
+
+The txandrx function needs to stay as it is. Splitting the function in
+separate reading and writing functions wouldn't work because the slaves
+can't build (and send) a frame on their own.
+
+It would be better to add an argument to the txandrx function that
+defines the logical start address. (or better: adding a second txandrx
+function with this third argument) As you can see in
+ethercat_process_data.cxx the used telegram is created with logical
+start address 0x00010000:
+
+  	   m_lrw_telegram(0x00,0x00010000,0x00,0,NULL),
+
+The logical address can be set with the set(EC_UDINT a_adr) function of
+  a Logical_Addressing_Telegram
+
+In this way you can send and read data separately by changing the
+logical start address
+
+Tom
+
+
+
+
+From dennisnguy at sbcglobal.net  Fri Dec 21 17:16:52 2007
+From: dennisnguy at sbcglobal.net (Dennis Nguyen)
+Date: Fri, 21 Dec 2007 16:16:52 +0000
+Subject: [Ethercatmaster-users] Read and write etherCAT	frames	separatly
+	question.
+In-Reply-To: <476C31BE.1050902@dommel.be>
+References: <1198089874.19538.13.camel@dalat.org> <476A2ADC.4070605@gmail.com>
+	<Pine.LNX.4.64.0712201119400.17736@ampere.labo01.fmtc.be>
+	<476A8753.2080406@sbcglobal.net>
+	<Pine.LNX.4.64.0712211136290.18735@ampere.labo01.fmtc.be>
+	<1198259080.10190.14.camel@dalat.org>  <476C31BE.1050902@dommel.be>
+Message-ID: <1198253812.3586.3.camel@dalat.org>
+
+Thanks a lot for the info. I'll follow your advice.
+Dennis
+
+On Fri, 2007-12-21 at 22:35 +0100, Tom Panis wrote:
+> Dennis Nguyen wrote:
+> > Thanks for the information,
+> > I'm sorry I didn't write clearly in the previous email.  I meant should
+> > I use the low_level_input and low_level_output function after I add some
+> > code into the ethercat_xenomai_drv.c and other related modules. In other
+> > words, could I write some code similar to: "static bool ec_rtdm_txandrc"
+> > function.  For example: "static bool ec_rtdm_tx" and "static ec_rtdm_rx"
+> > for sending and receiving respectively?  the "static bool ec_rtdm_tx"
+> > contents low_level_output and "static bool ec_rtdm_rx" contents
+> > low_level_output function.
+> 
+> The txandrx function needs to stay as it is. Splitting the function in
+> separate reading and writing functions wouldn't work because the slaves
+> can't build (and send) a frame on their own.
+> 
+> It would be better to add an argument to the txandrx function that
+> defines the logical start address. (or better: adding a second txandrx
+> function with this third argument) As you can see in
+> ethercat_process_data.cxx the used telegram is created with logical
+> start address 0x00010000:
+> 
+>   	   m_lrw_telegram(0x00,0x00010000,0x00,0,NULL),
+> 
+> The logical address can be set with the set(EC_UDINT a_adr) function of
+>   a Logical_Addressing_Telegram
+> 
+> In this way you can send and read data separately by changing the
+> logical start address
+> 
+> Tom
+> 
+> 
+
+
+

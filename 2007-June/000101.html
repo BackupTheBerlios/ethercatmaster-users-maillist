@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] getting started
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20getting%20started&In-Reply-To=%3Cbc4264770706120642v2081c609ib079c071bb182b5a%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000102.html">
+   <LINK REL="Next"  HREF="000103.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] getting started</H1>
+    <B>roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20getting%20started&In-Reply-To=%3Cbc4264770706120642v2081c609ib079c071bb182b5a%40mail.gmail.com%3E"
+       TITLE="[Ethercatmaster-users] getting started">rolandtollenaar at gmail.com
+       </A><BR>
+    <I>Tue Jun 12 15:42:11 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000102.html">[Ethercatmaster-users] getting started
+</A></li>
+        <LI>Next message: <A HREF="000103.html">[Ethercatmaster-users] getting started
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#101">[ date ]</a>
+              <a href="thread.html#101">[ thread ]</a>
+              <a href="subject.html#101">[ subject ]</a>
+              <a href="author.html#101">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+&gt;<i> &gt; This is the output if I do not run
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt;&gt; ./rtnet start
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; before running master_test.:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+</I>&gt;<i> &gt; Socket created: socket id: 3
+</I>&gt;<i> &gt; Cannot get interface index: No such device
+</I>&gt;<i> &gt; Socket initialisation failed
+</I>&gt;<i>
+</I>&gt;<i> Did you configure rteth0? Something like modprobe &lt;my-rt-nic-driver&gt;,
+</I>&gt;<i> modprobe rtpacket, rtifconfig rteth0 up?
+</I>
+Where does it say something about this? AFAIK only the rtnet_conf in
+/rtnet/etc must be set up but its not clear to me how to set this up
+for the beckhoff node......
+As stated, if the Beckhoff node is to be the slave in the
+configuration, what ip adress does it have?
+
+
+&gt;<i>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test eth0
+</I>&gt;<i>
+</I>&gt;<i> eth0 is obviously wrong. You want to use RTnet, don't you?
+</I>I know, just thought I would post it for completeness.
+
+
+&gt;<i> &gt; If I run rtnet start the output is
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Waiting for slaves.........
+</I>&gt;<i>
+</I>&gt;<i> Don't use this for EtherCAT setup, RTmac/TDMA is otherwise brought up
+</I>&gt;<i> which makes no sense here.
+</I>Ah, see this is news that I can use!!
+
+Isn't the EML documentation covering the
+&gt;<i> required RTnet start-up sequence?
+</I>As Klaas points out, not yet.......
+
+&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+</I>&gt;<i> &gt; Socket created: socket id: 896
+</I>&gt;<i> &gt; Got interface: index: 0
+</I>&gt;<i> &gt; Attach netif
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Master initializing
+</I>&gt;<i>
+</I>&gt;<i> Due to RTmac/TDMA, the master will not be able to send any packet on the
+</I>&gt;<i> wire...
+</I>Ok.........
+
+I know that I am infamous for not reading the correct documentation
+before asking silly questions, but I get the impression that there is
+information about starting up rtnet without RTmac/TDMA which i do not
+know about. Where can I find out?
+
+
+Regards,
+
+Roland.
+
+&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; low_level_txandrx: failed: MAX_TRIES_TX: Giving up
+</I>&gt;<i> &gt; DLL::txandrx() Error
+</I>&gt;<i> &gt; Error sending counter frame
+</I>&gt;<i> &gt; Something went wrong while scanning network
+</I>&gt;<i> &gt; EtherCAT_AL:: Can't init network
+</I>&gt;<i> &gt; Getting slave handler
+</I>&gt;<i> &gt; EtherCAT_AL: No such slave, returning NULL
+</I>&gt;<i> &gt; Setting EK1100 to OP STATE
+</I>&gt;<i> &gt; Segmentation fault
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Hope this tells us what I am doing wrong?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Kind regards.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Roland.
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> Jan
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000102.html">[Ethercatmaster-users] getting started
+</A></li>
+	<LI>Next message: <A HREF="000103.html">[Ethercatmaster-users] getting started
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#101">[ date ]</a>
+              <a href="thread.html#101">[ thread ]</a>
+              <a href="subject.html#101">[ subject ]</a>
+              <a href="author.html#101">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

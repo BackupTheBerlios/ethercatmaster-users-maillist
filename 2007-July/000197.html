@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] RE : Re:  The EtherCAT Tarfic scan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20%20The%20EtherCAT%20Tarfic%20scan&In-Reply-To=%3C146012.48873.qm%40web37305.mail.mud.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000196.html">
+   <LINK REL="Next"  HREF="000203.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] RE : Re:  The EtherCAT Tarfic scan</H1>
+    <B>said harti</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20%20The%20EtherCAT%20Tarfic%20scan&In-Reply-To=%3C146012.48873.qm%40web37305.mail.mud.yahoo.com%3E"
+       TITLE="[Ethercatmaster-users] RE : Re:  The EtherCAT Tarfic scan">harti_said at yahoo.fr
+       </A><BR>
+    <I>Thu Jul 26 10:30:32 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000196.html">[Ethercatmaster-users] The EtherCAT Tarfic scan
+</A></li>
+        <LI>Next message: <A HREF="000203.html">[Ethercatmaster-users] RE : Re:  The EtherCAT Tarfic scan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#197">[ date ]</a>
+              <a href="thread.html#197">[ thread ]</a>
+              <a href="subject.html#197">[ subject ]</a>
+              <a href="author.html#197">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I don't noticed any important differences, i have compared all parameters with twincat,...no differences
+
+Me too, i am sur that i have set a correct Logical address to my EL2004 : 0x00010004 and i am like Rolland, i don't think that the problem is the EL2004 parameters, because, data are received correctely one time by EL2004 and LEDs flash briefly. So i think that the exchange process of data is not correctly realised (txandrx functions, or some thing alse...)
+
+
+
+If you hope that i test some things in order to resolve this famouss problem, let me know
+
+Regards,
+
+Said
+
+This i my master_test config :
+
+///SlaveConfig EK1100
+EtherCAT_FMMU_Config fmmu_config_EK1100(0);
+EtherCAT_PD_Config pd_config_EK1100(0);
+EtherCAT_SlaveConfig
+ EC_EK1100(0x044c2c52,0x00010000,0x03e9,&amp;fmmu_config_EK1100,&amp;pd_config_EK1100);
+
+///SlaveConfig EL4102
+
+///[A slave configuration consists of a fmmu-config, a process data (pd) config and optionally a mailbox config]
+
+EtherCAT_FMMU_Config fmmu_config_EL4102(2);///arg=number of FMMU's.Some modules take more than one if e.g. they have in and outputs.///not sure what this is doing (Seems to be actual fmmu config which gets linked to the handle created above)
+///fmmu (fieldbus memory management unit) config container (handle?)
+
+///logical start address, # bytes used, start bit, end bit, physical address, physical start bit, read-enable, write-enable, activate-module
+
+EC_FMMU fmmu0_EL4102(0x00080000,0x0001,0x00,0x00,0x080D,0x00,true,false,true);
+EC_FMMU fmmu1_EL4102(0x00010000,0x0004,0x00,0x07,0x1000,0x00,false,true,true);
+
+EC_SyncMan syncman_mbx0_EL4102(0x1800,246,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan syncman_mbx1_EL4102(0x18f6,246,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_MbxConfig mbx_conf_EL4102 = {syncman_mbx0_EL4102,
+ syncman_mbx1_EL4102};
+
+///process data config (Again seems to be a handle)
+
+EtherCAT_PD_Config pd_config_EL4102(2);///argument=length
+EC_SyncMan syncman0_EL4102(0x1000,4,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan syncman1_EL4102(0x1100,0,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+
+///compile the slave configuration
+
+EtherCAT_SlaveConfig EC_EL4102(0x10063052,0x00000000,0x03ea,&amp;fmmu_config_EL4102,&amp;pd_config_EL4102,&amp;mbx_conf_EL4102);
+
+///Modif
+///SlaveConfig EL2004
+EtherCAT_FMMU_Config fmmu_config_EL2004(1);
+
+EC_FMMU fmmu0_EL2004(0x00010004,0x0001,0x00,0x03,0x0F00,0x00,false,true,true);
+
+EtherCAT_PD_Config pd_config_EL2004(1);EC_SyncMan syncman0_EL2004(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig EC_EL2004(0x7d43052,0x00100000,0x03eb,&amp;fmmu_config_EL2004,&amp;pd_config_EL2004);
+
+///SlaveConfig EL1004
+EtherCAT_FMMU_Config fmmu_config_EL1004(1);
+//EC_FMMU fmmu0_EL1004(0x00010800,0x0001,0x00,0x03,0x1000,0x00,true,false,true);
+EC_FMMU fmmu0_EL1004(0x0001000A,0x0001,0x00,0x03,0x1000,0x00,true,false,true);
+EtherCAT_PD_Config pd_config_EL1004(1);
+EC_SyncMan syncman0_EL1004(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+
+EtherCAT_SlaveConfig EC_EL1004(0x03EC3052,0x00100000,0x03ec,&amp;fmmu_config_EL1004,&amp;pd_config_EL1004);
+
+Exchange data process :
+
+unsigned char msg[20];
+
+        if(AL-&gt;isReady()) {
+
+            printf(&quot;Test \n\n&quot;);
+            
+
+            int count = 0;
+            while(count&lt;100000) {
+
+                msg[0]=0x00;
+                msg[1]=0x00;
+                msg[2]=0xff;
+                msg[3]=0x3f;
+                msg[4]=0x0f;
+                msg[10]=0x00;
+
+                EM-&gt;txandrx_PD(sizeof(msg),msg);            
+    
+                
+
+                        printf(&quot;DI : 0X0%x , AO : 0x0%x 0%x , DO : 0x0%x&quot;, msg[10],
+ msg[0], msg[1], msg[4]);
+                            printf (&quot;\n&quot;);
+                    
+                
+
+                count++;
+            }
+            printf(&quot;Test done.\n&quot;);
+        }
+        
+        close_socket(ni);
+        
+    }
+}
+
+void catch_signal(int sig)
+{
+   if(ni != 0)
+        close_socket(ni);
+    exit(1);
+}
+
+int main(int argc, char** argv)
+{
+
+    signal(SIGTERM, catch_signal);
+   signal(SIGINT, catch_signal);
+   signal(SIGHUP, catch_signal);
+    mlockall(MCL_CURRENT|MCL_FUTURE);
+
+    if (argc &lt; 2) {
+        printf(&quot;usage: %s &lt;interface&gt;\n&quot;, argv[0]);
+        return 0;
+    }
+
+    pthread_t xenothread;
+    pthread_attr_t xenothread_attr;
+
+    //Set attributes of thread
+    pthread_attr_init (&amp; xenothread_attr);
+
+    //Start thread
+    if(pthread_create(&amp;xenothread, &amp;xenothread_attr, run_master, argv[1])
+ != 0) {
+        printf(&quot;Cannot create thread EtherCatThread.\n&quot;);
+        exit(1);
+    }
+   pthread_join( xenothread, 0 );
+    return 0;
+}
+
+Roland Tollenaar &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">rwatollenaar at gmail.com</A>&gt; a &#233;crit : Hi Tom,
+
+Thanks for looking at the scan. This is Said's scan so I cannot answer 
+for him. My 4 2004's have logical addresses set at:
+
+0x00010000   sb0 eb3
+0x00010000   sb4 eb7
+0x00010001   sb0 eb3
+0x00010001   sb4 eb7
+
+if I remember correctly and I am almost 100% certain that I have not 
+overlapped addresses. And I am witnessing exactly the same problem.
+
+Also remember that the outputs do respond according to the process data 
+sent to them, but only once and briefly in any program. I have 
+incorporated the code in my actual project where it runs in a rt thread 
+and the behaviour is exactly the same as in your master_test example.
+
+So it seems as though the other data that twincat sends in its traffic 
+is more important than assumed?
+
+Kind regards,
+
+Roland
+
+Tom Panis wrote:
+&gt;<i> Klaas Gadeyne wrote:
+</I>&gt;&gt;<i> On Mon, 23 Jul 2007, said harti wrote:
+</I>&gt;&gt;<i>   
+</I>&gt;&gt;&gt;<i> This is the Trafic scan between :
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 1)  Twincat Tool and Beckhoff modules (EK1100, EL4102, EL2004, EL1004)
+</I>&gt;&gt;&gt;<i> 2)  EML and Beckhoff modules (EK1100, EL4102, EL2004, EL1004)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> (I have gived 5V (3fff to EL4102) and 0x0f to DO EL2004).
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;<i> [...]
+</I>&gt;&gt;<i> I just (re)discovered the ethercat wireshark plugin at ethercat.org is
+</I>&gt;&gt;<i> a dll, so I won't be able to help you out quickly here :-((
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Did you compare the 2 output scans yourself and notice important differences?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Klaas
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> I've taken a look at both scans and I can't find an important 
+</I>&gt;<i> difference. The process data are both the same on the TwinCAT and the 
+</I>&gt;<i> EML scan.
+</I>&gt;<i> May I assume the logical address for the digital outputs is set 
+</I>&gt;<i> correctly at 0x00010004? So it's not a configuration fault.
+</I>&gt;<i> 
+</I>&gt;<i> Tom
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i> 
+</I>_______________________________________________
+Ethercatmaster-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+
+
+       
+---------------------------------
+ Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez aujourd'hui de mail !
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070726/b661d1b5/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070726/b661d1b5/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000196.html">[Ethercatmaster-users] The EtherCAT Tarfic scan
+</A></li>
+	<LI>Next message: <A HREF="000203.html">[Ethercatmaster-users] RE : Re:  The EtherCAT Tarfic scan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#197">[ date ]</a>
+              <a href="thread.html#197">[ thread ]</a>
+              <a href="subject.html#197">[ subject ]</a>
+              <a href="author.html#197">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

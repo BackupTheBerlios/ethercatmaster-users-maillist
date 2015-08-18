@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] RE : Re: RE : Re: CoE (CANopen over EtherCAT) : EL6751 parameters!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20CoE%20%28CANopen%20over%0A%20EtherCAT%29%20%3A%20EL6751%20parameters%21&In-Reply-To=%3CPine.LNX.4.64.0707261836180.12995%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000198.html">
+   <LINK REL="Next"  HREF="000194.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] RE : Re: RE : Re: CoE (CANopen over EtherCAT) : EL6751 parameters!</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20CoE%20%28CANopen%20over%0A%20EtherCAT%29%20%3A%20EL6751%20parameters%21&In-Reply-To=%3CPine.LNX.4.64.0707261836180.12995%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] RE : Re: RE : Re: CoE (CANopen over EtherCAT) : EL6751 parameters!">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Thu Jul 26 18:40:04 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000198.html">[Ethercatmaster-users] RE : Re: RE : Re: CoE (CANopen over	EtherCAT) : EL6751 parameters!
+</A></li>
+        <LI>Next message: <A HREF="000194.html">[Ethercatmaster-users] non-persistent outputs 2004
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#205">[ date ]</a>
+              <a href="thread.html#205">[ thread ]</a>
+              <a href="subject.html#205">[ subject ]</a>
+              <a href="author.html#205">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 26 Jul 2007, said harti wrote:
+&gt;<i> I have a CANopen application which run on  CANopen card and communicate with CANopen drives, and i hope to  use  CoE.
+</I>&gt;<i>
+</I>&gt;<i> In order to send CANopen frame encapsuled on EtherCAT frame to my drives, i need to know exactely the role of the EL6751 module,(i am going to read the EL6751.chm documentation),
+</I>&gt;<i>
+</I>&gt;<i> In order to anderstand EtherCAT and CoE process i have same questions :(
+</I>&gt;<i>
+</I>&gt;<i> My first question is :
+</I>&gt;<i>
+</I>&gt;<i> In your opinion, What's comunication process that i must add or implement to the EML in order to run CoE process  ?
+</I>&gt;<i>
+</I>&gt;<i> and precisely :
+</I>&gt;<i>
+</I>&gt;<i> how the synchronization process is doing between the EtherCAT bus and the CANopen bus ? (this Synchronization is realised by the EL6751 hard? ...)
+</I>&gt;<i>
+</I>&gt;<i> What's type of frame that The EL6751 need to communicate with CANopen noeuds ? (just a standard CANopen frame...) ?
+</I>&gt;<i>
+</I>&gt;<i> I think that i must simply take my CANopen frame ==&gt; encapsulate it on the EtherCAT frame ==&gt; so the result is a CoE frame,==&gt; which i must send normaly on the EtherCAT bus, ==&gt; and at the EL6751 module, this CANopen frame is extracted and sented to the CANopen drive normaly by this modules ? are you agree with me ? or the process is more hard then i think ????!!
+</I>
+My first suggestion (since it has been to long ago since I wrote this
+code, and I don't recall how CoE is spec'd on top of plain EtherCAT)
+would be to take the EtherCAT spec document and see what the spec says
+about CoE.  Since EML follows the spec naming quite closely (and some
+of the coE defines are already in EML), this is probably the best way
+to start.
+
+ps. I suggest you ask further, concrete questions to the devel
+mailinglist.
+
+regards,
+
+Klaas
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000198.html">[Ethercatmaster-users] RE : Re: RE : Re: CoE (CANopen over	EtherCAT) : EL6751 parameters!
+</A></li>
+	<LI>Next message: <A HREF="000194.html">[Ethercatmaster-users] non-persistent outputs 2004
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#205">[ date ]</a>
+              <a href="thread.html#205">[ thread ]</a>
+              <a href="subject.html#205">[ subject ]</a>
+              <a href="author.html#205">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,690 @@
+From henning.richter at besi.com  Fri Apr  3 12:46:02 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Fri, 3 Apr 2009 12:46:02 +0200
+Subject: [Ethercatmaster-users] BK 1250
+Message-ID: <OFFBA21448.F63D6023-ONC125758D.003AB829-C125758D.003B25CE@datacon.at>
+
+
+Hi,
+
+I'd like to set the bus coupler BK1250 from Beckhoff to OP-State but this
+didn't work.
+Setting the bus coupler the Preoperation state works. So I guess there must
+be something wrong in my SyncManager configuration.
+I used the xml file from the beckhoff website for configuration.
+Maybe I did something wrong in the configuration that I don't see right
+now.
+
+Here is the corresponding source code:
+
+///BusKoppler BK1250
+
+EtherCAT_FMMU_Config fmmu_config_BK1250(2);
+EC_FMMU fmmu0_BK1250
+(0x00080000,0x0001,0x00,0x03,0x1600,0x00,true,false,true); //inputs
+EC_FMMU fmmu1_BK1250
+(0x00060000,0x0001,0x00,0x03,0x1000,0x00,false,true,true); //outputs
+
+EtherCAT_PD_Config pd_config_BK1250(2);
+
+EC_SyncMan syncman0_BK1250
+(0x1600,1,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);  //inputs
+EC_SyncMan syncman1_BK1250
+(0x1000,1,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); //outputs
+//Mailbox-config
+EC_SyncMan syncman_mbx1_BK1250
+(0x1e00,136,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);  //MboxIn
+EC_SyncMan syncman_mbx0_BK1250
+(0x1c00,136,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); //MboxOut
+EtherCAT_MbxConfig mbx_conf_BK1250 = {syncman_mbx0_BK1250,
+syncman_mbx1_BK1250};
+
+EtherCAT_SlaveConfig EC_BK1250
+(0x04E22C22,0x00100000,0x03f0,&fmmu_config_BK1250,&pd_config_BK1250,&mbx_conf_BK1250);
+
+
+Henning
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090403/e217fd0d/attachment.html>
+
+From klaas.gadeyne at fmtc.be  Mon Apr  6 09:19:54 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 6 Apr 2009 09:19:54 +0200 (CEST)
+Subject: [Ethercatmaster-users] BK 1250
+In-Reply-To: <OFFBA21448.F63D6023-ONC125758D.003AB829-C125758D.003B25CE@datacon.at>
+References: <OFFBA21448.F63D6023-ONC125758D.003AB829-C125758D.003B25CE@datacon.at>
+Message-ID: <alpine.DEB.2.00.0904060911220.14121@ampere.labo01.fmtc.be>
+
+On Fri, 3 Apr 2009, henning.richter at besi.com wrote:
+> Hi,
+>
+> I'd like to set the bus coupler BK1250 from Beckhoff to OP-State but this
+> didn't work.
+> Setting the bus coupler the Preoperation state works. So I guess there must
+> be something wrong in my SyncManager configuration.
+
+Or you've found a bug :-)
+
+> I used the xml file from the beckhoff website for configuration.
+> Maybe I did something wrong in the configuration that I don't see right
+> now.
+>
+> Here is the corresponding source code:
+>
+> ///BusKoppler BK1250
+>
+> EtherCAT_FMMU_Config fmmu_config_BK1250(2);
+> EC_FMMU fmmu0_BK1250
+> (0x00080000,0x0001,0x00,0x03,0x1600,0x00,true,false,true); //inputs
+> EC_FMMU fmmu1_BK1250
+> (0x00060000,0x0001,0x00,0x03,0x1000,0x00,false,true,true); //outputs
+>
+> EtherCAT_PD_Config pd_config_BK1250(2);
+>
+> EC_SyncMan syncman0_BK1250
+> (0x1600,1,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);  //inputs
+> EC_SyncMan syncman1_BK1250
+> (0x1000,1,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); //outputs
+> //Mailbox-config
+> EC_SyncMan syncman_mbx1_BK1250
+> (0x1e00,136,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);  //MboxIn
+> EC_SyncMan syncman_mbx0_BK1250
+> (0x1c00,136,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); //MboxOut
+> EtherCAT_MbxConfig mbx_conf_BK1250 = {syncman_mbx0_BK1250,
+> syncman_mbx1_BK1250};
+>
+> EtherCAT_SlaveConfig EC_BK1250
+> (0x04E22C22,0x00100000,0x03f0,&fmmu_config_BK1250,&pd_config_BK1250,&mbx_conf_BK1250);
+
+It's hard to read this for breakfast :-)
+
+Do you have access to TwinCAT, so you can verify the parameters above really work?  IIRC, there were some reports on this ML that sometimes a particular module has several 'versions', which have to be configured differently, so maybe the information you're using from the xml file is not completely correct.
+
+Also, you might try to raise the value of
+
+src/al/ethercat_FSM.cxx:53:static const unsigned int EC_ESM_OPS_MAX_RETRIES = 10;
+
+to make sure you've waited long enough.
+
+
+Klaas
+
+
+From henning.richter at besi.com  Mon Apr  6 10:06:30 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Mon, 6 Apr 2009 10:06:30 +0200
+Subject: [Ethercatmaster-users] BK 1250
+In-Reply-To: <alpine.DEB.2.00.0904060911220.14121@ampere.labo01.fmtc.be>
+Message-ID: <OF91B69E9A.D20784DB-ONC1257590.002BC999-C1257590.002C8A8E@datacon.at>
+
+
+
+
+
+
+
+>> Hi,
+>>
+>> I'd like to set the bus coupler BK1250 from Beckhoff to OP-State but
+this
+>> didn't work.
+>> Setting the bus coupler the Preoperation state works. So I guess there
+must
+>> be something wrong in my SyncManager configuration.
+
+> Or you've found a bug :-)
+
+>> I used the xml file from the beckhoff website for configuration.
+>> Maybe I did something wrong in the configuration that I don't see right
+>> now.
+>>
+>> Here is the corresponding source code:
+>>
+>> ///BusKoppler BK1250
+>>
+>> EtherCAT_FMMU_Config fmmu_config_BK1250(2);
+>> EC_FMMU fmmu0_BK1250
+>> (0x00080000,0x0001,0x00,0x03,0x1600,0x00,true,false,true); //inputs
+>> EC_FMMU fmmu1_BK1250
+>> (0x00060000,0x0001,0x00,0x03,0x1000,0x00,false,true,true); //outputs
+>>
+>> EtherCAT_PD_Config pd_config_BK1250(2);
+>>
+>> EC_SyncMan syncman0_BK1250
+>>
+(0x1600,1,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);  //inputs
+
+>> EC_SyncMan syncman1_BK1250
+>>
+(0x1000,1,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); //outputs
+
+>> //Mailbox-config
+>> EC_SyncMan syncman_mbx1_BK1250
+>>
+(0x1e00,136,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);  //MboxIn
+
+>> EC_SyncMan syncman_mbx0_BK1250
+>>
+(0x1c00,136,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); //MboxOut
+
+>> EtherCAT_MbxConfig mbx_conf_BK1250 = {syncman_mbx0_BK1250,
+>> syncman_mbx1_BK1250};
+>>
+>> EtherCAT_SlaveConfig EC_BK1250
+>>
+(0x04E22C22,0x00100000,0x03f0,&fmmu_config_BK1250,&pd_config_BK1250,&mbx_conf_BK1250);
+
+
+> It's hard to read this for breakfast :-)
+
+> Do you have access to TwinCAT, so you can verify the parameters above
+really work?  IIRC, there were some reports on this ML that sometimes a
+particular module has several 'versions', which have to be configured
+differently, so maybe the information you're using from the xml file is not
+completely correct.
+
+Unfortunately I don't have access to TwinCAT, as I use a Linux machine.
+The EML output said me to use configuration for revision 0x00100000 which I
+used from the xml.
+
+
+> Also, you might try to raise the value of
+
+> src/al/ethercat_FSM.cxx:53:static const unsigned int
+EC_ESM_OPS_MAX_RETRIES = 10;
+
+> to make sure you've waited long enough.
+
+I already raised the max_retries-value before up to 50, so this should be
+long enough.
+
+> Klaas
+
+Henning
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090406/dd915e52/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: graycol.gif
+Type: image/gif
+Size: 105 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090406/dd915e52/attachment.gif>
+
+From klaas.gadeyne at fmtc.be  Mon Apr  6 10:41:36 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 6 Apr 2009 10:41:36 +0200 (CEST)
+Subject: [Ethercatmaster-users] BK 1250
+In-Reply-To: <OF91B69E9A.D20784DB-ONC1257590.002BC999-C1257590.002C8A8E@datacon.at>
+References: <OF91B69E9A.D20784DB-ONC1257590.002BC999-C1257590.002C8A8E@datacon.at>
+Message-ID: <alpine.DEB.2.00.0904061038200.14121@ampere.labo01.fmtc.be>
+
+On Mon, 6 Apr 2009, henning.richter at besi.com wrote:
+[snip config]
+>> Do you have access to TwinCAT, so you can verify the parameters above
+> really work?  IIRC, there were some reports on this ML that sometimes a
+> particular module has several 'versions', which have to be configured
+> differently, so maybe the information you're using from the xml file is not
+> completely correct.
+>
+> Unfortunately I don't have access to TwinCAT, as I use a Linux machine.
+> The EML output said me to use configuration for revision 0x00100000 which I
+> used from the xml.
+>
+>> Also, you might try to raise the value of
+>
+>> src/al/ethercat_FSM.cxx:53:static const unsigned int
+> EC_ESM_OPS_MAX_RETRIES = 10;
+>
+>> to make sure you've waited long enough.
+>
+> I already raised the max_retries-value before up to 50, so this should be
+> long enough.
+
+Jip, indeed.  Unfortunately, in that case, the only thing I can think of in terms of debugging, is comparing the messages EML sends with those of twincat (or another ethercat stack which works).  Is the BK1250 the only module you have problems with?
+
+Klaas
+
+
+From henning.richter at besi.com  Mon Apr  6 10:53:01 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Mon, 6 Apr 2009 10:53:01 +0200
+Subject: [Ethercatmaster-users] BK 1250
+In-Reply-To: <alpine.DEB.2.00.0904061038200.14121@ampere.labo01.fmtc.be>
+Message-ID: <OF04EA88F9.4B621897-ONC1257590.002FDB6C-C1257590.0030CC90@datacon.at>
+
+
+
+On Mon, 6 Apr 2009, henning.richter at besi.com wrote:
+[snip config]
+>> Do you have access to TwinCAT, so you can verify the parameters above
+> really work?  IIRC, there were some reports on this ML that sometimes a
+> particular module has several 'versions', which have to be configured
+> differently, so maybe the information you're using from the xml file is
+not
+> completely correct.
+>
+> Unfortunately I don't have access to TwinCAT, as I use a Linux machine.
+> The EML output said me to use configuration for revision 0x00100000 which
+I
+> used from the xml.
+>
+>> Also, you might try to raise the value of
+>
+>> src/al/ethercat_FSM.cxx:53:static const unsigned int
+> EC_ESM_OPS_MAX_RETRIES = 10;
+>
+>> to make sure you've waited long enough.
+>
+> I already raised the max_retries-value before up to 50, so this should be
+> long enough.
+
+Jip, indeed.  Unfortunately, in that case, the only thing I can think of in
+terms of debugging, is comparing the messages EML sends with those of
+twincat (or another ethercat stack which works).  Is the BK1250 the only
+module you have problems with?
+
+Klaas
+
+Yes, the BK1250 module is the only module causing problems in my ring. The
+ring consists of: EK1100, 2x EL2202, EL1014, BK1250, KL2541 and KL9010.
+The stepper motor (KL2541) is not configured yet. The in- and outputs
+(EL2202,EL1014) work fine.
+
+
+Henning
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090406/5330bee6/attachment.html>
+
+From henning.richter at besi.com  Tue Apr  7 10:01:10 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Tue, 7 Apr 2009 10:01:10 +0200
+Subject: [Ethercatmaster-users] BK 1250
+In-Reply-To: <OF04EA88F9.4B621897-ONC1257590.002FDB6C-C1257590.0030CC90@datacon.at>
+Message-ID: <OF1237A6A1.DC40468A-ONC1257591.002BD771-C1257591.002C0CD4@datacon.at>
+
+
+
+
+     On Mon, 6 Apr 2009, henning.richter at besi.com wrote:
+     [snip config]
+     >> Do you have access to TwinCAT, so you can verify the parameters
+     above
+     > really work?  IIRC, there were some reports on this ML that
+     sometimes a
+     > particular module has several 'versions', which have to be
+     configured
+     > differently, so maybe the information you're using from the xml file
+     is not
+     > completely correct.
+     >
+     > Unfortunately I don't have access to TwinCAT, as I use a Linux
+     machine.
+     > The EML output said me to use configuration for revision 0x00100000
+     which I
+     > used from the xml.
+     >
+     >> Also, you might try to raise the value of
+     >
+     >> src/al/ethercat_FSM.cxx:53:static const unsigned int
+     > EC_ESM_OPS_MAX_RETRIES = 10;
+     >
+     >> to make sure you've waited long enough.
+     >
+     > I already raised the max_retries-value before up to 50, so this
+     should be
+     > long enough.
+
+     Jip, indeed.  Unfortunately, in that case, the only thing I can think
+     of in terms of debugging, is comparing the messages EML sends with
+     those of twincat (or another ethercat stack which works).  Is the
+     BK1250 the only module you have problems with?
+
+     Klaas
+
+     Yes, the BK1250 module is the only module causing problems in my ring.
+     The ring consists of: EK1100, 2x EL2202, EL1014, BK1250, KL2541 and
+     KL9010.
+     The stepper motor (KL2541) is not configured yet. The in- and outputs
+     (EL2202,EL1014) work fine.
+
+     Henning
+
+So it works now. I mixed sth. up in the configuration. But with the help of
+TwinCAT I found the mistakes.
+
+Henning
+
+_______________________________________________
+Ethercatmaster-users mailing list
+Ethercatmaster-users at lists.berlios.de
+https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090407/fd7dd183/attachment.html>
+
+From klaas.gadeyne at fmtc.be  Tue Apr  7 13:53:25 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 7 Apr 2009 13:53:25 +0200 (CEST)
+Subject: [Ethercatmaster-users] BK 1250
+In-Reply-To: <OF1237A6A1.DC40468A-ONC1257591.002BD771-C1257591.002C0CD4@datacon.at>
+References: <OF1237A6A1.DC40468A-ONC1257591.002BD771-C1257591.002C0CD4@datacon.at>
+Message-ID: <alpine.DEB.2.00.0904071349250.26407@ampere.labo01.fmtc.be>
+
+On Tue, 7 Apr 2009, henning.richter at besi.com wrote:
+[...]
+>     Yes, the BK1250 module is the only module causing problems in my ring.
+>     The ring consists of: EK1100, 2x EL2202, EL1014, BK1250, KL2541 and
+>     KL9010.
+>     The stepper motor (KL2541) is not configured yet. The in- and outputs
+>     (EL2202,EL1014) work fine.
+>
+>     Henning
+>
+> So it works now. I mixed sth. up in the configuration. But with the help of
+> TwinCAT I found the mistakes.
+
+The people from TU Eindhoven have once developed a small EML application that scans a network of EtherCAT slaves, and creates a configuration file by fetching the necessary information from the xml-files, given the slave id's from the network scan.
+
+However, it never got submitted (and they are using SOEM right now).  This could avoid such mistakes.
+
+Klaas
+
+
+From henning.richter at besi.com  Wed Apr 15 15:24:12 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Wed, 15 Apr 2009 15:24:12 +0200
+Subject: [Ethercatmaster-users] BK 1250 mailbox communication
+Message-ID: <OFB5E8EC3E.7E93A05E-ONC1257599.0047951E-C1257599.0049A0B4@datacon.at>
+
+
+Hi,
+
+i would like to write and send some data to the mailbox of the bus coupler
+BK1250 (configuration see below).
+Actually I don't know exactly how to do.
+First I tried to write sth. to the mailbox using a NPWR_Telegram:
+
+NPWR_Telegram NPWRtelegram(0x01, 0x03f0, 0x1c00,0xffff, 1, data);
+
+This seems to work as the WKC increments by 1.
+
+Trying to read on the other hand doesn't work (WKC isn't incremented):
+
+NPRD_Telegram NPRDtelegram(0x01, 0x03f0, 0x1e00, 0xffff, 1, &readdata);
+
+Can I address the mailbox in that way or do I have to build an EC_MbxMsgHdr
+and EtherCAT_MbxMsg by my own and put this to the EtherCAT Datagram
+( EC_Telegram ) ?
+Sending / Reading Data to / from the module directly seem to work as the
+WKCs incremment in the suggested manner.
+
+
+///BusKoppler BK1250
+
+EtherCAT_FMMU_Config fmmu_config_BK1250(2);
+EC_FMMU fmmu0_BK1250
+(0x00010006,8,0x00,0x03,0x1600,0x00,true,false,true); //inputs
+EC_FMMU fmmu1_BK1250
+(0x00010006,8,0x00,0x03,0x1000,0x00,false,true,true); //outputs
+
+//Mailbox-config
+EC_SyncMan syncman_mbx0_BK1250
+(0x1c00,136,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,true,false,false,EC_FIRST_BUFFER,true); //MboxOut
+EC_SyncMan syncman_mbx1_BK1250
+(0x1e00,136,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,true,false,false,EC_FIRST_BUFFER,true);  //MboxIn
+EtherCAT_MbxConfig mbx_conf_BK1250 = {syncman_mbx0_BK1250,
+syncman_mbx1_BK1250};
+
+EtherCAT_PD_Config pd_config_BK1250(2);
+EC_SyncMan syncman0_BK1250
+(0x1000,8,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);  //outputs
+EC_SyncMan syncman1_BK1250
+(0x1600,8,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); //inputs
+
+EtherCAT_SlaveConfig EC_BK1250
+(0x04E22C22,0x00100000,0x03f0,&fmmu_config_BK1250,&pd_config_BK1250,&mbx_conf_BK1250);
+
+
+Henning
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090415/37491658/attachment.html>
+
+From klaas.gadeyne at fmtc.be  Mon Apr 20 17:30:00 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 20 Apr 2009 17:30:00 +0200 (CEST)
+Subject: [Ethercatmaster-users] Mailbox messages in Decive Addressing
+	Telegram
+In-Reply-To: <OF1C3C13BC.B4C8CB4B-ONC125759E.004506CE-C125759E.004579AC@datacon.at>
+References: <OF1C3C13BC.B4C8CB4B-ONC125759E.004506CE-C125759E.004579AC@datacon.at>
+Message-ID: <alpine.DEB.2.00.0904201725350.7496@ampere.labo01.fmtc.be>
+
+On Mon, 20 Apr 2009, henning.richter at besi.com wrote:
+Hi Henning,
+
+[adding the ML to cc:]
+
+> can you explain me how to put an EtherCAT_MbxMsg containing a MbxHeader and
+> a message in to a Device Addressing Telegram?
+> Is this possible or is there another way?
+>
+> I find no way to put a mailboxmessage to such a telegram because of the
+> type missmatching (EtherCAT_MbxMsg <--> const unsigned char * )
+
+It's been a (far too long) while since I've looked at this, but I think you're looking for the dump() function?
+
+You can find an example of how to use it in the
+EtherCAT_Router::post_mbxmsg(EtherCAT_MbxMsg * msg, const EtherCAT_SlaveHandler * from_sh) const
+
+function, which puts a message in a npwr telegram.
+
+HTH,
+
+Klaas
+
+ps.  I still have to find some time to read your previous message about the mailbox.
+
+
+From klaas.gadeyne at fmtc.be  Mon Apr 20 17:50:28 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 20 Apr 2009 17:50:28 +0200 (CEST)
+Subject: [Ethercatmaster-users] BK 1250 mailbox communication
+In-Reply-To: <OFB5E8EC3E.7E93A05E-ONC1257599.0047951E-C1257599.0049A0B4@datacon.at>
+References: <OFB5E8EC3E.7E93A05E-ONC1257599.0047951E-C1257599.0049A0B4@datacon.at>
+Message-ID: <alpine.DEB.2.00.0904201749020.7496@ampere.labo01.fmtc.be>
+
+On Wed, 15 Apr 2009, henning.richter at besi.com wrote:
+Hi Henning,
+
+> i would like to write and send some data to the mailbox of the bus coupler
+> BK1250 (configuration see below).
+> Actually I don't know exactly how to do.
+> First I tried to write sth. to the mailbox using a NPWR_Telegram:
+>
+> NPWR_Telegram NPWRtelegram(0x01, 0x03f0, 0x1c00,0xffff, 1, data);
+>
+> This seems to work as the WKC increments by 1.
+>
+> Trying to read on the other hand doesn't work (WKC isn't incremented):
+>
+> NPRD_Telegram NPRDtelegram(0x01, 0x03f0, 0x1e00, 0xffff, 1, &readdata);
+>
+> Can I address the mailbox in that way or do I have to build an EC_MbxMsgHdr
+> and EtherCAT_MbxMsg by my own and put this to the EtherCAT Datagram
+> ( EC_Telegram ) ?
+> Sending / Reading Data to / from the module directly seem to work as the
+> WKCs incremment in the suggested manner.
+
+Is the code in src/al/ethercat_router.cxx of any help?
+If not, I guess you'll have to check the EtherCAT spec to know more.
+
+hth,
+
+Klaas
+
+
+From henning.richter at besi.com  Tue Apr 21 11:43:06 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Tue, 21 Apr 2009 11:43:06 +0200
+Subject: [Ethercatmaster-users] Mailbox messages in Decive
+	Addressing	Telegram
+Message-ID: <OF33ECCB1D.F7A89034-ONC125759F.003542EE-C125759F.00356122@datacon.at>
+
+
+The hint with the dump function was good.
+Now it works.
+
+Henning
+
+
+On Mon, 20 Apr 2009, henning.richter at besi.com wrote:
+Hi Henning,
+
+[adding the ML to cc:]
+
+> can you explain me how to put an EtherCAT_MbxMsg containing a MbxHeader
+and
+> a message in to a Device Addressing Telegram?
+> Is this possible or is there another way?
+>
+> I find no way to put a mailboxmessage to such a telegram because of the
+> type missmatching (EtherCAT_MbxMsg <--> const unsigned char * )
+
+It's been a (far too long) while since I've looked at this, but I think
+you're looking for the dump() function?
+
+You can find an example of how to use it in the
+EtherCAT_Router::post_mbxmsg(EtherCAT_MbxMsg * msg, const
+EtherCAT_SlaveHandler * from_sh) const
+
+function, which puts a message in a npwr telegram.
+
+HTH,
+
+Klaas
+
+ps.  I still have to find some time to read your previous message about the
+mailbox.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090421/13d5da20/attachment.html>
+
+From henning.richter at besi.com  Tue Apr 28 15:39:46 2009
+From: henning.richter at besi.com (henning.richter at besi.com)
+Date: Tue, 28 Apr 2009 15:39:46 +0200
+Subject: [Ethercatmaster-users] Loosing time while sending Frames
+Message-ID: <OFEC199195.225DFC01-ONC12575A6.00497A1D-C12575A6.004B0CAA@datacon.at>
+
+
+Hi,
+
+once more i have a question.
+
+In the main function of the EML a created and started a xenomai task.
+The cycle time of this task is set to 250 us.
+During this time I am sending one Frame to my slaves each cycle. In all I
+have 3 Frames (Frame1 = 60 byte, Frame 2 = 1217 byte, Frame3 = 1204 byte).
+
+I am also measuring the time the send command from the low_level_output
+function in ethercat_xenomai_drv.c needs.
+This time is between 5 and 10 us. So passing the Frames to the network
+interface is quite fast.
+So far so good, now the problem:
+Measuring the elapsed time between 2 send commands (also @
+low_level_output) gives me values between 150 us and 350.
+This i too much I think.
+
+I also got this times between the single Frames while sniffing with
+wireshark.
+
+I would be glad about any hint where the time might be lost.
+
+
+Henning
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090428/2e2cd42a/attachment.html>
+
+From jan.kiszka at web.de  Tue Apr 28 21:03:19 2009
+From: jan.kiszka at web.de (Jan Kiszka)
+Date: Tue, 28 Apr 2009 21:03:19 +0200
+Subject: [Ethercatmaster-users] Loosing time while sending Frames
+In-Reply-To: <OFEC199195.225DFC01-ONC12575A6.00497A1D-C12575A6.004B0CAA@datacon.at>
+References: <OFEC199195.225DFC01-ONC12575A6.00497A1D-C12575A6.004B0CAA@datacon.at>
+Message-ID: <49F752F7.5000800@web.de>
+
+henning.richter at besi.com wrote:
+> Hi,
+> 
+> once more i have a question.
+> 
+> In the main function of the EML a created and started a xenomai task.
+> The cycle time of this task is set to 250 us.
+> During this time I am sending one Frame to my slaves each cycle. In all I
+> have 3 Frames (Frame1 = 60 byte, Frame 2 = 1217 byte, Frame3 = 1204 byte).
+> 
+> I am also measuring the time the send command from the low_level_output
+> function in ethercat_xenomai_drv.c needs.
+> This time is between 5 and 10 us. So passing the Frames to the network
+> interface is quite fast.
+> So far so good, now the problem:
+> Measuring the elapsed time between 2 send commands (also @
+> low_level_output) gives me values between 150 us and 350.
+> This i too much I think.
+> 
+> I also got this times between the single Frames while sniffing with
+> wireshark.
+> 
+> I would be glad about any hint where the time might be lost.
+
+Try using a tracer (ipipe function tracer or LTTng, check Xenomai
+mailing list archive and homepage for more infos). It may increase the
+overhead, but will provide a picture of what happens in between the
+transmissions.
+
+Jan
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 257 bytes
+Desc: OpenPGP digital signature
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090428/f8d39c29/attachment.pgp>
+
+From klaas.gadeyne at fmtc.be  Thu Apr 30 16:32:06 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 30 Apr 2009 16:32:06 +0200 (CEST)
+Subject: [Ethercatmaster-users] Loosing time while sending Frames
+In-Reply-To: <49F752F7.5000800@web.de>
+References: <OFEC199195.225DFC01-ONC12575A6.00497A1D-C12575A6.004B0CAA@datacon.at>
+	<49F752F7.5000800@web.de>
+Message-ID: <alpine.DEB.2.00.0904301628520.14134@ampere.labo01.fmtc.be>
+
+On Tue, 28 Apr 2009, Jan Kiszka wrote:
+>> In the main function of the EML a created and started a xenomai task.
+>> The cycle time of this task is set to 250 us.
+>> During this time I am sending one Frame to my slaves each cycle. In all I
+>> have 3 Frames (Frame1 = 60 byte, Frame 2 = 1217 byte, Frame3 = 1204 byte).
+>>
+>> I am also measuring the time the send command from the low_level_output
+>> function in ethercat_xenomai_drv.c needs.
+>> This time is between 5 and 10 us. So passing the Frames to the network
+>> interface is quite fast.
+>> So far so good, now the problem:
+>> Measuring the elapsed time between 2 send commands (also @
+>> low_level_output) gives me values between 150 us and 350.
+>> This i too much I think.
+
+Apart from Jan's suggestions, does that mean that your xenomai task indeed "overruns"?  Can you show some code?
+
+Klaas
+
+
+
+

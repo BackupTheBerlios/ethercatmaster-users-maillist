@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Debugging EtherCAT Master Library and eCos
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Debugging%20EtherCAT%20Master%20Library%20and%0A%20eCos&In-Reply-To=%3C20070319082643.5689DE2D59%40server04.site04.wtcm.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000032.html">
+   <LINK REL="Next"  HREF="000034.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Debugging EtherCAT Master Library and eCos</H1>
+    <B>Bob Koninckx</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Debugging%20EtherCAT%20Master%20Library%20and%0A%20eCos&In-Reply-To=%3C20070319082643.5689DE2D59%40server04.site04.wtcm.be%3E"
+       TITLE="[Ethercatmaster-users] Debugging EtherCAT Master Library and eCos">bob.koninckx at fmtc.be
+       </A><BR>
+    <I>Mon Mar 19 09:26:43 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000032.html">[Ethercatmaster-users] Debugging EtherCAT Master Library and eCos
+</A></li>
+        <LI>Next message: <A HREF="000034.html">[Ethercatmaster-users] Application development
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#33">[ date ]</a>
+              <a href="thread.html#33">[ thread ]</a>
+              <a href="subject.html#33">[ subject ]</a>
+              <a href="author.html#33">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>At 08:11 19/03/2007, Felix Erkert wrote:
+
+&gt;<i>Hello,
+</I>&gt;<i>
+</I>&gt;<i>I have problems again! Can anybody tell me how I can
+</I>&gt;<i>debug the EtherCAT Master Library or eCos?
+</I>
+
+You debug the ethercatmaster like any other eCos 
+app. Search the eCos mailinglists and the 
+documentation of your developmnent tools, you'll 
+find tons of information there!
+
+
+&gt;<i>I have
+</I>&gt;<i>a JTAG Interface on my Altera Development Board.
+</I>&gt;<i>But if I want to Debug eCos or EtherCAT Master Library
+</I>&gt;<i>my IDE tells me that &quot;no sources found&quot;!
+</I>
+
+Did you compile everything with debug info? For gcc, its the -g flag.
+
+
+&gt;<i>  Must I create a
+</I>&gt;<i>RedBoot Monitor? How do you debug your eCos and
+</I>&gt;<i>EtherCAT Master Library?
+</I>
+
+As explained above, this is more an eCos related 
+question than it is related to EML. Better ask 
+for help in the eCos community, you'll get much 
+more, and probably also better, support there.
+
+
+
+&gt;<i>regards,
+</I>&gt;<i>Felix
+</I>
+
+Bob
+
+
+
+
+&gt;<i>Bitte beachten Sie meine neue eMail Adresse: <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ERFE at DE.FESTO.COM</A>
+</I>&gt;<i>
+</I>&gt;<i>My new email address is: <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ERFE at DE.FESTO.COM</A>
+</I>&gt;<i>
+</I>&gt;<i>Festo AG &amp; Co. KG
+</I>&gt;<i>Felix Erkert
+</I>&gt;<i>
+</I>&gt;<i>Abteilung TV-ND
+</I>&gt;<i>Business Unit NIC Netware Devices
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>Ruiter Stra&#223;e 82
+</I>&gt;<i>D - 73734 Esslingen
+</I>&gt;<i>
+</I>&gt;<i>Tel: ++49 (0) 711-347-57193
+</I>&gt;<i>Fax:
+</I>&gt;<i>
+</I>&gt;<i><A HREF="http://www.festo.com">http://www.festo.com</A>
+</I>&gt;<i>
+</I>&gt;<i>Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+</I>&gt;<i>Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+</I>&gt;<i>Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+</I>&gt;<i>unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+</I>&gt;<i>des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+</I>&gt;<i>E-Mails sind und das Material von Ihrem Computer zu loeschen.
+</I>&gt;<i>
+</I>&gt;<i>This e-mail and any attachments are confidential and intended solely for
+</I>&gt;<i>the addressee. The perusal, publication, copying or dissemination of the
+</I>&gt;<i>contents of this e-mail by unauthorised third parties is prohibited. If you
+</I>&gt;<i>are not the intended recipient of this e-mail, please delete it and
+</I>&gt;<i>immediately notify the sender.
+</I>&gt;<i>
+</I>&gt;<i>_______________________________________________
+</I>&gt;<i>Ethercatmaster-users mailing list
+</I>&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, Bus 4027, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">bob.koninckx at fmtc.be</A>                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders&#146; MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. 
+Reyerslaan 80, B-1030 Brussel, Belgi&#235;
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain 
+confidential information. It is intended
+solely for the intended addressee(s). Any use of 
+the information contained herein by other
+persons is prohibited. FMTC does not accept any 
+liability for the contents of this e-mail
+and/or its attachments.
+********************  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000032.html">[Ethercatmaster-users] Debugging EtherCAT Master Library and eCos
+</A></li>
+	<LI>Next message: <A HREF="000034.html">[Ethercatmaster-users] Application development
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#33">[ date ]</a>
+              <a href="thread.html#33">[ thread ]</a>
+              <a href="subject.html#33">[ subject ]</a>
+              <a href="author.html#33">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

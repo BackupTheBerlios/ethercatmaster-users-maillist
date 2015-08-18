@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] connecting the slave over a switch
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20connecting%20the%20slave%20over%20a%20switch&In-Reply-To=%3CPine.LNX.4.64.0708021744380.3918%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000227.html">
+   <LINK REL="Next"  HREF="000232.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] connecting the slave over a switch</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20connecting%20the%20slave%20over%20a%20switch&In-Reply-To=%3CPine.LNX.4.64.0708021744380.3918%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] connecting the slave over a switch">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Thu Aug  2 17:51:44 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000227.html">[Ethercatmaster-users] connecting the slave over a switch
+</A></li>
+        <LI>Next message: <A HREF="000232.html">[Ethercatmaster-users] connecting the slave over a switch
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#230">[ date ]</a>
+              <a href="thread.html#230">[ thread ]</a>
+              <a href="subject.html#230">[ subject ]</a>
+              <a href="author.html#230">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 2 Aug 2007, roland Tollenaar wrote:
+&gt;<i> I now have a client which happily runs wireshark. I can see the
+</I>&gt;<i> communication attempt between my EML master and the slave ( think I
+</I>&gt;<i> can even see the slave responding) but the master_test fails to
+</I>&gt;<i> perform as it does when i only have a direct link between the master
+</I>&gt;<i> and the slave. Somewhere the switch is doing something not so nice
+</I>&gt;<i> witht he packets. Below is the master_test output and the scan is
+</I>&gt;<i> attached. can anyone possibly make out what i am doing wrong?
+</I>
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/mnt/appusb/Packages/eml/modtrunk/build-rtnet/tests/rtnet#
+</I>&gt;<i> ./master_test rteth0
+</I>&gt;<i> Socket created: socket id: 896
+</I>&gt;<i> Got interface: index: 0
+</I>&gt;<i> Attach netif
+</I>&gt;<i>
+</I>&gt;<i> Master initializing
+</I>&gt;<i>
+</I>[...]
+&gt;<i> AL: resetting SMs
+</I>&gt;<i> EC_Telegram::check_index(): Index field does not correspond with received data
+</I>&gt;<i> low_level_input: framebuilding failed!
+</I>&gt;<i> AL: Setting all slaves in init mode
+</I>&gt;<i> building frame: checkheader failed
+</I>&gt;<i> low_level_input: framebuilding failed!
+</I>&gt;<i> master_test: /mnt/appusb/Packages/eml/trunk/src/dll/ethercat_device_addressed_telegram.cxx:110:
+</I>&gt;<i> virtual const unsigned char* APRD_Telegram::build_command_field(const
+</I>&gt;<i> unsigned char*): Assertion `a_buffer[0] == APRD' failed.
+</I>&gt;<i> Aborted
+</I>
+I can hardly imagine the switch would alter ethernet data.  Did you
+try with different switches.
+
+[wild guess]
+I don't know/recall if Tom's implementation uses locks to prevent sending a
+new message before the new one is back (or a time-out occurred).
+
+If it is not the case, I presume you might have hit some EML bug here due to
+the fact that the switch adds some extra (HW) latency to the message
+transmission time and something fishy happens.
+
+Are you still using the while loop for sending?  If so, what happens
+if you send the ethercat messages in a separate thread with a
+frequency of say, 1KHz?
+[/wild guess]
+
+You might find debugging information in the wireshark scan too:
+remember that the slaves should leave the index field unaltered...
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000227.html">[Ethercatmaster-users] connecting the slave over a switch
+</A></li>
+	<LI>Next message: <A HREF="000232.html">[Ethercatmaster-users] connecting the slave over a switch
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#230">[ date ]</a>
+              <a href="thread.html#230">[ thread ]</a>
+              <a href="subject.html#230">[ subject ]</a>
+              <a href="author.html#230">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

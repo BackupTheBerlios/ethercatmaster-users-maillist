@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3C46C1FFDA.4070709%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000264.html">
+   <LINK REL="Next"  HREF="000266.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.</H1>
+    <B>Jan Kiszka</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3C46C1FFDA.4070709%40web.de%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.">jan.kiszka at web.de
+       </A><BR>
+    <I>Tue Aug 14 21:17:46 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000264.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000266.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#265">[ date ]</a>
+              <a href="thread.html#265">[ thread ]</a>
+              <a href="subject.html#265">[ subject ]</a>
+              <a href="author.html#265">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Roland Tollenaar wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;&gt;<i> How many threads do you have sending process data, and what are there
+</I>&gt;&gt;<i> priorities? (/proc/xenomai/sched IIRC)
+</I>&gt;<i> I have 3 rt tasks running. Only one sends and receives process data. The 
+</I>&gt;<i> priorities are:
+</I>&gt;<i> rt_task1 99
+</I>
+Check the /proc output again, there should be also RTnet's stack manager
+at prio 98. Maybe that is too low for your scenario and causes prio
+inversions (note: every incoming Ethernet frame goes through its hands).
+Try lowering the prio of your rt_task1 beneath 98.
+
+&gt;<i> rt_task2 75
+</I>&gt;<i> rt_task3 1
+</I>&gt;<i> 
+</I>&gt;<i> Period times are
+</I>&gt;<i> 1ms
+</I>&gt;<i> 3ms
+</I>&gt;<i> indefinite(holds a blocking rt_can recv call to catch any incoming CAN 
+</I>&gt;<i> messages)
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> EC_Telegram::index_check() : index not the same,
+</I>&gt;&gt;&gt;<i> low_level_input() :  framebuilding failed.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Or something pretty closely to that effect.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Despite EML warning that the frame could not be built, the inputs (which
+</I>&gt;&gt;&gt;<i> rely on the framebuilding being succesful pretty stringently) seem to
+</I>&gt;&gt;&gt;<i> function perfectly. It seems as though EML is emitting a false warning.
+</I>&gt;&gt;<i> What do you mean with &quot;inputs functioning perfectly&quot;?
+</I>&gt;<i> 
+</I>&gt;<i> The digital inputs are packed into the frame as are the digital outputs 
+</I>&gt;<i> and analog output process data. The outputs function as they should but 
+</I>&gt;<i> the warning complains mainly about the retrieving part of the ethercat 
+</I>&gt;<i> cycle. Hence my comment that the digital inputs also function as they 
+</I>&gt;<i> should that is to say the data arrives correctly and uncorrupted. AFAI 
+</I>&gt;<i> understand from ETG the index is not changed by the ESC's so I would 
+</I>&gt;<i> expect the check always return true. But even if it does not what does 
+</I>&gt;<i> that mean? Can it mean that EML is losing some frames that have been 
+</I>&gt;<i> transmitted? I.e. the index is incremented with every transmit and the 
+</I>&gt;<i> message with the same index is expected on the next read but instead it 
+</I>&gt;<i> is only getting one later? If so, what could cause this?
+</I>
+If the problem persists (or your _really_ want to understand what
+happens), you could try to put an xntrace_user_freeze(0, 1) before the
+line which emits that EML warning, turn on the I-pipe tracer, set a
+large back_trace_points value (a few thousand), enable verbose mode, and
+grab what /proc/ipipe/trace/frozen reports after the hick-up. See [1]
+for more howtos.
+
+If you post the dump, we may be able to analyse what the system is doing
+before the problem report, if there are long delays due to high-prio
+tasks e.g.
+
+Jan
+
+[1] <A HREF="http://www.xenomai.org/index.php/I-pipe:Tracer">http://www.xenomai.org/index.php/I-pipe:Tracer</A>
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070814/da8ca53d/attachment.pgp">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070814/da8ca53d/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000264.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000266.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#265">[ date ]</a>
+              <a href="thread.html#265">[ thread ]</a>
+              <a href="subject.html#265">[ subject ]</a>
+              <a href="author.html#265">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

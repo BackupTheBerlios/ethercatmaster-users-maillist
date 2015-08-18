@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] RE : Re: EL6751 CANopen Configuration !!!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20EL6751%20CANopen%20Configuration%20%21%21%21&In-Reply-To=%3CPine.LNX.4.64.0708290859490.6617%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000287.html">
+   <LINK REL="Next"  HREF="000288.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] RE : Re: EL6751 CANopen Configuration !!!</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20EL6751%20CANopen%20Configuration%20%21%21%21&In-Reply-To=%3CPine.LNX.4.64.0708290859490.6617%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] RE : Re: EL6751 CANopen Configuration !!!">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Wed Aug 29 09:07:17 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000287.html">[Ethercatmaster-users] RE : Re:  EL6751 CANopen Configuration !!!
+</A></li>
+        <LI>Next message: <A HREF="000288.html">[Ethercatmaster-users] Send Mailbox Messages errors!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#290">[ date ]</a>
+              <a href="thread.html#290">[ thread ]</a>
+              <a href="subject.html#290">[ subject ]</a>
+              <a href="author.html#290">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 28 Aug 2007, said harti wrote:
+&gt;<i> I think that the read() and write() eml functions are not emplemented
+</I>&gt;<i>
+</I>&gt;<i> see :
+</I>&gt;<i> <A HREF="http://ethercatmaster.berlios.de/doxygen/html/classEtherCAT__Mbx.html">http://ethercatmaster.berlios.de/doxygen/html/classEtherCAT__Mbx.html</A>
+</I>&gt;<i>
+</I>&gt;<i> So, do you think that the check_mbx() and post_mbx functions will allows me to send CoE Mailbox Messages???
+</I>&gt;<i>
+</I>&gt;<i> see :
+</I>&gt;<i> EtherCAT_Router.cxx
+</I>&gt;<i> and
+</I>&gt;<i> <A HREF="http://ethercatmaster.berlios.de/doxygen/html/ethercat__router_8h-source.html">http://ethercatmaster.berlios.de/doxygen/html/ethercat__router_8h-source.html</A>
+</I>
+IIRC (again, don't trust my word for it, the spec provides the
+definitive answer), the router is &quot;just a router&quot;, it's basically a
+(lower priority) thread that &quot;routes&quot; mailbox messages from one slave
+to another.  To that extent, it checks if a slave indicated that it
+wants to post a mbx message, reads that message and forwards it to its
+destination.
+Therefore it uses those 2 functions you mention above.  However, since
+it's meant for routing only, those functions are private (and hence
+not available to the master).
+However, I think they might be a good starting point in order to
+implement functions that achieve similar communication between master
+and slave.
+
+ps.  I noticed the berlios doxygen documentation for the router is not
+completely up-to-date, I'll try to find some time to have a look at
+that...
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000287.html">[Ethercatmaster-users] RE : Re:  EL6751 CANopen Configuration !!!
+</A></li>
+	<LI>Next message: <A HREF="000288.html">[Ethercatmaster-users] Send Mailbox Messages errors!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#290">[ date ]</a>
+              <a href="thread.html#290">[ thread ]</a>
+              <a href="subject.html#290">[ subject ]</a>
+              <a href="author.html#290">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

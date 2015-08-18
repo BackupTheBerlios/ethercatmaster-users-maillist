@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] understanding the datagrams
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20understanding%20the%20datagrams&In-Reply-To=%3C46AF62AD.8040009%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000214.html">
+   <LINK REL="Next"  HREF="000216.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] understanding the datagrams</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20understanding%20the%20datagrams&In-Reply-To=%3C46AF62AD.8040009%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] understanding the datagrams">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Tue Jul 31 18:26:21 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000214.html">[Ethercatmaster-users] understanding the datagrams
+</A></li>
+        <LI>Next message: <A HREF="000216.html">[Ethercatmaster-users] understanding the datagrams
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#215">[ date ]</a>
+              <a href="thread.html#215">[ thread ]</a>
+              <a href="subject.html#215">[ subject ]</a>
+              <a href="author.html#215">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Klaas,
+
+Thanks. The LWR should be fine but its a bit strange that Twincat does a 
+logical RD. That would imply that no data is written to the slaves but 
+this does not correspond to the outputs being set?
+
+Have you received the mail about the watchdog timer? Could you advise on 
+how to read/ set this with EML?
+
+Regards,
+
+Roland
+
+Klaas Gadeyne wrote:
+&gt;<i> On Tue, 31 Jul 2007, Roland Tollenaar wrote:
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Please give some assistance wrt to the ethercat dataframes. I am having
+</I>&gt;&gt;<i> trouble with the documentation.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In particular at the moment the EC datagram header is what I am
+</I>&gt;&gt;<i> interested in.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This is what the header looks like.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    Cmd    /Idx    /Addr    /Offset    /11bit length/R/C/R/M    /IRQ
+</I>&gt;&gt;<i> TC  0b    00    00 00    01 00    05 80            00 00
+</I>&gt;&gt;<i> EML 0c    46    00 00    01 00    05 00            00 00
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Now the questions are:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Where do I find documentation on the Cmd values that must be used. Why
+</I>&gt;&gt;<i> would EML have a different command? (0xc instead of 0x0b)
+</I>&gt;<i> 
+</I>&gt;<i> &lt;<A HREF="https://svn.berlios.de/wsvn/ethercatmaster/trunk/src/dll/ethercat_device_addressed_telegram.cxx?op=file&amp;rev=0&amp;sc=0">https://svn.berlios.de/wsvn/ethercatmaster/trunk/src/dll/ethercat_device_addressed_telegram.cxx?op=file&amp;rev=0&amp;sc=0</A>&gt; 
+</I>&gt;<i> 
+</I>&gt;<i> &lt;<A HREF="https://svn.berlios.de/wsvn/ethercatmaster/trunk/src/dll/ethercat_logical_addressed_telegram.cxx?op=file&amp;rev=0&amp;sc=0">https://svn.berlios.de/wsvn/ethercatmaster/trunk/src/dll/ethercat_logical_addressed_telegram.cxx?op=file&amp;rev=0&amp;sc=0</A>&gt; 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> So it seems you (or EML code, since I don't know _when_ this frame is
+</I>&gt;<i> send)) are performing a logical read-write, while twincat is doing a
+</I>&gt;<i> logical read.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> The Index Idx has 0x46 instead of 00. Again I have missed (cannot for
+</I>&gt;&gt;<i> the life of me find it this morning because I think I have seen
+</I>&gt;&gt;<i> something about it) the part in the documentation that tells me what the
+</I>&gt;&gt;<i> index does. Why will EML have a different value here?
+</I>&gt;<i> 
+</I>&gt;<i> AFAIK (please check in the spec) the spec only says that the master
+</I>&gt;<i> should check if the index is unaltered when a message returns, its
+</I>&gt;<i> real value doesn't matter.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Then we see a difference in the RCRM part of the header. I have no idea
+</I>&gt;&gt;<i> what they mean. C is recirculating, M means More datagrams.
+</I>&gt;<i> 
+</I>&gt;<i> Me neither, I guess that is the module specific data?
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Finally my question is how to establish the lenght out of the 11 bit
+</I>&gt;&gt;<i> length. This may be obvious but what confuses me is the part in the
+</I>&gt;&gt;<i> Ethercat Header (main header not the one in the datagram)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This part is
+</I>&gt;&gt;<i> TC   0x39 0x10
+</I>&gt;&gt;<i> EML  0x11 0x10
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Which I don;t understnad because according to the documentation the last
+</I>&gt;&gt;<i> 4 bits indicate the type and 1 should be Ethercat. But neither TC nor
+</I>&gt;&gt;<i> EML have a 1 in that position? Or is LSB and MSB turned around?
+</I>&gt;<i> 
+</I>&gt;<i> I don't understand your question here, but ethercat is little endian IIRC
+</I>&gt;<i> 
+</I>&gt;&gt;<i> I get a feeling that the differences in this header may be the cause for
+</I>&gt;&gt;<i> the problem. It may even be the length which IMHO seems to differ but I
+</I>&gt;&gt;<i> am not sure because there is so much info I am lacking.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000214.html">[Ethercatmaster-users] understanding the datagrams
+</A></li>
+	<LI>Next message: <A HREF="000216.html">[Ethercatmaster-users] understanding the datagrams
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#215">[ date ]</a>
+              <a href="thread.html#215">[ thread ]</a>
+              <a href="subject.html#215">[ subject ]</a>
+              <a href="author.html#215">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

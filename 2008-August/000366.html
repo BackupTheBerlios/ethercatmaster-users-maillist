@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] how to set outputs ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20how%20to%20set%20outputs%20%3F&In-Reply-To=%3Calpine.DEB.1.10.0808270850040.15754%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000365.html">
+   <LINK REL="Next"  HREF="000367.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] how to set outputs ?</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20how%20to%20set%20outputs%20%3F&In-Reply-To=%3Calpine.DEB.1.10.0808270850040.15754%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] how to set outputs ?">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Wed Aug 27 08:56:16 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000365.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+        <LI>Next message: <A HREF="000367.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#366">[ date ]</a>
+              <a href="thread.html#366">[ thread ]</a>
+              <a href="subject.html#366">[ subject ]</a>
+              <a href="author.html#366">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 26 Aug 2008, Rob Wheeler wrote:
+&gt;<i> On Tue, Aug 26, 2008 at 2:21 AM, Klaas Gadeyne &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">klaas.gadeyne at fmtc.be</A>&gt; wrote:
+</I>&gt;&gt;<i> On Mon, 25 Aug 2008, Frederik Bayart wrote:
+</I>&gt;&gt;&gt;<i> I installed a wireshark version with the ethercat plugin. When I take a
+</I>&gt;&gt;&gt;<i> network dump, I see that the master is sending malformed packets : see pcap
+</I>&gt;&gt;&gt;<i> file in attachment. The messages are too short although I have increased my
+</I>&gt;&gt;&gt;<i> msg to 128 bytes.
+</I>&gt;&gt;&gt;<i> I don't know whether this is a problem of the master or the wireshark
+</I>&gt;&gt;&gt;<i> plugin.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> FWIW: The first message sent seems to be a valid EtherCAT frame (2x6 address bytes, 2bytes for the ethertype, and 15 data bytes), so I don't understand why this is considered as a malformed packet (unless the specs would have changed).  Moreover, it seems that the &quot;malformed&quot; frames are correctly understood by your slaves to.
+</I>&gt;<i>
+</I>&gt;<i> The wireshark plugin (&quot;packet-ethercat-datagram.c&quot;) has the following
+</I>&gt;<i> comment in it:
+</I>&gt;<i>
+</I>&gt;<i>   /* If the data portion of an EtherCAT datagram is less than 44 bytes, then
+</I>&gt;<i>      it must have been padded with an additional n number of bytes to reach a
+</I>&gt;<i>      total Ethernet frame length of 64 bytes (Ethernet header + Ethernet Data +
+</I>&gt;<i>      FCS). Hence at least 44 bytes data shall always be available in any
+</I>&gt;<i>      EtherCAT datagram. */
+</I>&gt;<i>
+</I>&gt;<i> followed by the line:
+</I>&gt;<i>
+</I>&gt;<i> tvb_ensure_bytes_exist(tvb, offset, 44);
+</I>&gt;<i>
+</I>&gt;<i> You might want to try commenting out that line and see if your
+</I>&gt;<i> wireshark problem is &quot;fixed&quot;.
+</I>
+Did some quick look-ups:
+- In the Ethercat Spec (Ethercat Communication Specification 1.0, 2004) I used to implement EML back in the middle ages, there's no mention of that 64 bytes.
+- However, in the EtherCAT spec I just downloaded from ethercat.org (Ethercat specification V1.0, Part 3, DLL specification), this *is* mentioned in section 4.3, DLL overview.
+
+Conclusions:
+- Ethercat.org seems to have difficulties maintaining a one-to-one relationship between version numbers and specificitions :-((
+- EML is not in sync anymore with the latest spec, I'll submit a bug for this.
+
+Thx for pointing this out!
+
+Klaas
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000365.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+	<LI>Next message: <A HREF="000367.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#366">[ date ]</a>
+              <a href="thread.html#366">[ thread ]</a>
+              <a href="subject.html#366">[ subject ]</a>
+              <a href="author.html#366">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

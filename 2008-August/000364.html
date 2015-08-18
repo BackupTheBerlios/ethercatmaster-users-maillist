@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] how to set outputs ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20how%20to%20set%20outputs%20%3F&In-Reply-To=%3Calpine.DEB.1.10.0808261118150.15754%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000363.html">
+   <LINK REL="Next"  HREF="000365.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] how to set outputs ?</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20how%20to%20set%20outputs%20%3F&In-Reply-To=%3Calpine.DEB.1.10.0808261118150.15754%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] how to set outputs ?">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Tue Aug 26 11:21:26 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000363.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+        <LI>Next message: <A HREF="000365.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#364">[ date ]</a>
+              <a href="thread.html#364">[ thread ]</a>
+              <a href="subject.html#364">[ subject ]</a>
+              <a href="author.html#364">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Mon, 25 Aug 2008, Frederik Bayart wrote:
+&gt;<i> Hallo Roland,
+</I>&gt;<i>
+</I>&gt;<i> Using exact the same settings doesn't solve the problem.
+</I>&gt;<i> I changed my source a little bit :
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 		unsigned char msg[128] ;
+</I>&gt;<i>            for(int i = 0 ; i &lt; sizeof(msg); ++i) msg[i] = i;
+</I>&gt;<i>
+</I>&gt;<i> 		if(AL-&gt;isReady()) {
+</I>&gt;<i> 				EM-&gt;txandrx_PD(sizeof(msg),msg);
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> The logical start address of the EL2008 is now 0x10003 (See configuration
+</I>&gt;<i> below).
+</I>&gt;<i> I see now that the outputs are activated very briefly and are disabled
+</I>&gt;<i> immediately. Outp 1 and 2 are enabled briefly, so this
+</I>&gt;<i> is corresponding indeed to logical address 0x10003 where 0x3 is written to
+</I>&gt;<i> according to the code above.
+</I>&gt;<i> I installed a wireshark version with the ethercat plugin. When I take a
+</I>&gt;<i> network dump, I see that the master is sending malformed packets : see pcap
+</I>&gt;<i> file in attachment. The messages are too short although I have increased my
+</I>&gt;<i> msg to 128 bytes.
+</I>&gt;<i> I don't know whether this is a problem of the master or the wireshark
+</I>&gt;<i> plugin.
+</I>
+FWIW: The first message sent seems to be a valid EtherCAT frame (2x6 address bytes, 2bytes for the ethertype, and 15 data bytes), so I don't understand why this is considered as a malformed packet (unless the specs would have changed).  Moreover, it seems that the &quot;malformed&quot; frames are correctly understood by your slaves to.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000363.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+	<LI>Next message: <A HREF="000365.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#364">[ date ]</a>
+              <a href="thread.html#364">[ thread ]</a>
+              <a href="subject.html#364">[ subject ]</a>
+              <a href="author.html#364">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

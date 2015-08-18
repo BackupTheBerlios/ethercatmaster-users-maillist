@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [RTnet-users] two NIC's
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-September/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BRTnet-users%5D%20two%20NIC%27s&In-Reply-To=%3C46DEFAD8.5010508%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000299.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [RTnet-users] two NIC's</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BRTnet-users%5D%20two%20NIC%27s&In-Reply-To=%3C46DEFAD8.5010508%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] [RTnet-users] two NIC's">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Wed Sep  5 20:52:08 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000299.html">[Ethercatmaster-users] [RTnet-users] two NIC's
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#300">[ date ]</a>
+              <a href="thread.html#300">[ thread ]</a>
+              <a href="subject.html#300">[ subject ]</a>
+              <a href="author.html#300">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+&gt;&gt;<i> If I have two cards with realtek chip how can I ensure one is still 
+</I>&gt;&gt;<i> accessible for normal non-realtime traffic?
+</I>&gt;<i> 
+</I>&gt;<i> Using the module parameter &quot;cards&quot;. It accepts an array of zeros and
+</I>&gt;<i> ones. e.g.: insmod rt_8139too.ko cards=0,1,0 will use the &quot;middle&quot; card
+</I>&gt;<i> of 3.
+</I>&gt;<i> 
+</I>&gt;<i> So the workflow is to first load the RTnet module with the cards
+</I>&gt;<i> parameter and then the normal 8139too module which will take whatever
+</I>&gt;<i> cards are left.
+</I>
+If the first is realtek and the other has another chip. If I don;t 
+unload the module for the second chip then I presume that it will remain 
+functional as a normal ethrnet interface?
+
+Kind regards,
+
+Roland
+
+
+&gt;<i> 
+</I>&gt;<i> CU Fabian
+</I>&gt;<i> TabascoEye
+</I>&gt;<i> 
+</I>&gt;<i> -------------------------------------------------------------------------
+</I>&gt;<i> This SF.net email is sponsored by: Splunk Inc.
+</I>&gt;<i> Still grepping through log files to find problems?  Stop.
+</I>&gt;<i> Now Search log events and configuration files using AJAX and a browser.
+</I>&gt;<i> Download your FREE copy of Splunk now &gt;&gt;  <A HREF="http://get.splunk.com/">http://get.splunk.com/</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> RTnet-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">RTnet-users at lists.sourceforge.net</A>
+</I>&gt;<i> <A HREF="https://lists.sourceforge.net/lists/listinfo/rtnet-users">https://lists.sourceforge.net/lists/listinfo/rtnet-users</A>
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000299.html">[Ethercatmaster-users] [RTnet-users] two NIC's
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#300">[ date ]</a>
+              <a href="thread.html#300">[ thread ]</a>
+              <a href="subject.html#300">[ subject ]</a>
+              <a href="author.html#300">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

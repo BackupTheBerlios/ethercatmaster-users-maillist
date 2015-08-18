@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] building redboot
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2006-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20building%20redboot&In-Reply-To=%3C39AB441B43BF19468361907ECD4937EB49F18B%40hestia.ccm.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000006.html">
+   <LINK REL="Next"  HREF="000008.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] building redboot</H1>
+    <B>Jeroen Theelen</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20building%20redboot&In-Reply-To=%3C39AB441B43BF19468361907ECD4937EB49F18B%40hestia.ccm.local%3E"
+       TITLE="[Ethercatmaster-users] building redboot">jeroen.theelen at ccm.nl
+       </A><BR>
+    <I>Tue Apr 11 12:05:49 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000006.html">[Ethercatmaster-users] building redboot
+</A></li>
+        <LI>Next message: <A HREF="000008.html">[Ethercatmaster-users] building redboot
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#7">[ date ]</a>
+              <a href="thread.html#7">[ thread ]</a>
+              <a href="subject.html#7">[ subject ]</a>
+              <a href="author.html#7">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello everyone,
+
+I think indeed the possibility to use 2 nic's is only offered by the realtek cards. 
+That's the reason why I decided to use the serial line for debugging and a Intel
+nic a EtherCAT master (as Klaas Gadeyne also sugested).
+
+But when I try to build a redboot bootdisk I get errors again :-( 
+
+/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/rb_intel3/redboot_install
+/lib/libtarget.a(io_eth_eth_drv.o): In function `eth_drv_dsr':
+/home/Administrator/ecos/packages/io/eth/current/src/stand_alone/eth_drv.c:551:
+undefined reference to `start_console'
+/home/Administrator/ecos/packages/io/eth/current/src/stand_alone/eth_drv.c:551:
+undefined reference to `end_console'
+collect2: ld returned 1 exit status
+make[1]: *** [/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/rb_intel3/r
+edboot_install/bin/redboot.elf] Error 1
+make[1]: Leaving directory `/home/Administrator/eml-0.1/test/library/rb_intel3/r
+edboot_build/redboot/current'
+make: *** [build] Error 2
+
+
+I tried different things. Because I don't want to use the nic for redboot debugging, 
+my first guess was that disabling Redboot Networking is enough to get it working. 
+This wasn't the case, so I also disabled Ethernet port 0 driver (under common ethernet 
+support -&gt; pc board ethernet driver). Because this also failed in combination with an 
+Intel card I tried it also with a realtek. This also gives the same result.
+
+Only when I only change start-up type from grub to floppy and change nothing else
+I'm able to boot redboot (of course it says no network card found). When I change the
+same configuration to an Intel card, I can make a bootdisk, but when I load it I only
+get 2,5 rows of dots and a blinking cursor. All other things I tried (as explained above)
+don't succeed in building a bootdisk.
+
+Can someone give me a hint how to get it working? It can be not that difficult to get it
+working I think, but I still didn't succeed to build eCos for my hardware.
+
+Thanks in advance,
+Jeroen
+
+
+&gt;&gt;&gt;&gt;<i> This e-mail message and its attachments are subject to the disclaimer 
+</I>&gt;&gt;&gt;&gt;<i> published at the website of CCM Centre for Concepts in Mechatronics B.V.: 
+</I>&gt;&gt;<i> www.ccm.nl
+</I>
+&gt;&gt;<i> After reading your disclaimer, I _do_ hope I did not abusively
+</I>&gt;&gt;<i>received your email :-)
+</I>
+No problem of cource :-) I must admit I read the disclamer yesterday for the first 
+time. 
+
+-----Original Message-----
+From: Klaas Gadeyne [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">klaas.gadeyne at fmtc.be</A>]
+Sent: Monday, April 10, 2006 3:47 PM
+To: Bob Koninckx
+Cc: Jeroen Theelen; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ethercatmaster-users at lists.berlios.de</A>
+Subject: Re: [Ethercatmaster-users] building redboot
+
+
+On Fri, 7 Apr 2006, Bob Koninckx wrote:
+&gt;<i> At 14:37 7/04/2006, Jeroen Theelen wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> A second question I have is about how to change the configuration. I have 
+</I>&gt;&gt;<i> changed the pc target with RTL8139 to a target with a Intel network card. 
+</I>&gt;&gt;<i> But where can I find the second network card? I notice that when I use the 
+</I>&gt;&gt;<i> realtek target I can use a second Ethernet port device under common 
+</I>&gt;&gt;<i> Ethernet support. By a Intel card I don't have that option. Is this because 
+</I>&gt;&gt;<i> of a &quot;hack&quot; from your side? How can I use to Intel cards?
+</I>&gt;<i>
+</I>&gt;<i> We had to change something in order to get two ethernet cards operational, 
+</I>&gt;<i> don't remember exactly what it was. Maybe Klaas does ?
+</I>
+I don't think this problem is related to our changes.  I just had a
+look to the cdl logic of the different ethernet drivers, and it seems
+like only the (cdl logic of the?) rltk8139 driver allows to have multiple
+cards.  Maybe the rltk8139 driver is the only eCos driver that allows
+for multiple cards?  You better check this on the eCos ML though.
+
+btw, you could of course use the serial line for debugging, that seems
+to me like the easiest workaround in the short term.
+
+&gt;&gt;<i> This e-mail message and its attachments are subject to the disclaimer 
+</I>&gt;&gt;<i> published at the website of CCM Centre for Concepts in Mechatronics B.V.: 
+</I>&gt;&gt;<i> www.ccm.nl
+</I>
+After reading your disclaimer, I _do_ hope I did not abusively
+received your email :-)
+
+regards,
+
+Klaas
+
+
+CCM Centre for Concepts in Mechatronics B.V.
+P.O. Box 12, NL-5670 AA  Nuenen 
+De Pinckart 24, NL-5674 CC Nuenen 
+Phone +31 (0)40-263 50 00 
+Fax       +31 (0)40-263 55 55 
+
+Op dit e-mailbericht, inclusief bijlagen, is de e-mail disclaimer van toepassing zoals gepubliceerd op de website van CCM Centre for Concepts in Mechatronics B.V.: www.ccm.nl  
+
+This e-mail message and its attachments are subject to the disclaimer published at the website of CCM Centre for Concepts in Mechatronics B.V.: www.ccm.nl 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000006.html">[Ethercatmaster-users] building redboot
+</A></li>
+	<LI>Next message: <A HREF="000008.html">[Ethercatmaster-users] building redboot
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#7">[ date ]</a>
+              <a href="thread.html#7">[ thread ]</a>
+              <a href="subject.html#7">[ subject ]</a>
+              <a href="author.html#7">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

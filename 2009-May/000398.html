@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Loosing time while sending Frames
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Loosing%20time%20while%20sending%20Frames&In-Reply-To=%3COF078FF2B8.CC0EF1FE-ONC12575AD.002011E4-C12575AD.0020CA26%40datacon.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000401.html">
+   <LINK REL="Next"  HREF="000400.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Loosing time while sending Frames</H1>
+    <B>henning.richter at besi.com</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Loosing%20time%20while%20sending%20Frames&In-Reply-To=%3COF078FF2B8.CC0EF1FE-ONC12575AD.002011E4-C12575AD.0020CA26%40datacon.at%3E"
+       TITLE="[Ethercatmaster-users] Loosing time while sending Frames">henning.richter at besi.com
+       </A><BR>
+    <I>Tue May  5 07:58:09 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000401.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+        <LI>Next message: <A HREF="000400.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#398">[ date ]</a>
+              <a href="thread.html#398">[ thread ]</a>
+              <a href="subject.html#398">[ subject ]</a>
+              <a href="author.html#398">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+
+
+&gt;<i> I can't see from your code below how you actually _measure_ the time
+</I>while your thread runs periodically (after the rt_task_set_periodic)?
+
+&gt;<i> void signalhandler(int signo, EC_Ethernet_Frame &amp;frame)
+</I>&gt;<i>   {
+</I>&gt;<i>   /* Do something every INTERVAL microseconds */
+</I>&gt;<i>
+</I>&gt;<i> ///------------------------SEND
+</I>FRAMES------------------------------------
+&gt;<i>
+</I>&gt;<i>        rtStart = rt_timer_read();
+</I>&gt;<i>   bool send = EtherCAT_DataLinkLayer::instance()-&gt;txandrx(&amp;frame);
+</I>&gt;<i>        rtEnd = rt_timer_read();
+</I>&gt;<i>        printf(&quot;txandrx Frame: %ld\n&quot;,(rt_timer_ticks2ns
+</I>&gt;<i> (rtEnd-rtStart))/1000);
+</I>&gt;<i>
+</I>&gt;<i>   }
+</I>
+I measure the time with the xenomai function rt_timer_read() from timer.h
+library. The timer starts short before the frame will be send and stops
+immediately afterwards.
+
+
+Henning
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090505/9cecc333/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090505/9cecc333/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000401.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+	<LI>Next message: <A HREF="000400.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#398">[ date ]</a>
+              <a href="thread.html#398">[ thread ]</a>
+              <a href="subject.html#398">[ subject ]</a>
+              <a href="author.html#398">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

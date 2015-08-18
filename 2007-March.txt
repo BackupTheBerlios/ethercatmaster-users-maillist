@@ -1,0 +1,1247 @@
+From ERFE at DE.FESTO.COM  Fri Mar  9 17:04:49 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Fri, 9 Mar 2007 17:04:49 +0100
+Subject: [Ethercatmaster-users] EtherCAT Master Library and Altera Nios II
+Message-ID: <OFD236773D.C0209187-ONC1257299.0056F4C5-C1257299.005855CC@MAIL.DE.FESTO.NET>
+
+
+Hello,
+
+I want to implement an EtherCAT Master on a Altera Development Board with a
+Nios II Prozessor and eCos as
+Operating System. Now, when I want to include the EtherCAT Master package
+to eCos and build the system then
+I get some errors.
+
+make[1]: Entering directory
+`/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_build/net/ethercatmaster/current'
+nios2-elf-gcc -c
+-I/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_install/include
+-I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current
+
+-I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src
+
+-I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/tests
+ -I.
+-I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/
+ -finline-limit=7000 -g -O3 -ffunction-sections -fdata-sections -fno-rtti
+-fno-exceptions  -DSYSTEM_BUS_WIDTH=32 -mhw-mul -mhw-mulx -mno-hw-div
+-Wp,-MD,src/ecos/support.tmp -o src/ecos/net_ethercatmaster_support.o
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:33:31:
+ cyg/io/eth/netdev.h: No such file or directory
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:34:32:
+ cyg/io/eth/eth_drv.h: No such file or directory
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:47:
+ error: expected constructor, destructor, or type conversion before '('
+token
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:47:
+ error: expected `,' or `;' before '(' token
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:48:
+ error: expected constructor, destructor, or type conversion before '('
+token
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:48:
+ error: expected `,' or `;' before '(' token
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:
+ In function `void cyg_net_init_devs()':
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:70:
+ error: `cyg_netdevtab_entry_t' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:70:
+ error: (Each undeclared identifier is reported only once for each function
+it appears in.)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:70:
+ error: `t' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:72:
+ error: `__NETDEVTAB__' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:72:
+ error: `__NETDEVTAB_END__' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:75:
+ error: `CYG_NETDEVTAB_STATUS_AVAIL' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:
+ In function `void ethercat_delivery(cyg_addrword_t)':
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:118:
+ error: `cyg_netdevtab_entry_t' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:118:
+ error: `t' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:124:
+ error: `__NETDEVTAB__' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:124:
+ error: `__NETDEVTAB_END__' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:126:
+ error: invalid use of undefined type `struct eth_drv_sc'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:125:
+ error: forward declaration of `struct eth_drv_sc'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:126:
+ error: `ETH_DRV_NEEDS_DELIVERY' undeclared (first use this function)
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:127:
+ error: invalid use of undefined type `struct eth_drv_sc'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:125:
+ error: forward declaration of `struct eth_drv_sc'
+make[1]: Leaving directory
+`/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_build/net/ethercatmaster/current'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:128:
+ error: invalid use of undefined type `struct eth_drv_sc'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:125:
+ error: forward declaration of `struct eth_drv_sc'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:
+ In function `void if_attach(netif*)':
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:158:
+ error: invalid use of undefined type `struct netif'
+/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_install/include/dll/ethercat_dll.h:38:
+ error: forward declaration of `struct netif'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:161:
+ error: invalid use of undefined type `struct netif'
+/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_install/include/dll/ethercat_dll.h:38:
+ error: forward declaration of `struct netif'
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:161:
+ error: `ETHERCAT_DEVICE_NAME_MAX_LENGTH' undeclared (first use this
+function)
+make[1]: *** [src/ecos/support.o.d] Error 1
+make: *** [build] Error 2
+
+The Altera Development Board has an SMSC LAN91c111 Ethernet Controller.
+What I have to do to porting the EtherCAT Master Library to the SMSC
+LAN91c111
+Ethernet Controller?
+
+thanks,
+Felix Erkert
+
+
+Bitte beachten Sie meine neue eMail Adresse: ERFE at DE.FESTO.COM
+
+My new email address is: ERFE at DE.FESTO.COM
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+
+
+From klaas.gadeyne at fmtc.be  Fri Mar  9 23:30:41 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Fri, 09 Mar 2007 23:30:41 +0100
+Subject: [Ethercatmaster-users] EtherCAT Master Library and Altera
+	Nios	II
+In-Reply-To: <OFD236773D.C0209187-ONC1257299.0056F4C5-C1257299.005855CC@MAIL.DE.FESTO.NET>
+References: <OFD236773D.C0209187-ONC1257299.0056F4C5-C1257299.005855CC@MAIL.DE.FESTO.NET>
+Message-ID: <20070309233041.52yndsh24feokcc4@www.fmtc.be>
+
+Quoting Felix Erkert <ERFE at DE.FESTO.COM>:
+> I want to implement an EtherCAT Master on a Altera Development Board with a
+> Nios II Prozessor and eCos as
+> Operating System. Now, when I want to include the EtherCAT Master package
+> to eCos and build the system then
+> I get some errors.
+>
+> make[1]: Entering directory
+> `/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_build/net/ethercatmaster/current'
+> nios2-elf-gcc -c
+> -I/cygdrive/c/altera/projects/eCosEML/eCosEtherCATMaster_install/include
+> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current
+> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src
+> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/tests
+> -I.
+> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/
+> -finline-limit=7000 -g -O3 -ffunction-sections -fdata-sections -fno-rtti
+> -fno-exceptions  -DSYSTEM_BUS_WIDTH=32 -mhw-mul -mhw-mulx -mno-hw-div
+> -Wp,-MD,src/ecos/support.tmp -o src/ecos/net_ethercatmaster_support.o
+> /cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx
+> /cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/net/ethercatmaster/current/src/ecos/support.cxx:33:31:
+> cyg/io/eth/netdev.h: No such file or directory
+
+Did you load the package CYGPKG_IO_ETH_DRIVERS (common ethernet 
+support)?  It's probably a missing dependency in the ethercat cdl logic.
+
+> The Altera Development Board has an SMSC LAN91c111 Ethernet Controller.
+> What I have to do to porting the EtherCAT Master Library to the SMSC
+> LAN91c111
+> Ethernet Controller?
+
+Normally, there shouldn't be any dependencies to particular NIC, but - 
+We never tested other NICS than the realtek one
+- I notice you are using cygwin: We never tested that too.
+
+So, in case you encounter any further problems, don't hesitate to 
+report them on the Mailing list.
+
+ps.  Note that we are changing the EML build system to cmake ATM, but I 
+wouldn't advise you to use it for the ecos build right now.
+
+regards,
+
+Klaas
+
+
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
+
+
+
+From ERFE at DE.FESTO.COM  Mon Mar 12 09:29:29 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Mon, 12 Mar 2007 09:29:29 +0100
+Subject: [Ethercatmaster-users] EtherCAT Master Library and Altera Nios II
+Message-ID: <OF6E03F0CB.E2A21CD7-ONC125729C.002CF3DB-C125729C.002EA5D8@MAIL.DE.FESTO.NET>
+
+
+Hallo,
+
+Thank you for your fast answer. I forgot to include the
+CYGPKG_IO_ETH_DRIVERS package.
+The first Error is lost. Now, I have only two errors.
+
+make[1]: Entering directory
+`/cygdrive/c/altera/projects/eCosMaster/eCos_build/devs/eth/smsc/lan91cxx/current'
+nios2-elf-gcc -c
+-I/cygdrive/c/altera/projects/eCosMaster/eCos_install/include
+-I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current
+
+-I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src
+
+-I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/tests
+ -I.
+-I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/
+ -finline-limit=7000 -g -O3 -ffunction-sections -fdata-sections
+-fno-exceptions  -DSYSTEM_BUS_WIDTH=32 -mhw-mul -mhw-mulx -mno-hw-div
+-D_KERNEL -D__ECOS -Wp,-MD,src/if_lan91cxx.tmp -o
+src/devs_eth_smsc_lan91cxx_if_lan91cxx.o
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/if_lan91cxx.c
+In file included from
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/if_lan91cxx.c
+:92:
+/cygdrive/c/altera/projects/eCosMaster/eCos_install/include/cyg/io/eth/eth_drv.h
+:165: error: redefinition of `struct arpcom'
+In file included from
+/cygdrive/c/altera/projects/eCosMaster/eCos_install/include/cyg/sopc/altera_avalon_lan91c111.inl:185,
+                 from
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/smsc_lan91cxx.h:340,
+                 from
+/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/if_lan91cxx.c:153:
+/cygdrive/c/altera/projects/eCosMaster/eCos_install/include/cyg/hal/devices.h:149:
+ warning: initialization makes pointer from integer without a cast
+make[1]: Leaving directory
+`/cygdrive/c/altera/projects/eCosMaster/eCos_build/devs/eth/smsc/lan91cxx/current'
+make[1]: *** [src/if_lan91cxx.o.d] Error 1
+make: Leaving directory `/cygdrive/c/altera/projects/eCosMaster/eCos_build'
+make: *** [build] Error 2
+
+There is a redefinition in of struct arpcom in
+/cygdrive/c/altera/projects/eCosMaster/eCos_install/include/cyg/io/eth/eth_drv.h
+Do you know how can I resolve this problem?
+
+eth_drv.h:
+
+#ifdef CYGPKG_NET_LWIP
+struct arpcom {
+    struct netif ac_if;
+};
+#endif
+
+#ifdef CYGPKG_NET_ETHERCATMASTER
+struct arpcom {
+    struct netif ac_if;
+};
+#endif
+
+Can I disable anyhow the LWIP Stack or must I include some new packages?
+
+regards,
+Felix Erkert
+
+
+Bitte beachten Sie meine neue eMail Adresse: ERFE at DE.FESTO.COM
+
+My new email address is: ERFE at DE.FESTO.COM
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+
+
+From ERFE at DE.FESTO.COM  Mon Mar 12 10:38:48 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Mon, 12 Mar 2007 10:38:48 +0100
+Subject: [Ethercatmaster-users] Package error
+Message-ID: <OF2AE5A4AC.9DD371B7-ONC125729C.003492EA-C125729C.0034FE61@MAIL.DE.FESTO.NET>
+
+
+Hello,
+
+ok, I have include the packages EtherCAT Master and the Common Ethernet
+driver.
+Than I got follow errors:
+
+CYGNUM_ETHERCATMASTER_TIMEOUT_DELAY_TICKS
+CYGNUM_ETHERCATMASTER_ROUTE_PERIOD_TICKS
+
+Can you help me please? I use a SMSC LAN91c111 ethernet controller!
+
+regards,
+Felix
+
+
+Bitte beachten Sie meine neue eMail Adresse: ERFE at DE.FESTO.COM
+
+My new email address is: ERFE at DE.FESTO.COM
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+
+
+From klaas.gadeyne at fmtc.be  Mon Mar 12 11:00:48 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 12 Mar 2007 11:00:48 +0100 (CET)
+Subject: [Ethercatmaster-users] EtherCAT Master Library and Altera Nios
+ II
+In-Reply-To: <OF6E03F0CB.E2A21CD7-ONC125729C.002CF3DB-C125729C.002EA5D8@MAIL.DE.FESTO.NET>
+References: <OF6E03F0CB.E2A21CD7-ONC125729C.002CF3DB-C125729C.002EA5D8@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0703121056420.7897@ampere.labo01.fmtc.be>
+
+On Mon, 12 Mar 2007, Felix Erkert wrote:
+[...]
+> eth_drv.h:
+>
+> #ifdef CYGPKG_NET_LWIP
+> struct arpcom {
+>    struct netif ac_if;
+> };
+> #endif
+>
+> #ifdef CYGPKG_NET_ETHERCATMASTER
+> struct arpcom {
+>    struct netif ac_if;
+> };
+> #endif
+>
+> Can I disable anyhow the LWIP Stack or must I include some new packages?
+
+You can disable it.  I'll try to fix this #ifdef stuff when I complete
+the eCos cmake port.
+
+regards,
+
+Klaas
+
+
+From klaas.gadeyne at fmtc.be  Mon Mar 12 11:01:49 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 12 Mar 2007 11:01:49 +0100 (CET)
+Subject: [Ethercatmaster-users] Package error
+In-Reply-To: <OF2AE5A4AC.9DD371B7-ONC125729C.003492EA-C125729C.0034FE61@MAIL.DE.FESTO.NET>
+References: <OF2AE5A4AC.9DD371B7-ONC125729C.003492EA-C125729C.0034FE61@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0703121101010.7897@ampere.labo01.fmtc.be>
+
+On Mon, 12 Mar 2007, Felix Erkert wrote:
+> Hello,
+>
+> ok, I have include the packages EtherCAT Master and the Common Ethernet
+> driver.
+> Than I got follow errors:
+>
+> CYGNUM_ETHERCATMASTER_TIMEOUT_DELAY_TICKS
+> CYGNUM_ETHERCATMASTER_ROUTE_PERIOD_TICKS
+>
+> Can you help me please? I use a SMSC LAN91c111 ethernet controller!
+
+Can you be a bit more specific about the errors?  During which step do
+they occur, and what is the exact error output?
+
+Klaas
+
+
+
+From klaas.gadeyne at fmtc.be  Mon Mar 12 13:46:18 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 12 Mar 2007 13:46:18 +0100 (CET)
+Subject: [Ethercatmaster-users] Antwort: Re:  Package error
+In-Reply-To: <OFFDBF302F.3B4ED8FE-ONC125729C.003FA63C-C125729C.00413880@MAIL.DE.FESTO.NET>
+References: <OFFDBF302F.3B4ED8FE-ONC125729C.003FA63C-C125729C.00413880@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0703121342470.7897@ampere.labo01.fmtc.be>
+
+Hi Felix,
+
+[please keep the ML in cc:]
+
+> The errors occurs, if I include the packages "common ethernet support" and
+> "EtherCATMaster" into the eCos Library. Now, when I want to build the eCos
+> library
+> I get some (2 errors) errors.
+>
+> redefinition error:
+> nios2-elf-gcc -c
+> -I/cygdrive/c/altera/projects/eCosMaster/eCos_install/include
+> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current
+>
+> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src
+>
+> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/tests
+> -I.
+> -I/cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/
+> -finline-limit=7000 -g -O3 -ffunction-sections -fdata-sections
+> -fno-exceptions  -DSYSTEM_BUS_WIDTH=32 -mhw-mul -mhw-mulx -mno-hw-div
+> -D_KERNEL -D__ECOS -Wp,-MD,src/if_lan91cxx.tmp -o
+> src/devs_eth_smsc_lan91cxx_if_lan91cxx.o
+> /cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/if_lan91cxx.c
+> make[1]: Leaving directory
+> `/cygdrive/c/altera/projects/eCosMaster/eCos_build/devs/eth/smsc/lan91cxx/current'
+> In file included from
+> /cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/if_lan91cxx.c:92:
+> make: Leaving directory `/cygdrive/c/altera/projects/eCosMaster/eCos_build'
+> /cygdrive/c/altera/projects/eCosMaster/eCos_install/include/cyg/io/eth/eth_drv.h:165:
+> error: redefinition of `
+> struct arpcom'
+> In file included from
+> /cygdrive/c/altera/projects/eCosMaster/eCos_install/include/cyg/sopc/altera_avalon_lan91c111.inl:185,
+>                 from
+> /cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/smsc_lan91cxx.h:340,
+>                 from
+> /cygdrive/c/altera/61/nios2eds/components/ecos/ecos-current/packages/devs/eth/smsc/lan91cxx/current/src/if_lan91cxx.c:153:
+> /cygdrive/c/altera/projects/eCosMaster/eCos_install/include/cyg/hal/devices.h:149:
+> warning: initialization makes pointer from integer without a cast
+> make[1]: *** [src/if_lan91cxx.o.d] Error 1
+> make: *** [build] Error 2
+>
+
+As I told in a previous mail, you can/must safely disable the LWIP stack in
+your configuration to solve that issue.
+
+> Do you know what?s wrong? Does the redefinition error above anything to do
+> with this package errors below?
+
+> Package error:
+>>> CYGNUM_ETHERCATMASTER_TIMEOUT_DELAY_TICKS | Exception |
+>
+> Calculated((CYGNUM_ETHERCATMASTER_TIMEOUT_DELAY*CYGNUM_HAL_RTC_DENOMINATOR)/CYGNUM_HAL_RTC_ENUMERATOR)
+>
+>>> CYGNUM_ETHERCATMASTER_ROUTE_PERIOD_TICKS  | Exception |
+> Calculated((CYGNUM_ETHERCATMASTER_ROUTE_PERIOD_TICKS*CYGNUM_HAL_RTC_DENOMINATOR)/CYGNUM_HAL_RTC_ENUMERATOR)
+
+At what stage do you get these "packages error"?  Is this at compile
+time or when using configtool?
+
+ps. Don't forget to run "ecosconfig tree" after updating your configuration...
+
+Klaas
+
+From ERFE at DE.FESTO.COM  Mon Mar 12 17:11:54 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Mon, 12 Mar 2007 17:11:54 +0100
+Subject: [Ethercatmaster-users] Creating Master Error
+Message-ID: <OF6CE89C55.7125AEC0-ONC125729C.0055787D-C125729C.0058FB98@MAIL.DE.FESTO.NET>
+
+
+Hallo,
+
+I have build eCos with EtherCAT Master Library without errors.
+Now I?m testing the ethercat example in the test directory.
+I have compiled the example with no errors.  If I start now the
+example on the development board the example stops at the
+"Creating Master" state.
+
+int main()
+{
+  init_slave_db();
+
+  printf("Creating Master\n");
+=>EtherCAT_Master * EM = EtherCAT_Master::instance();       ERROR!!!
+  printf("Getting Slave Handler\n");
+  EtherCAT_SlaveHandler * sh = EM->get_slave_handler(0x03e9);
+  ...
+}
+
+This is my output:
+This Flash does not contain a valid MAC Address
+Using the default of 0x12:13:14:15:16:17
+Creating Master => ERROR!!!
+
+Do you know where is the error or what I do wrong.
+
+
+Bitte beachten Sie meine neue eMail Adresse: ERFE at DE.FESTO.COM
+
+My new email address is: ERFE at DE.FESTO.COM
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+
+
+From klaas.gadeyne at fmtc.be  Mon Mar 12 17:30:27 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 12 Mar 2007 17:30:27 +0100 (CET)
+Subject: [Ethercatmaster-users] Creating Master Error
+In-Reply-To: <OF6CE89C55.7125AEC0-ONC125729C.0055787D-C125729C.0058FB98@MAIL.DE.FESTO.NET>
+References: <OF6CE89C55.7125AEC0-ONC125729C.0055787D-C125729C.0058FB98@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0703121720220.7897@ampere.labo01.fmtc.be>
+
+On Mon, 12 Mar 2007, Felix Erkert wrote:
+> Hallo,
+>
+> I have build eCos with EtherCAT Master Library without errors.
+
+Great!  This means you could build the code for an Altera board with
+nios II processor and an untested NIC, under cygwin. 
+And if I understood it correctly, apart from some cdl dependencies
+which are/were not yet in place, everything went fine?
+
+Given the fact we've only tested this under linux, on i386 with a
+realtek NIC, it is truly amazing this compiles out of the box :-)
+
+> Now I?m testing the ethercat example in the test directory.
+> I have compiled the example with no errors.  If I start now the
+> example on the development board the example stops at the
+> "Creating Master" state.
+>
+> int main()
+> {
+>  init_slave_db();
+>
+>  printf("Creating Master\n");
+> =>EtherCAT_Master * EM = EtherCAT_Master::instance();       ERROR!!!
+>  printf("Getting Slave Handler\n");
+>  EtherCAT_SlaveHandler * sh = EM->get_slave_handler(0x03e9);
+>  ...
+> }
+>
+> This is my output:
+> This Flash does not contain a valid MAC Address
+> Using the default of 0x12:13:14:15:16:17
+> Creating Master => ERROR!!!
+>
+> Do you know where is the error or what I do wrong.
+
+I don't recall having ever seen such an error.
+
+While debugging, I would suggest you increase the
+CYGNUM_ETHERCATMASTER_LOG_LEVEL variable to 4 in configtool and use your
+debugger to see where things go wrong...
+
+BTW, the test will only work partially if some slave is connected to
+your altera board (one of the things happening during creation of the
+master is scanning the network for slaves), and will only work fully
+if the ethercat evaluation board is connected to your master.
+
+Klaas
+
+
+
+
+
+
+From ERFE at DE.FESTO.COM  Tue Mar 13 09:31:13 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Tue, 13 Mar 2007 09:31:13 +0100
+Subject: [Ethercatmaster-users] Antwort: Re:  Creating Master Error
+In-Reply-To: <Pine.LNX.4.64.0703121720220.7897@ampere.labo01.fmtc.be>
+Message-ID: <OFEF9FE2D8.7688B379-ONC125729D.002D90DE-C125729D.002ECF97@MAIL.DE.FESTO.NET>
+
+Klaas Gadeyne <klaas.gadeyne at fmtc.be> schrieb am 12.03.2007 17:30:27:
+
+> On Mon, 12 Mar 2007, Felix Erkert wrote:
+> > Hallo,
+> >
+> > I have build eCos with EtherCAT Master Library without errors.
+>
+> Great!  This means you could build the code for an Altera board with
+> nios II processor and an untested NIC, under cygwin.
+> And if I understood it correctly, apart from some cdl dependencies
+> which are/were not yet in place, everything went fine?
+>
+> Given the fact we've only tested this under linux, on i386 with a
+> realtek NIC, it is truly amazing this compiles out of the box :-)
+>
+> > Now I?m testing the ethercat example in the test directory.
+> > I have compiled the example with no errors.  If I start now the
+> > example on the development board the example stops at the
+> > "Creating Master" state.
+> >
+> > int main()
+> > {
+> >  init_slave_db();
+> >
+> >  printf("Creating Master\n");
+> > =>EtherCAT_Master * EM = EtherCAT_Master::instance();       ERROR!!!
+> >  printf("Getting Slave Handler\n");
+> >  EtherCAT_SlaveHandler * sh = EM->get_slave_handler(0x03e9);
+> >  ...
+> > }
+> >
+> > This is my output:
+> > This Flash does not contain a valid MAC Address
+> > Using the default of 0x12:13:14:15:16:17
+> > Creating Master => ERROR!!!
+> >
+> > Do you know where is the error or what I do wrong.
+>
+> I don't recall having ever seen such an error.
+>
+> While debugging, I would suggest you increase the
+> CYGNUM_ETHERCATMASTER_LOG_LEVEL variable to 4 in configtool and use your
+> debugger to see where things go wrong...
+>
+> BTW, the test will only work partially if some slave is connected to
+> your altera board (one of the things happening during creation of the
+> master is scanning the network for slaves), and will only work fully
+> if the ethercat evaluation board is connected to your master.
+>
+> Klaas
+
+Hello,
+
+ok, sorry, if I start the ethercat test program, there
+occurs no errors. But if I run the example the EtherCAT_Master::instance()
+function hang up! I have connected a festo ethercat slave, because you
+mean it should be connected an ethercat slave. I haven?t an
+ethercat evaluation board! Why does this example hang up? Have you an idea?
+Are there any hardware specific or eCos specific instructions?
+
+regards
+Felix
+
+
+Bitte beachten Sie meine neue eMail Adresse: ERFE at DE.FESTO.COM
+
+My new email address is: ERFE at DE.FESTO.COM
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+
+
+From ERFE at DE.FESTO.COM  Tue Mar 13 09:49:21 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Tue, 13 Mar 2007 09:49:21 +0100
+Subject: [Ethercatmaster-users] Antwort: Re: Antwort: Re:  Package error
+In-Reply-To: <Pine.LNX.4.64.0703121342470.7897@ampere.labo01.fmtc.be>
+Message-ID: <OF6F52DDAB.F828EB91-ONC125729D.0030158C-C125729D.0030788A@MAIL.DE.FESTO.NET>
+
+Hello,
+
+Are there anywhere more examples?
+The test example is configured for EVA board.
+I use an other slave! Have you a user manual or a
+documentation about the ethercat stack expecting
+http://ethercatmaster.berlios.de?
+
+regards,
+Felix
+
+
+Bitte beachten Sie meine neue eMail Adresse: ERFE at DE.FESTO.COM
+
+My new email address is: ERFE at DE.FESTO.COM
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+
+
+From klaas.gadeyne at fmtc.be  Tue Mar 13 10:25:17 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 13 Mar 2007 10:25:17 +0100 (CET)
+Subject: [Ethercatmaster-users] Antwort: Re: Antwort: Re: Package error
+In-Reply-To: <OF6F52DDAB.F828EB91-ONC125729D.0030158C-C125729D.0030788A@MAIL.DE.FESTO.NET>
+References: <OF6F52DDAB.F828EB91-ONC125729D.0030158C-C125729D.0030788A@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0703131013250.10134@ampere.labo01.fmtc.be>
+
+On Tue, 13 Mar 2007, Felix Erkert wrote:
+> Hello,
+>
+> Are there anywhere more examples?
+
+Yes,
+<http://svn.berlios.de/wsvn/ethercatmaster/trunk/tests/rtnet/master_test.cpp?op=file&rev=0&sc=0>
+is an example where some beckhoff IO modules are used [*]
+
+> The test example is configured for EVA board.
+> I use an other slave! Have you a user manual or a
+> documentation about the ethercat stack expecting
+> http://ethercatmaster.berlios.de?
+
+No, we haven't, but you're very welcome to provide one :-)
+
+Klaas.
+
+[*] Note that this is a xenomai example, but most of the code applies
+to the eCos master.
+
+
+
+From klaas.gadeyne at fmtc.be  Tue Mar 13 10:12:48 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 13 Mar 2007 10:12:48 +0100 (CET)
+Subject: [Ethercatmaster-users] Antwort: Re:  Creating Master Error
+In-Reply-To: <OFEF9FE2D8.7688B379-ONC125729D.002D90DE-C125729D.002ECF97@MAIL.DE.FESTO.NET>
+References: <OFEF9FE2D8.7688B379-ONC125729D.002D90DE-C125729D.002ECF97@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0703131009450.10134@ampere.labo01.fmtc.be>
+
+On Tue, 13 Mar 2007, Felix Erkert wrote:
+[...]
+>> While debugging, I would suggest you increase the
+>> CYGNUM_ETHERCATMASTER_LOG_LEVEL variable to 4 in configtool and use your
+>> debugger to see where things go wrong...
+>>
+>> BTW, the test will only work partially if some slave is connected to
+>> your altera board (one of the things happening during creation of the
+>> master is scanning the network for slaves), and will only work fully
+>> if the ethercat evaluation board is connected to your master.
+[...]
+> ok, sorry, if I start the ethercat test program, there
+> occurs no errors. But if I run the example the EtherCAT_Master::instance()
+> function hang up! I have connected a festo ethercat slave, because you
+> mean it should be connected an ethercat slave. I haven?t an
+> ethercat evaluation board! Why does this example hang up? Have you an idea?
+> Are there any hardware specific or eCos specific instructions?
+
+Felix, did you follow the guidelines above?  If increasing the log
+level doesn't help, use your debugger to find out where it hangs.
+
+Klaas
+
+From tfreedy at gmail.com  Fri Mar 16 06:37:43 2007
+From: tfreedy at gmail.com (Tom Freedy)
+Date: Thu, 15 Mar 2007 22:37:43 -0700
+Subject: [Ethercatmaster-users] slave examples
+Message-ID: <c1b231260703152237u1b0cbbc4x26f2a928bf1a7e1a@mail.gmail.com>
+
+hello,
+
+  are there any slave examples available?
+
+thanks,
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070315/5da5c33b/attachment.html>
+
+From tfreedy at hotmail.com  Fri Mar 16 05:49:01 2007
+From: tfreedy at hotmail.com (Tom Freedy)
+Date: Fri, 16 Mar 2007 04:49:01 +0000
+Subject: [Ethercatmaster-users] slave examples
+Message-ID: <BAY131-F47C472CCBC6D41183EEECB2710@phx.gbl>
+
+hello,
+
+  are there any slave examples available?
+
+thanks,
+Thomas
+
+_________________________________________________________________
+Get Out Of The House - Ski, Skate & Sun 
+http://local.live.com/?mkt=en-ca/?v=2&cid=A6D6BDB4586E357F!147
+
+
+
+From klaas.gadeyne at fmtc.be  Fri Mar 16 08:59:45 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Fri, 16 Mar 2007 08:59:45 +0100 (CET)
+Subject: [Ethercatmaster-users] slave examples
+In-Reply-To: <c1b231260703152237u1b0cbbc4x26f2a928bf1a7e1a@mail.gmail.com>
+References: <c1b231260703152237u1b0cbbc4x26f2a928bf1a7e1a@mail.gmail.com>
+Message-ID: <Pine.LNX.4.64.0703160857440.7678@ampere.labo01.fmtc.be>
+
+On Thu, 15 Mar 2007, Tom Freedy wrote:
+[...]
+> are there any slave examples available?
+
+Is this what you mean?
+<https://lists.berlios.de/pipermail/ethercatmaster-users/2007-March/000027.html>
+
+Klaas
+
+
+
+From ERFE at DE.FESTO.COM  Mon Mar 19 08:11:04 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Mon, 19 Mar 2007 08:11:04 +0100
+Subject: [Ethercatmaster-users] Debugging EtherCAT Master Library and eCos
+Message-ID: <OF30943620.E49E7B6C-ONC12572A3.0026C971-C12572A3.0027785D@MAIL.DE.FESTO.NET>
+
+
+Hello,
+
+I have problems again! Can anybody tell me how I can
+debug the EtherCAT Master Library or eCos? I have
+a JTAG Interface on my Altera Development Board.
+But if I want to Debug eCos or EtherCAT Master Library
+my IDE tells me that "no sources found"! Must I create a
+RedBoot Monitor? How do you debug your eCos and
+EtherCAT Master Library?
+
+regards,
+Felix
+
+
+Bitte beachten Sie meine neue eMail Adresse: ERFE at DE.FESTO.COM
+
+My new email address is: ERFE at DE.FESTO.COM
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+
+
+From bob.koninckx at fmtc.be  Mon Mar 19 09:26:43 2007
+From: bob.koninckx at fmtc.be (Bob Koninckx)
+Date: Mon, 19 Mar 2007 09:26:43 +0100
+Subject: [Ethercatmaster-users] Debugging EtherCAT Master Library and
+ eCos
+In-Reply-To: <OF30943620.E49E7B6C-ONC12572A3.0026C971-C12572A3.0027785D@
+	MAIL.DE.FESTO.NET>
+References: <OF30943620.E49E7B6C-ONC12572A3.0026C971-C12572A3.0027785D@MAIL.DE.FESTO.NET>
+Message-ID: <20070319082643.5689DE2D59@server04.site04.wtcm.be>
+
+At 08:11 19/03/2007, Felix Erkert wrote:
+
+>Hello,
+>
+>I have problems again! Can anybody tell me how I can
+>debug the EtherCAT Master Library or eCos?
+
+
+You debug the ethercatmaster like any other eCos 
+app. Search the eCos mailinglists and the 
+documentation of your developmnent tools, you'll 
+find tons of information there!
+
+
+>I have
+>a JTAG Interface on my Altera Development Board.
+>But if I want to Debug eCos or EtherCAT Master Library
+>my IDE tells me that "no sources found"!
+
+
+Did you compile everything with debug info? For gcc, its the -g flag.
+
+
+>  Must I create a
+>RedBoot Monitor? How do you debug your eCos and
+>EtherCAT Master Library?
+
+
+As explained above, this is more an eCos related 
+question than it is related to EML. Better ask 
+for help in the eCos community, you'll get much 
+more, and probably also better, support there.
+
+
+
+>regards,
+>Felix
+
+
+Bob
+
+
+
+
+>Bitte beachten Sie meine neue eMail Adresse: ERFE at DE.FESTO.COM
+>
+>My new email address is: ERFE at DE.FESTO.COM
+>
+>Festo AG & Co. KG
+>Felix Erkert
+>
+>Abteilung TV-ND
+>Business Unit NIC Netware Devices
+>
+>
+>Ruiter Stra?e 82
+>D - 73734 Esslingen
+>
+>Tel: ++49 (0) 711-347-57193
+>Fax:
+>
+>http://www.festo.com
+>
+>Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+>Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+>Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+>unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+>des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+>E-Mails sind und das Material von Ihrem Computer zu loeschen.
+>
+>This e-mail and any attachments are confidential and intended solely for
+>the addressee. The perusal, publication, copying or dissemination of the
+>contents of this e-mail by unauthorised third parties is prohibited. If you
+>are not the intended recipient of this e-mail, please delete it and
+>immediately notify the sender.
+>
+>_______________________________________________
+>Ethercatmaster-users mailing list
+>Ethercatmaster-users at lists.berlios.de
+>https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, Bus 4027, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+bob.koninckx at fmtc.be                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders? MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. 
+Reyerslaan 80, B-1030 Brussel, Belgi?
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain 
+confidential information. It is intended
+solely for the intended addressee(s). Any use of 
+the information contained herein by other
+persons is prohibited. FMTC does not accept any 
+liability for the contents of this e-mail
+and/or its attachments.
+********************  
+
+
+
+From ERFE at DE.FESTO.COM  Mon Mar 19 14:20:18 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Mon, 19 Mar 2007 14:20:18 +0100
+Subject: [Ethercatmaster-users] Application development
+Message-ID: <OF1F41775A.03E6A9F7-ONC12572A3.00449605-C12572A3.00494571@MAIL.DE.FESTO.NET>
+
+
+Hello,
+
+Can anybody tell me, how I start a development for a EtherCAT Master.
+Which  steps are required to develop a EtherCAT Master application?
+
+regards,
+Felix
+
+
+Bitte beachten Sie meine neue eMail Adresse: ERFE at DE.FESTO.COM
+
+My new email address is: ERFE at DE.FESTO.COM
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+
+
+From ERFE at DE.FESTO.COM  Mon Mar 26 14:17:40 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Mon, 26 Mar 2007 14:17:40 +0200
+Subject: [Ethercatmaster-users] EML eCos example
+Message-ID: <OF9EDD5A28.1FDD5814-ONC12572AA.00420951-C12572AA.004387BB@MAIL.DE.FESTO.NET>
+
+
+Hello,
+
+I want to test the eCos EML example Application with the Beckhoff Dev.
+Board, but it doesn?t run.
+That?s my trace and the Application doesn?t send any message. I try to run
+the EML on a Nios Dev. Board
+with eCos.
+
+Init device '/dev/uart1'
+Set output buffer - buf: 1033070 len: 64
+Set input buffer - buf: 1033030 len: 64
+Init device '/dev/jtag_uart'
+Set output buffer - buf: 10331cc len: 64
+Set input buffer - buf: 103318c len: 64
+Init device '/dev/ttydiag'
+Init tty channel: 10336fc
+Init device '/dev/haldiag'
+HAL/diag SERIAL init
+Init device 'lan91c111_eth0'
+This Flash does not contain a valid MAC Address
+Using the default of 0x12:13:14:15:16:17
+Creating Master
+EtherCAT AL: Ring contains 0 slaves
+AL: resetting FMMUs
+AL: resetting SMs
+AL: Setting all slaves in init mode
+Getting Slave Handler
+EtherCAT_AL: No such slave, returning NULL
+
+Does EML need an Real Time Clock? My eCos template for the Nios Core
+have not a RTC DENOMINATOR and a RTC NUMERATOR! Why the EML
+needs a Real Time Clock?
+
+Can anybody give me an introduction for the EML, because I don?t know how
+I must apply the EML to write an application.
+
+regards,
+Felix
+
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+
+
+From felix-erkert at gmx.de  Fri Mar 30 21:42:34 2007
+From: felix-erkert at gmx.de (Felix GMX)
+Date: Fri, 30 Mar 2007 21:42:34 +0200
+Subject: [Ethercatmaster-users] Master create Error
+Message-ID: <000601c77303$90f63860$2101a8c0@FelixLaptop>
+
+Hello,
+
+If I create an EtherCAT Master with
+
+EtherCAT_Master * EM = EtherCAT_Master::instance()
+
+the "netif *m_if" variable in the EtherCAT_DataLinkLayer class is 
+set to "0". Why is it initial with "0".
+
+EtherCAT_DataLinkLayer::EtherCAT_DataLinkLayer()
+  : m_if(0)
+{
+}
+
+If the EtherCAT Master is searching a slave, the master can not send
+any messages because m_if is set to "0".
+
+bool EtherCAT_DataLinkLayer::txandrx(EtherCAT_Frame * a_frame)
+{
+ bool succeed = m_if->txandrx(a_frame, m_if);
+ if (!succeed)
+  log(EC_LOG_INFO, "DLL::txandrx() Error\n");
+ return succeed;
+}
+
+How should I initiate the netit *m_if variable?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070330/8ff4361c/attachment.html>
+

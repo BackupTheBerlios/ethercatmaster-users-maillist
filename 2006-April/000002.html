@@ -1,0 +1,356 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Fwd: RE: EtherCAT master
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2006-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Fwd%3A%20RE%3A%20EtherCAT%20master&In-Reply-To=%3C6.2.1.2.0.20060407091837.01dcf470%40server04.site04.wtcm.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000001.html">
+   <LINK REL="Next"  HREF="000005.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Fwd: RE: EtherCAT master</H1>
+    <B>Bob Koninckx</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Fwd%3A%20RE%3A%20EtherCAT%20master&In-Reply-To=%3C6.2.1.2.0.20060407091837.01dcf470%40server04.site04.wtcm.be%3E"
+       TITLE="[Ethercatmaster-users] Fwd: RE: EtherCAT master">bob.koninckx at fmtc.be
+       </A><BR>
+    <I>Fri Apr  7 09:46:42 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000001.html">[Ethercatmaster-users] Fwd: RE: EtherCAT master
+</A></li>
+        <LI>Next message: <A HREF="000005.html">[Ethercatmaster-users] Fwd: RE: EtherCAT master
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2">[ date ]</a>
+              <a href="thread.html#2">[ thread ]</a>
+              <a href="subject.html#2">[ subject ]</a>
+              <a href="author.html#2">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>At 09:17 7/04/2006, Bob Koninckx wrote:
+
+&gt;&gt;<i>Delivered-To: <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">rkon at server04.site04.wtcm.be</A>
+</I>&gt;&gt;<i>X-Greylist: domain auto-whitelisted by SQLgrey-1.5.5
+</I>&gt;&gt;<i>Subject: RE: EtherCAT master
+</I>&gt;&gt;<i>Date: Thu, 6 Apr 2006 09:46:36 +0200
+</I>&gt;&gt;<i>X-MS-Has-Attach:
+</I>&gt;&gt;<i>X-MS-TNEF-Correlator:
+</I>&gt;&gt;<i>Thread-Topic: EtherCAT master
+</I>&gt;&gt;<i>thread-index: AcZPZqkBSPU0ScbzTTOZQ6RIc70ckQJ51AHw
+</I>&gt;&gt;<i>From: &quot;Jeroen Theelen&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">jeroen.theelen at ccm.nl</A>&gt;
+</I>&gt;&gt;<i>To: &quot;Bob Koninckx&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">bob.koninckx at fmtc.be</A>&gt;
+</I>&gt;&gt;<i>X-NAIMIME-Disclaimer: 1
+</I>&gt;&gt;<i>X-NAIMIME-Modified: 1
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Geachte heer Koninckx,
+</I>
+Hi Jeroen,
+
+
+&gt;&gt;<i>In de eerste plaats wil ik u hartelijk danken voor het beschikbaar 
+</I>&gt;&gt;<i>stellen van de EtherCAT Master Library die uw bedrijf heeft ontwikkeld.
+</I>
+You're welcome, thanks for trying it out.
+
+
+&gt;&gt;<i>Ik heb echter een aantal vragen over de implementatie hiervan. Gezien het 
+</I>&gt;&gt;<i>feit dat ik weinig tot geen ervaring heb met eCos loop ik tegen een 
+</I>&gt;&gt;<i>aantal problemen aan. Het installeren van de patch en het EtherCAT 
+</I>&gt;&gt;<i>package is inmiddels gelukt.
+</I>
+good.
+
+&gt;&gt;<i>Bij stap 3 (op uw website) loop ik (wegens gebrek aan kennis van eCos) 
+</I>&gt;&gt;<i>echter tegen een aantal problemen aan. Ik heb wel ooit een eCos 
+</I>&gt;&gt;<i>applicatie gebouwd, maar dit ging om een voorbeeld uit een boek over 
+</I>&gt;&gt;<i>eCos, waar alles stap voor stap stond beschreven. Mij is niet helemaal 
+</I>&gt;&gt;<i>duidelijk hoe ik de makedefs file moet aanpassen en hoe ik eocs 
+</I>&gt;&gt;<i>vervolgens moet builden.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Ik heb uw tarball uitgepakt in 
+</I>&gt;&gt;<i>D:\cygwin\home\Administrator\ecos-cvs\eml-0.1. Vervolgens moet ik de 
+</I>&gt;&gt;<i>makedefs file aanpassen aan mijn wensen. Ik heb BUILDDIR  := 
+</I>&gt;&gt;<i>/home/kgad/CVS/fieldbus/soft/ecos aangepast naar BUILDDIR  := 
+</I>&gt;&gt;<i>/home/Administrator/ecos-cvs/eml-0.1/test. De rest heb ik gelaten zoals 
+</I>&gt;&gt;<i>uw de file heeft aangeleverd. Is dit voldoende of moet ik ook andere 
+</I>&gt;&gt;<i>zaken aanpassen?
+</I>
+
+I never used eCos on a windows host, always used linux as a development 
+system. At first sight, what you did there seems ok.
+
+
+&gt;&gt;<i>Vervolgens dacht ik een (eCos) boot disk te kunnen maken met de 
+</I>&gt;&gt;<i>retboot.ecc file door deze in de eCos config tool in te laden. Ik krijg 
+</I>&gt;&gt;<i>dan echter de volgende foutmeldingen:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>D:\eml_application_ecos\eml_application_ecos\library\redboot\redboot.ecc: 
+</I>&gt;&gt;<i>error
+</I>&gt;&gt;<i>     The savefile contains a cdl_option for an unknown option 
+</I>&gt;&gt;<i> `CYGBLD_REDBOOT_ZLIB_LOCAL_ALLOC'
+</I>&gt;&gt;<i>D:\eml_application_ecos\eml_application_ecos\library\redboot\redboot.ecc: 
+</I>&gt;&gt;<i>error
+</I>&gt;&gt;<i>     The savefile contains a cdl_option for an unknown option 
+</I>&gt;&gt;<i> `CYGNUM_REDBOOT_DEFAULT_NETWORK_DEVICE'
+</I>&gt;&gt;<i>D:\eml_application_ecos\eml_application_ecos\library\redboot\redboot.ecc: 
+</I>&gt;&gt;<i>error
+</I>&gt;&gt;<i>     The savefile contains a cdl_option for an unknown option 
+</I>&gt;&gt;<i> `CYGNUM_REDBOOT_MEMALLOC_POOL_SIZE'
+</I>
+
+Hmmm... I am not sure what exactly goes wrong there. Which version of eCos 
+did you use?
+
+
+
+&gt;&gt;<i>Om de file toch te kunnen laden heb ik deze functies tijdelijk 
+</I>&gt;&gt;<i>uitgeschakeld (aangezien ik uit de website begreep dat u iets 
+</I>&gt;&gt;<i>soortgelijks hebt gedaan met 3 andere unknown options). Het laden van de 
+</I>&gt;&gt;<i>file werkt dan, maar als ik de library probeer te builden krijg ik de 
+</I>&gt;&gt;<i>melding dat redboot_build niet bestaat.
+</I>
+
+I suppose you used ecos configtool for loading the .ecc ? You probably 
+forgot to create the build-dirs, select build-&gt;generate build tree. Close 
+configtool, the redboot_build directory should now be there. Cd into 
+redboot_build and type make. Redboot should be build. If I am not 
+mistaking, the .ecc in the example is made for grub booting. If you want to 
+make a boot floppy, change the startup type to FLOPPY with configtool, save 
+the ecc, generate the build tree again, and build redboot again. If all 
+goes well, you should now have a redboot image that can be booted via 
+floppy. Also notice that we use d a pc with two network interfaces, one is 
+used by redboot for debugging, the other by ecos for ethercat. Make sure to 
+configure things properly according to your setup.
+
+If you really get stuck getting redboot operational on your system, the 
+ecos mailinglists and archives are the place to look for help. This list is 
+dedicated to the etherCAT master library.
+
+&gt;&gt;<i>  Verder zie ik dat de gekozen template een i386 pc taget with RTL8139 
+</I>&gt;&gt;<i> ethernet betreft. Is dit geen HAL specific option? Kan ik dit zonder 
+</I>&gt;&gt;<i> verdere aanpassingen te maken aanpassen naar bijvoorbeeld een Intel kaart?
+</I>
+
+RTL8139 is what we used. If intel cards are supported by eCos, that should 
+be no problem. Again, consult the ecos lists and archives for additional 
+information on that one.
+
+
+&gt;&gt;<i>Ik weet ook niet helemaal zeker of het builden in dit geval moet gebeuren 
+</I>&gt;&gt;<i>met de eCos configuration tool, maar ik weet ook niet hoe het anders zou 
+</I>&gt;&gt;<i>moeten. Als ik het commando make in een shell probeer krijg ik ook 
+</I>&gt;&gt;<i>verschillende foutmeldingen.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Kunt u mij vertellen hoe ik uw implementatie draaiend krijg. Ik heb het 
+</I>&gt;&gt;<i>idee dat ik verschillende (kleine) dingen fout doe, waardoor het me niet 
+</I>&gt;&gt;<i>lukt om uw voorbeeld draaiend te krijgen.
+</I>
+
+
+Once you have redboot going, do the same thing in the library/ecos for 
+building ecos together with the ethercat stack. Then you have to build the 
+application in the topdir of the example (where you edited the makedefs 
+file). If all goes well, an .elf file should now be present in the bin 
+directory. You can now use redboot for loading and starting the application.
+
+
+&gt;&gt;<i>Ik veronderstel dat redboot.ecc is bedoeld een &quot;OS&quot; voor de target te 
+</I>&gt;&gt;<i>kunnen bouwen en dat ecos.ecc in combinatie met ethercat.cxx  de 
+</I>&gt;&gt;<i>applicatie moet worden. Klopt mijn denkwijze?
+</I>
+
+Nope, redboot.ecc is used for building the bootloader, ecos.ecc provides 
+the OS with ethercat stack, build as a library that must be linked against 
+the testapplication, as explained above.
+
+
+&gt;&gt;<i>Een korte blik op ethercat.cxx toont dat de huidige main functie de 
+</I>&gt;&gt;<i>werking van een evaluatie bord laat zien. wat gebeurd er als ik dit 
+</I>&gt;&gt;<i>onaangepast aansluit op een normaal kopstation (EK1100) met enkele I/O modules?
+</I>
+
+No idea, not much I suppose. Let us know if you get other things than the 
+eva board operational and please share the code. Getting additional 
+examples into the repository would be great!
+
+
+&gt;&gt;<i>Ik hoop dat u bereid bent om mijn vragen te beantwoorden. In eerste 
+</I>&gt;&gt;<i>instantie wilde ik deze vragen via de EtherCAT mailinglist posten, maar 
+</I>&gt;&gt;<i>ik heb het idee dat hier tot op heden nog niet echt actief gebruik van 
+</I>&gt;&gt;<i>wordt gemaakt.
+</I>
+
+Someone 's got to be firs :-)
+
+Thanks for trying out ethercatmaster.
+
+
+&gt;&gt;<i>Met vriendelijke groet,
+</I>&gt;&gt;<i>Jeroen Theelen
+</I>&gt;&gt;<i>
+</I>
+Regards,
+Bob
+
+
+
+&gt;&gt;<i>-----Original Message-----
+</I>&gt;&gt;<i>From: Bob Koninckx [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">bob.koninckx at fmtc.be</A>]
+</I>&gt;&gt;<i>Sent: Friday, March 24, 2006 6:16 PM
+</I>&gt;&gt;<i>To: Jeroen Theelen
+</I>&gt;&gt;<i>Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">peter.soetens at fmtc.be</A>; Klaas Gadeyne
+</I>&gt;&gt;<i>Subject: EtherCAT master
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Geachte heer Theelen,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Onze implementatie komt beschikbaar via <A HREF="http://ethercatmaster.berlios.de">http://ethercatmaster.berlios.de</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Deze website zal in de loop van de komende dagen publiek toegankelijk
+</I>&gt;&gt;<i>gemaakt worden.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Met vriendelijke groeten,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Bob Koninckx
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>--
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>-----------------------------------------------------------------------
+</I>&gt;&gt;<i>dr. ir. Bob Koninckx
+</I>&gt;&gt;<i>Project Leader
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Flanders' MECHATRONICS Technology Centre (FMTC)
+</I>&gt;&gt;<i>Celestijnenlaan 300D, 3001 Leuven, Belgium
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Tel: +32-498-91.94.02
+</I>&gt;&gt;<i>       +32- 16-32.80.32
+</I>&gt;&gt;<i>Fax: +32- 16-32.80.64
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">bob.koninckx at fmtc.be</A>                    www.fmtc.be
+</I>&gt;&gt;<i>-----------------------------------------------------------------------
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Flanders' MECHATRONICS Technology Centre vzw
+</I>&gt;&gt;<i>Maatschappelijke zetel: Diamant Building, A. Reyerslaan 80, B-1030 Brussel,
+</I>&gt;&gt;<i>Belgi&#195;&#171;
+</I>&gt;&gt;<i>BTW BE 0860.286.268
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>*****DISCLAIMER*****
+</I>&gt;&gt;<i>This e-mail and/or its attachments may contain confidential information. It
+</I>&gt;&gt;<i>is intended
+</I>&gt;&gt;<i>solely for the intended addressee(s). Any use of the information contained
+</I>&gt;&gt;<i>herein by other
+</I>&gt;&gt;<i>persons is prohibited. FMTC does not accept any liability for the contents
+</I>&gt;&gt;<i>of this e-mail
+</I>&gt;&gt;<i>and/or its attachments.
+</I>&gt;&gt;<i>********************
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>CCM Centre for Concepts in Mechatronics B.V. P.O. Box 12, NL-5670 
+</I>&gt;&gt;<i>AA  Nuenen De Pinckart 24, NL-5674 CC Nuenen Phone +31 (0)40-263 50 00 
+</I>&gt;&gt;<i>Fax       +31 (0)40-263 55 55 Op dit e-mailbericht, inclusief bijlagen, 
+</I>&gt;&gt;<i>is de e-mail disclaimer van toepassing zoals gepubliceerd op de website 
+</I>&gt;&gt;<i>van CCM Centre for Concepts in Mechatronics B.V.: www.ccm.nl  This e-mail 
+</I>&gt;&gt;<i>message and its attachments are subject to the disclaimer published at 
+</I>&gt;&gt;<i>the website of CCM Centre for Concepts in Mechatronics B.V.: www.ccm.nl
+</I>&gt;<i>
+</I>&gt;<i>--
+</I>&gt;<i>
+</I>&gt;<i>-----------------------------------------------------------------------
+</I>&gt;<i>dr. ir. Bob Koninckx
+</I>&gt;<i>Program Manager Modular Machines
+</I>&gt;<i>
+</I>&gt;<i>Flanders' MECHATRONICS Technology Centre (FMTC)
+</I>&gt;<i>Celestijnenlaan 300D, 3001 Leuven, Belgium
+</I>&gt;<i>
+</I>&gt;<i>Tel: +32-498-91.94.02
+</I>&gt;<i>      +32- 16-32.80.32
+</I>&gt;<i>Fax: +32- 16-32.80.64
+</I>&gt;<i>
+</I>&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">bob.koninckx at fmtc.be</A>                    www.fmtc.be
+</I>&gt;<i>-----------------------------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i>Flanders&#146; MECHATRONICS Technology Centre vzw
+</I>&gt;<i>Maatschappelijke zetel: Diamant Building, A. Reyerslaan 80, B-1030 
+</I>&gt;<i>Brussel, Belgi&#235;
+</I>&gt;<i>BTW BE 0860.286.268
+</I>&gt;<i>
+</I>&gt;<i>*****DISCLAIMER*****
+</I>&gt;<i>This e-mail and/or its attachments may contain confidential information. 
+</I>&gt;<i>It is intended
+</I>&gt;<i>solely for the intended addressee(s). Any use of the information contained 
+</I>&gt;<i>herein by other
+</I>&gt;<i>persons is prohibited. FMTC does not accept any liability for the contents 
+</I>&gt;<i>of this e-mail
+</I>&gt;<i>and/or its attachments.
+</I>&gt;<i>********************
+</I>&gt;<i>
+</I>&gt;<i>_______________________________________________
+</I>&gt;<i>Ethercatmaster-users mailing list
+</I>&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/ethercatmaster-users">http://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">bob.koninckx at fmtc.be</A>                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders&#146; MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. Reyerslaan 80, B-1030 Brussel, 
+Belgi&#235;
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain confidential information. It 
+is intended
+solely for the intended addressee(s). Any use of the information contained 
+herein by other
+persons is prohibited. FMTC does not accept any liability for the contents 
+of this e-mail
+and/or its attachments.
+********************  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000001.html">[Ethercatmaster-users] Fwd: RE: EtherCAT master
+</A></li>
+	<LI>Next message: <A HREF="000005.html">[Ethercatmaster-users] Fwd: RE: EtherCAT master
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2">[ date ]</a>
+              <a href="thread.html#2">[ thread ]</a>
+              <a href="subject.html#2">[ subject ]</a>
+              <a href="author.html#2">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

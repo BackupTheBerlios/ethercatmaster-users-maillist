@@ -1,0 +1,353 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] RE : Re: RE : Re: RE : Re: Slaves	Parameters!!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20Slaves%0A%09Parameters%21%21&In-Reply-To=%3Cbc4264770707160544o74ee061bs87a620baab284286%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000144.html">
+   <LINK REL="Next"  HREF="000148.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: Slaves	Parameters!!</H1>
+    <B>roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20Slaves%0A%09Parameters%21%21&In-Reply-To=%3Cbc4264770707160544o74ee061bs87a620baab284286%40mail.gmail.com%3E"
+       TITLE="[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: Slaves	Parameters!!">rolandtollenaar at gmail.com
+       </A><BR>
+    <I>Mon Jul 16 14:44:24 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000144.html">[Ethercatmaster-users] RE : Re: RE : Re:  Slaves Parameters!!
+</A></li>
+        <LI>Next message: <A HREF="000148.html">[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: Slaves	Parameters!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#145">[ date ]</a>
+              <a href="thread.html#145">[ thread ]</a>
+              <a href="subject.html#145">[ subject ]</a>
+              <a href="author.html#145">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Said,
+
+In the latest example Tom posted he places the write in a separate
+thread. Perhaps that has got something to do with it. Why the 5V stays
+up I don;t know.
+
+What we do know is that since you and I have the same problem, its
+unlikely to be something wrong with the hardware. :)
+
+Roland
+
+On 7/16/07, said harti &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">harti_said at yahoo.fr</A>&gt; wrote:
+&gt;<i> Exactly Rollan,
+</I>&gt;<i>
+</I>&gt;<i> I have a same question :(,
+</I>&gt;<i>
+</I>&gt;<i> How we can make the outputs stay up ?
+</I>&gt;<i>
+</I>&gt;<i> my AO (the EL4102) stay up at 5V, but all DO flashing on briefly, and i
+</I>&gt;<i> don't know how we can make it stay up !!!!   :(
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i>
+</I>&gt;<i> Said
+</I>&gt;<i>
+</I>&gt;<i> roland Tollenaar &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">rolandtollenaar at gmail.com</A>&gt; a &#233;crit :
+</I>&gt;<i>  Hi Said,
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Thanks for this. Using this I managed to establish what was wrong.
+</I>&gt;<i> Apparently there is a relation between the exact logical start
+</I>&gt;<i> addresses and the place in the pd buffer.
+</I>&gt;<i>
+</I>&gt;<i> I now also have all 16 outputs flashing on briefly. Only thing is,
+</I>&gt;<i> they don't want to stay on. Do you have any idea how to make the
+</I>&gt;<i> outputs stay up?
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i>
+</I>&gt;<i> Roland
+</I>&gt;<i>
+</I>&gt;<i> On 7/16/07, said harti wrote:
+</I>&gt;<i> &gt; I have some good news about our problem,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; i have change my last code like this :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; ///Set Channel 1 to 5V
+</I>&gt;<i> &gt; //unsigned char msg[2] = {0xff, 0x3f};
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; unsigned char msg[5] = {0xff, 0x3f, 0x00, 0x00, 0x0f};
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; if(AL-&gt;isReady()) {
+</I>&gt;<i> &gt; printf(&quot;Test: Set Channel 1 to 5V: \n\n&quot;);
+</I>&gt;<i> &gt; printf(&quot;Test: Set all DO to 1 \n\n&quot;);
+</I>&gt;<i> &gt; int count = 0;
+</I>&gt;<i> &gt; while(count&lt;100000) {
+</I>&gt;<i> &gt; EM-&gt;txandrx_PD(sizeof(msg),msg);
+</I>&gt;<i> &gt; count++;
+</I>&gt;<i> &gt; }
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; and, now, i got 5v (3FFF) and all DO switch on quickly.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; so, in order to inswer to your question, i have exactly the some logical
+</I>&gt;<i> &gt; adress, and exactly the some all parameters on TC and EML.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; So, i think, the problem is that i tryed to send a bad message : unsigned
+</I>&gt;<i> &gt; char msg[3] = {0xff, 0x3f, 0x0f};
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; i have modified this message to : unsigned char msg[5] = {0xff, 0x3f,
+</I>&gt;<i> 0x00,
+</I>&gt;<i> &gt; 0x00, 0x0f};
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; and this is the captured frame :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 0000 ff ff ff ff ff ff 02 00 00 00 00 00 88 a4 11 10 ................
+</I>&gt;<i> &gt; 0010 0c 51 00 00 01 00 05 00 04 00 ff 3f 00 00 0f 04 .Q.........?....
+</I>&gt;<i> &gt; 0020 00 00 00 00 00 01 01 00 00 00 00 00 00 00 00 00 ................
+</I>&gt;<i> &gt; 0030 00 00 00 00 00 00 00 00 00 00 00 00 ............
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; and if i hope to set the second channel to 5 v too : unsigned char msg[5]
+</I>&gt;<i> =
+</I>&gt;<i> &gt; {0xff, 0x3f, 0xff, 0x3f, 0x0f};
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; that's all what i have modified in order to turn on my outputs.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Said
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Roland Tollenaar a &#233;crit :
+</I>&gt;<i>
+</I>&gt;<i> &gt; Hi Said,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Afraid not I am as desparate as you are. And its seems like the EML
+</I>&gt;<i> &gt; chaps have taken leaven and are bathing in the sun. :(
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I have done some disecting below, to determine what we can try next and
+</I>&gt;<i> &gt; to make things faster for the EML chaps when they eventually return.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Apparently the frame for simple ethercat communication is supposed to
+</I>&gt;<i> &gt; ahve the destination address in the first 48 bits of the frame. Here
+</I>&gt;<i> &gt; already our EML frame seems to be incorrect.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; EML: ff ff ff ff ff ff
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; as opposed to
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; TC: 01 01 05 01 00 00
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; next come the source (also 48 bit)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; EML: 02 00 00 00 00 00
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; TC: 02 00 7b 56 00 9a
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; then the Ethertype (16 bit)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; EML:88 a4
+</I>&gt;<i> &gt; TC: 88 a4
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; (Hey these are the same too!) :)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; then comes the ethercat data header (16 bit)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; EML: 0f 10
+</I>&gt;<i> &gt; TC: 2c 10
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; (first 11 bit are the length, then 1 bit reserved then 4 bit Type
+</I>&gt;<i> &gt; [supposed to be 1])
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; The last 32 bit are the FCS
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; EML:00 00 00 00
+</I>&gt;<i> &gt; TC:00 00 00 00
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; so what is inbetween is are the datagrams:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; EML:
+</I>&gt;<i> &gt; 0c 5e 00 00 01 00 03 00 04 00 XXX ff 3f 00 00 0f 00 00 07 00 10 00 02
+</I>&gt;<i> &gt; 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; TC:
+</I>&gt;<i> &gt; 0b 00 00 00 01 00 05 80 00 00 XXX ff 3f 00 00 0f 00 00 0a 00 00 00 08
+</I>&gt;<i> &gt; 00 01 80 00 00 00 00 00 07 00 00 00 30 01 02 00 00 00 00 00 00 00
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Each datagram consists of a 10 byte (80 bit) headerfollowed by
+</I>&gt;<i> &gt; unspecified length of data and a 16 bit working counter at the end.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; So presumanbly we can compare the headers
+</I>&gt;<i> &gt; Cmd Idx Address
+</I>&gt;<i> &gt; EML: 0c XXX 5e XXX 00 00 01 00 XXX 03 00 04 00
+</I>&gt;<i> &gt; TC: 0b XXX 00 XXX 00 00 01 00 XXX 05 80 00 00
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; So at least the first address is the same, but the command and index
+</I>&gt;<i> &gt; differ. What does this mean? I also don;t recognise the address?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; anyway then we can see that there is the only recognizable data
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; EML: ff 3f 00 00 0f
+</I>&gt;<i> &gt; TC: ff 3f 00 00 0f
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; And at what point another datagram header follows would have to be
+</I>&gt;<i> &gt; derived from the length in the datagram header above. But this is more
+</I>&gt;<i> &gt; something for the EML chaps to look at.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Can you tell whether your logical and fixed addresses are the same in
+</I>&gt;<i> &gt; the TWINCAT experiment as in the EML experiment? Getting them the same
+</I>&gt;<i> &gt; would be a good start to determine where the important differences might
+</I>&gt;<i> be.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; HTH.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Roland
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; said harti wrote:
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Exactly Rolland, my outputs respond correctely when i set them with the
+</I>&gt;<i> &gt; &gt; twincat tool, and i got this frame :
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; 0000 01 01 05 01 00 00 02 00 7b 56 00 9a 88 a4 2c 10................
+</I>&gt;<i> &gt; &gt; 0010 0b 00 00 00 01 00 05 80 00 00 ff 3f 00 00 0f 00.^.........??...
+</I>&gt;<i> &gt; &gt; 0020 00 0a 00 00 00 08 00 01 80 00 00 00 00 00 07 00................
+</I>&gt;<i> &gt; &gt; 0030 00 00 30 01 02 00 00 00 00 00 00 00
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; do you have some ideas pleaze for how can i resolve this misterious
+</I>&gt;<i> &gt; problem ?!!!!
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; */Roland Tollenaar /* a &#233;crit :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Hi Said,
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; as mentioned I am having the same problem but I don't have twincat.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Do your outputs respond properly when you set them with twincat and get
+</I>&gt;<i> &gt; &gt; the below frames?
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Regards,
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Roland
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; said harti wrote:
+</I>&gt;<i> &gt; &gt; &gt; Hello,
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; I did'nt resolve my problem yet, my master_test program turn
+</I>&gt;<i> &gt; &gt; perfectely,
+</I>&gt;<i> &gt; &gt; &gt; but the LEDs for the EL4102 and the EL2004 don't switch on, (my
+</I>&gt;<i> &gt; &gt; code is
+</I>&gt;<i> &gt; &gt; &gt; posted on my last message)
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; for the some data transmeted to the beckhoff modules (5v = 03FFF to
+</I>&gt;<i> &gt; &gt; &gt; EL4102 and all DO to 1 = 0x0F to EL2004), this is the difference
+</I>&gt;<i> &gt; &gt; between
+</I>&gt;<i> &gt; &gt; &gt; captered frames
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; 1: between my master and the Beckhoff modules :
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; 0000 ff ff ff ff ff ff 02 00 00 00 00 00 88 a4 0f 10
+</I>&gt;<i> &gt; &gt; &gt; ................
+</I>&gt;<i> &gt; &gt; &gt; 0010 0c 5e 00 00 01 00 03 00 04 00 ff 3f 00 00 0f 00 .^.........?....
+</I>&gt;<i> &gt; &gt; &gt; 0020 00 07 00 10 00 02 01 00 00 00 00 00 00 00 00 00 ................
+</I>&gt;<i> &gt; &gt; &gt; 0030 00 00 00 00 00 00 00 00 00 00 00 00 ............
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; and this is the captured frame between the twincat tools on my
+</I>&gt;<i> &gt; &gt; laptop
+</I>&gt;<i> &gt; &gt; &gt; and the beckhoff modules :
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; 0000 01 01 05 01 00 00 02 00 7b 56 00 9a 88 a4 2c 10 ................
+</I>&gt;<i> &gt; &gt; &gt; 0010 0b 00 00 00 01 00 05 80 00 00 ff 3f 00 00 0f 00 .^.........??...
+</I>&gt;<i> &gt; &gt; &gt; 0020 00 0a 00 00 00 08 00 01 80 00 00 00 00 00 07 00 ................
+</I>&gt;<i> &gt; &gt; &gt; 0030 00 00 30 01 02 00 00 00 00 00 00 00 ............
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; thanks to tell me what i am possibly wrong
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; Best Regards
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; Said HARTI
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> &gt; &gt; &gt; D&#233;couvrez une nouvelle fa&#231;on d'obtenir des r&#233;ponses &#224; toutes vos
+</I>&gt;<i> &gt; &gt; &gt; questions ! Profitez des connaissances, des opinions et des
+</I>&gt;<i> &gt; &gt; exp&#233;riences
+</I>&gt;<i> &gt; &gt; &gt; des internautes sur Yahoo! Questions/R&#233;ponses
+</I>&gt;<i> &gt; &gt; &gt; .
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; _______________________________________________
+</I>&gt;<i> &gt; &gt; &gt; Ethercatmaster-users mailing list
+</I>&gt;<i> &gt; &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> &gt; &gt; Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez aujourd'hui de
+</I>&gt;<i> &gt; &gt; mail !
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; ________________________________
+</I>&gt;<i> &gt; Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez aujourd'hui de
+</I>&gt;<i> &gt; mail !
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  ________________________________
+</I>&gt;<i>  Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez aujourd'hui de
+</I>&gt;<i> mail !
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000144.html">[Ethercatmaster-users] RE : Re: RE : Re:  Slaves Parameters!!
+</A></li>
+	<LI>Next message: <A HREF="000148.html">[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: Slaves	Parameters!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#145">[ date ]</a>
+              <a href="thread.html#145">[ thread ]</a>
+              <a href="subject.html#145">[ subject ]</a>
+              <a href="author.html#145">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

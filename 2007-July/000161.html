@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] netif.h
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20netif.h&In-Reply-To=%3CPine.LNX.4.64.0707191742030.3316%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000127.html">
+   <LINK REL="Next"  HREF="000162.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] netif.h</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20netif.h&In-Reply-To=%3CPine.LNX.4.64.0707191742030.3316%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] netif.h">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Thu Jul 19 17:43:49 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000127.html">[Ethercatmaster-users] netif.h
+</A></li>
+        <LI>Next message: <A HREF="000162.html">[Ethercatmaster-users] netif.h
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#161">[ date ]</a>
+              <a href="thread.html#161">[ thread ]</a>
+              <a href="subject.html#161">[ subject ]</a>
+              <a href="author.html#161">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 12 Jul 2007, roland Tollenaar wrote:
+&gt;<i> On incorporating EML communication in to my xenomai/Qt project, I
+</I>&gt;<i> discovered that there are two netif.h files in the EML trunk. They
+</I>&gt;<i> seem to be identical except for an #ifdef __cplusplus section.
+</I>
+There's one for each OS EML supports (so currently one for eCos and
+one for Xenomai/RTnet)
+
+&gt;<i> This does not give problems when compiling the master_test example but
+</I>&gt;<i> does when compiling in my project. I made them both the same now since
+</I>&gt;<i> I see no reason why this was not so in the first place.
+</I>&gt;<i>
+</I>&gt;<i> Would it be possible to change the svn trunk like this so that I don;t
+</I>&gt;<i> pick up the same problem when i checkout in the future? Or am I doing
+</I>&gt;<i> something wrong?
+</I>
+I think you should not have this problem when your project uses the
+_installed_ headers of EML (and not the source tree)?
+
+regards,
+
+Klaas
+
+ps.  It seems you have been working hard during my holidays :-)
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000127.html">[Ethercatmaster-users] netif.h
+</A></li>
+	<LI>Next message: <A HREF="000162.html">[Ethercatmaster-users] netif.h
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#161">[ date ]</a>
+              <a href="thread.html#161">[ thread ]</a>
+              <a href="subject.html#161">[ subject ]</a>
+              <a href="author.html#161">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

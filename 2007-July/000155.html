@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Read from the EL1004 module !!!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Read%20from%20the%20EL1004%20module%20%21%21%21&In-Reply-To=%3C954552.74335.qm%40web37306.mail.mud.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000147.html">
+   <LINK REL="Next"  HREF="000156.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Read from the EL1004 module !!!</H1>
+    <B>said harti</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Read%20from%20the%20EL1004%20module%20%21%21%21&In-Reply-To=%3C954552.74335.qm%40web37306.mail.mud.yahoo.com%3E"
+       TITLE="[Ethercatmaster-users] Read from the EL1004 module !!!">harti_said at yahoo.fr
+       </A><BR>
+    <I>Tue Jul 17 17:55:15 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000147.html">[Ethercatmaster-users] RE : Re: RE : Re:  Slaves Parameters!!
+</A></li>
+        <LI>Next message: <A HREF="000156.html">[Ethercatmaster-users] Read from the EL1004 module !!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#155">[ date ]</a>
+              <a href="thread.html#155">[ thread ]</a>
+              <a href="subject.html#155">[ subject ]</a>
+              <a href="author.html#155">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+As you see in my test program, i want to see on my scren the DI EL1004 value,
+
+but when i apply or remove the Digital Input on, i don't see any instantaneous response any where !!!
+
+Anyone can tell me please how can i do in order to get the DI value on my scren ????
+
+Regards,
+
+Said
+///SlaveConfig EL1004 :
+
+EtherCAT_FMMU_Config fmmu_config_EL1004(1);
+EC_FMMU
+fmmu0_EL1004(0x00010800,0x0001,0x00,0x03,0x1000,0x00,true,false,true);
+
+EtherCAT_PD_Config pd_config_EL1004(1);
+EC_SyncMan syncman0_EL1004(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+
+EtherCAT_SlaveConfig EC_EL1004(0x03EC3052,0x00100000,0x03ec,&amp;fmmu_config_EL1004,&amp;pd_config_EL1004);
+EtherCAT_AL * AL = EtherCAT_AL::instance();
+       
+
+
+        ///Set Channel 1 to 5V
+
+        //unsigned char msg[5] = {0xff, 0x3f, 0xff, 0x3f, 0x0f};///
+        //unsigned char msg[18];
+unsigned char msg[20]={0xff, 0x3f, 0xff, 0x3f, 0x0f,0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        if(AL-&gt;isReady()) {
+
+            printf(&quot;Test: Set Channel 1 to 5V: \n\n&quot;);
+            printf(&quot;Test: Mettre le module TOR &#224; 1: \n\n&quot;);///
+
+            printf(&quot;Lecture sans ecriture: \n\n&quot;);///
+
+            int count = 0;
+            while(count&lt;100) {
+
+                msg[0]=0xff;
+                msg[1]=0x3f;
+                msg[2]=0xff;
+                msg[3]=0x3f;
+                msg[4]=0x0f;
+
+                  if(EM-&gt;txandrx_PD(sizeof(msg),msg)){
+                    //printf(&quot;msg = 0x&quot;);           
+                    for (int i=0;i&lt;20;i++)
+                        printf(&quot;0X%x &quot;, msg[i]);
+                    printf (&quot;\n&quot;);       
+                }//EM-&gt;txandrx_PD(sizeof(msg),msg);
+                    else{
+                        printf(&quot;txandrx failed : \n\n&quot;);
+                        }
+
+                count++;
+            }
+
+
+ 		
+---------------------------------
+ D&#233;couvrez une nouvelle fa&#231;on d'obtenir des r&#233;ponses &#224; toutes vos questions ! Profitez des connaissances, des opinions et des exp&#233;riences des internautes sur Yahoo! Questions/R&#233;ponses.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070717/4c032c66/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070717/4c032c66/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000147.html">[Ethercatmaster-users] RE : Re: RE : Re:  Slaves Parameters!!
+</A></li>
+	<LI>Next message: <A HREF="000156.html">[Ethercatmaster-users] Read from the EL1004 module !!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#155">[ date ]</a>
+              <a href="thread.html#155">[ thread ]</a>
+              <a href="subject.html#155">[ subject ]</a>
+              <a href="author.html#155">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

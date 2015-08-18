@@ -1,0 +1,262 @@
+From klaas.gadeyne at fmtc.be  Mon Jul 28 09:13:19 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 28 Jul 2008 09:13:19 +0200 (CEST)
+Subject: [Ethercatmaster-users] EML on windows?
+In-Reply-To: <488C5874.4000706@gmail.com>
+References: <488C5874.4000706@gmail.com>
+Message-ID: <Pine.LNX.4.64.0807280909410.26838@ampere.labo01.fmtc.be>
+
+On Sun, 27 Jul 2008, Roland Tollenaar wrote:
+
+[I cc: the mailinglist since I guess this is of benefit to multiple people]
+
+> About a year ago we used EML with xenomai to implement a controller for some 
+> industrial machinery. This was successful and a few controllers using 
+> Ethercat are in heavy  daily operation since.
+>
+> Many new projects which can rather be implemented on windows could benefit 
+> from Ethercat and the Beckhoff Remote IO, however we develop our applications 
+> in C++ and are not really interested in Beckhoff's software system which, 
+> AFAIK does not include a library for third party C++ applications. And if it 
+> does, they are not aware of it themselves and the support thereof is so lousy 
+> we might as well not bother.
+>
+> Is there any chance that EML will be ported to windows?
+
+I once had a private conversation with somebody (he was Dutch too) who had already done it and told me it was a minor effort.  Unfortunately, it was never contributed back and I don't know whether he's subscribed to the mailinglist.
+
+> I mention that we are not strictly interested in hard real-time in most of 
+> our windows applications. All we need is a library to access ethercat IO 
+> through from the normal non-realtime environment. Does this make things 
+> easier?
+
+The port above was non-realtime IIRC.
+
+Klaas
+
+
+From rwatollenaar at gmail.com  Mon Jul 28 11:52:37 2008
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Mon, 28 Jul 2008 11:52:37 +0200
+Subject: [Ethercatmaster-users] EML on windows?
+In-Reply-To: <Pine.LNX.4.64.0807280909410.26838@ampere.labo01.fmtc.be>
+References: <488C5874.4000706@gmail.com>
+	<Pine.LNX.4.64.0807280909410.26838@ampere.labo01.fmtc.be>
+Message-ID: <488D96E5.2010406@gmail.com>
+
+Hi Klaas,
+
+Thanks. I'll look into porting EML ourselves then.
+
+Kind regards,
+
+Roland.
+
+Klaas Gadeyne wrote:
+> On Sun, 27 Jul 2008, Roland Tollenaar wrote:
+> 
+> [I cc: the mailinglist since I guess this is of benefit to multiple people]
+> 
+>> About a year ago we used EML with xenomai to implement a controller 
+>> for some industrial machinery. This was successful and a few 
+>> controllers using Ethercat are in heavy  daily operation since.
+>>
+>> Many new projects which can rather be implemented on windows could 
+>> benefit from Ethercat and the Beckhoff Remote IO, however we develop 
+>> our applications in C++ and are not really interested in Beckhoff's 
+>> software system which, AFAIK does not include a library for third 
+>> party C++ applications. And if it does, they are not aware of it 
+>> themselves and the support thereof is so lousy we might as well not 
+>> bother.
+>>
+>> Is there any chance that EML will be ported to windows?
+> 
+> I once had a private conversation with somebody (he was Dutch too) who 
+> had already done it and told me it was a minor effort.  Unfortunately, 
+> it was never contributed back and I don't know whether he's subscribed 
+> to the mailinglist.
+> 
+>> I mention that we are not strictly interested in hard real-time in 
+>> most of our windows applications. All we need is a library to access 
+>> ethercat IO through from the normal non-realtime environment. Does 
+>> this make things easier?
+> 
+> The port above was non-realtime IIRC.
+> 
+> Klaas
+> 
+
+
+From klaas.gadeyne at fmtc.be  Tue Jul 29 17:51:58 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 29 Jul 2008 17:51:58 +0200 (CEST)
+Subject: [Ethercatmaster-users] EML on windows?
+In-Reply-To: <488E1121.7000507@gmail.com>
+References: <488C5874.4000706@gmail.com>
+	<Pine.LNX.4.64.0807280909410.26838@ampere.labo01.fmtc.be>
+	<488E1121.7000507@gmail.com>
+Message-ID: <alpine.DEB.1.10.0807291744230.7732@ampere.labo01.fmtc.be>
+
+On Mon, 28 Jul 2008, Roland Tollenaar wrote:
+
+[please use the ML for these kinds of questions]
+
+> Is there any compacter kind of test code available that was used in the 
+> development phase of the EML to play with?  Simple, unflexible code that 
+> simply sends the raw Ethernet frames according to the specs out to a socket?
+
+I had some for the ecos port (not using sockets) before it was migrated to Berlios, but that seems to be lost (ie. I deleted the old repository here :-(.
+AFAIS, the closest shot is to use the DLL directly, see <http://ethercatmaster.berlios.de/doxygen/html/classEtherCAT__DataLinkLayer.html>
+
+> The EML is good for sure, and it works for sure but, its  practically 
+> impossible to obtain a concise view of what it is doing. It is so thoroughly 
+> abstracted that its ,well, kind of emulsified.
+> Which is great of course for its purpose, but not exactly instructive.
+
+Your patches are very welcome :-)
+
+Klaas
+
+
+
+From rwatollenaar at gmail.com  Tue Jul 29 18:15:15 2008
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Tue, 29 Jul 2008 18:15:15 +0200
+Subject: [Ethercatmaster-users] EML on windows?
+In-Reply-To: <alpine.DEB.1.10.0807291744230.7732@ampere.labo01.fmtc.be>
+References: <488C5874.4000706@gmail.com>
+	<Pine.LNX.4.64.0807280909410.26838@ampere.labo01.fmtc.be>
+	<488E1121.7000507@gmail.com>
+	<alpine.DEB.1.10.0807291744230.7732@ampere.labo01.fmtc.be>
+Message-ID: <488F4213.2060307@gmail.com>
+
+> [please use the ML for these kinds of questions]
+Sorry. No Problem.
+
+
+> 
+>> Is there any compacter kind of test code available that was used in 
+>> the development phase of the EML to play with?  Simple, unflexible 
+>> code that simply sends the raw Ethernet frames according to the specs 
+>> out to a socket?
+> 
+> I had some for the ecos port (not using sockets) before it was migrated 
+> to Berlios, but that seems to be lost (ie. I deleted the old repository 
+> here :-(.
+Aahh! What a pity!
+
+
+> AFAIS, the closest shot is to use the DLL directly, see 
+> <http://ethercatmaster.berlios.de/doxygen/html/classEtherCAT__DataLinkLayer.html> 
+Thanks but afraid this does not help. I am trying to find out what the 
+ethernet frames look like just before they are sent. In the code where 
+we use the EML we do work directly with the dll. Unless I am 
+misunderstanding you entirely.
+
+
+> 
+> 
+>> The EML is good for sure, and it works for sure but, its  practically 
+>> impossible to obtain a concise view of what it is doing. It is so 
+>> thoroughly abstracted that its ,well, kind of emulsified.
+>> Which is great of course for its purpose, but not exactly instructive.
+> 
+> Your patches are very welcome :-)
+What, to make the EML more instructive? I presume the EML was not 
+written to be instructive rather than effective, flexible etc. Which I 
+will presume it to be.
+
+I just want to see how best to connect to a slave in a straightforward 
+frame x frame manner. And do some simple tests. Guess I'll have to do 
+this the hard way. Glory be, why does Beckhoff not jsut simply supply a 
+neat C++ API for their equipment :(
+
+Thanks anyway.
+
+Regards,
+
+Roland.
+
+
+
+
+> 
+> Klaas
+> 
+> 
+
+
+From tboyer at numalliance.com  Wed Jul 30 17:34:35 2008
+From: tboyer at numalliance.com (Thibaut BOYER)
+Date: Wed, 30 Jul 2008 17:34:35 +0200
+Subject: [Ethercatmaster-users] EtherCAT Distributed Clocks --> line delay
+	calculation
+Message-ID: <48908A0B.8080106@numalliance.com>
+
+Hello,
+
+I'm working on the implementation of the DCs on an Ethercat Master.
+There is an ambiguous calculation... According to the EtherCAT spec :
+
+    linedelay = [( port time difference - execution delays - port delays
+    ) - DelayAA of next slave] / 2.
+    DelayAA : time the frames needs to enter Port 0 and leave Port 0 on
+    the way back. E.g. if Port 0 and Port 1 are in use :
+    DelayAA = Receive Port Delay of Port 0 + Execution Delay +
+    TimeDifference (BA) + Port Delay Transmit of Port 0
+    BA = Receive Time on Port 1 - Receive Time on Port 0
+
+    * Can anyone please explain to me the subtle difference between
+      "execution delays" and "Execution Delay".
+    * I'd also like to know what the spec means with "port delays" ?
+          o Is that the time each port need to transmit the frame ?
+          o Is that the sum of the delays of all ports ?
+          o Is that the transmission delay between the two ports ? (i.e
+            a delay due to the electronics components)
+          o Or it's rather the delays' sum of the 2 ports used in this
+            calculation ?
+
+Best regards,
+Thibaut BOYER
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20080730/b256cea2/attachment.html>
+
+From klaas.gadeyne at fmtc.be  Thu Jul 31 09:59:02 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 31 Jul 2008 09:59:02 +0200 (CEST)
+Subject: [Ethercatmaster-users] EtherCAT Distributed Clocks --> line
+ delay calculation
+In-Reply-To: <48908A0B.8080106@numalliance.com>
+References: <48908A0B.8080106@numalliance.com>
+Message-ID: <alpine.DEB.1.10.0807310957210.13257@ampere.labo01.fmtc.be>
+
+On Wed, 30 Jul 2008, Thibaut BOYER wrote:
+> I'm working on the implementation of the DCs on an Ethercat Master.
+> There is an ambiguous calculation... According to the EtherCAT spec :
+>
+>   linedelay = [( port time difference - execution delays - port delays
+>   ) - DelayAA of next slave] / 2.
+>   DelayAA : time the frames needs to enter Port 0 and leave Port 0 on
+>   the way back. E.g. if Port 0 and Port 1 are in use :
+>   DelayAA = Receive Port Delay of Port 0 + Execution Delay +
+>   TimeDifference (BA) + Port Delay Transmit of Port 0
+>   BA = Receive Time on Port 1 - Receive Time on Port 0
+>
+>   * Can anyone please explain to me the subtle difference between
+>     "execution delays" and "Execution Delay".
+>   * I'd also like to know what the spec means with "port delays" ?
+>         o Is that the time each port need to transmit the frame ?
+>         o Is that the sum of the delays of all ports ?
+>         o Is that the transmission delay between the two ports ? (i.e
+>           a delay due to the electronics components)
+>         o Or it's rather the delays' sum of the 2 ports used in this
+>           calculation ?
+
+Hmm, I only have V1.00 of the spec at hand here, and I can't find the stuff your referring to?
+
+Klaas
+
+

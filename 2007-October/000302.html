@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] help remove a bug please:
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20help%20remove%20a%20bug%20please%3A&In-Reply-To=%3C470BB201.6040307%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000301.html">
+   <LINK REL="Next"  HREF="000307.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] help remove a bug please:</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20help%20remove%20a%20bug%20please%3A&In-Reply-To=%3C470BB201.6040307%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] help remove a bug please:">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Tue Oct  9 18:53:21 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000301.html">[Ethercatmaster-users] EL5101 incremental encoder
+</A></li>
+        <LI>Next message: <A HREF="000307.html">[Ethercatmaster-users] help remove a bug please:
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#302">[ date ]</a>
+              <a href="thread.html#302">[ thread ]</a>
+              <a href="subject.html#302">[ subject ]</a>
+              <a href="author.html#302">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+For me, no matter which machine or which swtich I use, its not possible 
+run the ethrecat communication over a switch to look at the packages. 
+This is very inconvenient.
+
+I have discovered that EML fails in this part of the code when the 
+check_header function is called. I have tracked the starting point of 
+the error throught hte functions and have copied the reasoning into this 
+mail. Anyone familiar with EML might be able to determine form below 
+where the problem is most likely to be found. I also seem to have found 
+a recursive call of functions which seems dubious to me.
+
+TO make it easy i have pointed out in the snippets below where the 
+conditions fail.
+
+
+The first function to holler &amp; complain is:
+
+bool
+EC_Ethernet_Frame::check_header(const unsigned char * a_buffer) const
+{
+   const unsigned char * dataptr = a_buffer;
+   EC_UINT frame_header;
+   dataptr=nw2host(dataptr,frame_header);
+
+   EC_UINT ec_command = 0x1000;
+   if (ec_command == (frame_header &amp; ec_command))
+     {
+       EC_UINT bodylength = 0x07ff;
+       if (this-&gt;body_length() == (size_t) (frame_header &amp; bodylength))
+	return true;
+	!!!!!!!!!!Fails on this condition!!!!!!!!!!!!!!!!
+     }
+   log(EC_LOG_ERROR, &quot;building frame: checkheader failed\n&quot;);
+   return false;
+}
+
+
+Next falls out in
+
+static bool low_level_input(struct EtherCAT_Frame * frame, struct netif 
+* netif) {
+
+	unsigned char buffer_receive[MAX_ETH_DATA + HEADER_SIZE];
+	struct eth_msg *msg_received = (struct eth_msg *)buffer_receive;
+	//Receive message from socket
+	int sock = netif-&gt;socket_private;
+	int len_recv = recv(sock,buffer_receive,sizeof(buffer_receive),0);
+	if(len_recv &lt; 0) {
+		//perror(&quot;low_level_input: Cannot receive msg: &quot;);
+		//log(EC_LOG_ERROR, &quot;low_level_input: Cannot receive msg: %d\n&quot;,len_recv);
+		return false;
+	}
+
+	if ( ((msg_received-&gt;ether_type[0]) != 0x88) || 
+(msg_received-&gt;ether_type[1]) != 0xA4) {
+		log(EC_LOG_ERROR, &quot;low_level_input: No EtherCAT msg!\n&quot;);
+		return false;
+	}
+
+	// build Ethercat Frame
+	int succes = framebuild(frame,msg_received-&gt;data);
+	if (succes != 0){   !!!!!!!!!!!!!!Fails on this 
+condition!!!!!!!!!!!!!!!!!!!!!
+		// FIXME decent error handling here
+		log(EC_LOG_ERROR, &quot;Roland low_level_input: framebuilding failed!\n&quot;);
+		return false;
+	}
+
+	return true;
+}
+
+which means we check framebuild:
+
+externC int framebuild(struct EtherCAT_Frame * frame,
+		       const unsigned char * buffer)
+{
+   return (frame-&gt;build(buffer));
+}
+
+which means EC_Frame::build returns -1....
+
+
+int
+EC_Frame::build(const unsigned char * a_buffer)
+{
+   if (this-&gt;check_header(a_buffer) == true) !!!!!!!!!!!!!!!!!Fails on 
+this condition!!!!!!!!!!!!!!!!!!!
+     {
+       a_buffer += ETHERCAT_ETHERNET_FRAME_HEADER_SIZE;
+       // a_buffer now points to the first telegram
+       // current telegram in frame, initialised to first telegram
+       EC_Telegram * tg = this-&gt;get_telegram();
+       while(tg) {
+	if ((a_buffer  = tg-&gt;build(a_buffer)) == NULL)
+	  return -1;
+	else
+	  tg = tg-&gt;next;
+       }
+       return 0;
+     }
+   else return -1;
+}
+
+thus we have to look at check_header....
+
+bool
+EC_Ethernet_Frame::check_header(const unsigned char * a_buffer) const
+{
+   const unsigned char * dataptr = a_buffer;
+   EC_UINT frame_header;
+   dataptr=nw2host(dataptr,frame_header);
+
+   EC_UINT ec_command = 0x1000;
+   if (ec_command == (frame_header &amp; ec_command))
+     {
+       EC_UINT bodylength = 0x07ff;
+       if (this-&gt;body_length() == (size_t) (frame_header &amp; 
+bodylength))!!!!!!!!!!!!!!!!!Fails on this condition!!!!!!!!!!!!!!!!!!!!
+	return true;
+       else
+	log(EC_LOG_ERROR, &quot;Roland: checkheader failed on faulty body length\n&quot;);	
+     }
+   log(EC_LOG_ERROR, &quot;building frame: checkheader failed\n&quot;);
+   return false;
+	
+}
+
+so we look at body_length().....phew....
+
+size_t
+EC_Frame::body_length(void) const
+{
+   int result = 0;
+   if (m_telegram)
+     {
+       EC_Telegram * tg = m_telegram;
+       result += tg-&gt;length();
+       while (tg-&gt;next != NULL)
+	{
+	  tg = tg-&gt;next;
+	  result += tg-&gt;length();
+	}
+     }
+     else
+	log(EC_LOG_ERROR, &quot;Roland: m_telegram false in 
+EC_Frame::body_length\n&quot;);!!!!!!!!!!This message never shows!!!!!!!!!!!!!	
+   return result;
+}
+
+which leaves us to look at EC_Telegram::length() and nw2host()
+
+length implemented as such:
+
+size_t length(void) const  { return header_length() + body_length();}
+
+  virtual size_t          header_length(void)const { return 
+ETHERCAT_TELEGRAM_HEADER_SIZE; }
+which seems pretty constant to me, and
+
+size_t
+EC_Frame::body_length(void) const
+{
+   int result = 0;
+   if (m_telegram)
+     {
+       EC_Telegram * tg = m_telegram;
+       result += tg-&gt;length();
+       while (tg-&gt;next != NULL)
+	{
+	  tg = tg-&gt;next;
+	  result += tg-&gt;length();
+	}
+     }
+     else
+	log(EC_LOG_ERROR, &quot;Roland: m_telegram false in EC_Frame::body_length\n&quot;);
+   return result;
+}
+
+which we have seen before. In fact this looks pretty recursive to me and 
+not good style??
+
+
+  Whatever the case its either this length() function returning garbage or
+
+nw2host is messing up on giving frame_header content and shifting the 
+pointer to the buffer
+
+inline const unsigned char * nw2host(const unsigned char * a_data, 
+EC_UINT&amp; a_value) {
+   cyg_uint16 tmp;
+   memcpy(&amp;tmp, a_data, sizeof(tmp));
+   tmp = CYG_LE16_TO_CPU(tmp);
+
+   a_value = static_cast&lt;EC_UINT&gt;(tmp);
+   return a_data + sizeof(a_value);
+}
+
+BUt I cannot see this happening.
+
+Any tips?
+
+
+Regards,
+
+Roland
+
+
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000301.html">[Ethercatmaster-users] EL5101 incremental encoder
+</A></li>
+	<LI>Next message: <A HREF="000307.html">[Ethercatmaster-users] help remove a bug please:
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#302">[ date ]</a>
+              <a href="thread.html#302">[ thread ]</a>
+              <a href="subject.html#302">[ subject ]</a>
+              <a href="author.html#302">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

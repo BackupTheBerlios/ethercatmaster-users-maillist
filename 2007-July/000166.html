@@ -1,0 +1,387 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Fwd: AW: AW: Questions]
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BFwd%3A%20AW%3A%20AW%3A%20Questions%5D&In-Reply-To=%3C46A05F86.50407%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000160.html">
+   <LINK REL="Next"  HREF="000167.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Fwd: AW: AW: Questions]</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BFwd%3A%20AW%3A%20AW%3A%20Questions%5D&In-Reply-To=%3C46A05F86.50407%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] [Fwd: AW: AW: Questions]">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Fri Jul 20 09:08:54 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000160.html">[Ethercatmaster-users] RE : Re:  Read from the EL1004 module !!!
+</A></li>
+        <LI>Next message: <A HREF="000167.html">[Ethercatmaster-users] [Fwd: AW: AW: AW: Questions]
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#166">[ date ]</a>
+              <a href="thread.html#166">[ thread ]</a>
+              <a href="subject.html#166">[ subject ]</a>
+              <a href="author.html#166">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>The first suggestions of ETG.
+
+Roland
+
+-------- Original Message --------
+Subject: AW: AW: Questions
+Date: Wed, 18 Jul 2007 16:21:15 +0200
+From: Florian H&#228;fele (ETG) &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">F.Haefele at ethercat.org</A>&gt;
+To: R.W.A. Tollenaar &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">r.tollenaar at tosec.nl</A>&gt;
+References: 
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">81CD4B137F3954408EDBF6277A0E6D0D1D23F2 at NT-Mail04.beckhoff.com</A>&gt; 
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ACC2337D054D0B40869560DD3F71EF8D021B260E at nt-mail01.beckhoff.com</A>&gt; 
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">469B7DAA.3030805 at tosec.nl</A>&gt;
+
+Dear Mr. Tollenaar,
+
+The EL2004 terminals should work fine. So I suppose there is some little 
+mistake in the way process data is sent by the master.
+
+Please check if the WC is incremented by the EL2004 terminals every 
+cycle. If this is correct, please check for the watchdog time if you 
+send valid process data within the watchdog time (should be 100ms with 
+EL2004). Please make also sure that you not send other process data to 
+the terminals in between.
+
+If you have checked this things and cannot have not eliminated this 
+behaviour by then please send me a Wireshark scan of a period of time 
+when you observe this behaviour.
+
+Regards,
+
+Florian H&#228;fele
+
+----------------------------------------------------------
+Florian H&#228;fele
+
+EtherCAT Technology Group
+Ostendstr. 196
+90482 Nuremberg, Germany
+Phone +49 911 5405614
+Fax +49 911 5405629
+Internet: www.ethercat.org
+Email: <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">f.haefele at ethercat.org</A>
+
+
+
+-----Urspr&#252;ngliche Nachricht-----
+Von: R.W.A. Tollenaar [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">r.tollenaar at tosec.nl</A>]
+Gesendet: Montag, 16. Juli 2007 16:16
+An: Florian H&#228;fele (ETG)
+Betreff: Re: AW: Questions
+
+Dear Mr Haefele,
+
+Thanks for this information, it proved to be very useful.
+
+I now have all modules configured and it seems as though the outputs are
+responding. At least almost.
+
+I have a question of which I cannot find the answer elsewhere.
+
+A problem I have with the EL2004 module of Beckhoff is that when I send
+the process data that is supposed to bring up the outputs, the result is
+that the outputs go up briefly once and then go off again. They flash on
+and off once per program. Even if I send the same up data in a tight loop.
+
+The analog outputs on the other hand seem to stay up.
+
+Is there a setting that must be transferred to the EL 2004 unit (SDO
+parameter or somthing?) before it will behave?
+
+I realize that this is probably a BeckHoff question and not a Ethercat
+question, but perhaps you are familiar with the units. Problem is that
+Beckhoff themselves cannot tell me who else could answer this question.
+If you have a contact name within Beckhoff for me who will be able to
+anser this I will gladly take my question there?
+
+Kind regards,
+
+Roland Tollenaar.
+
+Florian H&#228;fele (ETG) wrote:
+&gt;<i> Dear Mr. Tollenaar,
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> First some more sources:
+</I>&gt;<i> 
+</I>&gt;<i> -        Download Area on ethercat.org (members only area)
+</I>&gt;<i> 
+</I>&gt;<i>    Find the EtherCAT Communication slides (older version)
+</I>&gt;<i> 
+</I>&gt;<i>    Find the IEC 61158-x-12 EtherCAT FDIS (for review)
+</I>&gt;<i> 
+</I>&gt;<i>    Find more papers as other specifications and software tools
+</I>&gt;<i> 
+</I>&gt;<i> -        Attached please find
+</I>&gt;<i> 
+</I>&gt;<i> o        latest EtherCAT Communications slides which are used for the 
+</I>&gt;<i> technical training (next in September, see ethtercat.org -&gt; events)
+</I>&gt;<i> 
+</I>&gt;<i> o        EtherCAT Technology
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i>  From your question I see that you miss out on a lot of basic 
+</I>&gt;<i> information so I think the sources mentioned above will answer your 
+</I>&gt;<i> questions. SyncManagers, FMMUs and Addressing is described in detail.
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> I would like to ask you to take advantage of the provided information. 
+</I>&gt;<i> However, if there remain open questions after the reading I will be 
+</I>&gt;<i> happy to answer your questions.
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> Best Regards,
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> Florian H&#228;fele
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> ----------------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> Florian H&#228;fele
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> EtherCAT Technology Group
+</I>&gt;<i> 
+</I>&gt;<i> Ostendstr. 196
+</I>&gt;<i> 
+</I>&gt;<i> 90482 Nuremberg, Germany
+</I>&gt;<i> 
+</I>&gt;<i> Phone +49 911 5405614
+</I>&gt;<i> 
+</I>&gt;<i> Fax +49 911 5405629
+</I>&gt;<i> 
+</I>&gt;<i> Internet: www.ethercat.org
+</I>&gt;<i> 
+</I>&gt;<i> Email: <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">f.haefele at ethercat.org</A>
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> -----Urspr&#252;ngliche Nachricht-----
+</I>&gt;<i> 
+</I>&gt;<i> Von: R.W.A. Tollenaar [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">r.tollenaar at tosec.nl</A>]
+</I>&gt;<i> 
+</I>&gt;<i> Gesendet: Mittwoch, 11. Juli 2007 12:23
+</I>&gt;<i> 
+</I>&gt;<i> An: <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">info at ethercat.org</A>
+</I>&gt;<i> 
+</I>&gt;<i> Betreff: Questions
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> Dear Mrs Huegel,
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> I am writing in english because it is faster for me. As mentioned I am 
+</I>&gt;<i> having trouble getting a decent understanding of the ethercat system 
+</I>&gt;<i> from the information I can find on the internet. It seems to be limited 
+</I>&gt;<i> to a few presentation slides which although helpful do not give a solid 
+</I>&gt;<i> understanding. So firstly if there is any more technical documentation 
+</I>&gt;<i> (words not only pictures) and I have missed it on the site, please 
+</I>&gt;<i> direct me to it or, if this is not available on the site perhaps send it 
+</I>&gt;<i> to me? That might cut a lot of questions I have short.
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> In concrete I am connecting some BeckHoff modules (4xEL2004, 4xEL1014, 
+</I>&gt;<i> EK 1100 and EL4132 and EL 5101) to a linux real-time platform. I am 
+</I>&gt;<i> using the ethercat master library developed at the university of Leuven 
+</I>&gt;<i> but its documentation is also very scarce (very young project) and the 
+</I>&gt;<i> people involved are on vacation. (And I am running short of time).
+</I>&gt;<i> 
+</I>&gt;<i> I seem to have some communication going between the slaves and the 
+</I>&gt;<i> master, i.e. the configuraiton seems to be succesful and the slaves seem 
+</I>&gt;<i> to go into operational state (at least I think it is operational state 
+</I>&gt;<i> on the EK1100 the &quot;run&quot; led goes on and green?).
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> My immediate questions:
+</I>&gt;<i> 
+</I>&gt;<i> -I still suspect that my configuration might not be perfect since I 
+</I>&gt;<i> supply the slave configuration with a different address than I supply to 
+</I>&gt;<i> the sync manager configuration and to the fmmu configuration. The code 
+</I>&gt;<i> of the EML refers to the addresses as &quot;Fixed Address&quot; and &quot;Physical 
+</I>&gt;<i> Address&quot; and I am not sure the programmer is referring to two different 
+</I>&gt;<i> entities.
+</I>&gt;<i> 
+</I>&gt;<i> -As such I am not exactly sure what the different addresses do, some 
+</I>&gt;<i> vague idea but I am not really comfortable with the role of each address 
+</I>&gt;<i> space yet. We have logical address, physical address and perhaps even a 
+</I>&gt;<i> &quot;fixed&quot; address. The logical address space is a register kept on the 
+</I>&gt;<i> master I presume where information is dropped from the separate slaves 
+</I>&gt;<i> into the designated address when the ethernet frame returns and where 
+</I>&gt;<i> the frame gets data from for designated slaves. Correct?
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> Choosing (finding) the addresses
+</I>&gt;<i> 
+</I>&gt;<i> -On choosing the logical addresses for the FMMU I understand this can be
+</I>&gt;<i> 
+</I>&gt;<i>   anything starting from 0x1000 as long as it has not been used for 
+</I>&gt;<i> another slave. Using the number of bits a slave engages it is possible 
+</I>&gt;<i> to select the addresses and the start and end bits such that there is no 
+</I>&gt;<i> overlap. Correct?
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> -Where do I find the physical addresses of the slaves if this is a 
+</I>&gt;<i> hardware address?
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> -What relation is there between the physical address and the logical 
+</I>&gt;<i> address? Or is there no relation? Where does the physical address come 
+</I>&gt;<i> into the picture? Is it the substitute for an IP address so that slave 
+</I>&gt;<i> knows which datagram in the frame is for itself? Is the physical address 
+</I>&gt;<i> an address on the hardware of the slave? Or is it physical storage on 
+</I>&gt;<i> the master? What role does the &quot;fixed&quot; address then play if it is an 
+</I>&gt;<i> independent entity?
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> -If the FMMU is the mechanism that is the translation between the 
+</I>&gt;<i> logical addresses (on the master) and the physical addresses(on the
+</I>&gt;<i> 
+</I>&gt;<i> slaves) whereby the ethernet frames transport the data from the physical 
+</I>&gt;<i> addesses to the logical addresses and visa-versa, what does the sync 
+</I>&gt;<i> manager do? I now that it is supposed to prevent simultaneous access of 
+</I>&gt;<i> address space but which addresses and how?
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> -What are the key parameters required for configuring the syncmanager 
+</I>&gt;<i> and why? (this question is related to the previous one of course)
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> -I am not 100% or even 60% clear on what the difference is between the 
+</I>&gt;<i> datalink layer and the application link layer?
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> -I have little to no idea yet as to how to exchange process data with 
+</I>&gt;<i> slaves from the master. The way I understand it is that I should load 
+</I>&gt;<i> all the data that is to be sent to the slaves into one frame, use a 
+</I>&gt;<i> generic send/receive function with which i despatch the ethernet frame.
+</I>&gt;<i> 
+</I>&gt;<i> It will run by all the slaves ticking up the working counter and return 
+</I>&gt;<i> to the master automatically (take care fo by the last slave?). On return 
+</I>&gt;<i> the frame will unload the received data into the designated logical 
+</I>&gt;<i> addresses and I can rectrieve the information (e.g. digital input
+</I>&gt;<i> 
+</I>&gt;<i> states) from the logical address register?
+</I>&gt;<i> 
+</I>&gt;<i>      
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> I hope you can help, it will be difficult otherwise.
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> Kind regards,
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> Roland Tollenaar.
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> --
+</I>&gt;<i> 
+</I>&gt;<i> Ir R.W.A. Tollenaar
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> Tosec
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> Hoekerweg 2
+</I>&gt;<i> 
+</I>&gt;<i> Postbus 164
+</I>&gt;<i> 
+</I>&gt;<i> 8000 AD Zwolle
+</I>&gt;<i> 
+</I>&gt;<i> Tel 038 425 0030
+</I>&gt;<i> 
+</I>&gt;<i> Fax 038 423 4272
+</I>&gt;<i> 
+</I>&gt;<i> www.tosec.nl
+</I>&gt;<i> 
+</I>
+-- 
+Ir R.W.A. Tollenaar
+
+Tosec
+
+Hoekerweg 2
+Postbus 164
+8000 AD Zwolle
+Tel 038 425 0030
+Fax 038 423 4272
+www.tosec.nl
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000160.html">[Ethercatmaster-users] RE : Re:  Read from the EL1004 module !!!
+</A></li>
+	<LI>Next message: <A HREF="000167.html">[Ethercatmaster-users] [Fwd: AW: AW: AW: Questions]
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#166">[ date ]</a>
+              <a href="thread.html#166">[ thread ]</a>
+              <a href="subject.html#166">[ subject ]</a>
+              <a href="author.html#166">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] interacting with 1014 and 2004
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20interacting%20with%201014%20and%202004&In-Reply-To=%3Cbc4264770707120828x297e5764n476a14ec6754fbe1%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000149.html">
+   <LINK REL="Next"  HREF="000146.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] interacting with 1014 and 2004</H1>
+    <B>roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20interacting%20with%201014%20and%202004&In-Reply-To=%3Cbc4264770707120828x297e5764n476a14ec6754fbe1%40mail.gmail.com%3E"
+       TITLE="[Ethercatmaster-users] interacting with 1014 and 2004">rolandtollenaar at gmail.com
+       </A><BR>
+    <I>Thu Jul 12 17:28:08 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000149.html">[Ethercatmaster-users] interacting with 1014 and 2004
+</A></li>
+        <LI>Next message: <A HREF="000146.html">[Ethercatmaster-users] interacting with 1014 and 2004
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#132">[ date ]</a>
+              <a href="thread.html#132">[ thread ]</a>
+              <a href="subject.html#132">[ subject ]</a>
+              <a href="author.html#132">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> If you want to read data from input modules (there isn't any in my
+</I>&gt;<i> example), you don't have to do much:
+</I>&gt;<i> While this frame with process data is send, the input modules will write
+</I>&gt;<i> there data to this frame. So when the frame returns, the input data from
+</I>&gt;<i> the modules will be in the received frame. If you've assigned the
+</I>&gt;<i> logical address 0x0001000C to a digital input, the digital input can be
+</I>&gt;<i> found on byte 12 of the local buffer (local buffer starts at
+</I>&gt;<i> 0x00010000). Note that you have to make sure the local buffer is big
+</I>&gt;<i> enough (13 bytes in this case).
+</I>
+Sorry if this sounds stupid, but if we look at your example and
+assuming that there were some inputs to be read, would I just read out
+the msg buffer starting at the first bit of the first byte?
+
+
+Roland
+
+
+
+
+
+&gt;<i>
+</I>&gt;<i> Sending a buffer can be done with the txandrx function of the
+</I>&gt;<i> EtherCAT_Master.
+</I>&gt;<i>
+</I>&gt;<i> I hope this helps you out a bit.
+</I>&gt;<i>
+</I>&gt;<i> Tom
+</I>&gt;<i>
+</I>&gt;<i> #include &lt;native/task.h&gt;
+</I>&gt;<i> #include &lt;native/timer.h&gt;
+</I>&gt;<i> #include &lt;posix/pthread.h&gt;
+</I>&gt;<i> #include &lt;signal.h&gt;
+</I>&gt;<i> #include &lt;sys/mman.h&gt;
+</I>&gt;<i> #include &lt;math.h&gt;
+</I>&gt;<i> #include &lt;stdlib.h&gt;
+</I>&gt;<i>
+</I>&gt;<i> #include &lt;al/ethercat_master.h&gt;
+</I>&gt;<i> #include &lt;al/ethercat_AL.h&gt;
+</I>&gt;<i> #include &lt;al/ethercat_process_data.h&gt;
+</I>&gt;<i> #include &lt;ethercat/ethercat_xenomai_drv.h&gt;
+</I>&gt;<i> #include &lt;ethercat/netif.h&gt;
+</I>&gt;<i> #include &lt;dll/ethercat_dll.h&gt;
+</I>&gt;<i> #include &lt;dll/ethercat_frame.h&gt;
+</I>&gt;<i> #include &lt;dll/ethercat_slave_memory.h&gt;
+</I>&gt;<i> #include &lt;al/ethercat_slave_conf.h&gt;
+</I>&gt;<i> #include &lt;al/ethercat_slave_handler.h&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> struct netif *ni;
+</I>&gt;<i> RT_TASK ec_pd_task;
+</I>&gt;<i> bool stop = false;
+</I>&gt;<i> unsigned long sinus_freq = 1;
+</I>&gt;<i> unsigned long period;
+</I>&gt;<i>
+</I>&gt;<i> ///SlaveConfig EK1100
+</I>&gt;<i> EtherCAT_FMMU_Config fmmu_config_EK1100(0);
+</I>&gt;<i> EtherCAT_PD_Config pd_config_EK1100(0);
+</I>&gt;<i> EtherCAT_SlaveConfig EC_EK1100(0x044c2c52,0x00010000,0x03e9,&amp;fmmu_config_EK1100,&amp;pd_config_EK1100);
+</I>&gt;<i>
+</I>&gt;<i> ///SlaveConfig EL4102
+</I>&gt;<i> EtherCAT_FMMU_Config fmmu_config_EL4102(2);
+</I>&gt;<i> EC_FMMU fmmu0_EL4102(0x00080000,0x0001,0x00,0x00,0x080D,0x00,true,false,true);
+</I>&gt;<i> EC_FMMU fmmu1_EL4102(0x00010000,0x0004,0x00,0x07,0x1000,0x00,false,true,true);
+</I>&gt;<i>
+</I>&gt;<i> EC_SyncMan syncman_mbx0_EL4102(0x1800,246,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> EC_SyncMan syncman_mbx1_EL4102(0x18f6,246,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> EtherCAT_MbxConfig mbx_conf_EL4102 = {syncman_mbx0_EL4102, syncman_mbx1_EL4102};
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_PD_Config pd_config_EL4102(2);
+</I>&gt;<i> EC_SyncMan
+</I>&gt;<i>  syncman0_EL4102(0x1000,4,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> EC_SyncMan
+</I>&gt;<i>  syncman1_EL4102(0x1100,0,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_SlaveConfig EC_EL4102(0x10063052,0x00000000,0x03ea,&amp;fmmu_config_EL4102,&amp;pd_config_EL4102,&amp;mbx_conf_EL4102);
+</I>&gt;<i>
+</I>&gt;<i> ///SlaveConfig EL2004
+</I>&gt;<i> EtherCAT_FMMU_Config fmmu_config_EL2004(1);
+</I>&gt;<i> EC_FMMU fmmu0_EL2004(0x00010004,0x0001,0x00,0x03,0x0F00,0x00,false,true,true);
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_PD_Config pd_config_EL2004(1);
+</I>&gt;<i> EC_SyncMan syncman0_EL2004(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_SlaveConfig EC_EL2004(0x7d43052,0x00000000,0x03eb,&amp;fmmu_config_EL2004,&amp;pd_config_EL2004);
+</I>&gt;<i>
+</I>&gt;<i> static void init_slave_db() {
+</I>&gt;<i>         EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(3);
+</I>&gt;<i>         fmmu_config_EL4102[0] = fmmu0_EL4102;
+</I>&gt;<i>         fmmu_config_EL4102[1] = fmmu1_EL4102;
+</I>&gt;<i>         pd_config_EL4102[0] = syncman0_EL4102;
+</I>&gt;<i>         pd_config_EL4102[1] = syncman1_EL4102;
+</I>&gt;<i>         fmmu_config_EL2004[0] = fmmu0_EL2004;
+</I>&gt;<i>         pd_config_EL2004[0] = syncman0_EL2004;
+</I>&gt;<i>         slave_db-&gt;set_conf(&amp;EC_EL4102,0);
+</I>&gt;<i>         slave_db-&gt;set_conf(&amp;EC_EK1100,1);
+</I>&gt;<i>         slave_db-&gt;set_conf(&amp;EC_EL2004,2);
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> static void ec_pd(void *) {
+</I>&gt;<i>         EtherCAT_Master *EM = EtherCAT_Master::instance();
+</I>&gt;<i>         unsigned char msg[5];           //Data to Send
+</I>&gt;<i>         int cnt = 0, cnt_dig = 0;
+</I>&gt;<i>         int voltage_i = 0;
+</I>&gt;<i>         float voltage_f = 0, time = 0;
+</I>&gt;<i>         long samples = 1000*1000*1000 / period / sinus_freq;
+</I>&gt;<i>         printf(&quot;Samples = %d\n&quot;, samples);
+</I>&gt;<i>         while(!stop) {
+</I>&gt;<i>                 if(cnt &gt; samples)
+</I>&gt;<i>                         cnt = 0;
+</I>&gt;<i>                 time = M_PI * 2 * cnt / samples;
+</I>&gt;<i>                 voltage_f = (sin(time) * 5 + 5) * 32767 / 10;
+</I>&gt;<i>                 voltage_i = (int) voltage_f;
+</I>&gt;<i>                 msg[0] = voltage_i;     msg[1] = voltage_i&gt;&gt;8;  // analog output
+</I>&gt;<i>                 msg[4] = cnt_dig &amp; 0x01;        // only the last bit: one digital output
+</I>&gt;<i>                 //printf(&quot;mdg[4] = %d\n&quot;,msg[4]);
+</I>&gt;<i>                 //printf(&quot;cnt = %d   time = %f    voltage = %f  msg[0] =0x%x     msg[1] = 0cx%x \n&quot;, cnt,time, voltage_f,msg[0], msg[1]);                                                       // Digital Output Channel 1
+</I>&gt;<i>                 cnt++;  cnt_dig++;
+</I>&gt;<i>                 rt_task_wait_period(0);
+</I>&gt;<i>                 EM-&gt;txandrx_PD(sizeof(msg),msg);
+</I>&gt;<i>         }
+</I>&gt;<i>
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> static void* run_master(void * arg) {
+</I>&gt;<i>
+</I>&gt;<i>         ni = init_ec((char*)arg);
+</I>&gt;<i>         init_slave_db();
+</I>&gt;<i>         if(ni != 0) {
+</I>&gt;<i>
+</I>&gt;<i>                 EtherCAT_DataLinkLayer::instance()-&gt;attach(ni);
+</I>&gt;<i>                 printf(&quot;Master initializing \n\n&quot;);
+</I>&gt;<i>                 EtherCAT_Master * EM = EtherCAT_Master::instance();
+</I>&gt;<i>                 printf(&quot;Getting slave handler\n&quot;);
+</I>&gt;<i>                 EtherCAT_SlaveHandler * sh_ek1100 = EM-&gt;get_slave_handler(0x03e9);
+</I>&gt;<i>                 if(sh_ek1100-&gt;to_state(EC_OP_STATE))
+</I>&gt;<i>                         printf(&quot;EK1100 succesfully set in OP STATE\n&quot;);
+</I>&gt;<i>                 else
+</I>&gt;<i>                         printf(&quot;\nFailed to set EK1100 in OP STATE\n&quot;);
+</I>&gt;<i>                 printf(&quot;Getting slave handler\n&quot;);
+</I>&gt;<i>                 EtherCAT_SlaveHandler * sh_el4102 = EM-&gt;get_slave_handler(0x03ea);
+</I>&gt;<i>                 if(sh_el4102-&gt;to_state(EC_OP_STATE))
+</I>&gt;<i>                         printf(&quot;EL4102 succesfully set in OP STATE\n&quot;);
+</I>&gt;<i>                 else
+</I>&gt;<i>                         printf(&quot;\nFailed to set EL4102 in OP STATE!!\n&quot;);
+</I>&gt;<i>                 printf(&quot;Getting slave handler\n&quot;);
+</I>&gt;<i>                 EtherCAT_SlaveHandler * sh_el2004 = EM-&gt;get_slave_handler(0x03eb);
+</I>&gt;<i>                 if(sh_el2004-&gt;to_state(EC_OP_STATE))
+</I>&gt;<i>                         printf(&quot;EL2004 succesfully set in OP STATE\n&quot;);
+</I>&gt;<i>                 else
+</I>&gt;<i>                         printf(&quot;\nFailed to set EL2004 in OP STATE\n&quot;);
+</I>&gt;<i>
+</I>&gt;<i>                 EtherCAT_AL * AL = EtherCAT_AL::instance();
+</I>&gt;<i>                 if(AL-&gt;isReady()) {
+</I>&gt;<i>                         period = 1000*50;
+</I>&gt;<i>                         rt_task_create (&amp;ec_pd_task, &quot;Ethercat PD&quot;, 0,1,T_JOINABLE);
+</I>&gt;<i>                         rt_task_set_periodic (&amp;ec_pd_task, TM_NOW, rt_timer_ns2ticks(period));
+</I>&gt;<i>                         rt_task_start (&amp;ec_pd_task, &amp;ec_pd, 0);
+</I>&gt;<i>                 }
+</I>&gt;<i>
+</I>&gt;<i>                 rt_task_join(&amp;ec_pd_task);
+</I>&gt;<i>                 close_socket(ni);
+</I>&gt;<i>         }
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> void catch_signal(int sig)
+</I>&gt;<i> {
+</I>&gt;<i>         stop = true;
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> int main(int argc, char** argv)
+</I>&gt;<i> {
+</I>&gt;<i>
+</I>&gt;<i>         signal(SIGTERM, catch_signal);
+</I>&gt;<i>         signal(SIGINT, catch_signal);
+</I>&gt;<i>         signal(SIGHUP, catch_signal);
+</I>&gt;<i>         mlockall(MCL_CURRENT|MCL_FUTURE);
+</I>&gt;<i>
+</I>&gt;<i>         if (argc &lt; 3) {
+</I>&gt;<i>         printf(&quot;usage: %s &lt;interface&gt; &lt;frequence&gt;\n&quot;, argv[0]);
+</I>&gt;<i>         return 0;
+</I>&gt;<i>     }
+</I>&gt;<i>
+</I>&gt;<i>         sinus_freq = atoi(argv[2]);
+</I>&gt;<i>
+</I>&gt;<i>         pthread_t xenothread;
+</I>&gt;<i>         pthread_attr_t xenothread_attr;
+</I>&gt;<i>
+</I>&gt;<i>         //Set attributes of thread
+</I>&gt;<i>         pthread_attr_init (&amp; xenothread_attr);
+</I>&gt;<i>
+</I>&gt;<i>         //Start thread
+</I>&gt;<i>         if(pthread_create(&amp;xenothread, &amp;xenothread_attr, run_master, argv[1]) != 0) {
+</I>&gt;<i>                 printf(&quot;Cannot create thread EtherCatThread.\n&quot;);
+</I>&gt;<i>                 exit(1);
+</I>&gt;<i>         }
+</I>&gt;<i>    pthread_join( xenothread, 0 );
+</I>&gt;<i>         printf(&quot;\nEnd\n&quot;);
+</I>&gt;<i>         return 0;
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000149.html">[Ethercatmaster-users] interacting with 1014 and 2004
+</A></li>
+	<LI>Next message: <A HREF="000146.html">[Ethercatmaster-users] interacting with 1014 and 2004
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#132">[ date ]</a>
+              <a href="thread.html#132">[ thread ]</a>
+              <a href="subject.html#132">[ subject ]</a>
+              <a href="author.html#132">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

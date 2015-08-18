@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] EtherCAT Distributed Clocks --&gt; line delay	calculation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EtherCAT%20Distributed%20Clocks%20--%3E%20line%20delay%0A%09calculation&In-Reply-To=%3C48908A0B.8080106%40numalliance.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000345.html">
+   <LINK REL="Next"  HREF="000347.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] EtherCAT Distributed Clocks --&gt; line delay	calculation</H1>
+    <B>Thibaut BOYER</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EtherCAT%20Distributed%20Clocks%20--%3E%20line%20delay%0A%09calculation&In-Reply-To=%3C48908A0B.8080106%40numalliance.com%3E"
+       TITLE="[Ethercatmaster-users] EtherCAT Distributed Clocks --&gt; line delay	calculation">tboyer at numalliance.com
+       </A><BR>
+    <I>Wed Jul 30 17:34:35 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000345.html">[Ethercatmaster-users] EML on windows?
+</A></li>
+        <LI>Next message: <A HREF="000347.html">[Ethercatmaster-users] EtherCAT Distributed Clocks --&gt; line delay calculation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#346">[ date ]</a>
+              <a href="thread.html#346">[ thread ]</a>
+              <a href="subject.html#346">[ subject ]</a>
+              <a href="author.html#346">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I'm working on the implementation of the DCs on an Ethercat Master.
+There is an ambiguous calculation... According to the EtherCAT spec :
+
+    linedelay = [( port time difference - execution delays - port delays
+    ) - DelayAA of next slave] / 2.
+    DelayAA : time the frames needs to enter Port 0 and leave Port 0 on
+    the way back. E.g. if Port 0 and Port 1 are in use :
+    DelayAA = Receive Port Delay of Port 0 + Execution Delay +
+    TimeDifference (BA) + Port Delay Transmit of Port 0
+    BA = Receive Time on Port 1 - Receive Time on Port 0
+
+    * Can anyone please explain to me the subtle difference between
+      &quot;execution delays&quot; and &quot;Execution Delay&quot;.
+    * I'd also like to know what the spec means with &quot;port delays&quot; ?
+          o Is that the time each port need to transmit the frame ?
+          o Is that the sum of the delays of all ports ?
+          o Is that the transmission delay between the two ports ? (i.e
+            a delay due to the electronics components)
+          o Or it's rather the delays' sum of the 2 ports used in this
+            calculation ?
+
+Best regards,
+Thibaut BOYER
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20080730/b256cea2/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20080730/b256cea2/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000345.html">[Ethercatmaster-users] EML on windows?
+</A></li>
+	<LI>Next message: <A HREF="000347.html">[Ethercatmaster-users] EtherCAT Distributed Clocks --&gt; line delay calculation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#346">[ date ]</a>
+              <a href="thread.html#346">[ thread ]</a>
+              <a href="subject.html#346">[ subject ]</a>
+              <a href="author.html#346">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

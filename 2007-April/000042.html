@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] EML eCos example
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EML%20eCos%20example&In-Reply-To=%3CPine.LNX.4.64.0704030926070.1346%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000040.html">
+   <LINK REL="Next"  HREF="000043.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] EML eCos example</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EML%20eCos%20example&In-Reply-To=%3CPine.LNX.4.64.0704030926070.1346%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] EML eCos example">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Tue Apr  3 10:15:49 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000040.html">[Ethercatmaster-users] Master create Error
+</A></li>
+        <LI>Next message: <A HREF="000043.html">[Ethercatmaster-users] Low level device driver problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#42">[ date ]</a>
+              <a href="thread.html#42">[ thread ]</a>
+              <a href="subject.html#42">[ subject ]</a>
+              <a href="author.html#42">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Mon, 26 Mar 2007, Felix Erkert wrote:
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> I want to test the eCos EML example Application with the Beckhoff Dev.
+</I>&gt;<i> Board, but it doesn&#180;t run.
+</I>&gt;<i> That&#180;s my trace and the Application doesn&#180;t send any message. I try to run
+</I>&gt;<i> the EML on a Nios Dev. Board
+</I>&gt;<i> with eCos.
+</I>&gt;<i>
+</I>&gt;<i> Init device '/dev/uart1'
+</I>&gt;<i> Set output buffer - buf: 1033070 len: 64
+</I>&gt;<i> Set input buffer - buf: 1033030 len: 64
+</I>&gt;<i> Init device '/dev/jtag_uart'
+</I>&gt;<i> Set output buffer - buf: 10331cc len: 64
+</I>&gt;<i> Set input buffer - buf: 103318c len: 64
+</I>&gt;<i> Init device '/dev/ttydiag'
+</I>&gt;<i> Init tty channel: 10336fc
+</I>&gt;<i> Init device '/dev/haldiag'
+</I>&gt;<i> HAL/diag SERIAL init
+</I>&gt;<i> Init device 'lan91c111_eth0'
+</I>
+[See my reply of yesterday]
+I think this means you might have to set # Ethernet device
+# Ethernet device to be used by the EtherCAT master
+#
+cdl_option CYGDAT_ETHERCATMASTER_ETH_DEVICE {
+     # Flavor: data
+     user_value &quot;\&quot;eth1\&quot;&quot;
+     # value_source user
+     # Default value: &quot;\&quot;eth0\&quot;&quot;
+};
+
+to
+
+lan91c111_eth0
+
+in your configuration.
+
+&gt;<i> This Flash does not contain a valid MAC Address
+</I>&gt;<i> Using the default of 0x12:13:14:15:16:17
+</I>&gt;<i> Creating Master
+</I>&gt;<i> EtherCAT AL: Ring contains 0 slaves
+</I>&gt;<i> AL: resetting FMMUs
+</I>&gt;<i> AL: resetting SMs
+</I>&gt;<i> AL: Setting all slaves in init mode
+</I>&gt;<i> Getting Slave Handler
+</I>&gt;<i> EtherCAT_AL: No such slave, returning NULL
+</I>
+&gt;<i> Does EML need an Real Time Clock? My eCos template for the Nios Core
+</I>&gt;<i> have not a RTC DENOMINATOR and a RTC NUMERATOR! Why the EML
+</I>&gt;<i> needs a Real Time Clock?
+</I>
+See &lt;<A HREF="http://ecos.sourceware.org/docs-latest/ref/hal-clocks-and-timers.html">http://ecos.sourceware.org/docs-latest/ref/hal-clocks-and-timers.html</A>&gt;
+
+&gt;<i> Can anybody give me an introduction for the EML, because I don&#180;t know how
+</I>&gt;<i> I must apply the EML to write an application.
+</I>
+This Mailinglist is all you have right now.  You are very welcome to
+write an introduction to/for EML yourself after you've got your system
+up and running...
+
+Klaas
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000040.html">[Ethercatmaster-users] Master create Error
+</A></li>
+	<LI>Next message: <A HREF="000043.html">[Ethercatmaster-users] Low level device driver problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#42">[ date ]</a>
+              <a href="thread.html#42">[ thread ]</a>
+              <a href="subject.html#42">[ subject ]</a>
+              <a href="author.html#42">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

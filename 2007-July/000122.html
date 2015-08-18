@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Question about the usage of the master_test	program
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Question%20about%20the%20usage%20of%20the%20master_test%0A%09program&In-Reply-To=%3C824973.8635.qm%40web37309.mail.mud.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000121.html">
+   <LINK REL="Next"  HREF="000124.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Question about the usage of the master_test	program</H1>
+    <B>said harti</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Question%20about%20the%20usage%20of%20the%20master_test%0A%09program&In-Reply-To=%3C824973.8635.qm%40web37309.mail.mud.yahoo.com%3E"
+       TITLE="[Ethercatmaster-users] Question about the usage of the master_test	program">harti_said at yahoo.fr
+       </A><BR>
+    <I>Thu Jul 12 10:23:26 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000121.html">[Ethercatmaster-users] Question about the usage of the master_test	program
+</A></li>
+        <LI>Next message: <A HREF="000124.html">[Ethercatmaster-users] Question about the usage of the master_test program
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#122">[ date ]</a>
+              <a href="thread.html#122">[ thread ]</a>
+              <a href="subject.html#122">[ subject ]</a>
+              <a href="author.html#122">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>So, now, i try to unload all rt modules in order to try other solutions :
+
+/local/rtnet/sbin/rtifconfig rtlo down
+/usr/local/rtnet/sbin/rtifconfig rteth0 down
+rmmod rt_loopback
+rmmod rt_8139too
+rmmod rtpacket
+rmmod rtnet
+
+But, when i do :
+
+ rmmo rtpacket 
+
+I get this message : Xenomai: RTDM: device still in use - waiting for release...
+
+It's normal that i get this message ? do you think that the master_test program dont run due to this message ??
+
+thanks a lot
+
+Regards
+
+Said HARTI
+
+       
+---------------------------------
+ Ne gardez plus qu'une seule adresse mail ! Copiez vos mails vers Yahoo! Mail 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070712/f2505870/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070712/f2505870/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000121.html">[Ethercatmaster-users] Question about the usage of the master_test	program
+</A></li>
+	<LI>Next message: <A HREF="000124.html">[Ethercatmaster-users] Question about the usage of the master_test program
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#122">[ date ]</a>
+              <a href="thread.html#122">[ thread ]</a>
+              <a href="subject.html#122">[ subject ]</a>
+              <a href="author.html#122">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

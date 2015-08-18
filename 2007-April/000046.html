@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Antwort: Re: Low level device driver problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20Low%20level%20device%20driver%0A%20problem&In-Reply-To=%3C20070403145913.371D0E2D96%40server04.site04.wtcm.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000045.html">
+   <LINK REL="Next"  HREF="000047.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Antwort: Re: Low level device driver problem</H1>
+    <B>Bob Koninckx</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20Low%20level%20device%20driver%0A%20problem&In-Reply-To=%3C20070403145913.371D0E2D96%40server04.site04.wtcm.be%3E"
+       TITLE="[Ethercatmaster-users] Antwort: Re: Low level device driver problem">bob.koninckx at fmtc.be
+       </A><BR>
+    <I>Tue Apr  3 16:59:18 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000045.html">[Ethercatmaster-users] Antwort: Re: Low level device driver problem
+</A></li>
+        <LI>Next message: <A HREF="000047.html">[Ethercatmaster-users] Antwort: Re: Low level device driver problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#46">[ date ]</a>
+              <a href="thread.html#46">[ thread ]</a>
+              <a href="subject.html#46">[ subject ]</a>
+              <a href="author.html#46">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Felix,
+
+Looks like something is wrong in your EtherNet 
+driver. In that case it is probably best to take 
+this discussion to the eCos mailing list 
+(supposing that you use eCos for the OS).
+
+Bob
+
+
+At 16:52 3/04/2007, Felix Erkert wrote:
+&gt;<i>Thanks for your fast answer. I have read the generic ethernet device driver
+</I>&gt;<i>chapter and checked my status flag. My status flag in the eth_drv_tx_done
+</I>&gt;<i>function  is set to &quot;1&quot; but it should be &quot;0&quot;. The key is the same as the
+</I>&gt;<i>key in the send function. Have you no idea what could going wrong? Do you
+</I>&gt;<i>know how i can find out what the status flag means?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>Festo AG &amp; Co. KG
+</I>&gt;<i>Felix Erkert
+</I>&gt;<i>
+</I>&gt;<i>Abteilung TV-ND
+</I>&gt;<i>Business Unit NIC Netware Devices
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>Ruiter Stra&#223;e 82
+</I>&gt;<i>D - 73734 Esslingen
+</I>&gt;<i>
+</I>&gt;<i>Tel: ++49 (0) 711-347-57193
+</I>&gt;<i>Fax:
+</I>&gt;<i>
+</I>&gt;<i><A HREF="http://www.festo.com">http://www.festo.com</A>
+</I>&gt;<i>
+</I>&gt;<i>Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+</I>&gt;<i>Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+</I>&gt;<i>Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+</I>&gt;<i>unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+</I>&gt;<i>des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+</I>&gt;<i>E-Mails sind und das Material von Ihrem Computer zu loeschen.
+</I>&gt;<i>
+</I>&gt;<i>This e-mail and any attachments are confidential and intended solely for
+</I>&gt;<i>the addressee. The perusal, publication, copying or dissemination of the
+</I>&gt;<i>contents of this e-mail by unauthorised third parties is prohibited. If you
+</I>&gt;<i>are not the intended recipient of this e-mail, please delete it and
+</I>&gt;<i>immediately notify the sender.
+</I>&gt;<i>
+</I>&gt;<i>Rechtsform: Kommanditgesellschaft
+</I>&gt;<i>Sitz: Esslingen a.N.
+</I>&gt;<i>Registergericht Stuttgart HRA 211583
+</I>&gt;<i>Umsatzsteuerident-Nummer: DE 145339206
+</I>&gt;<i>
+</I>&gt;<i>Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+</I>&gt;<i>Sitz: Stuttgart
+</I>&gt;<i>Registergericht Stuttgart HRB 18535
+</I>&gt;<i>
+</I>&gt;<i>Vorstand:
+</I>&gt;<i>Dr. Ekkehard Gericke,
+</I>&gt;<i>Lothar Kempf,
+</I>&gt;<i>Dipl.-Ing. Rudi Menrad
+</I>&gt;<i>Dr. Thomas Rubbe
+</I>&gt;<i>Dr. Eberhard Veit (Sprecher)
+</I>&gt;<i>Dr. Ulrich Walker
+</I>&gt;<i>Aufsichtsratsvorsitzender:
+</I>&gt;<i>Dr. Wilfried Stoll
+</I>&gt;<i>
+</I>&gt;<i>_______________________________________________
+</I>&gt;<i>Ethercatmaster-users mailing list
+</I>&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, Bus 4027, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">bob.koninckx at fmtc.be</A>                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders&#146; MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. 
+Reyerslaan 80, B-1030 Brussel, Belgi&#235;
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain 
+confidential information. It is intended
+solely for the intended addressee(s). Any use of 
+the information contained herein by other
+persons is prohibited. FMTC does not accept any 
+liability for the contents of this e-mail
+and/or its attachments.
+********************  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000045.html">[Ethercatmaster-users] Antwort: Re: Low level device driver problem
+</A></li>
+	<LI>Next message: <A HREF="000047.html">[Ethercatmaster-users] Antwort: Re: Low level device driver problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#46">[ date ]</a>
+              <a href="thread.html#46">[ thread ]</a>
+              <a href="subject.html#46">[ subject ]</a>
+              <a href="author.html#46">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

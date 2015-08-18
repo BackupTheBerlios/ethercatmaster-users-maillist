@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Antwort: Re: Low level device   driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20Low%20level%20device%20%20%20driver&In-Reply-To=%3C20070405091102.11890E2D59%40server04.site04.wtcm.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000055.html">
+   <LINK REL="Next"  HREF="000057.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Antwort: Re: Low level device   driver</H1>
+    <B>Bob Koninckx</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20Low%20level%20device%20%20%20driver&In-Reply-To=%3C20070405091102.11890E2D59%40server04.site04.wtcm.be%3E"
+       TITLE="[Ethercatmaster-users] Antwort: Re: Low level device   driver">bob.koninckx at fmtc.be
+       </A><BR>
+    <I>Thu Apr  5 11:11:01 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000055.html">[Ethercatmaster-users]  Antwort: Re: Low level device  driver
+</A></li>
+        <LI>Next message: <A HREF="000057.html">[Ethercatmaster-users] Antwort: Re: Low level device  driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#56">[ date ]</a>
+              <a href="thread.html#56">[ thread ]</a>
+              <a href="subject.html#56">[ subject ]</a>
+              <a href="author.html#56">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>At 11:00 5/04/2007, Felix GMX wrote:
+&gt;<i>Hello,
+</I>&gt;<i>
+</I>&gt;<i>- The NiosII Processor System is a Little Endian System!
+</I>
+
+In that case it's probably correct. The fact that 
+ethereal &quot;understands&quot; whats in the message also suggests this.
+
+
+&gt;<i>
+</I>&gt;<i>- Thats my traced EtherCAT frame (Why are there so many &quot;0&quot; at the end):
+</I>&gt;<i>
+</I>&gt;<i>    0000   ff ff ff ff ff ff 00 07 ed 0a 58 49 
+</I>&gt;<i> 88 a4 0d 10              ..........XI....
+</I>&gt;<i>    0010   01 c0 00 00 00 00 01 00 00 00 3a 74 00 00 00 00  ..........:t....
+</I>&gt;<i>    0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+</I>&gt;<i>    0030   00 00 00 00 00 00 00 00 00 00 00 00                    ............
+</I>&gt;<i>    Destination: ff ff ff ff ff ff
+</I>&gt;<i>    Source:       00 07 ed 0a 58 49
+</I>&gt;<i>    Type:          88a4
+</I>&gt;<i>
+</I>&gt;<i>    EtherCAT Protcol: 'APRD', Len: 1, Adp 0x0, Ado 0x0, Wc 116
+</I>&gt;<i>     Sub Frame: Cmd: 'APRD' (1), Len: 1, Adp 0x0, Ado 0x0, Cnt 116
+</I>&gt;<i>        Header
+</I>&gt;<i>         Command:    APRD (0x01)
+</I>&gt;<i>         Index:            0xc0
+</I>&gt;<i>         Slave Addr:    0x0000
+</I>&gt;<i>         Offset Addr:   0x0000
+</I>&gt;<i>         Length:          1(0x1) - No Roundtrip - Last Sub Command
+</I>&gt;<i>         Interrupt:        0x0000
+</I>&gt;<i>        Data      : 3A(0x3a)
+</I>&gt;<i>        Working Cnt: 116
+</I>
+
+Now take the EtherCAT spec and verify that all 
+fields are filled in correctly. If you have a 
+version of twincat available, I'dd suggest you 
+try with Twincat too. If the board responds to 
+twincat, take again a trace and look for 
+differences in the message. If it does not 
+respond to twincat either, you have to find out 
+what's wrong with the EVA board. We had a very 
+early version of this board, and found after a 
+lot of trial and error that both ethernet ports 
+are not equivalent; one is an input and the other 
+is an output (this is a long shot, though)
+
+
+&gt;<i>
+</I>&gt;<i>- What does the EtherCAT Master do if he doesn&#180;t get a frame back?
+</I>
+
+I guess it just waits for data to come in. Could 
+be that it's a timed wait (not sure). If that's 
+the case (verify it first!) and it does not come 
+back eventually, make sure that your eCos RTC is ticking.
+
+&gt;<i>
+</I>&gt;<i>- What does IIRC mean and where can I find this 
+</I>&gt;<i>switches (DI, DO, DIO, AO etc.)?
+</I>
+
+IIRC = If I Remember Correctly :-)
+
+&gt;<i>
+</I>&gt;<i>Sorry for my stupied questions any thanks a lot for your fast answers!
+</I>
+
+You're welcome
+
+Bob
+
+
+&gt;<i>_______________________________________________
+</I>&gt;<i>Ethercatmaster-users mailing list
+</I>&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, Bus 4027, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">bob.koninckx at fmtc.be</A>                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders&#146; MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. 
+Reyerslaan 80, B-1030 Brussel, Belgi&#235;
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain 
+confidential information. It is intended
+solely for the intended addressee(s). Any use of 
+the information contained herein by other
+persons is prohibited. FMTC does not accept any 
+liability for the contents of this e-mail
+and/or its attachments.
+********************  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000055.html">[Ethercatmaster-users]  Antwort: Re: Low level device  driver
+</A></li>
+	<LI>Next message: <A HREF="000057.html">[Ethercatmaster-users] Antwort: Re: Low level device  driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#56">[ date ]</a>
+              <a href="thread.html#56">[ thread ]</a>
+              <a href="subject.html#56">[ subject ]</a>
+              <a href="author.html#56">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

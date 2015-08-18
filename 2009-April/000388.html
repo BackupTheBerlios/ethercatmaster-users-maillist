@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] BK 1250 mailbox communication
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20BK%201250%20mailbox%20communication&In-Reply-To=%3COFB5E8EC3E.7E93A05E-ONC1257599.0047951E-C1257599.0049A0B4%40datacon.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000387.html">
+   <LINK REL="Next"  HREF="000390.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] BK 1250 mailbox communication</H1>
+    <B>henning.richter at besi.com</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20BK%201250%20mailbox%20communication&In-Reply-To=%3COFB5E8EC3E.7E93A05E-ONC1257599.0047951E-C1257599.0049A0B4%40datacon.at%3E"
+       TITLE="[Ethercatmaster-users] BK 1250 mailbox communication">henning.richter at besi.com
+       </A><BR>
+    <I>Wed Apr 15 15:24:12 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000387.html">[Ethercatmaster-users] BK 1250
+</A></li>
+        <LI>Next message: <A HREF="000390.html">[Ethercatmaster-users] BK 1250 mailbox communication
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#388">[ date ]</a>
+              <a href="thread.html#388">[ thread ]</a>
+              <a href="subject.html#388">[ subject ]</a>
+              <a href="author.html#388">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi,
+
+i would like to write and send some data to the mailbox of the bus coupler
+BK1250 (configuration see below).
+Actually I don't know exactly how to do.
+First I tried to write sth. to the mailbox using a NPWR_Telegram:
+
+NPWR_Telegram NPWRtelegram(0x01, 0x03f0, 0x1c00,0xffff, 1, data);
+
+This seems to work as the WKC increments by 1.
+
+Trying to read on the other hand doesn't work (WKC isn't incremented):
+
+NPRD_Telegram NPRDtelegram(0x01, 0x03f0, 0x1e00, 0xffff, 1, &amp;readdata);
+
+Can I address the mailbox in that way or do I have to build an EC_MbxMsgHdr
+and EtherCAT_MbxMsg by my own and put this to the EtherCAT Datagram
+( EC_Telegram ) ?
+Sending / Reading Data to / from the module directly seem to work as the
+WKCs incremment in the suggested manner.
+
+
+///BusKoppler BK1250
+
+EtherCAT_FMMU_Config fmmu_config_BK1250(2);
+EC_FMMU fmmu0_BK1250
+(0x00010006,8,0x00,0x03,0x1600,0x00,true,false,true); //inputs
+EC_FMMU fmmu1_BK1250
+(0x00010006,8,0x00,0x03,0x1000,0x00,false,true,true); //outputs
+
+//Mailbox-config
+EC_SyncMan syncman_mbx0_BK1250
+(0x1c00,136,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,true,false,false,EC_FIRST_BUFFER,true); //MboxOut
+EC_SyncMan syncman_mbx1_BK1250
+(0x1e00,136,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,true,false,false,EC_FIRST_BUFFER,true);  //MboxIn
+EtherCAT_MbxConfig mbx_conf_BK1250 = {syncman_mbx0_BK1250,
+syncman_mbx1_BK1250};
+
+EtherCAT_PD_Config pd_config_BK1250(2);
+EC_SyncMan syncman0_BK1250
+(0x1000,8,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);  //outputs
+EC_SyncMan syncman1_BK1250
+(0x1600,8,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); //inputs
+
+EtherCAT_SlaveConfig EC_BK1250
+(0x04E22C22,0x00100000,0x03f0,&amp;fmmu_config_BK1250,&amp;pd_config_BK1250,&amp;mbx_conf_BK1250);
+
+
+Henning
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090415/37491658/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090415/37491658/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000387.html">[Ethercatmaster-users] BK 1250
+</A></li>
+	<LI>Next message: <A HREF="000390.html">[Ethercatmaster-users] BK 1250 mailbox communication
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#388">[ date ]</a>
+              <a href="thread.html#388">[ thread ]</a>
+              <a href="subject.html#388">[ subject ]</a>
+              <a href="author.html#388">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

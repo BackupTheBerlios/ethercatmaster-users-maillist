@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] The EtherCAT Tarfic scan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20The%20EtherCAT%20Tarfic%20scan&In-Reply-To=%3C46A83F49.8040106%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000195.html">
+   <LINK REL="Next"  HREF="000197.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] The EtherCAT Tarfic scan</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20The%20EtherCAT%20Tarfic%20scan&In-Reply-To=%3C46A83F49.8040106%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] The EtherCAT Tarfic scan">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Thu Jul 26 08:29:29 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000195.html">[Ethercatmaster-users] The EtherCAT Tarfic scan
+</A></li>
+        <LI>Next message: <A HREF="000197.html">[Ethercatmaster-users] RE : Re:  The EtherCAT Tarfic scan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#196">[ date ]</a>
+              <a href="thread.html#196">[ thread ]</a>
+              <a href="subject.html#196">[ subject ]</a>
+              <a href="author.html#196">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Tom,
+
+Thanks for looking at the scan. This is Said's scan so I cannot answer 
+for him. My 4 2004's have logical addresses set at:
+
+0x00010000   sb0 eb3
+0x00010000   sb4 eb7
+0x00010001   sb0 eb3
+0x00010001   sb4 eb7
+
+if I remember correctly and I am almost 100% certain that I have not 
+overlapped addresses. And I am witnessing exactly the same problem.
+
+Also remember that the outputs do respond according to the process data 
+sent to them, but only once and briefly in any program. I have 
+incorporated the code in my actual project where it runs in a rt thread 
+and the behaviour is exactly the same as in your master_test example.
+
+So it seems as though the other data that twincat sends in its traffic 
+is more important than assumed?
+
+Kind regards,
+
+Roland
+
+Tom Panis wrote:
+&gt;<i> Klaas Gadeyne wrote:
+</I>&gt;&gt;<i> On Mon, 23 Jul 2007, said harti wrote:
+</I>&gt;&gt;<i>   
+</I>&gt;&gt;&gt;<i> This is the Trafic scan between :
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 1)  Twincat Tool and Beckhoff modules (EK1100, EL4102, EL2004, EL1004)
+</I>&gt;&gt;&gt;<i> 2)  EML and Beckhoff modules (EK1100, EL4102, EL2004, EL1004)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> (I have gived 5V (3fff to EL4102) and 0x0f to DO EL2004).
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;<i> [...]
+</I>&gt;&gt;<i> I just (re)discovered the ethercat wireshark plugin at ethercat.org is
+</I>&gt;&gt;<i> a dll, so I won't be able to help you out quickly here :-((
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Did you compare the 2 output scans yourself and notice important differences?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Klaas
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> I've taken a look at both scans and I can't find an important 
+</I>&gt;<i> difference. The process data are both the same on the TwinCAT and the 
+</I>&gt;<i> EML scan.
+</I>&gt;<i> May I assume the logical address for the digital outputs is set 
+</I>&gt;<i> correctly at 0x00010004? So it's not a configuration fault.
+</I>&gt;<i> 
+</I>&gt;<i> Tom
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000195.html">[Ethercatmaster-users] The EtherCAT Tarfic scan
+</A></li>
+	<LI>Next message: <A HREF="000197.html">[Ethercatmaster-users] RE : Re:  The EtherCAT Tarfic scan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#196">[ date ]</a>
+              <a href="thread.html#196">[ thread ]</a>
+              <a href="subject.html#196">[ subject ]</a>
+              <a href="author.html#196">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

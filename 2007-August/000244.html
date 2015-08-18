@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] XML configuration File and the master test	program
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20XML%20configuration%20File%20and%20the%20master%20test%0A%09program&In-Reply-To=%3C588068.31193.qm%40web37310.mail.mud.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000243.html">
+   <LINK REL="Next"  HREF="000247.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] XML configuration File and the master test	program</H1>
+    <B>said harti</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20XML%20configuration%20File%20and%20the%20master%20test%0A%09program&In-Reply-To=%3C588068.31193.qm%40web37310.mail.mud.yahoo.com%3E"
+       TITLE="[Ethercatmaster-users] XML configuration File and the master test	program">harti_said at yahoo.fr
+       </A><BR>
+    <I>Thu Aug  9 15:47:30 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000243.html">[Ethercatmaster-users] non-persistent outputs, post mortem
+</A></li>
+        <LI>Next message: <A HREF="000247.html">[Ethercatmaster-users] XML configuration File and the master test	program
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#244">[ date ]</a>
+              <a href="thread.html#244">[ thread ]</a>
+              <a href="subject.html#244">[ subject ]</a>
+              <a href="author.html#244">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+thanks to my TwinCAT tool, i can generate the xml configuration file, 
+on this file we find all parameters used on the EML test program...
+
+for exemple :
+
+EML function               ===&gt;     EML value              ====&gt;   XML File
+
+EtherCAT_SlaveConfig ===&gt;     a_product_code      ====&gt; &lt;ProductCode&gt;
+EtherCAT_SlaveConfig ===&gt;     a_revision               ====&gt; &lt;RevisionNo&gt;
+EtherCAT_SlaveConfig ===&gt;     a_station_address   ====&gt; &lt;PhysAddr&gt;
+
+So my question is :
+
+what are XML parameters File which corresponds to EC_FMMU EML function ??
+
+
+ EML function               ===&gt;     EML value                      ====&gt;   XML File
+ 
+EC_FMMU                  ===&gt;     logical_start_address      ====&gt; ????
+EC_FMMU                  ===&gt;     length                            ====&gt; ????
+EC_FMMU                  ===&gt;     logical_start_bit              ====&gt; ????
+EC_FMMU                  ===&gt;     logical_end_bit               ====&gt; ????
+EC_FMMU                  ===&gt;     physical_start_address    ====&gt; ????
+EC_FMMU                  ===&gt;     physical_start_bit           ====&gt; ????
+
+Attached, my XML config File
+
+Thanks,
+
+King regards,
+
+Said
+ 
+
+
+
+       
+---------------------------------
+ Ne gardez plus qu'une seule adresse mail ! Copiez vos mails vers Yahoo! Mail 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070809/d172dd73/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070809/d172dd73/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: test_2.xml
+Type: text/xml
+Size: 37275 bytes
+Desc: 265615225-test_2.xml
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070809/d172dd73/attachment.xml">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070809/d172dd73/attachment.xml</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000243.html">[Ethercatmaster-users] non-persistent outputs, post mortem
+</A></li>
+	<LI>Next message: <A HREF="000247.html">[Ethercatmaster-users] XML configuration File and the master test	program
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#244">[ date ]</a>
+              <a href="thread.html#244">[ thread ]</a>
+              <a href="subject.html#244">[ subject ]</a>
+              <a href="author.html#244">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

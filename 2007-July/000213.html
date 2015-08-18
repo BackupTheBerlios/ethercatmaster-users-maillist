@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] understanding the datagrams
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20understanding%20the%20datagrams&In-Reply-To=%3C46AF1F30.1060907%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000212.html">
+   <LINK REL="Next"  HREF="000214.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] understanding the datagrams</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20understanding%20the%20datagrams&In-Reply-To=%3C46AF1F30.1060907%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] understanding the datagrams">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Tue Jul 31 13:38:24 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000212.html">[Ethercatmaster-users] [Ethercatmaster-devel] non-persistent outputs EML
+</A></li>
+        <LI>Next message: <A HREF="000214.html">[Ethercatmaster-users] understanding the datagrams
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#213">[ date ]</a>
+              <a href="thread.html#213">[ thread ]</a>
+              <a href="subject.html#213">[ subject ]</a>
+              <a href="author.html#213">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+Please give some assistance wrt to the ethercat dataframes. I am having 
+trouble with the documentation.
+
+In particular at the moment the EC datagram header is what I am 
+interested in.
+
+This is what the header looks like.
+
+    Cmd	/Idx	/Addr	/Offset	/11bit length/R/C/R/M	/IRQ
+TC  0b	00	00 00	01 00	05 80			00 00
+EML 0c	46	00 00	01 00	05 00			00 00
+
+Now the questions are:
+
+Where do I find documentation on the Cmd values that must be used. Why 
+would EML have a different command? (0xc instead of 0x0b)
+
+The Index Idx has 0x46 instead of 00. Again I have missed (cannot for 
+the life of me find it this morning because I think I have seen 
+something about it) the part in the documentation that tells me what the 
+index does. Why will EML have a different value here?
+
+Then we see a difference in the RCRM part of the header. I have no idea 
+what they mean. C is recirculating, M means More datagrams.
+
+Finally my question is how to establish the lenght out of the 11 bit 
+length. This may be obvious but what confuses me is the part in the 
+Ethercat Header (main header not the one in the datagram)
+
+This part is
+TC   0x39 0x10
+EML  0x11 0x10
+
+Which I don;t understnad because according to the documentation the last 
+4 bits indicate the type and 1 should be Ethercat. But neither TC nor 
+EML have a 1 in that position? Or is LSB and MSB turned around?
+
+I get a feeling that the differences in this header may be the cause for 
+the problem. It may even be the length which IMHO seems to differ but I 
+am not sure because there is so much info I am lacking.
+
+
+Thanks so so so much.
+
+Roland.
+		
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000212.html">[Ethercatmaster-users] [Ethercatmaster-devel] non-persistent outputs EML
+</A></li>
+	<LI>Next message: <A HREF="000214.html">[Ethercatmaster-users] understanding the datagrams
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#213">[ date ]</a>
+              <a href="thread.html#213">[ thread ]</a>
+              <a href="subject.html#213">[ subject ]</a>
+              <a href="author.html#213">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,2549 @@
+From tompanis at skynet.be  Sun Apr  1 12:32:56 2007
+From: tompanis at skynet.be (Tom Panis)
+Date: Sun, 01 Apr 2007 12:32:56 +0200
+Subject: [Ethercatmaster-users] Master create Error
+In-Reply-To: <000601c77303$90f63860$2101a8c0@FelixLaptop>
+References: <000601c77303$90f63860$2101a8c0@FelixLaptop>
+Message-ID: <460F8A58.9070908@skynet.be>
+
+
+
+Felix GMX wrote:
+> Hello,
+>  
+> If I create an EtherCAT Master with
+>  
+> EtherCAT_Master * EM = EtherCAT_Master::instance()
+>  
+> the "netif *m_if" variable in the EtherCAT_DataLinkLayer class is
+> set to "0". Why is it initial with "0".
+>  
+> EtherCAT_DataLinkLayer::EtherCAT_DataLinkLayer()
+>   : m_if(0)
+> {
+> }
+>  
+> If the EtherCAT Master is searching a slave, the master can not send
+> any messages because m_if is set to "0".
+>  
+> bool EtherCAT_DataLinkLayer::txandrx(EtherCAT_Frame * a_frame)
+> {
+>  bool succeed = m_if->txandrx(a_frame, m_if);
+>  if (!succeed)
+>   log(EC_LOG_INFO, "DLL::txandrx() Error\n");
+>  return succeed;
+> }
+>  
+> How should I initiate the netit *m_if variable?
+
+Would you like to create an etharcatmaster for eCos or RTnet/Xenomai?
+
+If it's RTnet you're working with, you should first initialise the
+network and create an EtherCAT network interface with init_ec(char *
+interface). The argument is the name of the real time network interface
+eg. init_ec(rteth0). Then you have to attach this EtherCAT network
+interface to the EtherCAT_DataLinkLayer with
+EtherCAT_DataLinkLayer::instance()->attach(struct netif * netif ).
+There's an example at
+<http://svn.berlios.de/wsvn/ethercatmaster/trunk/tests/rtnet/master_test.cpp?op=file&rev=0&sc=0>. 
+
+
+
+Tom
+
+
+
+From ERFE at DE.FESTO.COM  Mon Apr  2 09:43:01 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Mon, 2 Apr 2007 09:43:01 +0200
+Subject: [Ethercatmaster-users] (no subject)
+Message-ID: <OF6D3B6EEA.8E9F12AD-ONC12572B1.0029F100-C12572B1.002A643E@MAIL.DE.FESTO.NET>
+
+
+I want to create the EtherCAT Master Library for eCos on a Altera Dev.
+Board!
+On the Altera Development Board is an SMSC Ethernet Controller (LAN91C111).
+With which requirements does the eCos example run! I have the EtherCAT EVA
+Board.
+How should I initiate the EtherCAT Master Library to run a connection to
+the EVA Board?
+
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+Rechtsform: Kommanditgesellschaft
+Sitz: Esslingen a.N.
+Registergericht Stuttgart HRA 211583
+Umsatzsteuerident-Nummer: DE 145339206
+
+Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+Sitz: Stuttgart
+Registergericht Stuttgart HRB 18535
+
+Vorstand:
+Dr. Ekkehard Gericke,
+Lothar Kempf,
+Dipl.-Ing. Rudi Menrad
+Dr. Thomas Rubbe
+Dr. Eberhard Veit (Sprecher)
+Dr. Ulrich Walker
+Aufsichtsratsvorsitzender:
+Dr. Wilfried Stoll
+
+
+
+From ERFE at DE.FESTO.COM  Mon Apr  2 14:23:39 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Mon, 2 Apr 2007 14:23:39 +0200
+Subject: [Ethercatmaster-users] Master create Error
+Message-ID: <OF6A788A88.92A6E519-ONC12572B1.0042ECF0-C12572B1.00441880@MAIL.DE.FESTO.NET>
+
+
+I want to create the EtherCAT Master Library for eCos on a Altera Dev.
+Board!
+On the Altera Development Board is a SMSC Ethernet Controller (LAN91C111).
+Which requirements does the eCos have to run the eCos example? I want to
+run this example with the EtherCAT EVA Board. How should I initiate the
+EtherCAT Master Library to run a connection to the EVA Board?
+
+If the EtherCAT Master want to send a message when he scans the network, he
+hangs up by sending an EtherCAT message because the m_if structur (struct
+netif *) in the EtherCAT_DataLinkLayer is zero. How I have to attach the
+netif interface of have I forget any initialisations? I use eCos!!!
+
+bool EtherCAT_AL::init(void)
+{
+  if (scan_slaves()){
+    if (reset_slaves()){
+      return put_slaves_in_init();
+    }
+    else{
+      log(EC_LOG_FATAL, "Something went wrong while resetting slaves\n");
+      return false;
+    }
+  }
+  else{
+    log(EC_LOG_FATAL, "Something went wrong while scanning network\n");
+    return false;
+  }
+}
+
+bool EtherCAT_AL::scan_slaves(void)
+{
+  // Send APRD telegram to count number of slaves
+  APRD_Telegram counter_tg(m_logic_instance->get_idx(),0x0000,0x0000,
+            m_logic_instance->get_wkc(),0x01,(unsigned char) 0x00);
+  EC_Ethernet_Frame counter_frame(&counter_tg);
+  bool succeed = m_dll_instance->txandrx(&counter_frame);
+  ...
+}
+
+EtherCAT_DataLinkLayer::EtherCAT_DataLinkLayer()
+  : m_if(0)
+{
+}
+
+bool EtherCAT_DataLinkLayer::txandrx(EtherCAT_Frame * a_frame)
+{
+  bool succeed = m_if->txandrx(a_frame, m_if);           => Error, because
+m_if = 0
+  ...
+}
+
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+Rechtsform: Kommanditgesellschaft
+Sitz: Esslingen a.N.
+Registergericht Stuttgart HRA 211583
+Umsatzsteuerident-Nummer: DE 145339206
+
+Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+Sitz: Stuttgart
+Registergericht Stuttgart HRB 18535
+
+Vorstand:
+Dr. Ekkehard Gericke,
+Lothar Kempf,
+Dipl.-Ing. Rudi Menrad
+Dr. Thomas Rubbe
+Dr. Eberhard Veit (Sprecher)
+Dr. Ulrich Walker
+Aufsichtsratsvorsitzender:
+Dr. Wilfried Stoll
+
+
+
+From klaas.gadeyne at fmtc.be  Mon Apr  2 18:07:44 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 2 Apr 2007 18:07:44 +0200 (CEST)
+Subject: [Ethercatmaster-users] Master create Error
+In-Reply-To: <000601c77303$90f63860$2101a8c0@FelixLaptop>
+References: <000601c77303$90f63860$2101a8c0@FelixLaptop>
+Message-ID: <Pine.LNX.4.64.0704021755570.1346@ampere.labo01.fmtc.be>
+
+Hi Felix,
+
+[apologies for delays in responding, just returning from Norwegian
+snow and sun :-)]
+
+On Fri, 30 Mar 2007, Felix GMX wrote:
+> If I create an EtherCAT Master with
+>
+> EtherCAT_Master * EM = EtherCAT_Master::instance()
+>
+> the "netif *m_if" variable in the EtherCAT_DataLinkLayer class is
+> set to "0". Why is it initial with "0".
+>
+> EtherCAT_DataLinkLayer::EtherCAT_DataLinkLayer()
+>  : m_if(0)
+> {
+> }
+>
+> If the EtherCAT Master is searching a slave, the master can not send
+> any messages because m_if is set to "0".
+>
+> bool EtherCAT_DataLinkLayer::txandrx(EtherCAT_Frame * a_frame)
+> {
+> bool succeed = m_if->txandrx(a_frame, m_if);
+> if (!succeed)
+>  log(EC_LOG_INFO, "DLL::txandrx() Error\n");
+> return succeed;
+> }
+>
+> How should I initiate the netit *m_if variable?
+
+This should normally be done automagically when the NIC is
+"initialized" for etherCat by eCos.  It happens in
+
+packages/net/ethercatmaster/current/src/ecos/support.cxx
+
+The if_attach function is what you looking for.  However, the 0.1
+version of EML for eCos does not shout when thing go wrong during
+if_attach (which is probably the thing you are experiencing).  I fixed
+this a while ago in the SVN version, so can you try the following patch?
+
+[kgad at ampere ~]$
+  svn diff -r8:10 https://gatefmtc/svn/ecos/trunk/
+Index: packages/net/ethercatmaster/current/src/ecos/support.cxx
+===================================================================
+--- packages/net/ethercatmaster/current/src/ecos/support.cxx
+  (revision 8)
++++ packages/net/ethercatmaster/current/src/ecos/support.cxx
+  (revision 10)
+@@ -160,4 +160,8 @@
+    // Only attach the selected device
+    if(strncmp(netif->device_name, CYGDAT_ETHERCATMASTER_ETH_DEVICE,
+  ETHERCAT_DEVICE_NAME_MAX_LENGTH) == 0)
+      EtherCAT_DataLinkLayer::instance()->attach(netif);
++  else {
++    log(EC_LOG_FATAL, "Attach device failed, netif->device_name =
+  '%s'\n", netif->device_name);
++    exit(-1);
++  }
+  }
+
+regards,
+
+Klaas
+
+
+From klaas.gadeyne at fmtc.be  Mon Apr  2 18:09:36 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 2 Apr 2007 18:09:36 +0200 (CEST)
+Subject: [Ethercatmaster-users] (no subject)
+In-Reply-To: <OF6D3B6EEA.8E9F12AD-ONC12572B1.0029F100-C12572B1.002A643E@MAIL.DE.FESTO.NET>
+References: <OF6D3B6EEA.8E9F12AD-ONC12572B1.0029F100-C12572B1.002A643E@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0704021808130.1346@ampere.labo01.fmtc.be>
+
+On Mon, 2 Apr 2007, Felix Erkert wrote:
+> I want to create the EtherCAT Master Library for eCos on a Altera Dev.
+> Board!
+> On the Altera Development Board is an SMSC Ethernet Controller (LAN91C111).
+> With which requirements does the eCos example run! I have the EtherCAT EVA
+> Board.
+> How should I initiate the EtherCAT Master Library to run a connection to
+> the EVA Board?
+
+You shouldn't do anything special (note the previous mail though),
+unless there's a bug (there are most certainly :-)
+
+Klaas
+
+
+
+From klaas.gadeyne at fmtc.be  Tue Apr  3 10:15:49 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 3 Apr 2007 10:15:49 +0200 (CEST)
+Subject: [Ethercatmaster-users] EML eCos example
+In-Reply-To: <OF9EDD5A28.1FDD5814-ONC12572AA.00420951-C12572AA.004387BB@MAIL.DE.FESTO.NET>
+References: <OF9EDD5A28.1FDD5814-ONC12572AA.00420951-C12572AA.004387BB@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0704030926070.1346@ampere.labo01.fmtc.be>
+
+On Mon, 26 Mar 2007, Felix Erkert wrote:
+> Hello,
+>
+> I want to test the eCos EML example Application with the Beckhoff Dev.
+> Board, but it doesn?t run.
+> That?s my trace and the Application doesn?t send any message. I try to run
+> the EML on a Nios Dev. Board
+> with eCos.
+>
+> Init device '/dev/uart1'
+> Set output buffer - buf: 1033070 len: 64
+> Set input buffer - buf: 1033030 len: 64
+> Init device '/dev/jtag_uart'
+> Set output buffer - buf: 10331cc len: 64
+> Set input buffer - buf: 103318c len: 64
+> Init device '/dev/ttydiag'
+> Init tty channel: 10336fc
+> Init device '/dev/haldiag'
+> HAL/diag SERIAL init
+> Init device 'lan91c111_eth0'
+
+[See my reply of yesterday]
+I think this means you might have to set # Ethernet device
+# Ethernet device to be used by the EtherCAT master
+#
+cdl_option CYGDAT_ETHERCATMASTER_ETH_DEVICE {
+     # Flavor: data
+     user_value "\"eth1\""
+     # value_source user
+     # Default value: "\"eth0\""
+};
+
+to
+
+lan91c111_eth0
+
+in your configuration.
+
+> This Flash does not contain a valid MAC Address
+> Using the default of 0x12:13:14:15:16:17
+> Creating Master
+> EtherCAT AL: Ring contains 0 slaves
+> AL: resetting FMMUs
+> AL: resetting SMs
+> AL: Setting all slaves in init mode
+> Getting Slave Handler
+> EtherCAT_AL: No such slave, returning NULL
+
+> Does EML need an Real Time Clock? My eCos template for the Nios Core
+> have not a RTC DENOMINATOR and a RTC NUMERATOR! Why the EML
+> needs a Real Time Clock?
+
+See <http://ecos.sourceware.org/docs-latest/ref/hal-clocks-and-timers.html>
+
+> Can anybody give me an introduction for the EML, because I don?t know how
+> I must apply the EML to write an application.
+
+This Mailinglist is all you have right now.  You are very welcome to
+write an introduction to/for EML yourself after you've got your system
+up and running...
+
+Klaas
+
+From ERFE at DE.FESTO.COM  Tue Apr  3 13:07:22 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Tue, 3 Apr 2007 13:07:22 +0200
+Subject: [Ethercatmaster-users] Low level device driver problem
+Message-ID: <OF046DF37E.F9891EA3-ONC12572B2.003B8966-C12572B2.003D19EF@MAIL.DE.FESTO.NET>
+
+
+Hello,
+
+I just fixed my last problem, now I have a new problem.
+I get a low level device driver problem!
+My logging informations are show below:
+
+Init device '/dev/uart1'
+Set output buffer - buf: 10342d0 len: 64
+Set input buffer - buf: 1034290 len: 64
+Init device '/dev/jtag_uart'
+Set output buffer - buf: 103442c len: 64
+Set input buffer - buf: 10343ec len: 64
+Init device '/dev/ttydiag'
+Init tty channel: 1034b28
+Init device '/dev/haldiag'
+HAL/diag SERIAL init
+Init device '/dev/lcd_display'
+Init device 'lan91c111_eth0'
+This Flash does not contain a valid MAC Address
+Using the default of 0x12:13:14:15:16:17
+Creating Master
+EtherCAT error: Low level device driver problem               => Problem
+low_level_input(): Waiting for semafore from recv timed out
+low_level_txandrx: receiving failed
+DLL::txandrx() Error
+Error sending counter frame
+Something went wrong while scanning network
+EtherCAT_AL:: Can't init network
+ASSERT FAIL: <2>_exit.cxx
+[83]void _exit() Program _exiting with non-zero error status
+ASSERT FAIL: <2>_exit.cxx
+[83]void _exit()
+Program _exiting with non-zero error status
+
+The Low level device driver problem occurs in eth_drv.c at the
+eth_drv_tx_done function
+
+static void eth_drv_tx_done(struct eth_drv_sc *sc, CYG_ADDRWORD key, int
+status)
+{
+   ...
+   if(status) {
+     log(EC_LOG_ERROR, "EtherCAT error: Low level device driver
+problem\n");
+   }
+}
+
+At the LED?s i can see that the EtherCAT Master sends anything. But the
+EtherCAT Master does?t receive a frame. Do anybody know where the problem
+is or an idea?
+
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+Rechtsform: Kommanditgesellschaft
+Sitz: Esslingen a.N.
+Registergericht Stuttgart HRA 211583
+Umsatzsteuerident-Nummer: DE 145339206
+
+Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+Sitz: Stuttgart
+Registergericht Stuttgart HRB 18535
+
+Vorstand:
+Dr. Ekkehard Gericke,
+Lothar Kempf,
+Dipl.-Ing. Rudi Menrad
+Dr. Thomas Rubbe
+Dr. Eberhard Veit (Sprecher)
+Dr. Ulrich Walker
+Aufsichtsratsvorsitzender:
+Dr. Wilfried Stoll
+
+
+
+From klaas.gadeyne at fmtc.be  Tue Apr  3 13:50:28 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 3 Apr 2007 13:50:28 +0200 (CEST)
+Subject: [Ethercatmaster-users] Low level device driver problem
+In-Reply-To: <OF046DF37E.F9891EA3-ONC12572B2.003B8966-C12572B2.003D19EF@MAIL.DE.FESTO.NET>
+References: <OF046DF37E.F9891EA3-ONC12572B2.003B8966-C12572B2.003D19EF@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0704031316120.1346@ampere.labo01.fmtc.be>
+
+On Tue, 3 Apr 2007, Felix Erkert wrote:
+> I just fixed my last problem, now I have a new problem.
+> I get a low level device driver problem!
+
+[...]
+> Creating Master
+> EtherCAT error: Low level device driver problem               => Problem
+> low_level_input(): Waiting for semafore from recv timed out
+> low_level_txandrx: receiving failed
+> DLL::txandrx() Error
+> Error sending counter frame
+> Something went wrong while scanning network
+> EtherCAT_AL:: Can't init network
+
+[...]
+> The Low level device driver problem occurs in eth_drv.c at the
+> eth_drv_tx_done function
+>
+> static void eth_drv_tx_done(struct eth_drv_sc *sc, CYG_ADDRWORD key, int
+> status)
+> {
+>   ...
+>   if(status) {
+>     log(EC_LOG_ERROR, "EtherCAT error: Low level device driver
+> problem\n");
+>   }
+> }
+>
+> At the LED?s i can see that the EtherCAT Master sends anything.
+
+Just for making sure we don't misunderstand each other.  I guess you
+mean you are sure that a packet is sent?
+
+> But the
+> EtherCAT Master does?t receive a frame. Do anybody know where the problem
+> is or an idea?
+
+Note: be sure to read these pages first when you are digging further into this problem.
+<http://ecos.sourceware.org/docs-latest/ref/io-eth-drv-generic1.html>
+<http://ecos.sourceware.org/docs-latest/ref/io-eth-drv-upper-api.html>
+
+IIRC, The tx_done function is called when an outgoing packet is sent.
+For some reason, your NIC driver thinks something went wrong there.
+Try to use your debugger (or the logger) to check the value of the
+status variable and why it is set to non-zero by its caller.
+
+From the second link
+<quote>
+void (sc->funs->eth_drv->tx_done)(
+ 	struct eth_drv_sc *sc,
+ 	       unsigned long key, int status)
+
+This function is called when a packet completes transmission on the
+interface. The key value must be one of the keys provided to
+HRDWR_send() above. The value status should be non-zero (details
+currently undefined) to indicate that an error occurred during the
+transmission, and zero if all was well.
+</quote>
+
+I don't recall what your NIC driver was anymore, but in the driver
+code of your board (packages/devs/your_network_driver/) you can check
+why tx_done is called with a non-zero status.
+
+regards,
+
+Klaas
+
+From ERFE at DE.FESTO.COM  Tue Apr  3 16:52:22 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Tue, 3 Apr 2007 16:52:22 +0200
+Subject: [Ethercatmaster-users] Antwort: Re: Low level device driver problem
+In-Reply-To: <Pine.LNX.4.64.0704031316120.1346@ampere.labo01.fmtc.be>
+Message-ID: <OFD7403C7A.662EABC7-ONC12572B2.004BBEE0-C12572B2.0051B339@MAIL.DE.FESTO.NET>
+
+Thanks for your fast answer. I have read the generic ethernet device driver
+chapter and checked my status flag. My status flag in the eth_drv_tx_done
+function  is set to "1" but it should be "0". The key is the same as the
+key in the send function. Have you no idea what could going wrong? Do you
+know how i can find out what the status flag means?
+
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+Rechtsform: Kommanditgesellschaft
+Sitz: Esslingen a.N.
+Registergericht Stuttgart HRA 211583
+Umsatzsteuerident-Nummer: DE 145339206
+
+Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+Sitz: Stuttgart
+Registergericht Stuttgart HRB 18535
+
+Vorstand:
+Dr. Ekkehard Gericke,
+Lothar Kempf,
+Dipl.-Ing. Rudi Menrad
+Dr. Thomas Rubbe
+Dr. Eberhard Veit (Sprecher)
+Dr. Ulrich Walker
+Aufsichtsratsvorsitzender:
+Dr. Wilfried Stoll
+
+
+
+From bob.koninckx at fmtc.be  Tue Apr  3 16:59:18 2007
+From: bob.koninckx at fmtc.be (Bob Koninckx)
+Date: Tue, 03 Apr 2007 16:59:18 +0200
+Subject: [Ethercatmaster-users] Antwort: Re: Low level device driver
+ problem
+In-Reply-To: <OFD7403C7A.662EABC7-ONC12572B2.004BBEE0-C12572B2.0051B339@
+	MAIL.DE.FESTO.NET>
+References: <Pine.LNX.4.64.0704031316120.1346@ampere.labo01.fmtc.be>
+	<OFD7403C7A.662EABC7-ONC12572B2.004BBEE0-C12572B2.0051B339@MAIL.DE.FESTO.NET>
+Message-ID: <20070403145913.371D0E2D96@server04.site04.wtcm.be>
+
+Hi Felix,
+
+Looks like something is wrong in your EtherNet 
+driver. In that case it is probably best to take 
+this discussion to the eCos mailing list 
+(supposing that you use eCos for the OS).
+
+Bob
+
+
+At 16:52 3/04/2007, Felix Erkert wrote:
+>Thanks for your fast answer. I have read the generic ethernet device driver
+>chapter and checked my status flag. My status flag in the eth_drv_tx_done
+>function  is set to "1" but it should be "0". The key is the same as the
+>key in the send function. Have you no idea what could going wrong? Do you
+>know how i can find out what the status flag means?
+>
+>
+>Festo AG & Co. KG
+>Felix Erkert
+>
+>Abteilung TV-ND
+>Business Unit NIC Netware Devices
+>
+>
+>Ruiter Stra?e 82
+>D - 73734 Esslingen
+>
+>Tel: ++49 (0) 711-347-57193
+>Fax:
+>
+>http://www.festo.com
+>
+>Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+>Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+>Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+>unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+>des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+>E-Mails sind und das Material von Ihrem Computer zu loeschen.
+>
+>This e-mail and any attachments are confidential and intended solely for
+>the addressee. The perusal, publication, copying or dissemination of the
+>contents of this e-mail by unauthorised third parties is prohibited. If you
+>are not the intended recipient of this e-mail, please delete it and
+>immediately notify the sender.
+>
+>Rechtsform: Kommanditgesellschaft
+>Sitz: Esslingen a.N.
+>Registergericht Stuttgart HRA 211583
+>Umsatzsteuerident-Nummer: DE 145339206
+>
+>Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+>Sitz: Stuttgart
+>Registergericht Stuttgart HRB 18535
+>
+>Vorstand:
+>Dr. Ekkehard Gericke,
+>Lothar Kempf,
+>Dipl.-Ing. Rudi Menrad
+>Dr. Thomas Rubbe
+>Dr. Eberhard Veit (Sprecher)
+>Dr. Ulrich Walker
+>Aufsichtsratsvorsitzender:
+>Dr. Wilfried Stoll
+>
+>_______________________________________________
+>Ethercatmaster-users mailing list
+>Ethercatmaster-users at lists.berlios.de
+>https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, Bus 4027, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+bob.koninckx at fmtc.be                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders? MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. 
+Reyerslaan 80, B-1030 Brussel, Belgi?
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain 
+confidential information. It is intended
+solely for the intended addressee(s). Any use of 
+the information contained herein by other
+persons is prohibited. FMTC does not accept any 
+liability for the contents of this e-mail
+and/or its attachments.
+********************  
+
+
+
+From klaas.gadeyne at fmtc.be  Tue Apr  3 17:10:46 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 3 Apr 2007 17:10:46 +0200 (CEST)
+Subject: [Ethercatmaster-users] Antwort: Re: Low level device driver
+ problem
+In-Reply-To: <OFD7403C7A.662EABC7-ONC12572B2.004BBEE0-C12572B2.0051B339@MAIL.DE.FESTO.NET>
+References: <OFD7403C7A.662EABC7-ONC12572B2.004BBEE0-C12572B2.0051B339@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0704031704200.1346@ampere.labo01.fmtc.be>
+
+On Tue, 3 Apr 2007, Felix Erkert wrote:
+> Thanks for your fast answer. I have read the generic ethernet device driver
+> chapter and checked my status flag. My status flag in the eth_drv_tx_done
+> function  is set to "1" but it should be "0". The key is the same as the
+> key in the send function. Have you no idea what could going wrong? Do you
+> know how i can find out what the status flag means?
+
+<selfquote>
+I don't recall what your NIC driver was anymore, but in the driver
+code of your board (packages/devs/your_network_driver/) you can check
+why tx_done is called with a non-zero status.
+</selfquote>
+
+e.g. [kgad at ampere ~/SVN/ecos-fmtc/packages/devs/eth/smsc/lan91cxx/current/src]$
+  grep tx_done *
+if_lan91cxx.c:        (sc->funs->eth_drv->tx_done)(sc, cpd->txkey, 0);
+if_lan91cxx.c:            (sc->funs->eth_drv->tx_done)(sc, cpd->txkey,0);
+if_lan91cxx.c:        (sc->funs->eth_drv->tx_done)(sc, cpd->txkey,success);
+
+Check why success might be set to non-zero for instance...
+
+Klaas
+
+
+
+From felix-erkert at gmx.de  Wed Apr  4 17:57:44 2007
+From: felix-erkert at gmx.de (Felix GMX)
+Date: Wed, 4 Apr 2007 17:57:44 +0200
+Subject: [Ethercatmaster-users]  Antwort: Re: Low level device driver
+Message-ID: <000501c776d1$fc827900$2101a8c0@FelixLaptop>
+
+Hello,
+
+I found out that this function in the support.cxx file is waiting for the semaphore sem_delivery. Which function or where does this semaphore post? eCos waits for this semaphore but nowbody post it! eCos is exiting.
+
+static void ethercat_delivery(cyg_addrword_t)
+{
+    cyg_netdevtab_entry_t *t;
+
+    for(;;) {
+        // log(EC_LOG_INFO, "delivery thread: waiting for semaphore\n");
+        cyg_semaphore_wait(&sem_delivery);                                            => waiting for semaphore???
+        // log(EC_LOG_INFO, "delivery thread: woken up by semaphore\n");
+        for (t = &__NETDEVTAB__[0]; t != &__NETDEVTAB_END__; t++) {
+            struct eth_drv_sc *sc = (struct eth_drv_sc *)t->device_instance;
+            if (sc->state & ETH_DRV_NEEDS_DELIVERY) {
+                sc->state &= ~ETH_DRV_NEEDS_DELIVERY;
+                (sc->funs->deliver) (sc); 
+            }
+        }
+    }
+}
+
+static void ethercat_delivery_request(struct netif * netif)
+{
+    cyg_semaphore_post(&sem_delivery);    => Where does this function invoke???
+}
+
+extern "C" void if_attach(struct netif * netif) 
+{
+    netif->service_request_indication = ethercat_delivery_request;
+
+    // Only attach the selected device
+    if(strncmp(netif->device_name, CYGDAT_ETHERCATMASTER_ETH_DEVICE, ETHERCAT_DEVICE_NAME_MAX_LENGTH) == 0)
+        EtherCAT_DataLinkLayer::instance()->attach(netif);
+}
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070404/47c46707/attachment.html>
+
+From klaas.gadeyne at fmtc.be  Wed Apr  4 18:29:55 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Wed, 4 Apr 2007 18:29:55 +0200 (CEST)
+Subject: [Ethercatmaster-users] Antwort: Re: Low level device driver
+In-Reply-To: <000501c776d1$fc827900$2101a8c0@FelixLaptop>
+References: <000501c776d1$fc827900$2101a8c0@FelixLaptop>
+Message-ID: <Pine.LNX.4.64.0704041808440.3108@ampere.labo01.fmtc.be>
+
+On Wed, 4 Apr 2007, Felix GMX wrote:
+> Hello,
+>
+> I found out that this function in the support.cxx file is waiting for the semaphore sem_delivery. Which function or where does this semaphore post? eCos waits for this semaphore but nowbody post it! eCos is exiting.
+>
+> static void ethercat_delivery(cyg_addrword_t)
+> {
+>    cyg_netdevtab_entry_t *t;
+>
+>    for(;;) {
+>        // log(EC_LOG_INFO, "delivery thread: waiting for semaphore\n");
+>        cyg_semaphore_wait(&sem_delivery);                                            => waiting for semaphore???
+>        // log(EC_LOG_INFO, "delivery thread: woken up by semaphore\n");
+>        for (t = &__NETDEVTAB__[0]; t != &__NETDEVTAB_END__; t++) {
+>            struct eth_drv_sc *sc = (struct eth_drv_sc *)t->device_instance;
+>            if (sc->state & ETH_DRV_NEEDS_DELIVERY) {
+>                sc->state &= ~ETH_DRV_NEEDS_DELIVERY;
+>                (sc->funs->deliver) (sc);
+>            }
+>        }
+>    }
+> }
+>
+> static void ethercat_delivery_request(struct netif * netif)
+> {
+>    cyg_semaphore_post(&sem_delivery);    => Where does this function invoke???
+> }
+>
+> extern "C" void if_attach(struct netif * netif)
+> {
+>    netif->service_request_indication = ethercat_delivery_request;
+>
+>    // Only attach the selected device
+>    if(strncmp(netif->device_name, CYGDAT_ETHERCATMASTER_ETH_DEVICE, ETHERCAT_DEVICE_NAME_MAX_LENGTH) == 0)
+>        EtherCAT_DataLinkLayer::instance()->attach(netif);
+> }
+
+Felix, the delivery thread which posts this semaphore is woken up by
+the interrupt of an incoming ethercat packet.
+
+void
+eth_drv_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t
+data)
+{
+   struct eth_drv_sc * sc = (struct eth_drv_sc *)(data);
+   struct netif * netif = &(sc->sc_arpcom.ac_if);
+
+   // diag_printf("eth_drv_dsr called\n");
+
+   sc->state |= ETH_DRV_NEEDS_DELIVERY;
+   (netif->service_request_indication)(netif);
+}
+
+However, the problem you showed yesterday happens before, in casu when
+sending the packet.  AFAIS, there is no packet coming back in your
+case (no interrupt generated, hence no dsr, hence the delivery thread
+is not woken up).  Please investigate first why the status variable is
+set to non-nil.
+
+Klaas
+
+
+From bob.koninckx at fmtc.be  Wed Apr  4 18:37:06 2007
+From: bob.koninckx at fmtc.be (Bob Koninckx)
+Date: Wed, 04 Apr 2007 18:37:06 +0200
+Subject: [Ethercatmaster-users] Antwort: Re: Low level device driver
+In-Reply-To: <Pine.LNX.4.64.0704041808440.3108@ampere.labo01.fmtc.be>
+References: <000501c776d1$fc827900$2101a8c0@FelixLaptop>
+	<Pine.LNX.4.64.0704041808440.3108@ampere.labo01.fmtc.be>
+Message-ID: <20070404163647.30B9EE2D4B@server04.site04.wtcm.be>
+
+At 18:29 4/04/2007, Klaas Gadeyne wrote:
+>On Wed, 4 Apr 2007, Felix GMX wrote:
+> > Hello,
+> >
+> > I found out that this function in the 
+> support.cxx file is waiting for the semaphore 
+> sem_delivery. Which function or where does this 
+> semaphore post? eCos waits for this semaphore 
+> but nowbody post it! eCos is exiting.
+> >
+> > static void ethercat_delivery(cyg_addrword_t)
+> > {
+> >    cyg_netdevtab_entry_t *t;
+> >
+> >    for(;;) {
+> >        // log(EC_LOG_INFO, "delivery thread: waiting for semaphore\n");
+> >        cyg_semaphore_wait(&sem_delivery); 
+>                                         => waiting for semaphore???
+> >        // log(EC_LOG_INFO, "delivery thread: woken up by semaphore\n");
+> >        for (t = &__NETDEVTAB__[0]; t != &__NETDEVTAB_END__; t++) {
+> >            struct eth_drv_sc *sc = (struct eth_drv_sc *)t->device_instance;
+> >            if (sc->state & ETH_DRV_NEEDS_DELIVERY) {
+> >                sc->state &= ~ETH_DRV_NEEDS_DELIVERY;
+> >                (sc->funs->deliver) (sc);
+> >            }
+> >        }
+> >    }
+> > }
+> >
+> > static void ethercat_delivery_request(struct netif * netif)
+> > {
+> >    cyg_semaphore_post(&sem_delivery);    => 
+> Where does this function invoke???
+> > }
+> >
+> > extern "C" void if_attach(struct netif * netif)
+> > {
+> >    netif->service_request_indication = ethercat_delivery_request;
+> >
+> >    // Only attach the selected device
+> >    if(strncmp(netif->device_name, 
+> CYGDAT_ETHERCATMASTER_ETH_DEVICE, ETHERCAT_DEVICE_NAME_MAX_LENGTH) == 0)
+> >        EtherCAT_DataLinkLayer::instance()->attach(netif);
+> > }
+>
+>Felix, the delivery thread which posts this semaphore is woken up by
+>the interrupt of an incoming ethercat packet.
+>
+>void
+>eth_drv_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t
+>data)
+>{
+>    struct eth_drv_sc * sc = (struct eth_drv_sc *)(data);
+>    struct netif * netif = &(sc->sc_arpcom.ac_if);
+>
+>    // diag_printf("eth_drv_dsr called\n");
+>
+>    sc->state |= ETH_DRV_NEEDS_DELIVERY;
+>    (netif->service_request_indication)(netif);
+>}
+>
+>However, the problem you showed yesterday happens before, in casu when
+>sending the packet.  AFAIS, there is no packet coming back in your
+>case (no interrupt generated, hence no dsr, hence the delivery thread
+>is not woken up).  Please investigate first why the status variable is
+>set to non-nil.
+>
+>Klaas
+
+
+It is probably also a good idea to hook up a spy 
+tool to your network to see what actually happens 
+on the wire. If nothing is send out, you should 
+dig deeper into your driver. If something is sent 
+out but nothing comes back, then your slaves are 
+faulty or the messages are not formatted 
+correctly (endianness problems??). If something 
+comes back, but you don't see it, again, your 
+driver needs further investigation.
+
+Try Ethereal, its easy to use and ETG has plugins 
+for etherCAT available for download.
+
+Bob
+
+
+>_______________________________________________
+>Ethercatmaster-users mailing list
+>Ethercatmaster-users at lists.berlios.de
+>https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, Bus 4027, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+bob.koninckx at fmtc.be                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders? MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. 
+Reyerslaan 80, B-1030 Brussel, Belgi?
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain 
+confidential information. It is intended
+solely for the intended addressee(s). Any use of 
+the information contained herein by other
+persons is prohibited. FMTC does not accept any 
+liability for the contents of this e-mail
+and/or its attachments.
+********************  
+
+
+
+From felix-erkert at gmx.de  Wed Apr  4 19:25:25 2007
+From: felix-erkert at gmx.de (Felix GMX)
+Date: Wed, 4 Apr 2007 19:25:25 +0200
+Subject: [Ethercatmaster-users]   Antwort: Re: Low level device driver
+Message-ID: <000501c776de$3c672b40$2101a8c0@FelixLaptop>
+
+Hello,
+
+So just i have traced the first ethercat frame! Also the EtherCAT Master sends a correct APRD frame in the scan_slaves() function. My EtherCAT Slave is the EtherCAT EVA Board. How should i configurate the board in the EtherCAT Master? Must i change the EtherCAT slave configuration or is default configuration right?
+
+bool EtherCAT_AL::scan_slaves(void)
+{
+      // Send APRD telegram to count number of slaves
+      APRD_Telegram counter_tg(m_logic_instance->get_idx(),0x0000,0x0000, m_logic_instance->get_wkc(),0x01,(unsigned char) 0x00);
+      EC_Ethernet_Frame counter_frame(&counter_tg);
+      bool succeed = m_dll_instance->txandrx(&counter_frame);
+      ...
+}
+
+Thats my logging output:
+...
+smsc_lan91cxx_init
+LAN91CXX - supposed BankReg @ 80030e = 3302
+LAN91CXX - type: 9, rev: 1
+LAN91CXX - status: 0000
+LAN91CXX - static ESA: 00:07:ed:0a:58:49
+lan91cxx_start
+Creating Master
+lan91cxx_can_send
+lan91cxx_send
+lan91cxx_send: allocated packet 0000
+lan91cxx_isr
+lan91cxx_deliver
+lan91cxx_TxEvent
+lan91cxx_TxEvent:START: fifo 8000 ints 0100
+lan91cxx_TxEvent:END: fifo 8080 ints 010c
+EtherCAT error: Low level device driver problemlan91cxx_send:END: ints at TX: 010c
+low_level_input(): Waiting for semafore from recv timed out
+low_level_txandrx: receiving failed
+DLL::txandrx() Error
+Error sending counter frame
+Something went wrong while scanning network
+EtherCAT_AL:: Can't init network
+...
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070404/fc55341f/attachment.html>
+
+From klaas.gadeyne at fmtc.be  Thu Apr  5 08:57:49 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 5 Apr 2007 08:57:49 +0200 (CEST)
+Subject: [Ethercatmaster-users] Antwort: Re: Low level device driver
+In-Reply-To: <000501c776de$3c672b40$2101a8c0@FelixLaptop>
+References: <000501c776de$3c672b40$2101a8c0@FelixLaptop>
+Message-ID: <Pine.LNX.4.64.0704050855400.3108@ampere.labo01.fmtc.be>
+
+On Wed, 4 Apr 2007, Felix GMX wrote:
+> Hello,
+>
+> So just i have traced the first ethercat frame! Also the EtherCAT Master sends a correct APRD frame in the scan_slaves() function. My EtherCAT Slave is the EtherCAT EVA Board. How should i configurate the board in the EtherCAT Master? Must i change the EtherCAT slave configuration or is default configuration right?
+
+IIRC, there are some switches to set to choose which output
+functionality (DI, DO, DIO, AO etc) you want.  However, this setting shouldn't
+prevent the board from replying to an APRD telegram for
+initialisation, I guess.  Check the manual of the EVA board.
+
+Klaas
+
+
+From bob.koninckx at fmtc.be  Thu Apr  5 09:30:11 2007
+From: bob.koninckx at fmtc.be (Bob Koninckx)
+Date: Thu, 05 Apr 2007 09:30:11 +0200
+Subject: [Ethercatmaster-users] Antwort: Re: Low level device  driver
+In-Reply-To: <000501c776de$3c672b40$2101a8c0@FelixLaptop>
+References: <000501c776de$3c672b40$2101a8c0@FelixLaptop>
+Message-ID: <20070405073010.D2DB2E2D59@server04.site04.wtcm.be>
+
+At 19:25 4/04/2007, Felix GMX wrote:
+>Hello,
+>
+>So just i have traced the first ethercat frame! 
+>Also the EtherCAT Master sends a correct
+
+
+Are you sure about that? I don't remember your 
+hardware anymore, but if it's a big-endian 
+machine, maybe the payload of the message is 
+formmatted incorrectly. We tried to make our code 
+valid for both big-endian and little endian 
+machines (it is a configuration option IIRC, 
+Klaas ?). Only tested it on little endian though.
+
+Make sure this is ok, by inspecting the message 
+byte-by-byte. I wouldn't be surprised if the EVA 
+board just drops frames it does not understand.
+
+Bob
+
+
+
+>APRD frame in the scan_slaves() function. My 
+>EtherCAT Slave is the EtherCAT EVA Board. How 
+>should i configurate the board in the EtherCAT 
+>Master? Must i change the EtherCAT slave 
+>configuration or is default configuration right?
+>
+>bool EtherCAT_AL::scan_slaves(void)
+>{
+>       // Send APRD telegram to count number of slaves
+>       APRD_Telegram 
+> counter_tg(m_logic_instance->get_idx(),0x0000,0x0000, 
+> m_logic_instance->get_wkc(),0x01,(unsigned char) 0x00);
+>       EC_Ethernet_Frame counter_frame(&counter_tg);
+>       bool succeed = m_dll_instance->txandrx(&counter_frame);
+>       ...
+>}
+>
+>Thats my logging output:
+>...
+>smsc_lan91cxx_init
+>LAN91CXX - supposed BankReg @ 80030e = 3302
+>LAN91CXX - type: 9, rev: 1
+>LAN91CXX - status: 0000
+>LAN91CXX - static ESA: 00:07:ed:0a:58:49
+>lan91cxx_start
+>Creating Master
+>lan91cxx_can_send
+>lan91cxx_send
+>lan91cxx_send: allocated packet 0000
+>lan91cxx_isr
+>lan91cxx_deliver
+>lan91cxx_TxEvent
+>lan91cxx_TxEvent:START: fifo 8000 ints 0100
+>lan91cxx_TxEvent:END: fifo 8080 ints 010c
+>EtherCAT error: Low level device driver 
+>problemlan91cxx_send:END: ints at TX: 010c
+>low_level_input(): Waiting for semafore from recv timed out
+>low_level_txandrx: receiving failed
+>DLL::txandrx() Error
+>Error sending counter frame
+>Something went wrong while scanning network
+>EtherCAT_AL:: Can't init network
+>...
+>_______________________________________________
+>Ethercatmaster-users mailing list
+>Ethercatmaster-users at lists.berlios.de
+>https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, Bus 4027, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+bob.koninckx at fmtc.be                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders? MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. 
+Reyerslaan 80, B-1030 Brussel, Belgi?
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain 
+confidential information. It is intended
+solely for the intended addressee(s). Any use of 
+the information contained herein by other
+persons is prohibited. FMTC does not accept any 
+liability for the contents of this e-mail
+and/or its attachments.
+********************  
+
+
+
+From klaas.gadeyne at fmtc.be  Thu Apr  5 09:35:54 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 5 Apr 2007 09:35:54 +0200 (CEST)
+Subject: [Ethercatmaster-users] Antwort: Re: Low level device  driver
+In-Reply-To: <20070405073010.D2DB2E2D59@server04.site04.wtcm.be>
+References: <000501c776de$3c672b40$2101a8c0@FelixLaptop>
+	<20070405073010.D2DB2E2D59@server04.site04.wtcm.be>
+Message-ID: <Pine.LNX.4.64.0704050933160.3108@ampere.labo01.fmtc.be>
+
+On Thu, 5 Apr 2007, Bob Koninckx wrote:
+> Are you sure about that? I don't remember your
+> hardware anymore, but if it's a big-endian
+> machine, maybe the payload of the message is
+> formmatted incorrectly. We tried to make our code
+> valid for both big-endian and little endian
+> machines (it is a configuration option IIRC,
+> Klaas ?).
+
+No, it is done by including the HAL headers of your board and via
+CYG_CPU_TO_LE.. macros, so this should work out of the box.
+
+Klaas
+
+
+
+From felix-erkert at gmx.de  Thu Apr  5 11:00:15 2007
+From: felix-erkert at gmx.de (Felix GMX)
+Date: Thu, 5 Apr 2007 11:00:15 +0200
+Subject: [Ethercatmaster-users]  Antwort: Re: Low level device  driver
+Message-ID: <001e01c77760$d45e63f0$2101a8c0@FelixLaptop>
+
+Hello,
+
+- The NiosII Processor System is a Little Endian System!
+
+- Thats my traced EtherCAT frame (Why are there so many "0" at the end):
+
+   0000   ff ff ff ff ff ff 00 07 ed 0a 58 49 88 a4 0d 10              ..........XI....
+   0010   01 c0 00 00 00 00 01 00 00 00 3a 74 00 00 00 00  ..........:t....
+   0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+   0030   00 00 00 00 00 00 00 00 00 00 00 00                    ............
+
+   Destination: ff ff ff ff ff ff
+   Source:       00 07 ed 0a 58 49 
+   Type:          88a4
+
+   EtherCAT Protcol: 'APRD', Len: 1, Adp 0x0, Ado 0x0, Wc 116 
+    Sub Frame: Cmd: 'APRD' (1), Len: 1, Adp 0x0, Ado 0x0, Cnt 116
+       Header
+        Command:    APRD (0x01)
+        Index:            0xc0
+        Slave Addr:    0x0000
+        Offset Addr:   0x0000
+        Length:          1(0x1) - No Roundtrip - Last Sub Command
+        Interrupt:        0x0000
+       Data      : 3A(0x3a)
+       Working Cnt: 116
+
+- What does the EtherCAT Master do if he doesn?t get a frame back?
+
+- What does IIRC mean and where can I find this switches (DI, DO, DIO, AO etc.)?
+
+Sorry for my stupied questions any thanks a lot for your fast answers! 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070405/e5619ffb/attachment.html>
+
+From bob.koninckx at fmtc.be  Thu Apr  5 11:11:01 2007
+From: bob.koninckx at fmtc.be (Bob Koninckx)
+Date: Thu, 05 Apr 2007 11:11:01 +0200
+Subject: [Ethercatmaster-users] Antwort: Re: Low level device   driver
+In-Reply-To: <001e01c77760$d45e63f0$2101a8c0@FelixLaptop>
+References: <001e01c77760$d45e63f0$2101a8c0@FelixLaptop>
+Message-ID: <20070405091102.11890E2D59@server04.site04.wtcm.be>
+
+At 11:00 5/04/2007, Felix GMX wrote:
+>Hello,
+>
+>- The NiosII Processor System is a Little Endian System!
+
+
+In that case it's probably correct. The fact that 
+ethereal "understands" whats in the message also suggests this.
+
+
+>
+>- Thats my traced EtherCAT frame (Why are there so many "0" at the end):
+>
+>    0000   ff ff ff ff ff ff 00 07 ed 0a 58 49 
+> 88 a4 0d 10              ..........XI....
+>    0010   01 c0 00 00 00 00 01 00 00 00 3a 74 00 00 00 00  ..........:t....
+>    0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>    0030   00 00 00 00 00 00 00 00 00 00 00 00                    ............
+>    Destination: ff ff ff ff ff ff
+>    Source:       00 07 ed 0a 58 49
+>    Type:          88a4
+>
+>    EtherCAT Protcol: 'APRD', Len: 1, Adp 0x0, Ado 0x0, Wc 116
+>     Sub Frame: Cmd: 'APRD' (1), Len: 1, Adp 0x0, Ado 0x0, Cnt 116
+>        Header
+>         Command:    APRD (0x01)
+>         Index:            0xc0
+>         Slave Addr:    0x0000
+>         Offset Addr:   0x0000
+>         Length:          1(0x1) - No Roundtrip - Last Sub Command
+>         Interrupt:        0x0000
+>        Data      : 3A(0x3a)
+>        Working Cnt: 116
+
+
+Now take the EtherCAT spec and verify that all 
+fields are filled in correctly. If you have a 
+version of twincat available, I'dd suggest you 
+try with Twincat too. If the board responds to 
+twincat, take again a trace and look for 
+differences in the message. If it does not 
+respond to twincat either, you have to find out 
+what's wrong with the EVA board. We had a very 
+early version of this board, and found after a 
+lot of trial and error that both ethernet ports 
+are not equivalent; one is an input and the other 
+is an output (this is a long shot, though)
+
+
+>
+>- What does the EtherCAT Master do if he doesn?t get a frame back?
+
+
+I guess it just waits for data to come in. Could 
+be that it's a timed wait (not sure). If that's 
+the case (verify it first!) and it does not come 
+back eventually, make sure that your eCos RTC is ticking.
+
+>
+>- What does IIRC mean and where can I find this 
+>switches (DI, DO, DIO, AO etc.)?
+
+
+IIRC = If I Remember Correctly :-)
+
+>
+>Sorry for my stupied questions any thanks a lot for your fast answers!
+
+
+You're welcome
+
+Bob
+
+
+>_______________________________________________
+>Ethercatmaster-users mailing list
+>Ethercatmaster-users at lists.berlios.de
+>https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, Bus 4027, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+bob.koninckx at fmtc.be                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders? MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. 
+Reyerslaan 80, B-1030 Brussel, Belgi?
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain 
+confidential information. It is intended
+solely for the intended addressee(s). Any use of 
+the information contained herein by other
+persons is prohibited. FMTC does not accept any 
+liability for the contents of this e-mail
+and/or its attachments.
+********************  
+
+
+
+From klaas.gadeyne at fmtc.be  Thu Apr  5 11:36:31 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 5 Apr 2007 11:36:31 +0200 (CEST)
+Subject: [Ethercatmaster-users] Antwort: Re: Low level device  driver
+In-Reply-To: <001e01c77760$d45e63f0$2101a8c0@FelixLaptop>
+References: <001e01c77760$d45e63f0$2101a8c0@FelixLaptop>
+Message-ID: <Pine.LNX.4.64.0704051121170.3108@ampere.labo01.fmtc.be>
+
+On Thu, 5 Apr 2007, Felix GMX wrote:
+
+> Hello,
+>
+> - The NiosII Processor System is a Little Endian System!
+>
+> - Thats my traced EtherCAT frame (Why are there so many "0" at the end):
+>
+>   0000   ff ff ff ff ff ff 00 07 ed 0a 58 49 88 a4 0d 10              ..........XI....
+>   0010   01 c0 00 00 00 00 01 00 00 00 3a 74 00 00 00 00  ..........:t....
+>   0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   0030   00 00 00 00 00 00 00 00 00 00 00 00                    ............
+>
+>   Destination: ff ff ff ff ff ff
+>   Source:       00 07 ed 0a 58 49
+>   Type:          88a4
+>
+>   EtherCAT Protcol: 'APRD', Len: 1, Adp 0x0, Ado 0x0, Wc 116
+>    Sub Frame: Cmd: 'APRD' (1), Len: 1, Adp 0x0, Ado 0x0, Cnt 116
+>       Header
+>        Command:    APRD (0x01)
+>        Index:            0xc0
+>        Slave Addr:    0x0000
+>        Offset Addr:   0x0000
+>        Length:          1(0x1) - No Roundtrip - Last Sub Command
+>        Interrupt:        0x0000
+>       Data      : 3A(0x3a)
+>       Working Cnt: 116
+
+IIRC :-) most fields seem fine apart from
+- the data
+- the working counter (should be 0 for the outgoing message).
+
+We recently found a "bug" with an uninitialized value when we changed
+to another compiler.  Can you try the following patch on ethercat_AL.cxx
+
+root at einstein:~/SVN/eml-trunk/src/al #
+   svn diff -r10:11
+Index: ethercat_AL.cxx
+===================================================================
+--- ethercat_AL.cxx     (revision 10)
++++ ethercat_AL.cxx     (revision 11)
+@@ -77,6 +77,7 @@
+  {
+    m_dll_instance = EtherCAT_DataLinkLayer::instance();
+    m_slave_db = EtherCAT_SlaveDb::instance();
++  m_logic_instance = EC_Logic::instance();
+    if (init() == false){
+      // Can't use exceptions, since not supported by eCOS f.i.
+      log(EC_LOG_FATAL, "EtherCAT_AL:: Can't init network\n");
+@@ -115,8 +116,9 @@
+  EtherCAT_AL::scan_slaves(void)
+  {
+    // Send APRD telegram to count number of slaves
++  unsigned char counter_tg_data[1] = { 0x00 };
+    APRD_Telegram counter_tg(m_logic_instance->get_idx(),0x0000,0x0000,
+-                          m_logic_instance->get_wkc(),0x01,(unsigned char) 0x00);
++  m_logic_instance->get_wkc(),0x01,counter_tg_data);
+    EC_Ethernet_Frame counter_frame(&counter_tg);
+    bool succeed = m_dll_instance->txandrx(&counter_frame);
+    if (succeed == false){
+
+> - What does the EtherCAT Master do if he doesn?t get a frame back?
+
+I concludes there are no slaves in the network and goes back to sleep
+:-)
+
+> - What does IIRC mean and where can I find this switches (DI, DO, DIO, AO etc.)?
+
+It's a round button with numbers for each application with you have to
+set using a screw driver.  But you should have found this information
+in your manual!
+
+Klaas
+
+From felix-erkert at gmx.de  Thu Apr  5 17:25:43 2007
+From: felix-erkert at gmx.de (Felix GMX)
+Date: Thu, 5 Apr 2007 17:25:43 +0200
+Subject: [Ethercatmaster-users]   Antwort: Re: Low level device  driver
+Message-ID: <000501c77796$added490$2101a8c0@FelixLaptop>
+
+Hello,
+
+I have just checked the TX_Done Event function and the status flags! My low level driver function (see below) sends a status flag = 1. This status flag is in the low level driver function (lan91cxx_TxEvent) called success. By default suceess is set to 1 (true). Why does the eth_drv_tx_done function check the status flag onto true? I markt the important lines with "=>"!!! Is the verification of the flag a bug in the EtherCAT Master???
+
+=> This is the status check statement (Is this a bug)
+ if(status)     => Why is does the if statement check status onto true???
+ {
+      log(EC_LOG_ERROR, "EtherCAT error: Low level device driver problem\n");
+ }
+
+static void eth_drv_tx_done(struct eth_drv_sc *sc, CYG_ADDRWORD key, int status)
+{
+     // This is run from a thread context, we can safely do whatever we
+     // want
+     // diag_printf("Calling eth_drv_tx_done\n");
+  
+     struct eth_msg * msg = (struct eth_msg *)(key);
+     eth_drv_msg_put(&eth_msg_free, msg);
+
+     msg = eth_drv_msg_get(&eth_msg_wait);
+     if(msg) 
+     {
+          // FIXME Should we call can_send here ? Probably not, there should be space for at least
+          // one message
+          // KG according to the calling graph in the ecos reference manual,
+          // we should call it again!
+          struct eth_drv_sg sg_list[2]; // One for the header, one for the
+          // ethercat frames
+          int sg_len = 2;
+
+          struct netif * netif = &(sc->sc_arpcom.ac_if); 
+
+          // FIXME avoid double code
+         unsigned char hdr[HEADER_SIZE];
+         // Destination address is broadcast MAC address
+         hdr[0]  = 0xff; hdr[1]  = 0xff;
+         hdr[2]  = 0xff; hdr[3]  = 0xff;
+         hdr[4]  = 0xff; hdr[5]  = 0xff;
+         // Source address is broadcast MAC address
+         hdr[6]  = (netif->hwaddr)[0]; hdr[7]  = (netif->hwaddr)[1];
+         hdr[8]  = (netif->hwaddr)[2]; hdr[9]  = (netif->hwaddr)[3];
+         hdr[10] = (netif->hwaddr)[4]; hdr[11] = (netif->hwaddr)[5];
+         // Type is ethercat
+         hdr[12] = 0x88; hdr[13] = 0xa4;
+    
+         sg_list[0].buf = (CYG_ADDRESS)hdr;
+         sg_list[0].len = (HEADER_SIZE);
+         sg_list[1].buf = (CYG_ADDRESS)(msg->data);
+         sg_list[1].len = msg->len;
+
+         (sc->funs->send)(sc, sg_list, sg_len, msg->len + HEADER_SIZE, (CYG_ADDRWORD)msg);
+     }
+
+     if(status)     => Why true???
+     {
+         log(EC_LOG_ERROR, "EtherCAT error: Low level device driver problem\n");
+     }
+}
+
+=> This is my low level driver transmit function f?r the LAN91C111 Ethernet Controller
+static void lan91cxx_TxEvent(struct eth_drv_sc *sc, int stat)
+{
+        unsigned short packet, ints, tcr;
+        struct lan91cxx_priv_data *cpd = (struct lan91cxx_priv_data *)sc->driver_private;
+=>    int success = 1;    => Is set to true
+
+        DEBUG_FUNCTION();
+
+        INCR_STAT( tx_complete );
+
+        // Ack and mask TX interrupt set
+        ints = get_reg(sc, LAN91CXX_INTERRUPT) & 0xff00;
+        ints |= LAN91CXX_INTERRUPT_TX_SET_ACK;
+        ints &= ~LAN91CXX_INTERRUPT_TX_SET_M;
+        put_reg(sc, LAN91CXX_INTERRUPT, ints);
+
+        // Get number of completed packet and read the status word
+        packet = get_reg(sc, LAN91CXX_FIFO_PORTS);
+#if DEBUG & 1
+        db_printf("%s:START: fifo %04x ints %04x\n", __FUNCTION__, packet, ints);
+#endif
+
+#ifdef KEEP_STATISTICS
+        {
+            unsigned short reg;
+
+            reg = get_reg( sc, LAN91CXX_EPH_STATUS );
+        
+            // Covering each bit in turn...
+            if ( reg & LAN91CXX_STATUS_TX_UNRN   ) INCR_STAT( tx_underrun );
+            //if ( reg & LAN91CXX_STATUS_LINK_OK ) INCR_STAT(  );
+            //if ( reg & LAN91CXX_STATUS_CTR_ROL ) INCR_STAT(  );
+            //if ( reg & LAN91CXX_STATUS_EXC_DEF ) INCR_STAT(  );
+            if ( reg & LAN91CXX_STATUS_LOST_CARR ) INCR_STAT( tx_carrier_loss );
+            if ( reg & LAN91CXX_STATUS_LATCOL    ) INCR_STAT( tx_late_collisions );
+            //if ( reg & LAN91CXX_STATUS_WAKEUP  ) INCR_STAT(  );
+            if ( reg & LAN91CXX_STATUS_TX_DEFR   ) INCR_STAT( tx_deferred );
+            //if ( reg & LAN91CXX_STATUS_LTX_BRD ) INCR_STAT(  );
+            if ( reg & LAN91CXX_STATUS_SQET      ) INCR_STAT( tx_sqetesterrors );
+            if ( reg & LAN91CXX_STATUS_16COL     ) INCR_STAT( tx_max_collisions );
+            //if ( reg & LAN91CXX_STATUS_LTX_MULT) INCR_STAT(  );
+            if ( reg & LAN91CXX_STATUS_MUL_COL   ) INCR_STAT( tx_mult_collisions );
+            if ( reg & LAN91CXX_STATUS_SNGL_COL  ) INCR_STAT( tx_single_collisions );
+            if ( reg & LAN91CXX_STATUS_TX_SUC    ) INCR_STAT( tx_good );
+
+            cpd->stats.tx_total_collisions = 
+                    cpd->stats.tx_late_collisions + 
+                    cpd->stats.tx_max_collisions + 
+                    cpd->stats.tx_mult_collisions + 
+                    cpd->stats.tx_single_collisions;
+
+            // We do not need to look in the Counter Register (LAN91CXX_COUNTER)
+            // because it just mimics the info we already have above.
+        }
+#endif // KEEP_STATISTICS
+        // We do not really care about Tx failure.  Ethernet is not a reliable
+        // medium.  But we do care about the TX engine stopping.
+        tcr = get_reg(sc, LAN91CXX_TCR);
+        if ( 0 == (LAN91CXX_TCR_TXENA & tcr) )
+         {
+#if DEBUG & 1
+                db_printf("%s: ENGINE RESTART: tcr %x ints %04x\n", __FUNCTION__, tcr, ints);
+#endif
+                tcr |= LAN91CXX_TCR_TXENA;
+                put_reg(sc, LAN91CXX_TCR, tcr);
+=>            success = 0; // And treat this as an error...    => If an error occurs the success (status) flag is set to false
+        }
+
+        packet &= 0xff;
+
+        // It certainly appears that occasionally the tx fifo tells lies; we
+        // get the wrong packet number.  Freeing the one we allocated seems to
+        // give correct operation.
+#ifdef CYGPKG_INFRA_DEBUG
+        // Then we log, OOI, the number of times we get a bad packet number
+        // from the tx done fifo.
+        if (cpd->txpacket != packet )
+            lan91cxx_txfifo_bad++;
+        else
+            lan91cxx_txfifo_good++;
+#endif
+#if DEBUG & 4
+        db_printf("#####Tx packet freed %x (expected %x)\n", packet, cpd->txpacket );
+#endif
+        // and then free the packet
+        put_reg(sc, LAN91CXX_PNR, cpd->txpacket);
+        put_reg(sc, LAN91CXX_MMU_COMMAND, LAN91CXX_MMU_rel_packet);
+
+        // Ack the TX int which is supposed to clear the packet from the TX
+        // completion queue.
+        ints = get_reg(sc, LAN91CXX_INTERRUPT) & 0xff00;
+        ints |= LAN91CXX_INTERRUPT_TX_FIFO_ACK;
+        put_reg(sc, LAN91CXX_INTERRUPT, ints);
+
+#if DEBUG & 1
+        // Hm... The free doesn't seem to have the desired effect?!?
+        ints = get_reg(sc, LAN91CXX_INTERRUPT);
+        packet = get_reg(sc, LAN91CXX_FIFO_PORTS);
+        db_printf("%s:END: fifo %04x ints %04x\n", __FUNCTION__, packet, ints);
+#endif
+
+        if ( cpd->txbusy )
+        {
+            cpd->txbusy = 0;
+=>        (sc->funs->eth_drv->tx_done)(sc, cpd->txkey, success);    => sending the "success status" flag to an upper layer 
+        }
+}
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070405/970d4a2c/attachment.html>
+
+From klaas.gadeyne at fmtc.be  Thu Apr  5 17:29:48 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 5 Apr 2007 17:29:48 +0200 (CEST)
+Subject: [Ethercatmaster-users] Antwort: Re: Low level device  driver
+In-Reply-To: <000501c77796$added490$2101a8c0@FelixLaptop>
+References: <000501c77796$added490$2101a8c0@FelixLaptop>
+Message-ID: <Pine.LNX.4.64.0704051725280.3108@ampere.labo01.fmtc.be>
+
+On Thu, 5 Apr 2007, Felix GMX wrote:
+> Hello,
+>
+> I have just checked the TX_Done Event function and the status flags! My low level driver function (see below) sends a status flag = 1. This status flag is in the low level driver function (lan91cxx_TxEvent) called success. By default suceess is set to 1 (true). Why does the eth_drv_tx_done function check the status flag onto true? I markt the important lines with "=>"!!! Is the verification of the flag a bug in the EtherCAT Master???
+>
+> => This is the status check statement (Is this a bug)
+> if(status)     => Why is does the if statement check status onto true???
+
+See
+<https://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/000044.html>
+<http://ecos.sourceware.org/docs-latest/ref/io-eth-drv-upper-api.html>
+
+> => This is my low level driver transmit function f?r the LAN91C111 Ethernet Controller
+> static void lan91cxx_TxEvent(struct eth_drv_sc *sc, int stat)
+[...]
+> =>    int success = 1;    => Is set to true
+[...]
+> =>            success = 0; // And treat this as an error...    => If an error occurs the success (status) flag is set to false
+
+If I read
+<http://ecos.sourceware.org/docs-latest/ref/io-eth-drv-upper-api.html>
+correctly, I think you found a bug in your low level networkdriver.
+Please submit this issue to the eCos ML.
+
+ps.  As a quick test, you can change 1 into 0 and vice versa and see
+if it works then...
+
+Klaas
+
+From ERFE at DE.FESTO.COM  Thu Apr 12 10:59:02 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Thu, 12 Apr 2007 10:59:02 +0200
+Subject: [Ethercatmaster-users] Patch Bug???
+Message-ID: <OF333BD913.4DFF787E-ONC12572BB.00308244-C12572BB.003159BC@MAIL.DE.FESTO.NET>
+
+
+Hello,
+
+Is it right that the patch installs the eth_drv.c in <eCos install
+directory>\packages\io\eth\current\ethercatmaster
+
+diff -uN ethercatmaster/eth_drv.c ethercatmaster/eth_drv.c
+--- ethercatmaster/eth_drv.c  1970-01-01 01:00:00.000000000 +0100
++++ ethercatmaster/eth_drv.c  2006-02-23 14:16:16.000000000 +0100
+
+Should the eth_drv.c not be in the Source directory???
+
+ <eCos install directory>\packages\io\eth\current\src\ethercatmaster
+
+On which eCos Version do you build the ethercat master library?
+My eCos config Tool is based on sep 2004!!!
+
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+Rechtsform: Kommanditgesellschaft
+Sitz: Esslingen a.N.
+Registergericht Stuttgart HRA 211583
+Umsatzsteuerident-Nummer: DE 145339206
+
+Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+Sitz: Stuttgart
+Registergericht Stuttgart HRB 18535
+
+Vorstand:
+Dr. Ekkehard Gericke,
+Lothar Kempf,
+Dipl.-Ing. Rudi Menrad
+Dr. Thomas Rubbe
+Dr. Eberhard Veit (Sprecher)
+Dr. Ulrich Walker
+Aufsichtsratsvorsitzender:
+Dr. Wilfried Stoll
+
+
+
+From ERFE at DE.FESTO.COM  Thu Apr 12 14:46:58 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Thu, 12 Apr 2007 14:46:58 +0200
+Subject: [Ethercatmaster-users] Delivery Thread Priority???
+Message-ID: <OFE3C3F7B1.03F991E8-ONC12572BB.004428EC-C12572BB.004637BF@MAIL.DE.FESTO.NET>
+
+
+hello,
+
+in the eCos config tool you have to configurate the ethercat master. there
+are thread priority option. first for the delivery thread and secondly for
+the route thread priority. In eCos i can give thread priorities from 1 to
+32. 1 is the lowest and 32 the highest! Is this right? Which prioritiy
+should the delivery thread and the route thread have?
+
+I ask me why the ethercat master doesn?t detect a received ethercat frame.
+The ethercat slave sends a APRD frame back with increased working counter.
+I thing if the ethercat master increments the working counter, he gets a
+correct ethercat frame and sends the frame correct forward (with working
+counter + 1).
+
+if i send a ARP or an other ethernet frame to the slave he recognized the
+frame and said it is a wrong ethercat frame? There are my logging by
+sending any ethernet frames:
+
+Creating Master
+lan91cxx_can_send
+lan91cxx_send
+lan91cxx_send: allocated packet 0000
+lan91cxx_isr
+lan91cxx_deliver
+lan91cxx_TxEvent
+lan91cxx_TxEvent:START: fifo 8000 ints 0100
+lan91cxx_TxEvent:END: fifo 8080 ints 010c
+lan91cxx_send:END: ints at TX: 010c
+low_level_input(): Waiting for semafore, timeout = 2 ticks  => there he
+waits for a correct incoming ethercat frame
+lan91cxx_isr                                    => there he gets any other
+ethernet frame
+lan91cxx_deliver
+lan91cxx_RxEvent
+RxEvent - FIFOs: 0x0080
+RxEvent good rx - stat: 0x507f, len: 0x00fb
+lan91cxx_recv
+lan91cxx_recv : mlen fb, plen fb
+low_level_input: No EtherCAT msg!               => the ethercat master
+recognize that it isn?t a correct ethercat frame
+low_level_txandrx: receiving failed
+DLL::txandrx() Error
+Error sending counter frame
+Something went wrong while scanning network
+EtherCAT_AL:: Can't init network
+
+
+regards,
+
+Felix
+
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+Rechtsform: Kommanditgesellschaft
+Sitz: Esslingen a.N.
+Registergericht Stuttgart HRA 211583
+Umsatzsteuerident-Nummer: DE 145339206
+
+Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+Sitz: Stuttgart
+Registergericht Stuttgart HRB 18535
+
+Vorstand:
+Dr. Ekkehard Gericke,
+Lothar Kempf,
+Dipl.-Ing. Rudi Menrad
+Dr. Thomas Rubbe
+Dr. Eberhard Veit (Sprecher)
+Dr. Ulrich Walker
+Aufsichtsratsvorsitzender:
+Dr. Wilfried Stoll
+
+
+
+From klaas.gadeyne at fmtc.be  Thu Apr 12 15:16:26 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 12 Apr 2007 15:16:26 +0200 (CEST)
+Subject: [Ethercatmaster-users] Patch Bug???
+In-Reply-To: <OF333BD913.4DFF787E-ONC12572BB.00308244-C12572BB.003159BC@MAIL.DE.FESTO.NET>
+References: <OF333BD913.4DFF787E-ONC12572BB.00308244-C12572BB.003159BC@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0704121459160.21235@ampere.labo01.fmtc.be>
+
+On Thu, 12 Apr 2007, Felix Erkert wrote:
+> Hello,
+>
+> Is it right that the patch installs the eth_drv.c in <eCos install
+> directory>\packages\io\eth\current\ethercatmaster
+>
+> diff -uN ethercatmaster/eth_drv.c ethercatmaster/eth_drv.c
+> --- ethercatmaster/eth_drv.c  1970-01-01 01:00:00.000000000 +0100
+> +++ ethercatmaster/eth_drv.c  2006-02-23 14:16:16.000000000 +0100
+>
+> Should the eth_drv.c not be in the Source directory???
+
+Yes.  You've found a bug!  This should be
+
+--- src/ethercatmaster/eth_drv.c  1970-01-01 01:00:00.000000000 +0100
++++ src/ethercatmaster/eth_drv.c  2006-02-23 14:16:16.000000000 +0100
+
+Don't know how this got in :-(
+
+> <eCos install directory>\packages\io\eth\current\src\ethercatmaster
+>
+> On which eCos Version do you build the ethercat master library?
+> My eCos config Tool is based on sep 2004!!!
+
+See <http://ethercatmaster.berlios.de/#documentation>
+
+Klaas
+
+
+From klaas.gadeyne at fmtc.be  Thu Apr 12 15:41:08 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 12 Apr 2007 15:41:08 +0200 (CEST)
+Subject: [Ethercatmaster-users] Patch Bug???
+In-Reply-To: <Pine.LNX.4.64.0704121459160.21235@ampere.labo01.fmtc.be>
+References: <OF333BD913.4DFF787E-ONC12572BB.00308244-C12572BB.003159BC@MAIL.DE.FESTO.NET>
+	<Pine.LNX.4.64.0704121459160.21235@ampere.labo01.fmtc.be>
+Message-ID: <Pine.LNX.4.64.0704121538480.21235@ampere.labo01.fmtc.be>
+
+Hi Felix,
+
+>> Is it right that the patch installs the eth_drv.c in <eCos install
+>> directory>\packages\io\eth\current\ethercatmaster
+>>
+>> diff -uN ethercatmaster/eth_drv.c ethercatmaster/eth_drv.c
+>> --- ethercatmaster/eth_drv.c  1970-01-01 01:00:00.000000000 +0100
+>> +++ ethercatmaster/eth_drv.c  2006-02-23 14:16:16.000000000 +0100
+>>
+>> Should the eth_drv.c not be in the Source directory???
+>
+> Yes.  You've found a bug!  This should be
+>
+> --- src/ethercatmaster/eth_drv.c  1970-01-01 01:00:00.000000000 +0100
+> +++ src/ethercatmaster/eth_drv.c  2006-02-23 14:16:16.000000000 +0100
+>
+> Don't know how this got in :-(
+
+Can you try <http://ethercatmaster.berlios.de/files/eml-0.2.tar.bz2>
+Same installation instructions as for 0.1
+
+[kgad at ampere /tmp/eml-0.2/eml-0.2]$
+  cat ChangeLog
+2007-04-12  Klaas Gadeyne  <first dot last at fmtc dot be>
+
+         * release 0.2:  Fix problem with low level device driver patch
+         <https://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/000062.html>
+         and initialization problem
+         <https://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/000057.html>
+
+2006-02-21  Klaas Gadeyne  <first dot last at fmtc dot be>
+
+         * release 0.1: original code
+
+
+From klaas.gadeyne at fmtc.be  Thu Apr 12 15:56:59 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 12 Apr 2007 15:56:59 +0200 (CEST)
+Subject: [Ethercatmaster-users] Delivery Thread Priority???
+In-Reply-To: <OFE3C3F7B1.03F991E8-ONC12572BB.004428EC-C12572BB.004637BF@MAIL.DE.FESTO.NET>
+References: <OFE3C3F7B1.03F991E8-ONC12572BB.004428EC-C12572BB.004637BF@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0704121542100.21235@ampere.labo01.fmtc.be>
+
+On Thu, 12 Apr 2007, Felix Erkert wrote:
+> hello,
+>
+> in the eCos config tool you have to configurate the ethercat master. there
+> are thread priority option. first for the delivery thread and secondly for
+> the route thread priority. In eCos i can give thread priorities from 1 to
+> 32. 1 is the lowest and 32 the highest! Is this right? Which prioritiy
+> should the delivery thread and the route thread have?
+
+No
+<http://ecos.sourceware.org/docs-latest/ref/kernel-thread-create.html>
+
+the delivery thread should obviously have a _higher_ priority than the
+route thread (which is the case in the default configuration).
+
+> I ask me why the ethercat master doesn?t detect a received ethercat frame.
+> The ethercat slave sends a APRD frame back with increased working counter.
+> I thing if the ethercat master increments the working counter, he gets a
+
+Do you mean "ethercat slave"?
+
+> correct ethercat frame and sends the frame correct forward (with working
+> counter + 1).
+
+> if i send a ARP or an other ethernet frame to the slave he recognized the
+> frame and said it is a wrong ethercat frame? There are my logging by
+> sending any ethernet frames:
+>
+> Creating Master
+> lan91cxx_can_send
+> lan91cxx_send
+> lan91cxx_send: allocated packet 0000
+> lan91cxx_isr
+> lan91cxx_deliver
+> lan91cxx_TxEvent
+> lan91cxx_TxEvent:START: fifo 8000 ints 0100
+> lan91cxx_TxEvent:END: fifo 8080 ints 010c
+> lan91cxx_send:END: ints at TX: 010c
+> low_level_input(): Waiting for semafore, timeout = 2 ticks  => there he waits for a correct incoming ethercat frame
+> lan91cxx_isr                                    => there he gets any other
+> ethernet frame
+> lan91cxx_deliver
+> lan91cxx_RxEvent
+> RxEvent - FIFOs: 0x0080
+> RxEvent good rx - stat: 0x507f, len: 0x00fb
+> lan91cxx_recv
+> lan91cxx_recv : mlen fb, plen fb
+> low_level_input: No EtherCAT msg!               => the ethercat master recognize that it isn?t a correct ethercat frame
+> low_level_txandrx: receiving failed
+> DLL::txandrx() Error
+> Error sending counter frame
+> Something went wrong while scanning network
+> EtherCAT_AL:: Can't init network
+
+This seems like the right behaviour to me?  And this means the
+delivery thread _is_ woken up when an ethernet frame arrives...
+I don't really understand what you did I guess...  According to me,
+everything seems to workout fine.  If an ethernet frame is received,
+the delivery thread is woken up and it checks if the received message
+is an etherCAT message (which is not the case).  If (as you reported
+before), your slave would now send a true etherCAT message back,
+everything should work out fine?
+
+ps.  You _do_ use the NIC only for etherCAT traffic I presume...
+
+Klaas
+
+From ERFE at DE.FESTO.COM  Fri Apr 13 15:24:05 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Fri, 13 Apr 2007 15:24:05 +0200
+Subject: [Ethercatmaster-users] eCos Interrupts???
+Message-ID: <OF8B6FA078.1EA87AB2-ONC12572BC.0048C34D-C12572BC.00499983@MAIL.DE.FESTO.NET>
+
+
+Hello,
+
+I have traved the first to ethercat frames. So I thing the ethercat slave
+sends back to the ethercat master a correct ethercat frame! I think eCos
+doesn?t create an interrupt for the received frame! How do you configurate
+eCos HAL???? Whats your eCos "HAL interrupt handling" settings???
+
+Thats my settings (eCos HAL -> HAL interrupt handling):
+
+Use seperate stack for interrupts   enabled
+Interrupt stack size                4096
+Allow nested interrupts             disabled
+Save minimum context on interrupt   enabled
+Chain all interrupts together       disabled
+Ignore spuriouse [feeting] interrupts     disabled
+
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+Rechtsform: Kommanditgesellschaft
+Sitz: Esslingen a.N.
+Registergericht Stuttgart HRA 211583
+Umsatzsteuerident-Nummer: DE 145339206
+
+Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+Sitz: Stuttgart
+Registergericht Stuttgart HRB 18535
+
+Vorstand:
+Dr. Ekkehard Gericke,
+Lothar Kempf,
+Dipl.-Ing. Rudi Menrad
+Dr. Thomas Rubbe
+Dr. Eberhard Veit (Sprecher)
+Dr. Ulrich Walker
+Aufsichtsratsvorsitzender:
+Dr. Wilfried Stoll
+
+
+
+From ERFE at DE.FESTO.COM  Mon Apr 16 14:40:21 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Mon, 16 Apr 2007 14:40:21 +0200
+Subject: [Ethercatmaster-users] Antwort: Re:  Delivery Thread Priority???
+In-Reply-To: <Pine.LNX.4.64.0704121542100.21235@ampere.labo01.fmtc.be>
+Message-ID: <OFFCFEC09C.E84D5D25-ONC12572BF.0044D3BE-C12572BF.00459B31@MAIL.DE.FESTO.NET>
+
+Hello,
+
+Our example application and your EtherCAT Master runs! On the eCos SMSC
+LAN91C111 Ethernet device driver were a few issues. Thank you for our good
+support! Now I will analyse the EtherCAT Master stack and so one. Can you
+tell me, which cycle time your ethercat master have with one EVA Board?
+
+regards,
+
+Felix Erkert
+
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+Rechtsform: Kommanditgesellschaft
+Sitz: Esslingen a.N.
+Registergericht Stuttgart HRA 211583
+Umsatzsteuerident-Nummer: DE 145339206
+
+Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+Sitz: Stuttgart
+Registergericht Stuttgart HRB 18535
+
+Vorstand:
+Dr. Ekkehard Gericke,
+Lothar Kempf,
+Dipl.-Ing. Rudi Menrad
+Dr. Thomas Rubbe
+Dr. Eberhard Veit (Sprecher)
+Dr. Ulrich Walker
+Aufsichtsratsvorsitzender:
+Dr. Wilfried Stoll
+
+
+
+From klaas.gadeyne at fmtc.be  Mon Apr 16 15:20:58 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 16 Apr 2007 15:20:58 +0200 (CEST)
+Subject: [Ethercatmaster-users] Antwort: Re: Delivery Thread Priority???
+In-Reply-To: <OFFCFEC09C.E84D5D25-ONC12572BF.0044D3BE-C12572BF.00459B31@MAIL.DE.FESTO.NET>
+References: <OFFCFEC09C.E84D5D25-ONC12572BF.0044D3BE-C12572BF.00459B31@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0704161514440.7806@ampere.labo01.fmtc.be>
+
+On Mon, 16 Apr 2007, Felix Erkert wrote:
+Hi Felix
+
+> Our example application and your EtherCAT Master runs! On the eCos SMSC
+> LAN91C111 Ethernet device driver were a few issues. Thank you for our good
+> support!
+
+Nice to hear!  It would be nice for us and other users if you could
+tell us what you had to change exactly (in the eCos and/or EML tree)
+in order to get things running on your board, starting from the
+<http://ethercatmaster.berlios.de/files/eml-0.2.tar.bz2> tarball.
+
+And it would be even nicer if you could (help us) improve the
+documentation, by pointing out which issues were not clear in the
+documentation.
+
+> Now I will analyse the EtherCAT Master stack and so one. Can you tell
+> me, which cycle time your ethercat master have with one EVA Board?
+
+I think I tested it on the old i386 platform up to 1000 Hz (modifying
+the ticks variable in eCos).
+
+Best regards,
+Klaas
+
+
+
+From felix-erkert at gmx.de  Wed Apr 25 10:23:02 2007
+From: felix-erkert at gmx.de (Felix GMX)
+Date: Wed, 25 Apr 2007 10:23:02 +0200
+Subject: [Ethercatmaster-users] Nios Changes
+Message-ID: <000501c78712$f1683d10$2101a8c0@FelixLaptop>
+
+Hello,
+
+corrently i?m testing the ethercat master library. if i?m finished my testing, i will poste all my changes for the niosII core!
+
+regards,
+Felix Erkert
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070425/98925a3a/attachment.html>
+
+From ERFE at DE.FESTO.COM  Thu Apr 26 10:27:18 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Thu, 26 Apr 2007 10:27:18 +0200
+Subject: [Ethercatmaster-users] time measurement
+Message-ID: <OF37C801E5.54A700CF-ONC12572C9.002CC856-C12572C9.002E721A@MAIL.DE.FESTO.NET>
+
+
+Hello,
+
+I have just measured the time from two back-to-back ethercat frames. In the
+first ethercat frame i set an i/o port. In the second ethercat frame i
+reset the same i/o port, which i set before. Now i messured the time by an
+oscilloscope, how long the i/o port is set. The time is about 2msec.
+
+If I messured the cycle time (how long does it take to send two messages in
+a row) of the ethercat master a got a ethercat master cycle time from 5,8
+msec. I thing it is to slow for ethercat! the cycle time should be in usec
+(microsecound). Which cycle times to you have? I use the ethercat master on
+an niosII IP-Core which is clocked with 50Mhz. Is a clock from 50Mhz to
+slow for the ethercat master library?
+
+regards,
+Felix Erkert
+
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+Rechtsform: Kommanditgesellschaft
+Sitz: Esslingen a.N.
+Registergericht Stuttgart HRA 211583
+Umsatzsteuerident-Nummer: DE 145339206
+
+Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+Sitz: Stuttgart
+Registergericht Stuttgart HRB 18535
+
+Vorstand:
+Dr. Ekkehard Gericke,
+Lothar Kempf,
+Dipl.-Ing. Rudi Menrad
+Dr. Thomas Rubbe
+Dr. Eberhard Veit (Sprecher)
+Dr. Ulrich Walker
+Aufsichtsratsvorsitzender:
+Dr. Wilfried Stoll
+
+
+
+From bob.koninckx at fmtc.be  Thu Apr 26 14:56:19 2007
+From: bob.koninckx at fmtc.be (Bob Koninckx)
+Date: Thu, 26 Apr 2007 14:56:19 +0200
+Subject: [Ethercatmaster-users] time measurement
+In-Reply-To: <OF37C801E5.54A700CF-ONC12572C9.002CC856-C12572C9.002E721A@
+	MAIL.DE.FESTO.NET>
+References: <OF37C801E5.54A700CF-ONC12572C9.002CC856-C12572C9.002E721A@MAIL.DE.FESTO.NET>
+Message-ID: <20070426125618.83A2BE2D4B@server04.site04.wtcm.be>
+
+At 10:27 26/04/2007, Felix Erkert wrote:
+
+>Hello,
+>
+>I have just measured the time from two back-to-back ethercat frames. In the
+>first ethercat frame i set an i/o port. In the second ethercat frame i
+>reset the same i/o port, which i set before. Now i messured the time by an
+>oscilloscope, how long the i/o port is set. The time is about 2msec.
+>
+>If I messured the cycle time (how long does it take to send two messages in
+>a row) of the ethercat master a got a ethercat master cycle time from 5,8
+>msec. I thing it is to slow for ethercat! the cycle time should be in usec
+>(microsecound). Which cycle times to you have? I use the ethercat master on
+>an niosII IP-Core which is clocked with 50Mhz. Is a clock from 50Mhz to
+>slow for the ethercat master library?
+
+
+50 MHz means 50 clock cycles per microsecond. 
+Even in the assumption that you only need 1 cycle 
+per instruction (which is certainly optimistic), 
+there is not much you can do in one microsecond on your machine.
+
+You say you are using a NIOSII IP-core. Do I 
+understand correctly that you implemented a NIOS 
+core on an FPGA? In that case, I am not really 
+surprised by these numbers. BTW, is your 
+processor clocked at 50MHz or is it the FPGA ?
+
+Bob
+
+
+
+
+>regards,
+>Felix Erkert
+>
+>
+>Festo AG & Co. KG
+>Felix Erkert
+>
+>Abteilung TV-ND
+>Business Unit NIC Netware Devices
+>
+>
+>Ruiter Stra?e 82
+>D - 73734 Esslingen
+>
+>Tel: ++49 (0) 711-347-57193
+>Fax:
+>
+>http://www.festo.com
+>
+>Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+>Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+>Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+>unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+>des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+>E-Mails sind und das Material von Ihrem Computer zu loeschen.
+>
+>This e-mail and any attachments are confidential and intended solely for
+>the addressee. The perusal, publication, copying or dissemination of the
+>contents of this e-mail by unauthorised third parties is prohibited. If you
+>are not the intended recipient of this e-mail, please delete it and
+>immediately notify the sender.
+>
+>Rechtsform: Kommanditgesellschaft
+>Sitz: Esslingen a.N.
+>Registergericht Stuttgart HRA 211583
+>Umsatzsteuerident-Nummer: DE 145339206
+>
+>Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+>Sitz: Stuttgart
+>Registergericht Stuttgart HRB 18535
+>
+>Vorstand:
+>Dr. Ekkehard Gericke,
+>Lothar Kempf,
+>Dipl.-Ing. Rudi Menrad
+>Dr. Thomas Rubbe
+>Dr. Eberhard Veit (Sprecher)
+>Dr. Ulrich Walker
+>Aufsichtsratsvorsitzender:
+>Dr. Wilfried Stoll
+>
+>_______________________________________________
+>Ethercatmaster-users mailing list
+>Ethercatmaster-users at lists.berlios.de
+>https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, Bus 4027, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+bob.koninckx at fmtc.be                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders? MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. 
+Reyerslaan 80, B-1030 Brussel, Belgi?
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain 
+confidential information. It is intended
+solely for the intended addressee(s). Any use of 
+the information contained herein by other
+persons is prohibited. FMTC does not accept any 
+liability for the contents of this e-mail
+and/or its attachments.
+********************  
+
+
+
+From ERFE at DE.FESTO.COM  Thu Apr 26 15:31:44 2007
+From: ERFE at DE.FESTO.COM (Felix Erkert)
+Date: Thu, 26 Apr 2007 15:31:44 +0200
+Subject: [Ethercatmaster-users] Antwort: Re:  time measurement
+In-Reply-To: <20070426125618.83A2BE2D4B@server04.site04.wtcm.be>
+Message-ID: <OFAA06074E.221513FB-ONC12572C9.0049BE3F-C12572C9.004A4EC2@MAIL.DE.FESTO.NET>
+
+hello,
+
+My NiosII IP-Core is clocked with 50Mhz! Yes, I have implemented a NiosII
+IP-Core on an altera FPGA! What cycle times do you achieve?
+
+regards,
+Felix Erkert
+
+
+Festo AG & Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra?e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+http://www.festo.com
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+Rechtsform: Kommanditgesellschaft
+Sitz: Esslingen a.N.
+Registergericht Stuttgart HRA 211583
+Umsatzsteuerident-Nummer: DE 145339206
+
+Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+Sitz: Stuttgart
+Registergericht Stuttgart HRB 18535
+
+Vorstand:
+Dr. Ekkehard Gericke,
+Lothar Kempf,
+Dipl.-Ing. Rudi Menrad
+Dr. Thomas Rubbe
+Dr. Eberhard Veit (Sprecher)
+Dr. Ulrich Walker
+Aufsichtsratsvorsitzender:
+Dr. Wilfried Stoll
+
+
+
+From klaas.gadeyne at fmtc.be  Thu Apr 26 16:03:52 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 26 Apr 2007 16:03:52 +0200 (CEST)
+Subject: [Ethercatmaster-users] time measurement
+In-Reply-To: <OF37C801E5.54A700CF-ONC12572C9.002CC856-C12572C9.002E721A@MAIL.DE.FESTO.NET>
+References: <OF37C801E5.54A700CF-ONC12572C9.002CC856-C12572C9.002E721A@MAIL.DE.FESTO.NET>
+Message-ID: <Pine.LNX.4.64.0704261545110.14720@ampere.labo01.fmtc.be>
+
+On Thu, 26 Apr 2007, Felix Erkert wrote:
+> I have just measured the time from two back-to-back ethercat frames. In the
+> first ethercat frame i set an i/o port. In the second ethercat frame i
+> reset the same i/o port, which i set before. Now i messured the time by an
+> oscilloscope, how long the i/o port is set. The time is about 2msec.
+>
+> If I messured the cycle time (how long does it take to send two messages in
+> a row) of the ethercat master a got a ethercat master cycle time from 5,8
+> msec. I thing it is to slow for ethercat! the cycle time should be in usec
+> (microsecound).
+
+I don't understand very well, on a scope, you notice a cycletime of
+2msec (m denotes milli I suppose), on the master you measure 3 times
+as much?
+
+> Which cycle times to you have?
+
+I think we once ran a 1kHz loop on a Pentium I 90 MHz without any
+problems using eCos.
+
+> I use the ethercat master on
+> an niosII IP-Core which is clocked with 50Mhz. Is a clock from 50Mhz to
+> slow for the ethercat master library?
+
+It's hard to compare performance of a softcore CPU with the x86
+version we used.  Maybe the softcore is very bad for certain stuff,
+resulting in performance loss?
+Furthermore, "Too slow" will depend on the requirements of your
+application I guess (and you are the only one who knows these).
+
+BTW, you did use a highpriority thread for measuring I suppose?
+
+Klaas
+
+
+
+

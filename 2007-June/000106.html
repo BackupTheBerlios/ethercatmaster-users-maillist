@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] getting started
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20getting%20started&In-Reply-To=%3Cbc4264770706130331w42795787qc8e9340e3d629ea5%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000104.html">
+   <LINK REL="Next"  HREF="000107.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] getting started</H1>
+    <B>roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20getting%20started&In-Reply-To=%3Cbc4264770706130331w42795787qc8e9340e3d629ea5%40mail.gmail.com%3E"
+       TITLE="[Ethercatmaster-users] getting started">rolandtollenaar at gmail.com
+       </A><BR>
+    <I>Wed Jun 13 12:31:51 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000104.html">[Ethercatmaster-users] getting started
+</A></li>
+        <LI>Next message: <A HREF="000107.html">[Ethercatmaster-users] getting started
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#106">[ date ]</a>
+              <a href="thread.html#106">[ thread ]</a>
+              <a href="subject.html#106">[ subject ]</a>
+              <a href="author.html#106">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+With the modified start of rtnet things look a bit better but not 100%
+
+This is the output of master test now.
+
+One problem, after the mastertest crashes it seems as though rtpacket
+runs away holding on to rtnet in some form. It is not possible to
+unload it and only a reboot will allow me to start the normal network
+connection again. Any ideas why and how I can kill it?
+
+It would help my understanding if some comments could be inserted into
+the output below to explain what is happening. To me it looks as
+though there is some successful communication with the slave but why I
+am told that there are 10 slaves (if there is only one) and that the
+EEPROM is busy (why is it busy?) I have no idea.
+
+Very obviously it fails on trying to set the 4102 to operational
+state. I don;t have that module in my configuration and i assume that
+most complaints are caused by similar discrepancies.
+
+Kind regards,
+
+Roland.
+
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+Socket created: socket id: 896
+Got interface: index: 0
+Attach netif
+
+Master initializing
+
+EtherCAT AL: Ring contains 10 slaves
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, rev=0x10000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=1, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=2, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=3, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=4, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=5, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=6, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=7, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=8, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=9, Product Code=0x10243052, rev=0x0
+AL: resetting FMMUs
+AL: resetting SMs
+AL: Setting all slaves in init mode
+Getting slave handler
+Setting EK1100 to OP STATE
+EK1100 succesfully set in OP STATE
+Getting slave handler
+EtherCAT_AL: No such slave, returning NULL
+Setting EL4102 to OP STATE
+Segmentation fault
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+
+
+
+
+
+
+On 6/12/07, roland Tollenaar &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">rolandtollenaar at gmail.com</A>&gt; wrote:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; So far, you seem to have done the right thing asking here. Here is the
+</I>&gt;<i> &gt; required setup:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Load modules: &lt;Xenomai&gt;, rtnet, rtpacket, rt_&lt;your-nic&gt;
+</I>&gt;<i> &gt; Configure rteth0: rtifconfig rteth0 up
+</I>&gt;<i>
+</I>&gt;<i> Thanks. This makes sense to me. Will try.
+</I>&gt;<i>
+</I>&gt;<i> Roland
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Jan
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000104.html">[Ethercatmaster-users] getting started
+</A></li>
+	<LI>Next message: <A HREF="000107.html">[Ethercatmaster-users] getting started
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#106">[ date ]</a>
+              <a href="thread.html#106">[ thread ]</a>
+              <a href="subject.html#106">[ subject ]</a>
+              <a href="author.html#106">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

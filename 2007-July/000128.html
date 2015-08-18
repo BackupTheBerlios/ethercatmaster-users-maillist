@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] some questions about the usage of eml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3C4696253A.2060207%40skynet.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000126.html">
+   <LINK REL="Next"  HREF="000120.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] some questions about the usage of eml</H1>
+    <B>Tom Panis</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3C4696253A.2060207%40skynet.be%3E"
+       TITLE="[Ethercatmaster-users] some questions about the usage of eml">tompanis at skynet.be
+       </A><BR>
+    <I>Thu Jul 12 14:57:30 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000126.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+        <LI>Next message: <A HREF="000120.html">[Ethercatmaster-users] interacting with 1014 and 2004
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#128">[ date ]</a>
+              <a href="thread.html#128">[ thread ]</a>
+              <a href="subject.html#128">[ subject ]</a>
+              <a href="author.html#128">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+roland Tollenaar wrote:
+&gt;<i> HI Tom,
+</I>&gt;<i>
+</I>&gt;<i> The slaves all go into operational state it seems. At least all those
+</I>&gt;<i> I configure, I do not have the correct parameters for the EL4132 so
+</I>&gt;<i> that one is still not working. But what worries me is the address
+</I>&gt;<i> 0x0F00 in the configuration as I am using it in the below code.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ///SlaveConfig EL2004(4) [Digital Output]
+</I>&gt;<i> EtherCAT_FMMU_Config fmmu_config_EL2004_4(1);
+</I>&gt;<i> EC_FMMU fmmu0_EL2004_4(0x0001000B,1,4,7,0x0F00,0,false,true,true);
+</I>&gt;<i> EtherCAT_PD_Config pd_config_EL2004_4(1);
+</I>&gt;<i> EC_SyncMan 
+</I>&gt;<i> syncman0_EL2004_4(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true); 
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_SlaveConfig
+</I>&gt;<i> EC_EL2004_4(0x7d43052,0x100000,0x03ef,&amp;fmmu_config_EL2004_4,&amp;pd_config_EL2004_4); 
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> In your class code you call the address that is given in the above
+</I>&gt;<i> snippet as 0x0F00 the &quot;Fixed address&quot; and as you see it is not the
+</I>&gt;<i> same as the &quot;physical address&quot; given in the committing call of the
+</I>&gt;<i> salve config. Now my question is: Is there a difference and if so
+</I>&gt;<i> what? And ifthere is a difference, how do I figure out what the &quot;Fixed
+</I>&gt;<i> address&quot; is supposed to be? At the moment all configurations (8 in
+</I>&gt;<i> total) use 0x0F00 and that seems to work.
+</I>
+I think you're confusing the fixed station address with the physical 
+start address. Every module (station) has a different address which can 
+be used to address the module. This address is only used during 
+configuration. In your example above (EL2004_4) the fixed station 
+address is 0x03ef. It's the 3rd argument of the EtherCAT SlaveConfig. As 
+you'll see in the rest of your code, every module has a different fixes 
+station address.
+
+The address 0x0F00 you're referring to, isn't the fixes station address, 
+it's the physical start address. It's a memory address of the module. 
+For the EL2004 module: data written to this address is controlling the 
+output of the module. You never write directly to this address, you 
+write to a logical address, in your example above: 0x0001000B. The FMMU 
+(in combination with the Synchronisation Manager) writes this data to 
+the memory of the module, in this case 0x0F00. The FMMU needs to know 
+both the logical start address and the physical start address since it 
+connects both addresses. The Synchronisation Manager makes sure that 
+data isn't read from or written to the physical memory address (0x0F00) 
+at the same time. As you see, the Synchronisation Manager also needs 
+this address, so is knows which part of the memory it has to synchronise
+
+&gt;<i>
+</I>&gt;<i> Also why does it not make any difference to the functioning if I
+</I>&gt;<i> change the &quot;fixed address&quot; (in this case 0x0F00) to be the same as the
+</I>&gt;<i> physical address.
+</I>
+These two address have nothing to do with each other, so it doesn't make 
+ad difference if they're the same or not.
+
+&gt;<i>
+</I>&gt;<i> I have also written to ETG (when I assumed you were on holiday) to try
+</I>&gt;<i> find out more about the addressing and address spaces. 
+</I>
+Indeed, I was on a little holiday :-)
+
+&gt;<i> The documentation available about ethercat even for a reputable member of
+</I>&gt;<i> the ETG such as myself, is well, sparse.
+</I>
+This documentation on ETG just describes the EherCAT protocol. The 
+documentation from the Beckhoff modules has to come from Beckhoff itself.
+For each module, there's a little information on there website, but I 
+tollaly agree it's very sparse. I had to figure most things out with 
+TwinCAT in combination with a network sniffer.
+
+&gt;<i>
+</I>&gt;<i> Finally, if I my dump all questions here, my current problem is that I
+</I>&gt;<i> cannot figure out from you examples how to read access  the EL 1014
+</I>&gt;<i> and how to write the digital outputs to the EL2004. Do you have code
+</I>&gt;<i> examples for the list showing how this is done using the EML?
+</I>
+I'll explain this in your other mail
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Kind regards,
+</I>&gt;<i>
+</I>&gt;<i> (And thanks very very much for the reply without which progress I have
+</I>&gt;<i> found is slow)
+</I>&gt;<i>
+</I>&gt;<i> Roland
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On 7/12/07, Tom Panis &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">tompanis at skynet.be</A>&gt; wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &gt; Hi Tom,
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Sorry for the tremendous delay. I can only work on this in stolen 
+</I>&gt;&gt;<i> hours.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; I have managed to improve matters a bit wrt the situation I sketched
+</I>&gt;&gt;<i> &gt; previously. I was forgetting to commit the configuration settings with
+</I>&gt;&gt;<i> &gt; the call set_conf.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; However I did have the addressing wrong.
+</I>&gt;&gt;<i> &gt; I do understand I think what you are saying about the start addresses.
+</I>&gt;&gt;<i> &gt; i am posting as i think it should be. Could you please check, confirm
+</I>&gt;&gt;<i> &gt; and let us know where I am getting things wrong?
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Everything seems to be right. I can't find a mistake in the addressing.
+</I>&gt;&gt;<i> Have you tested this configuration? Can you put these modules in
+</I>&gt;&gt;<i> Operational State?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Tom
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000126.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+	<LI>Next message: <A HREF="000120.html">[Ethercatmaster-users] interacting with 1014 and 2004
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#128">[ date ]</a>
+              <a href="thread.html#128">[ thread ]</a>
+              <a href="subject.html#128">[ subject ]</a>
+              <a href="author.html#128">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

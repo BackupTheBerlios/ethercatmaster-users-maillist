@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%09framebuilding%20failed.&In-Reply-To=%3C46C05690.2010108%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000251.html">
+   <LINK REL="Next"  HREF="000253.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%09framebuilding%20failed.&In-Reply-To=%3C46C05690.2010108%40grandegger.com%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.">wg at grandegger.com
+       </A><BR>
+    <I>Mon Aug 13 15:03:12 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000251.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000253.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#252">[ date ]</a>
+              <a href="thread.html#252">[ thread ]</a>
+              <a href="subject.html#252">[ subject ]</a>
+              <a href="author.html#252">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Roland Tollenaar wrote:
+&gt;<i> Hi
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> RTnet:rtskb allocation from real-time cache failed.
+</I>&gt;&gt;&gt;<i> Assertion failed! drivers/xenomai/can/rtcan_raw.c: rtcan_tx_push:168 
+</I>&gt;&gt;&gt;<i> dev-&gt;tx_socket=0 (3) TX skb still in use.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hm, this is not supposed to happen.
+</I>&gt;<i> Which of the two?
+</I>
+The RTCAN assertion. Well, in fact, it can happen when the device goes 
+bus-off or is stopped while a TX message is pending. The next message 
+after (re-)start will the trigger this message. This is a bug but it 
+should _not_ harm (either I remove the assertion or I reset properly the 
+value of dev-&gt;tx_socket).
+
+The first one should be pretty clear. The rtskb pool seems to be exhausted.
+
+&gt;<i> 
+</I>&gt;&gt;<i> Can you show the output of /proc/rtcan/devices and /proc/rtcan/sockets 
+</I>&gt;&gt;<i> before and after the problem showed up.
+</I>&gt;<i> 
+</I>&gt;<i> Below is an accumulation of what I think you are asking for. I am not 
+</I>&gt;<i> convinced that the rtskb allocation failed message is serious, as you 
+</I>&gt;<i> will see from the syslog and my comment above it only takes place when i 
+</I>&gt;<i> close my application. Although I try to close all connections neatly 
+</I>&gt;<i> certain threads still seem to be busy. See the errors I get on closing 
+</I>&gt;<i> the application.
+</I>&gt;<i> 
+</I>&gt;<i> App running with no problem:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:~# cat /proc/rtcan/sockets
+</I>&gt;<i> fd Name___________ Filter ErrMask RX_Timeout_ns TX_Timeout_ns RX_BufFull 
+</I>&gt;<i> TX_Lo
+</I>&gt;<i>  2 rtcan2               1 0x00000      infinite      infinite 0     1
+</I>&gt;<i>  0 rtcan2              -1 0x00000      infinite      infinite 0     1
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:~# cat /proc/rtcan/devices
+</I>&gt;<i> Name___________ _Baudrate State___ TX_Counter RX_Counter ____Errors
+</I>&gt;<i> rtcan0          undefined stopped           0          0          0
+</I>&gt;<i> rtcan1          undefined stopped           0          0          0
+</I>&gt;<i> rtcan2            1000000 active     16321347   27633347    2367116
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> App running with messages failing
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/var/log# cat /proc/rtcan/sockets
+</I>&gt;<i> fd Name___________ Filter ErrMask RX_Timeout_ns TX_Timeout_ns RX_BufFull 
+</I>&gt;<i> TX_Lo
+</I>&gt;<i>  2 rtcan2               1 0x00000      infinite      infinite 0     1
+</I>&gt;<i>  0 rtcan2              -1 0x00000      infinite      infinite 0     1
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/var/log# cat /proc/rtcan/devices
+</I>&gt;<i> Name___________ _Baudrate State___ TX_Counter RX_Counter ____Errors
+</I>&gt;<i> rtcan0          undefined stopped           0          0          0
+</I>&gt;<i> rtcan1          undefined stopped           0          0          0
+</I>&gt;<i> rtcan2            1000000 active     16850473   28691571    2367116
+</I>
+Oops, that much errors?
+
+&gt;<i> cat /var/syslog shows that the error only seems to come up when the 
+</I>&gt;<i> application closes.
+</I>&gt;<i> 
+</I>&gt;<i> Only occurs on closing the application
+</I>&gt;<i> Aug 13 13:01:28 (none) kernel: RTnet: rtskb allocation from real-time 
+</I>&gt;<i> cache failed
+</I>&gt;<i> Aug 13 13:02:14 (none) kernel: RTnet: rtskb allocation from real-time 
+</I>&gt;<i> cache failed
+</I>&gt;<i> Aug 13 14:02:34 (none) kernel: RTnet: rtskb allocation from real-time 
+</I>&gt;<i> cache failed
+</I>&gt;<i> Aug 13 14:03:36 (none) kernel: RTnet: rtskb allocation from real-time 
+</I>&gt;<i> cache failed
+</I>&gt;<i> Aug 13 14:18:39 (none) kernel: RTnet: rtskb allocation from real-time 
+</I>&gt;<i> cache failed
+</I>&gt;<i> Aug 13 14:19:33 (none) kernel: RTnet: rtskb allocation from real-time 
+</I>&gt;<i> cache failed
+</I>&gt;<i> Aug 13 14:19:58 (none) kernel: RTnet: rtskb allocation from real-time 
+</I>&gt;<i> cache failed
+</I>&gt;<i> Aug 13 14:21:27 (none) kernel: RTnet: rtskb allocation from real-time 
+</I>&gt;<i> cache failed
+</I>&gt;<i> Aug 13 14:22:10 (none) kernel: RTnet: rtskb allocation from real-time 
+</I>&gt;<i> cache failed
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> When I close the application I get these errors
+</I>&gt;<i> 
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>
+You should handle this error properly.
+
+&gt;<i> rt_dev_ioctl: Bad file descriptor
+</I>&gt;<i> Waiting for tasks to stop....low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_output(): Cannot Send
+</I>&gt;<i> low_level_txandrx: failed: MAX_TRIES_TX: Giving up
+</I>&gt;<i> DLL::txandrx() Error
+</I>&gt;<i> PD_Buffer: Error sending PD
+</I>&gt;<i> txandrx failed:
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Does this shed any light on the matter?
+</I>
+Hm, seems that your shutdown is not implemented properly.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000251.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000253.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#252">[ date ]</a>
+              <a href="thread.html#252">[ thread ]</a>
+              <a href="subject.html#252">[ subject ]</a>
+              <a href="author.html#252">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

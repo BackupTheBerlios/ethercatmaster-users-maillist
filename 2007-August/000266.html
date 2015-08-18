@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3C46C298FD.8070300%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000265.html">
+   <LINK REL="Next"  HREF="000267.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3C46C298FD.8070300%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Wed Aug 15 08:11:09 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000265.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000267.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#266">[ date ]</a>
+              <a href="thread.html#266">[ thread ]</a>
+              <a href="subject.html#266">[ subject ]</a>
+              <a href="author.html#266">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+&gt;<i> Check the /proc output again, there should be also RTnet's stack manager
+</I>&gt;<i> at prio 98. Maybe that is too low for your scenario and causes prio
+</I>&gt;<i> inversions (note: every incoming Ethernet frame goes through its hands).
+</I>&gt;<i> Try lowering the prio of your rt_task1 beneath 98.
+</I>
+Thanks. This seems to have made a big improvement. I have so far not 
+once detected the scope to loose lock on the sawtooth when the 
+index_check in eml is still disabled. Before lowering the priority of my 
+task (to 97) I could still invoke what I suspect to be a latency spike.
+
+If the index_check is enabled I now mostly have less problems too. There 
+is a chance in start-up of the application that there is a latency spike 
+and then the warning kicks in. Due to the fact that the shift is 
+permanent, the error is persistent and this then destabilizes the 
+sawtooth a bit.
+
+I will keep the check disabled but for the EML chaps I do think this is 
+a point of interest. I would be very interested how this index shift 
+occurs and why it is persistent after occurring once.
+
+Sorry for the pragmatic qualifications here but in the end its the 
+stability of the outputs that will determine the behaviour of the 
+machine so its not a bad way to assess the software. :)
+
+&gt;<i> If the problem persists (or your _really_ want to understand what
+</I>&gt;<i> happens), you could try to put an xntrace_user_freeze(0, 1) before the
+</I>&gt;<i> line which emits that EML warning, turn on the I-pipe tracer, set a
+</I>&gt;<i> large back_trace_points value (a few thousand), enable verbose mode, and
+</I>&gt;<i> grab what /proc/ipipe/trace/frozen reports after the hick-up. See [1]
+</I>&gt;<i> for more howtos.
+</I>
+Done this before so it should not be a problem. Don't think it is 
+necessary quite yet as the behaviour at the moment looks good.
+
+
+Regards,
+
+Roland.
+
+&gt;<i> 
+</I>&gt;<i> If you post the dump, we may be able to analyse what the system is doing
+</I>&gt;<i> before the problem report, if there are long delays due to high-prio
+</I>&gt;<i> tasks e.g.
+</I>&gt;<i> 
+</I>&gt;<i> Jan
+</I>&gt;<i> 
+</I>&gt;<i> [1] <A HREF="http://www.xenomai.org/index.php/I-pipe:Tracer">http://www.xenomai.org/index.php/I-pipe:Tracer</A>
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000265.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000267.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#266">[ date ]</a>
+              <a href="thread.html#266">[ thread ]</a>
+              <a href="subject.html#266">[ subject ]</a>
+              <a href="author.html#266">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

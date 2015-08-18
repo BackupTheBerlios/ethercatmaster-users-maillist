@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] some questions about the usage of eml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3Cbc4264770707120431g1f95f9b6k1e36f918ee2123ab%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000125.html">
+   <LINK REL="Next"  HREF="000128.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] some questions about the usage of eml</H1>
+    <B>roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3Cbc4264770707120431g1f95f9b6k1e36f918ee2123ab%40mail.gmail.com%3E"
+       TITLE="[Ethercatmaster-users] some questions about the usage of eml">rolandtollenaar at gmail.com
+       </A><BR>
+    <I>Thu Jul 12 13:31:56 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000125.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+        <LI>Next message: <A HREF="000128.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#126">[ date ]</a>
+              <a href="thread.html#126">[ thread ]</a>
+              <a href="subject.html#126">[ subject ]</a>
+              <a href="author.html#126">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>HI Tom,
+
+The slaves all go into operational state it seems. At least all those
+I configure, I do not have the correct parameters for the EL4132 so
+that one is still not working. But what worries me is the address
+0x0F00 in the configuration as I am using it in the below code.
+
+
+///SlaveConfig EL2004(4) [Digital Output]
+EtherCAT_FMMU_Config fmmu_config_EL2004_4(1);
+EC_FMMU fmmu0_EL2004_4(0x0001000B,1,4,7,0x0F00,0,false,true,true);
+EtherCAT_PD_Config pd_config_EL2004_4(1);
+EC_SyncMan syncman0_EL2004_4(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL2004_4(0x7d43052,0x100000,0x03ef,&amp;fmmu_config_EL2004_4,&amp;pd_config_EL2004_4);
+
+In your class code you call the address that is given in the above
+snippet as 0x0F00 the &quot;Fixed address&quot; and as you see it is not the
+same as the &quot;physical address&quot; given in the committing call of the
+salve config. Now my question is: Is there a difference and if so
+what? And ifthere is a difference, how do I figure out what the &quot;Fixed
+address&quot; is supposed to be? At the moment all configurations (8 in
+total) use 0x0F00 and that seems to work.
+
+Also why does it not make any difference to the functioning if I
+change the &quot;fixed address&quot; (in this case 0x0F00) to be the same as the
+physical address.
+
+I have also written to ETG (when I assumed you were on holiday) to try
+find out more about the addressing and address spaces. The
+documentation available about ethercat even for a reputable member of
+the ETG such as myself, is well, sparse.
+
+Finally, if I my dump all questions here, my current problem is that I
+cannot figure out from you examples how to read access  the EL 1014
+and how to write the digital outputs to the EL2004. Do you have code
+examples for the list showing how this is done using the EML?
+
+
+Kind regards,
+
+(And thanks very very much for the reply without which progress I have
+found is slow)
+
+Roland
+
+
+On 7/12/07, Tom Panis &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">tompanis at skynet.be</A>&gt; wrote:
+&gt;<i>
+</I>&gt;<i> &gt; Hi Tom,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Sorry for the tremendous delay. I can only work on this in stolen hours.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I have managed to improve matters a bit wrt the situation I sketched
+</I>&gt;<i> &gt; previously. I was forgetting to commit the configuration settings with
+</I>&gt;<i> &gt; the call set_conf.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; However I did have the addressing wrong.
+</I>&gt;<i> &gt; I do understand I think what you are saying about the start addresses.
+</I>&gt;<i> &gt; i am posting as i think it should be. Could you please check, confirm
+</I>&gt;<i> &gt; and let us know where I am getting things wrong?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> Everything seems to be right. I can't find a mistake in the addressing.
+</I>&gt;<i> Have you tested this configuration? Can you put these modules in
+</I>&gt;<i> Operational State?
+</I>&gt;<i>
+</I>&gt;<i> Tom
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000125.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+	<LI>Next message: <A HREF="000128.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#126">[ date ]</a>
+              <a href="thread.html#126">[ thread ]</a>
+              <a href="subject.html#126">[ subject ]</a>
+              <a href="author.html#126">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

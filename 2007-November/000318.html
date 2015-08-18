@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] low_level_input: Cannot receive msg: -1
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20low_level_input%3A%20Cannot%20receive%20msg%3A%20-1&In-Reply-To=%3C473F146A.6080109%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000317.html">
+   <LINK REL="Next"  HREF="000319.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] low_level_input: Cannot receive msg: -1</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20low_level_input%3A%20Cannot%20receive%20msg%3A%20-1&In-Reply-To=%3C473F146A.6080109%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] low_level_input: Cannot receive msg: -1">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Sat Nov 17 17:18:50 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000317.html">[Ethercatmaster-users] low_level_input: Cannot receive msg: -1
+</A></li>
+        <LI>Next message: <A HREF="000319.html">[Ethercatmaster-users] low_level_input: Cannot receive msg: -1
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#318">[ date ]</a>
+              <a href="thread.html#318">[ thread ]</a>
+              <a href="subject.html#318">[ subject ]</a>
+              <a href="author.html#318">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dennis,
+
+If this NIC you are using with rtnet is on IRQ line 11 then it will most 
+certainly not work.
+
+you still have an IRQ conflict in this case.
+
+Roland
+
+Dennis Nguyen wrote:
+&gt;<i> Hello all,
+</I>&gt;<i> 
+</I>&gt;<i> I'm using linux i386 kernel 2.6.22-12,
+</I>&gt;<i> adeos-ipipe-2.6.22-i386-1.10-12.patch, xenomai-2.4-rc6, rtnet trunk 1140
+</I>&gt;<i> as 11/15/2007, eml trunk 31 as of 11/15/2007.
+</I>&gt;<i> Beckhoff EL1100, and one EL2004.
+</I>&gt;<i> I didn't use the El4102. I modified the master_test.cpp using Tom and
+</I>&gt;<i> Haris example for EL2004. I set EtherCAT_SlaveDb::instance(2).
+</I>&gt;<i> there are 2 RTL 8139 on the PC.
+</I>&gt;<i> 
+</I>&gt;<i> I inserted modules:
+</I>&gt;<i> sudo mknod /dev/rtnet c 10 240
+</I>&gt;<i> sudo ifconfig eth0 down
+</I>&gt;<i> sudo ifconfig eth1 down
+</I>&gt;<i> sudo rmmod 8139cp
+</I>&gt;<i> sudo rmmod 8139too
+</I>&gt;<i> sudo
+</I>&gt;<i> insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/nucleus/xeno_nucleus.ko
+</I>&gt;<i> sudo
+</I>&gt;<i> insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/native/xeno_native.ko
+</I>&gt;<i> sudo
+</I>&gt;<i> insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/posix/xeno_posix.ko
+</I>&gt;<i> sudo
+</I>&gt;<i> insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/rtdm/xeno_rtdm.ko
+</I>&gt;<i> sudo insmod /usr/local/rtnet/modulesmodules/rtnet.ko;
+</I>&gt;<i> sudo insmod /usr/local/rtnet/modulesmodules/rtipv4.ko;
+</I>&gt;<i> sudo insmod /usr/local/rtnet/modulesmodules/rtpacket.ko;
+</I>&gt;<i> sudo insmod /usr/local/rtnet/modulesmodules/rt_8139.ko;
+</I>&gt;<i> sudo insmod /usr/local/rtnet/modulesmodules/rt_loopback.ko;
+</I>&gt;<i> sudo /usr/local/rtnet/modules/sbin/rtifconfig rtlo up 127.0.0.1
+</I>&gt;<i> sudo /usr/local/rtnet/modules/sbin/rtifconfig rteth0 up 10.0.0.1 netmask
+</I>&gt;<i> 255.255.255.0;
+</I>&gt;<i> 
+</I>&gt;<i> I got the error messages when running the master_test:
+</I>&gt;<i> low_level_input: Cannot receive msg: -1
+</I>&gt;<i> low_level_txandrx: failed: MAX_TRIES_TX: giving up
+</I>&gt;<i> DLL::txandrx() Error
+</I>&gt;<i> Error sending counter frame
+</I>&gt;<i> Something went wrong while scanning network
+</I>&gt;<i> EtherCAT_AL&quot;&quot; Can't init network
+</I>&gt;<i> 
+</I>&gt;<i> There are 20 frames capture while I ran the master_test. The following
+</I>&gt;<i> are 2 of the frames.
+</I>&gt;<i> ffffffffffff00000000000088a40d10010000000000010000000000000000010000000000000a000001000000000000000000000000000000000000
+</I>&gt;<i> ffffffffffff02000000000088a40d10010002000000010000000301000000010000000000000a000001000000000000000000000000000000000000
+</I>&gt;<i> (Does the second frame come from Slave?)
+</I>&gt;<i> 
+</I>&gt;<i> I got this from dmesg:
+</I>&gt;<i> rt_8139too Fast Ethernet driver 0.9.24-rt0.7
+</I>&gt;<i> RTnet: registered rteth0
+</I>&gt;<i> Xenomai: xnintr_shirq_handler: IRQ11 not handled: Disable IRQ line.
+</I>&gt;<i> 
+</I>&gt;<i> I don't know if the xenomai disable IRQ line caused EML couldn't receive
+</I>&gt;<i> the reply.
+</I>&gt;<i> 
+</I>&gt;<i> Any suggestion to solve the master initiation please.
+</I>&gt;<i> 
+</I>&gt;<i> Thanks in advance,
+</I>&gt;<i> Dennis
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000317.html">[Ethercatmaster-users] low_level_input: Cannot receive msg: -1
+</A></li>
+	<LI>Next message: <A HREF="000319.html">[Ethercatmaster-users] low_level_input: Cannot receive msg: -1
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#318">[ date ]</a>
+              <a href="thread.html#318">[ thread ]</a>
+              <a href="subject.html#318">[ subject ]</a>
+              <a href="author.html#318">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

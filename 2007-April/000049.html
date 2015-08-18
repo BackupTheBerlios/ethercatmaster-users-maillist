@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Antwort: Re: Low level device driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20Low%20level%20device%20driver&In-Reply-To=%3CPine.LNX.4.64.0704041808440.3108%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000048.html">
+   <LINK REL="Next"  HREF="000050.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Antwort: Re: Low level device driver</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20Low%20level%20device%20driver&In-Reply-To=%3CPine.LNX.4.64.0704041808440.3108%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] Antwort: Re: Low level device driver">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Wed Apr  4 18:29:55 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000048.html">[Ethercatmaster-users]  Antwort: Re: Low level device driver
+</A></li>
+        <LI>Next message: <A HREF="000050.html">[Ethercatmaster-users] Antwort: Re: Low level device driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#49">[ date ]</a>
+              <a href="thread.html#49">[ thread ]</a>
+              <a href="subject.html#49">[ subject ]</a>
+              <a href="author.html#49">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, 4 Apr 2007, Felix GMX wrote:
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> I found out that this function in the support.cxx file is waiting for the semaphore sem_delivery. Which function or where does this semaphore post? eCos waits for this semaphore but nowbody post it! eCos is exiting.
+</I>&gt;<i>
+</I>&gt;<i> static void ethercat_delivery(cyg_addrword_t)
+</I>&gt;<i> {
+</I>&gt;<i>    cyg_netdevtab_entry_t *t;
+</I>&gt;<i>
+</I>&gt;<i>    for(;;) {
+</I>&gt;<i>        // log(EC_LOG_INFO, &quot;delivery thread: waiting for semaphore\n&quot;);
+</I>&gt;<i>        cyg_semaphore_wait(&amp;sem_delivery);                                            =&gt; waiting for semaphore???
+</I>&gt;<i>        // log(EC_LOG_INFO, &quot;delivery thread: woken up by semaphore\n&quot;);
+</I>&gt;<i>        for (t = &amp;__NETDEVTAB__[0]; t != &amp;__NETDEVTAB_END__; t++) {
+</I>&gt;<i>            struct eth_drv_sc *sc = (struct eth_drv_sc *)t-&gt;device_instance;
+</I>&gt;<i>            if (sc-&gt;state &amp; ETH_DRV_NEEDS_DELIVERY) {
+</I>&gt;<i>                sc-&gt;state &amp;= ~ETH_DRV_NEEDS_DELIVERY;
+</I>&gt;<i>                (sc-&gt;funs-&gt;deliver) (sc);
+</I>&gt;<i>            }
+</I>&gt;<i>        }
+</I>&gt;<i>    }
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> static void ethercat_delivery_request(struct netif * netif)
+</I>&gt;<i> {
+</I>&gt;<i>    cyg_semaphore_post(&amp;sem_delivery);    =&gt; Where does this function invoke???
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> extern &quot;C&quot; void if_attach(struct netif * netif)
+</I>&gt;<i> {
+</I>&gt;<i>    netif-&gt;service_request_indication = ethercat_delivery_request;
+</I>&gt;<i>
+</I>&gt;<i>    // Only attach the selected device
+</I>&gt;<i>    if(strncmp(netif-&gt;device_name, CYGDAT_ETHERCATMASTER_ETH_DEVICE, ETHERCAT_DEVICE_NAME_MAX_LENGTH) == 0)
+</I>&gt;<i>        EtherCAT_DataLinkLayer::instance()-&gt;attach(netif);
+</I>&gt;<i> }
+</I>
+Felix, the delivery thread which posts this semaphore is woken up by
+the interrupt of an incoming ethercat packet.
+
+void
+eth_drv_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t
+data)
+{
+   struct eth_drv_sc * sc = (struct eth_drv_sc *)(data);
+   struct netif * netif = &amp;(sc-&gt;sc_arpcom.ac_if);
+
+   // diag_printf(&quot;eth_drv_dsr called\n&quot;);
+
+   sc-&gt;state |= ETH_DRV_NEEDS_DELIVERY;
+   (netif-&gt;service_request_indication)(netif);
+}
+
+However, the problem you showed yesterday happens before, in casu when
+sending the packet.  AFAIS, there is no packet coming back in your
+case (no interrupt generated, hence no dsr, hence the delivery thread
+is not woken up).  Please investigate first why the status variable is
+set to non-nil.
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000048.html">[Ethercatmaster-users]  Antwort: Re: Low level device driver
+</A></li>
+	<LI>Next message: <A HREF="000050.html">[Ethercatmaster-users] Antwort: Re: Low level device driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#49">[ date ]</a>
+              <a href="thread.html#49">[ thread ]</a>
+              <a href="subject.html#49">[ subject ]</a>
+              <a href="author.html#49">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

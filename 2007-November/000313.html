@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] EtherCAT master
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EtherCAT%20master&In-Reply-To=%3CPine.LNX.4.64.0711051047300.17311%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000314.html">
+   <LINK REL="Next"  HREF="000315.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] EtherCAT master</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EtherCAT%20master&In-Reply-To=%3CPine.LNX.4.64.0711051047300.17311%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] EtherCAT master">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Mon Nov  5 11:01:09 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000314.html">[Ethercatmaster-users] Question about the usage of the	master_test	program
+</A></li>
+        <LI>Next message: <A HREF="000315.html">[Ethercatmaster-users] How to build Master as a Slave or establish communication between two Masters
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#313">[ date ]</a>
+              <a href="thread.html#313">[ thread ]</a>
+              <a href="subject.html#313">[ subject ]</a>
+              <a href="author.html#313">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 30 Oct 2007, Mickey Mendlin wrote:
+[I put the users mailing list in cc:, since the info below might
+interest other people and is not confidential]
+
+&gt;<i> Some questions regarding the EtherCAT master:
+</I>&gt;<i>
+</I>&gt;<i> 1.Can it be ported to  WinCE 6 or Other Win32 API RTOS?
+</I>
+Yes, IIRC I already had a private email conversation in the past with somebody
+which has it done already.  Never saw code though.  I don't know if
+he follows this mailing list and is willing to share his code?
+
+&gt;<i> 2. What is the fastest PDO cycle that you've reached with it and under
+</I>&gt;<i> what OS?
+</I>
+We never really went &quot;all the way&quot;, but we have given demos using
+xenomai with a PDO cycle of 10 kHz.
+It's been a very long time since we've used the eCos port, but given
+appropriate hardware, that should work on eCos too.
+
+&gt;<i> 3. Is XML parsing done on target?
+</I>
+There is no XML parsing in the code currently, and if there would be
+(there have been some mails on the mailing list about this, but again,
+we never saw code), it would be on master side
+
+&gt;<i> 4. Is it all open source code?
+</I>
+Yes.
+
+&gt;<i> 5. How is it decoupled from the main firmware?
+</I>
+I think I don't understand your question here.  It implements only
+master functionality and respects the standard, so it's not coupled to
+(ethercat) firmware.
+
+&gt;<i> 6. Are there any special HAL support for specific Ethernet chips?
+</I>
+We rely on HAL support from
+- available ethernet HW drivers in the eCos project for eCos
+- available ethernet HW drivers from the RTnet project for Xenomai
+
+So it's the OS that delivers us the network drivers.
+
+&gt;<i> 7. If yes, how can this layer be ported to other OS?
+</I>&gt;<i> 8.  Could you please explain the GPL lisence policy ?
+</I>
+What exactly is unclear about it?
+
+&gt;<i> 9. Would you consider slave implementation on DSP as a project ?
+</I>
+FMTC is currently not actively working on the project anymore (we do
+use the code in some of our projects ourselves).
+The source code is there for the community to use (and improve).
+
+Best regards,
+
+Klaas Gadeyne
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000314.html">[Ethercatmaster-users] Question about the usage of the	master_test	program
+</A></li>
+	<LI>Next message: <A HREF="000315.html">[Ethercatmaster-users] How to build Master as a Slave or establish communication between two Masters
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#313">[ date ]</a>
+              <a href="thread.html#313">[ thread ]</a>
+              <a href="subject.html#313">[ subject ]</a>
+              <a href="author.html#313">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

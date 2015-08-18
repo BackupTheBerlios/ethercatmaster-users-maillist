@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] non-persistent outputs ETG suggestions
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20non-persistent%20outputs%20ETG%20suggestions&In-Reply-To=%3C46B81B97.3020405%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000236.html">
+   <LINK REL="Next"  HREF="000238.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] non-persistent outputs ETG suggestions</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20non-persistent%20outputs%20ETG%20suggestions&In-Reply-To=%3C46B81B97.3020405%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] non-persistent outputs ETG suggestions">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Tue Aug  7 09:13:27 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000236.html">[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: RE : Re: understanding the datagrams
+</A></li>
+        <LI>Next message: <A HREF="000238.html">[Ethercatmaster-users] RE : non-persistent outputs ETG suggestions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#237">[ date ]</a>
+              <a href="thread.html#237">[ thread ]</a>
+              <a href="subject.html#237">[ subject ]</a>
+              <a href="author.html#237">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Said, Klaas, Tom
+
+
+ETG Mr Haefele has investigated the matter a bit and his findings are 
+stated below. Please tell me how to implement his suggestions with EML 
+since at the moment I am rather at loss as to how I must make the 
+configuration changes that he suggests.
+
+Kind regards,
+
+Roland Tollenaar
+
+
+
+
+
+Dear Mr. Tollenaar,
+
+
+
+It was good that you called this morning. So I learned a view things 
+about how you work with EtherCAT configurations and the use of device 
+description files. Thank you.
+
+
+
+There are two things you might have to have a look at.
+
+1)    ESC Type in Register 0x0000
+
+    For IO terminals register 0x0000 = 0x01
+
+    For ET1100 register 0x0000 = 0x11
+
+    This is only for master information. Read only information
+
+2)    ESC PDI Type register 0x0140
+
+    Old terminal 0x02
+
+    New terminals 0x04
+
+    Read only information for master use.
+
+3)    SyncManager Control Register 0x0804 +y
+
+    IO terminals 1 buffer mode -&gt; 0x0804 = 0x46
+
+    ET1100 terminals 3 buffer mode -&gt; 0x0804 = 0x44
+
+    This is also described within the device description file.
+
+    During start up the SyncManagers (and FMMUs) shall be configured by 
+the master according to the Device Description File. The scan shows that 
+the SyncManagers are configured in 1 Buffer     Mode.
+
+
+       If ET1200 terminals are operated in 1 Buffer Mode they will light 
+up once but then the watchdog will expire.
+
+       This is exactly what you have observed.
+
+       To avoid this behaviour please check the ESC type at start up and 
+configure the SyncManagers with the values described in the device 
+description file which belongs to the terminal. I       attached the 
+latest XML file for EL1xxx and EL2xxx Beckhoff terminals.
+
+       I know that this is a little confusing but can easily be resolved 
+by using the values of the device description.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000236.html">[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: RE : Re: understanding the datagrams
+</A></li>
+	<LI>Next message: <A HREF="000238.html">[Ethercatmaster-users] RE : non-persistent outputs ETG suggestions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#237">[ date ]</a>
+              <a href="thread.html#237">[ thread ]</a>
+              <a href="subject.html#237">[ subject ]</a>
+              <a href="author.html#237">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] some questions about the usage of eml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3C468A8713.5030303%40skynet.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000117.html">
+   <LINK REL="Next"  HREF="000119.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] some questions about the usage of eml</H1>
+    <B>Tom Panis</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3C468A8713.5030303%40skynet.be%3E"
+       TITLE="[Ethercatmaster-users] some questions about the usage of eml">tompanis at skynet.be
+       </A><BR>
+    <I>Tue Jul  3 19:27:47 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000117.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+        <LI>Next message: <A HREF="000119.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#118">[ date ]</a>
+              <a href="thread.html#118">[ thread ]</a>
+              <a href="subject.html#118">[ subject ]</a>
+              <a href="author.html#118">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Roland Tollenaar wrote:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I am having problems when configuring for the 4 modules instead of 
+</I>&gt;<i> only 2. Correcting the version number does allow the first two modules 
+</I>&gt;<i> to successfully configure in the modified master-test program, and 
+</I>&gt;<i> since I am using the configure snippet Tom posted this implies that 
+</I>&gt;<i> the error might be in the arguments I supply to the EC_FMMU object 
+</I>&gt;<i> constructor.
+</I>&gt;<i>
+</I>&gt;<i> Must I supply a new logical starting address for the 3rd module (say 
+</I>&gt;<i> EL 2004) If not then am I correct in assuming that the length, 
+</I>&gt;<i> start-bit and end-bit arguments are the same as for modules 1 and 2? 
+</I>&gt;<i> Will the physical address and start-bit be the same?
+</I>The logical addresses are used when sending processdata to the modules. 
+Every module writes/reads data to/from the logical address that has been 
+assigned to him. So every single module must have another logical 
+address, to avoid conflicts. When assigning logical addresses, you must 
+make sure that you don't use an address that's already been used. For 
+example: the processdata of an EL4102 is 4 byte long, when you assign 
+the logical address 0x1000 to that module, the addresses 0x1000 to 
+0x1003 are being used by that module. The start-bit is 0 and the 
+stop-bit is 7 since 4 whole bytes are being used. (The start-bit reverse 
+to the first used byte (0x1000) and the stop-bit reverse to the last 
+used byte (0x1003). So the next address that may be used for another 
+module is 0x1004. The processdata of an EL2004 module is only 4 bit 
+long. In this example, you can use address 0x1004. Because only 4 bits 
+have to be used, the length is 1, the start-bit is 0 and the stop-bit is 
+3. The last 4 bits of address 0x1004 can still be used for another 
+module. The start-bit of that module module would be 4 in this case.
+
+So in your case, you must assign a new logical address to the 3rd 
+module, the start-bit shall be 0, the stop-bit 3.
+
+The physical addresses are the addresses of the modules' memory itself. 
+Those are the same for every module of the same type.
+&gt;<i>
+</I>&gt;<i> Or might my problem be else-where?
+</I>&gt;<i>
+</I>&gt;<i> Is it possible to suggest what I am possibly wrong from the above? I 
+</I>&gt;<i> cannot post my code snippet now (don';t have access to the code from 
+</I>&gt;<i> here). 
+</I>It's possible that the configurations of the SM are wrong to. If you can 
+access your code and post it with a description of the used modules, it 
+would be easier for me to see what's wrong with your configuration.
+
+Tom
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000117.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+	<LI>Next message: <A HREF="000119.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#118">[ date ]</a>
+              <a href="thread.html#118">[ thread ]</a>
+              <a href="subject.html#118">[ subject ]</a>
+              <a href="author.html#118">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

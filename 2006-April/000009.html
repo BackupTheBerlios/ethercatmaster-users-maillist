@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] building redboot
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2006-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20building%20redboot&In-Reply-To=%3C39AB441B43BF19468361907ECD4937EB49F18C%40hestia.ccm.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000010.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] building redboot</H1>
+    <B>Jeroen Theelen</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20building%20redboot&In-Reply-To=%3C39AB441B43BF19468361907ECD4937EB49F18C%40hestia.ccm.local%3E"
+       TITLE="[Ethercatmaster-users] building redboot">jeroen.theelen at ccm.nl
+       </A><BR>
+    <I>Tue Apr 11 14:02:06 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000010.html">[Ethercatmaster-users] building redboot
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#9">[ date ]</a>
+              <a href="thread.html#9">[ thread ]</a>
+              <a href="subject.html#9">[ subject ]</a>
+              <a href="author.html#9">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Bob,
+
+Thanks for you quick answer, but I think I wasn't very clear in my last mail. When I use 
+the redboot.ecc I received from Klaas Gadeyne and I only disable Redboot networking 
+(rest stays the same) I get the list of errors from my last mail.
+
+(I open the redboot.ecc with the configtool, disable Redboot Rom monitor -&gt; Build Redboot 
+ROM ELF image -&gt; Redboot Networking, save the change, Generate build tree, close configtool,
+cd to redboot_build and type make)
+
+So only disabling redboot networking isn't enough to get it working and I don't know, what
+else I must change. Something in /home/Administrator/ecos/packages/io/eth/current/src/stand_alone/eth_drv.c?
+Or is this a bug in cygwin??? Maybe I must change to linux to get it working, because a
+couple of the errors have to do with cygwin, but it's more easy for me to work under windows.
+
+
+Kind regards,
+Jeroen
+
+-----Original Message-----
+From: Bob Koninckx [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">bob.koninckx at fmtc.be</A>]
+Sent: Tuesday, April 11, 2006 1:07 PM
+To: Jeroen Theelen; Klaas Gadeyne
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ethercatmaster-users at lists.berlios.de</A>
+Subject: RE: [Ethercatmaster-users] building redboot
+
+
+At 12:05 11/04/2006, Jeroen Theelen wrote:
+
+...
+
+&gt;<i>/lib/libtarget.a(io_eth_eth_drv.o): In function `eth_drv_dsr':
+</I>&gt;<i>/home/Administrator/ecos/packages/io/eth/current/src/stand_alone/eth_drv.c:551:
+</I>&gt;<i>undefined reference to `start_console'
+</I>&gt;<i>/home/Administrator/ecos/packages/io/eth/current/src/stand_alone/eth_drv.c:551:
+</I>&gt;<i>undefined reference to `end_console'
+</I>&gt;<i>collect2: ld returned 1 exit status
+</I>&gt;<i>make[1]: *** 
+</I>&gt;<i>[/ecos-c/cygwin/home/Administrator/eml-0.1/test/library/rb_intel3/r
+</I>&gt;<i>edboot_install/bin/redboot.elf] Error 1
+</I>&gt;<i>make[1]: Leaving directory 
+</I>&gt;<i>`/home/Administrator/eml-0.1/test/library/rb_intel3/r
+</I>&gt;<i>edboot_build/redboot/current'
+</I>&gt;<i>make: *** [build] Error 2
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>I tried different things. Because I don't want to use the nic for redboot 
+</I>&gt;<i>debugging,
+</I>&gt;<i>my first guess was that disabling Redboot Networking is enough to get it 
+</I>&gt;<i>working.
+</I>&gt;<i>This wasn't the case, so I also disabled Ethernet port 0 driver (under 
+</I>&gt;<i>common ethernet
+</I>&gt;<i>support -&gt; pc board ethernet driver). Because this also failed in 
+</I>&gt;<i>combination with an
+</I>&gt;<i>Intel card I tried it also with a realtek. This also gives the same result.
+</I>
+
+Disable networking in redboot. You do not need it since you're going to use 
+serial for debugging.
+
+
+&gt;<i>Only when I only change start-up type from grub to floppy and change 
+</I>&gt;<i>nothing else
+</I>&gt;<i>I'm able to boot redboot (of course it says no network card found). When I 
+</I>&gt;<i>change the
+</I>&gt;<i>same configuration to an Intel card, I can make a bootdisk, but when I 
+</I>&gt;<i>load it I only
+</I>&gt;<i>get 2,5 rows of dots and a blinking cursor. All other things I tried (as 
+</I>&gt;<i>explained above)
+</I>&gt;<i>don't succeed in building a bootdisk.
+</I>
+
+See above. Disable networking in redboot, you do not need it if you use 
+rs232 for debugging.
+
+
+&gt;<i>Can someone give me a hint how to get it working? It can be not that 
+</I>&gt;<i>difficult to get it
+</I>&gt;<i>working I think, but I still didn't succeed to build eCos for my hardware.
+</I>&gt;<i>
+</I>&gt;<i>Thanks in advance,
+</I>&gt;<i>Jeroen
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>Bob
+</I>
+
+
+
+
+
+CCM Centre for Concepts in Mechatronics B.V.
+P.O. Box 12, NL-5670 AA  Nuenen 
+De Pinckart 24, NL-5674 CC Nuenen 
+Phone +31 (0)40-263 50 00 
+Fax       +31 (0)40-263 55 55 
+
+Op dit e-mailbericht, inclusief bijlagen, is de e-mail disclaimer van toepassing zoals gepubliceerd op de website van CCM Centre for Concepts in Mechatronics B.V.: www.ccm.nl  
+
+This e-mail message and its attachments are subject to the disclaimer published at the website of CCM Centre for Concepts in Mechatronics B.V.: www.ccm.nl 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000010.html">[Ethercatmaster-users] building redboot
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#9">[ date ]</a>
+              <a href="thread.html#9">[ thread ]</a>
+              <a href="subject.html#9">[ subject ]</a>
+              <a href="author.html#9">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

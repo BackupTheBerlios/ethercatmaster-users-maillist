@@ -1,0 +1,38 @@
+From klaas.gadeyne at fmtc.be  Mon Aug  3 10:47:42 2009
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 3 Aug 2009 10:47:42 +0200 (CEST)
+Subject: [Ethercatmaster-users] Number of Mailboxes
+In-Reply-To: <OFA34378DA.C475A3D9-ONC12575FA.00263FC7-C12575FA.0027A343@datacon.at>
+References: <OFA34378DA.C475A3D9-ONC12575FA.00263FC7-C12575FA.0027A343@datacon.at>
+Message-ID: <alpine.DEB.2.00.0908031034180.10277@ampere.labo01.fmtc.be>
+
+On Tue, 21 Jul 2009, henning.richter at besi.com wrote:
+Hi Henning,
+
+[The EML list is definitely not a real-time (=fast in this context) fieldbus during holiday periods]
+
+> in the current version of the EML the number of mailboxes is limited to 2.
+> Was there a special reason why this was hard-coded into the EML ?
+>
+> In the ETG Sepcs the example configurations are always with 2 mailbox and 2
+> process data configurations.
+> Thus SM0 and SM1 are used for the mailbox configuration and SM2 and SM3 for
+> process data configuration.
+>
+> Theroretically there are up to 16 SyncManagers in one slave and we are
+> going to try set up 4 mailboxes (one slave that controls 2 axes => 2
+> mailboxes for each axes).
+
+The EML implementation was based on looking at the specs, so I guess that and the fact that we never used a slave which needed more MBX's until now was the reason for that :-)
+
+> Actually I am waiting for an answer from Beckhoff if this is generally
+> possible ( I guess it should.).
+>
+> Moreover, I will take care of the implementation of more than 2 Mailboxes
+> in a dynamic way.
+
+Great, thx!
+
+Klaas
+
+

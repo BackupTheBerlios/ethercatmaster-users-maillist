@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] library linking and testing
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-May/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20library%20linking%20and%20testing&In-Reply-To=%3CPine.LNX.4.64.0705220832140.32430%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000091.html">
+   <LINK REL="Next"  HREF="000093.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] library linking and testing</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20library%20linking%20and%20testing&In-Reply-To=%3CPine.LNX.4.64.0705220832140.32430%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] library linking and testing">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Tue May 22 08:37:22 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000091.html">[Ethercatmaster-users] Beckhoff hardware and EML
+</A></li>
+        <LI>Next message: <A HREF="000093.html">[Ethercatmaster-users] Beckhoff hardware and EML
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#92">[ date ]</a>
+              <a href="thread.html#92">[ thread ]</a>
+              <a href="subject.html#92">[ subject ]</a>
+              <a href="author.html#92">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Mon, 21 May 2007, Roland Tollenaar wrote:
+&gt;&gt;&gt;&gt;<i> how about running &quot;make install&quot;?
+</I>&gt;&gt;&gt;<i> Ah, perhaps update the README in the package with this wisdom. I
+</I>&gt;&gt;&gt;<i> simply put it in
+</I>&gt;&gt;&gt;<i> /usr/local/eml-trunk/build_rtnet/src. Which is kind of where it ends
+</I>&gt;&gt;&gt;<i> up in if one unpacks in /usr/local.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Then ldconfig &lt;above path&gt;.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> ldconfig is only necessary if you're building a dynamic library and
+</I>&gt;&gt;<i> changed the default installation path (but this is out of scope on 
+</I>&gt;&gt;<i> eml-users)
+</I>&gt;<i> Ok, I just re-emphasize that you may want to fix the readme with the make 
+</I>&gt;<i> install bit. Small change but if I am not mistaken it is missing.
+</I>
+Oh, I already fixed id, but forgot to put that in my previous reply
+:<i>-(
+</I>
+#  svn commit -m &quot;add make install&quot; README
+Sending        README
+Transmitting file data .
+Committed revision 29.
+
+&gt;<i> Ok looks promising then. I have no idea whether there is some generic 
+</I>&gt;<i> response of EC slaves to the master and whether if I connect the Beckhoff 
+</I>&gt;<i> buscoupler this master_test should execute successfully?
+</I>
+Not succesfully I guess (since you won't have the same slaves as in
+the example, but you should see a different output at least (ic. the
+master should detect some slave)
+
+&gt;<i> My next step would have to be to understand how to communicate with the 
+</I>&gt;<i> Beckhoff buscoupler.
+</I>
+You will probably need a real slave (and not a bus coupler) in order
+to do something really useful...
+
+&gt;<i> Could I get some advice of which EML src/test programs 
+</I>&gt;<i> might be most useful to study in this regards?
+</I>
+master_test, together with Tom's &quot;getting started&quot; document seems like
+the best place to start.
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000091.html">[Ethercatmaster-users] Beckhoff hardware and EML
+</A></li>
+	<LI>Next message: <A HREF="000093.html">[Ethercatmaster-users] Beckhoff hardware and EML
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#92">[ date ]</a>
+              <a href="thread.html#92">[ thread ]</a>
+              <a href="subject.html#92">[ subject ]</a>
+              <a href="author.html#92">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

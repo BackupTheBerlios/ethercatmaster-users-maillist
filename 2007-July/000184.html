@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Monitoring ethercat traffic
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Monitoring%20ethercat%20traffic&In-Reply-To=%3C46A46A9D.6010603%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000178.html">
+   <LINK REL="Next"  HREF="000179.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Monitoring ethercat traffic</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Monitoring%20ethercat%20traffic&In-Reply-To=%3C46A46A9D.6010603%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] Monitoring ethercat traffic">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Mon Jul 23 10:45:17 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000178.html">[Ethercatmaster-users] Monitoring ethercat traffic
+</A></li>
+        <LI>Next message: <A HREF="000179.html">[Ethercatmaster-users] Monitoring ethercat traffic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#184">[ date ]</a>
+              <a href="thread.html#184">[ thread ]</a>
+              <a href="subject.html#184">[ subject ]</a>
+              <a href="author.html#184">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>HI,
+
+Actually etherreal and wireshark were installed on a windows machine. 
+This is where they crash, on trying to monitor normal (office) network 
+traffic).
+
+So the problem is not related to ethercat, not related to xenomai or 
+rtnet but purely related to wireshark, windows and/or possibly myself. 
+THe latter being of course very unlikely because in this particular case 
+I simple follow pretty standard installation operations.
+
+Regards,
+
+Roland
+
+Jan Kiszka wrote:
+&gt;<i> Roland Tollenaar wrote:
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I want to try monitor the ethernet traffic to sort out the 
+</I>&gt;&gt;<i> non-persistent digital output problem. Only both wireshark and 
+</I>&gt;&gt;<i> ether-real (I know they are the same but there are still older etherreal 
+</I>&gt;&gt;<i>   versions out there) crash on the windows system i want to monitor with.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Secondly I am not sure how to connect a monitoring machine to the 
+</I>&gt;&gt;<i> system. When I connect a switch the ethercat communication gives errors 
+</I>&gt;&gt;<i> through EML. How must the switch be placed in the network topology?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I cannot install the sniffer on the platform I am running EML on.
+</I>&gt;<i> 
+</I>&gt;<i> Why? It should work if you enable and load RTcap, see RTcap.README. Then
+</I>&gt;<i> you may save the traffic to a file (tcpdump -w) and load it later on
+</I>&gt;<i> into Wireshark, or sniff directly in &quot;real-time&quot; on rteth0.
+</I>&gt;<i> 
+</I>&gt;<i> But I'm afraid the crash will not magically vanish that way. Maybe it is
+</I>&gt;<i> related to the Wireshark Ethercat plugin, then you should bug the guys
+</I>&gt;<i> at ETG with a report (and also urge them to merge their stuff into the
+</I>&gt;<i> official release - to make life easier for everyone, them included).
+</I>&gt;<i> 
+</I>&gt;<i> Jan
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000178.html">[Ethercatmaster-users] Monitoring ethercat traffic
+</A></li>
+	<LI>Next message: <A HREF="000179.html">[Ethercatmaster-users] Monitoring ethercat traffic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#184">[ date ]</a>
+              <a href="thread.html#184">[ thread ]</a>
+              <a href="subject.html#184">[ subject ]</a>
+              <a href="author.html#184">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,758 @@
+From klaas.gadeyne at fmtc.be  Mon Nov  5 11:01:09 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 5 Nov 2007 11:01:09 +0100 (CET)
+Subject: [Ethercatmaster-users] EtherCAT master
+In-Reply-To: <D13D18619113434FBF84E637729706C3459A79@ACS01.acsmotioncontrol.com>
+References: <D13D18619113434FBF84E637729706C3459A79@ACS01.acsmotioncontrol.com>
+Message-ID: <Pine.LNX.4.64.0711051047300.17311@ampere.labo01.fmtc.be>
+
+On Tue, 30 Oct 2007, Mickey Mendlin wrote:
+[I put the users mailing list in cc:, since the info below might
+interest other people and is not confidential]
+
+> Some questions regarding the EtherCAT master:
+>
+> 1.Can it be ported to  WinCE 6 or Other Win32 API RTOS?
+
+Yes, IIRC I already had a private email conversation in the past with somebody
+which has it done already.  Never saw code though.  I don't know if
+he follows this mailing list and is willing to share his code?
+
+> 2. What is the fastest PDO cycle that you've reached with it and under
+> what OS?
+
+We never really went "all the way", but we have given demos using
+xenomai with a PDO cycle of 10 kHz.
+It's been a very long time since we've used the eCos port, but given
+appropriate hardware, that should work on eCos too.
+
+> 3. Is XML parsing done on target?
+
+There is no XML parsing in the code currently, and if there would be
+(there have been some mails on the mailing list about this, but again,
+we never saw code), it would be on master side
+
+> 4. Is it all open source code?
+
+Yes.
+
+> 5. How is it decoupled from the main firmware?
+
+I think I don't understand your question here.  It implements only
+master functionality and respects the standard, so it's not coupled to
+(ethercat) firmware.
+
+> 6. Are there any special HAL support for specific Ethernet chips?
+
+We rely on HAL support from
+- available ethernet HW drivers in the eCos project for eCos
+- available ethernet HW drivers from the RTnet project for Xenomai
+
+So it's the OS that delivers us the network drivers.
+
+> 7. If yes, how can this layer be ported to other OS?
+> 8.  Could you please explain the GPL lisence policy ?
+
+What exactly is unclear about it?
+
+> 9. Would you consider slave implementation on DSP as a project ?
+
+FMTC is currently not actively working on the project anymore (we do
+use the code in some of our projects ourselves).
+The source code is there for the community to use (and improve).
+
+Best regards,
+
+Klaas Gadeyne
+
+
+From dennisnguy at sbcglobal.net  Fri Nov  2 23:20:42 2007
+From: dennisnguy at sbcglobal.net (Dennis Nguyen)
+Date: Fri, 02 Nov 2007 15:20:42 -0700
+Subject: [Ethercatmaster-users] Question about the usage of the
+	master_test	program
+Message-ID: <1194042042.23107.8.camel@localhost.localdomain>
+
+Hello Harti,
+
+I saw your post that the rtnet (0.99) was testes and worked on a xenomai
+platform (2.30). EML is compiled and installed.
+
+Could you send me some steps about the EML compilation and installing,
+testing RTnet?
+I'm using linux kernel 2.6.22.10, xenomai 2.4-rc5, rtnet trunk 1139, and
+EML 0.1.
+
+Thanks in advance,
+Dennis
+
+
+
+From dennisnguy at sbcglobal.net  Thu Nov  8 07:34:42 2007
+From: dennisnguy at sbcglobal.net (Dennis Nguyen)
+Date: Wed, 07 Nov 2007 22:34:42 -0800
+Subject: [Ethercatmaster-users] How to build Master as a Slave or establish
+ communication between two Masters
+Message-ID: <4732AE02.9090002@sbcglobal.net>
+
+Hello,
+
+Can EML be configured and built as a slave?
+Can EML Master communicate with another Master.
+
+Thanks in advance,
+Dennis
+
+
+From klaas.gadeyne at fmtc.be  Thu Nov  8 08:45:43 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 8 Nov 2007 08:45:43 +0100 (CET)
+Subject: [Ethercatmaster-users] How to build Master as a Slave or
+ establish communication between two Masters
+In-Reply-To: <4732AE02.9090002@sbcglobal.net>
+References: <4732AE02.9090002@sbcglobal.net>
+Message-ID: <Pine.LNX.4.64.0711080841560.24373@ampere.labo01.fmtc.be>
+
+On Wed, 7 Nov 2007, Dennis Nguyen wrote:
+> Hello,
+>
+> Can EML be configured and built as a slave?
+
+EML = ethercat MASTER library
+
+> Can EML Master communicate with another Master.
+
+AFAIK "There can be only one."
+
+k
+
+
+From dennisnguy at sbcglobal.net  Fri Nov 16 22:29:26 2007
+From: dennisnguy at sbcglobal.net (Dennis Nguyen)
+Date: Fri, 16 Nov 2007 13:29:26 -0800
+Subject: [Ethercatmaster-users] low_level_input: Cannot receive msg: -1
+Message-ID: <1195248567.16196.57.camel@dieutan.org>
+
+Hello all,
+
+I'm using linux i386 kernel 2.6.22-12,
+adeos-ipipe-2.6.22-i386-1.10-12.patch, xenomai-2.4-rc6, rtnet trunk 1140
+as 11/15/2007, eml trunk 31 as of 11/15/2007.
+Beckhoff EL1100, and one EL2004.
+I didn't use the El4102. I modified the master_test.cpp using Tom and
+Haris example for EL2004. I set EtherCAT_SlaveDb::instance(2).
+there are 2 RTL 8139 on the PC.
+
+I inserted modules:
+sudo mknod /dev/rtnet c 10 240
+sudo ifconfig eth0 down
+sudo ifconfig eth1 down
+sudo rmmod 8139cp
+sudo rmmod 8139too
+sudo
+insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/nucleus/xeno_nucleus.ko
+sudo
+insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/native/xeno_native.ko
+sudo
+insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/posix/xeno_posix.ko
+sudo
+insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/rtdm/xeno_rtdm.ko
+sudo insmod /usr/local/rtnet/modulesmodules/rtnet.ko;
+sudo insmod /usr/local/rtnet/modulesmodules/rtipv4.ko;
+sudo insmod /usr/local/rtnet/modulesmodules/rtpacket.ko;
+sudo insmod /usr/local/rtnet/modulesmodules/rt_8139.ko;
+sudo insmod /usr/local/rtnet/modulesmodules/rt_loopback.ko;
+sudo /usr/local/rtnet/modules/sbin/rtifconfig rtlo up 127.0.0.1
+sudo /usr/local/rtnet/modules/sbin/rtifconfig rteth0 up 10.0.0.1 netmask
+255.255.255.0;
+
+I got the error messages when running the master_test:
+low_level_input: Cannot receive msg: -1
+low_level_txandrx: failed: MAX_TRIES_TX: giving up
+DLL::txandrx() Error
+Error sending counter frame
+Something went wrong while scanning network
+EtherCAT_AL"" Can't init network
+
+There are 20 frames capture while I ran the master_test. The following
+are 2 of the frames.
+ffffffffffff00000000000088a40d10010000000000010000000000000000010000000000000a000001000000000000000000000000000000000000
+ffffffffffff02000000000088a40d10010002000000010000000301000000010000000000000a000001000000000000000000000000000000000000
+(Does the second frame come from Slave?)
+
+I got this from dmesg:
+rt_8139too Fast Ethernet driver 0.9.24-rt0.7
+RTnet: registered rteth0
+Xenomai: xnintr_shirq_handler: IRQ11 not handled: Disable IRQ line.
+
+I don't know if the xenomai disable IRQ line caused EML couldn't receive
+the reply.
+
+Any suggestion to solve the master initiation please.
+
+Thanks in advance,
+Dennis
+
+
+
+
+From rwatollenaar at gmail.com  Sat Nov 17 17:18:50 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Sat, 17 Nov 2007 17:18:50 +0100
+Subject: [Ethercatmaster-users] low_level_input: Cannot receive msg: -1
+In-Reply-To: <1195248567.16196.57.camel@dieutan.org>
+References: <1195248567.16196.57.camel@dieutan.org>
+Message-ID: <473F146A.6080109@gmail.com>
+
+Hi Dennis,
+
+If this NIC you are using with rtnet is on IRQ line 11 then it will most 
+certainly not work.
+
+you still have an IRQ conflict in this case.
+
+Roland
+
+Dennis Nguyen wrote:
+> Hello all,
+> 
+> I'm using linux i386 kernel 2.6.22-12,
+> adeos-ipipe-2.6.22-i386-1.10-12.patch, xenomai-2.4-rc6, rtnet trunk 1140
+> as 11/15/2007, eml trunk 31 as of 11/15/2007.
+> Beckhoff EL1100, and one EL2004.
+> I didn't use the El4102. I modified the master_test.cpp using Tom and
+> Haris example for EL2004. I set EtherCAT_SlaveDb::instance(2).
+> there are 2 RTL 8139 on the PC.
+> 
+> I inserted modules:
+> sudo mknod /dev/rtnet c 10 240
+> sudo ifconfig eth0 down
+> sudo ifconfig eth1 down
+> sudo rmmod 8139cp
+> sudo rmmod 8139too
+> sudo
+> insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/nucleus/xeno_nucleus.ko
+> sudo
+> insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/native/xeno_native.ko
+> sudo
+> insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/posix/xeno_posix.ko
+> sudo
+> insmod /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/rtdm/xeno_rtdm.ko
+> sudo insmod /usr/local/rtnet/modulesmodules/rtnet.ko;
+> sudo insmod /usr/local/rtnet/modulesmodules/rtipv4.ko;
+> sudo insmod /usr/local/rtnet/modulesmodules/rtpacket.ko;
+> sudo insmod /usr/local/rtnet/modulesmodules/rt_8139.ko;
+> sudo insmod /usr/local/rtnet/modulesmodules/rt_loopback.ko;
+> sudo /usr/local/rtnet/modules/sbin/rtifconfig rtlo up 127.0.0.1
+> sudo /usr/local/rtnet/modules/sbin/rtifconfig rteth0 up 10.0.0.1 netmask
+> 255.255.255.0;
+> 
+> I got the error messages when running the master_test:
+> low_level_input: Cannot receive msg: -1
+> low_level_txandrx: failed: MAX_TRIES_TX: giving up
+> DLL::txandrx() Error
+> Error sending counter frame
+> Something went wrong while scanning network
+> EtherCAT_AL"" Can't init network
+> 
+> There are 20 frames capture while I ran the master_test. The following
+> are 2 of the frames.
+> ffffffffffff00000000000088a40d10010000000000010000000000000000010000000000000a000001000000000000000000000000000000000000
+> ffffffffffff02000000000088a40d10010002000000010000000301000000010000000000000a000001000000000000000000000000000000000000
+> (Does the second frame come from Slave?)
+> 
+> I got this from dmesg:
+> rt_8139too Fast Ethernet driver 0.9.24-rt0.7
+> RTnet: registered rteth0
+> Xenomai: xnintr_shirq_handler: IRQ11 not handled: Disable IRQ line.
+> 
+> I don't know if the xenomai disable IRQ line caused EML couldn't receive
+> the reply.
+> 
+> Any suggestion to solve the master initiation please.
+> 
+> Thanks in advance,
+> Dennis
+> 
+> 
+> _______________________________________________
+> Ethercatmaster-users mailing list
+> Ethercatmaster-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+> 
+
+
+From rwatollenaar at gmail.com  Sat Nov 17 17:19:08 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Sat, 17 Nov 2007 17:19:08 +0100
+Subject: [Ethercatmaster-users] low_level_input: Cannot receive msg: -1
+In-Reply-To: <473F146A.6080109@gmail.com>
+References: <1195248567.16196.57.camel@dieutan.org>
+	<473F146A.6080109@gmail.com>
+Message-ID: <473F147C.7060306@gmail.com>
+
+
+
+Roland Tollenaar wrote:
+> Hi Dennis,
+> 
+> If this NIC you are using with rtnet is on IRQ line 11 then it will most 
+> certainly not work.
+> 
+> you still have an IRQ conflict in this case.
+> 
+> Roland
+> 
+> Dennis Nguyen wrote:
+>> Hello all,
+>>
+>> I'm using linux i386 kernel 2.6.22-12,
+>> adeos-ipipe-2.6.22-i386-1.10-12.patch, xenomai-2.4-rc6, rtnet trunk 1140
+>> as 11/15/2007, eml trunk 31 as of 11/15/2007.
+>> Beckhoff EL1100, and one EL2004.
+>> I didn't use the El4102. I modified the master_test.cpp using Tom and
+>> Haris example for EL2004. I set EtherCAT_SlaveDb::instance(2).
+>> there are 2 RTL 8139 on the PC.
+>>
+>> I inserted modules:
+>> sudo mknod /dev/rtnet c 10 240
+>> sudo ifconfig eth0 down
+>> sudo ifconfig eth1 down
+>> sudo rmmod 8139cp
+>> sudo rmmod 8139too
+>> sudo
+>> insmod 
+>> /lib/modules/2.6.22.12/kernel/kernel/xenomai/nucleus/xeno_nucleus.ko
+>> sudo
+>> insmod 
+>> /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/native/xeno_native.ko
+>> sudo
+>> insmod 
+>> /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/posix/xeno_posix.ko
+>> sudo
+>> insmod 
+>> /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/rtdm/xeno_rtdm.ko
+>> sudo insmod /usr/local/rtnet/modulesmodules/rtnet.ko;
+>> sudo insmod /usr/local/rtnet/modulesmodules/rtipv4.ko;
+>> sudo insmod /usr/local/rtnet/modulesmodules/rtpacket.ko;
+>> sudo insmod /usr/local/rtnet/modulesmodules/rt_8139.ko;
+>> sudo insmod /usr/local/rtnet/modulesmodules/rt_loopback.ko;
+>> sudo /usr/local/rtnet/modules/sbin/rtifconfig rtlo up 127.0.0.1
+>> sudo /usr/local/rtnet/modules/sbin/rtifconfig rteth0 up 10.0.0.1 netmask
+>> 255.255.255.0;
+>>
+>> I got the error messages when running the master_test:
+>> low_level_input: Cannot receive msg: -1
+>> low_level_txandrx: failed: MAX_TRIES_TX: giving up
+>> DLL::txandrx() Error
+>> Error sending counter frame
+>> Something went wrong while scanning network
+>> EtherCAT_AL"" Can't init network
+>>
+>> There are 20 frames capture while I ran the master_test. The following
+>> are 2 of the frames.
+>> ffffffffffff00000000000088a40d10010000000000010000000000000000010000000000000a000001000000000000000000000000000000000000 
+>>
+>> ffffffffffff02000000000088a40d10010002000000010000000301000000010000000000000a000001000000000000000000000000000000000000 
+>>
+>> (Does the second frame come from Slave?)
+>>
+>> I got this from dmesg:
+>> rt_8139too Fast Ethernet driver 0.9.24-rt0.7
+>> RTnet: registered rteth0
+>> Xenomai: xnintr_shirq_handler: IRQ11 not handled: Disable IRQ line.
+>>
+>> I don't know if the xenomai disable IRQ line caused EML couldn't receive
+>> the reply.
+>>
+>> Any suggestion to solve the master initiation please.
+>>
+>> Thanks in advance,
+>> Dennis
+>>
+>>
+>> _______________________________________________
+>> Ethercatmaster-users mailing list
+>> Ethercatmaster-users at lists.berlios.de
+>> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+>>
+> 
+
+
+From dennisnguy at sbcglobal.net  Tue Nov 20 05:17:04 2007
+From: dennisnguy at sbcglobal.net (Dennis Nguyen)
+Date: Mon, 19 Nov 2007 20:17:04 -0800
+Subject: [Ethercatmaster-users] low_level_input: Cannot receive msg: -1
+In-Reply-To: <473F147C.7060306@gmail.com>
+References: <1195248567.16196.57.camel@dieutan.org>
+	<473F146A.6080109@gmail.com> <473F147C.7060306@gmail.com>
+Message-ID: <47425FC0.3010109@sbcglobal.net>
+
+Hi Roland,
+
+You're right.  The issue related to IRQ.  I don't know how to turn on or 
+off the IRQ.  I'm using other card which has IRQ 10.
+
+Thanks,
+Dennis
+
+Roland Tollenaar wrote:
+>
+>
+> Roland Tollenaar wrote:
+>> Hi Dennis,
+>>
+>> If this NIC you are using with rtnet is on IRQ line 11 then it will 
+>> most certainly not work.
+>>
+>> you still have an IRQ conflict in this case.
+>>
+>> Roland
+>>
+>> Dennis Nguyen wrote:
+>>> Hello all,
+>>>
+>>> I'm using linux i386 kernel 2.6.22-12,
+>>> adeos-ipipe-2.6.22-i386-1.10-12.patch, xenomai-2.4-rc6, rtnet trunk 
+>>> 1140
+>>> as 11/15/2007, eml trunk 31 as of 11/15/2007.
+>>> Beckhoff EL1100, and one EL2004.
+>>> I didn't use the El4102. I modified the master_test.cpp using Tom and
+>>> Haris example for EL2004. I set EtherCAT_SlaveDb::instance(2).
+>>> there are 2 RTL 8139 on the PC.
+>>>
+>>> I inserted modules:
+>>> sudo mknod /dev/rtnet c 10 240
+>>> sudo ifconfig eth0 down
+>>> sudo ifconfig eth1 down
+>>> sudo rmmod 8139cp
+>>> sudo rmmod 8139too
+>>> sudo
+>>> insmod 
+>>> /lib/modules/2.6.22.12/kernel/kernel/xenomai/nucleus/xeno_nucleus.ko
+>>> sudo
+>>> insmod 
+>>> /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/native/xeno_native.ko 
+>>>
+>>> sudo
+>>> insmod 
+>>> /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/posix/xeno_posix.ko
+>>> sudo
+>>> insmod 
+>>> /lib/modules/2.6.22.12/kernel/kernel/xenomai/skins/rtdm/xeno_rtdm.ko
+>>> sudo insmod /usr/local/rtnet/modulesmodules/rtnet.ko;
+>>> sudo insmod /usr/local/rtnet/modulesmodules/rtipv4.ko;
+>>> sudo insmod /usr/local/rtnet/modulesmodules/rtpacket.ko;
+>>> sudo insmod /usr/local/rtnet/modulesmodules/rt_8139.ko;
+>>> sudo insmod /usr/local/rtnet/modulesmodules/rt_loopback.ko;
+>>> sudo /usr/local/rtnet/modules/sbin/rtifconfig rtlo up 127.0.0.1
+>>> sudo /usr/local/rtnet/modules/sbin/rtifconfig rteth0 up 10.0.0.1 
+>>> netmask
+>>> 255.255.255.0;
+>>>
+>>> I got the error messages when running the master_test:
+>>> low_level_input: Cannot receive msg: -1
+>>> low_level_txandrx: failed: MAX_TRIES_TX: giving up
+>>> DLL::txandrx() Error
+>>> Error sending counter frame
+>>> Something went wrong while scanning network
+>>> EtherCAT_AL"" Can't init network
+>>>
+>>> There are 20 frames capture while I ran the master_test. The following
+>>> are 2 of the frames.
+>>> ffffffffffff00000000000088a40d10010000000000010000000000000000010000000000000a000001000000000000000000000000000000000000 
+>>>
+>>> ffffffffffff02000000000088a40d10010002000000010000000301000000010000000000000a000001000000000000000000000000000000000000 
+>>>
+>>> (Does the second frame come from Slave?)
+>>>
+>>> I got this from dmesg:
+>>> rt_8139too Fast Ethernet driver 0.9.24-rt0.7
+>>> RTnet: registered rteth0
+>>> Xenomai: xnintr_shirq_handler: IRQ11 not handled: Disable IRQ line.
+>>>
+>>> I don't know if the xenomai disable IRQ line caused EML couldn't 
+>>> receive
+>>> the reply.
+>>>
+>>> Any suggestion to solve the master initiation please.
+>>>
+>>> Thanks in advance,
+>>> Dennis
+>>>
+>>>
+>>> _______________________________________________
+>>> Ethercatmaster-users mailing list
+>>> Ethercatmaster-users at lists.berlios.de
+>>> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+>>>
+>>
+>
+
+
+From rwatollenaar at gmail.com  Sun Nov 25 11:23:07 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Sun, 25 Nov 2007 11:23:07 +0100
+Subject: [Ethercatmaster-users] configuration & NOT in declaration
+Message-ID: <47494D0B.2020701@gmail.com>
+
+Hi,
+
+For practical use it would be beneficial to be able to configure the 
+ethercat slaves at run-time.
+
+Product code,
+Revision code
+Physical start address
+etc.
+
+At the moment (based on the master-test example) the configuration 
+happens as a global declaration which means the above parameters are 
+"cooked" in at compile time.
+
+Is there any manner change this behaviour?
+
+Advice would be much appreciated.
+
+Kind regards,
+
+Roland Tollenaar.
+
+
+From M.J.G.v.d.Molengraft at tue.nl  Sun Nov 25 20:25:14 2007
+From: M.J.G.v.d.Molengraft at tue.nl (Molengraft, M.J.G. van de)
+Date: Sun, 25 Nov 2007 20:25:14 +0100
+Subject: [Ethercatmaster-users] configuration & NOT in declaration
+	(Roland Tollenaar)
+In-Reply-To: <mailman.63.1195988499.26389.ethercatmaster-users@lists.berlios.de>
+Message-ID: <ED8883F7EB35334EB3CDC3658BF2A74D01FE2A5F@EXCHANGE1.campus.tue.nl>
+
+
+Hi Roland,
+
+In the current implementation, the slave database is built up from
+statically declared objects. However, the actual configuration can in
+principle be done dynamically, using the slaves present in the database.
+However, as the current implementation does not automatically provide
+unique logical addresses and physical addresses to multiple slaves of
+the same type, the slave database must contain multiple configuration
+instances of the same slave type, which is not practical if the
+multiplicity of slaves of the same type can be high.
+
+I have written a simple c-app -called ec_config- that first reads the
+actual layout (product- and revision codes) from the connected hardware,
+and next generates a c-file with the necessary configuration data for
+this hardware. Off course, the real-time app needs to be (re)compiled
+including the generated file, but only once for a specific hardware
+layout. Ec_config could also easily generate "standard" slave databases
+from which every hardware system that fits this database could be
+dynamically configured at run-time (e.g. if we would put five EL_5101
+slaves in the database with different addresses as automatically
+generated by ec_config, we could have up to five EL_5101 slaves in our
+hardware). At the moment, configuration data is implemented for EK1100,
+EL1014, EL1008, EL2004, EL2008, EL3102, EL4132 and EL5101. With the
+current implementation, this is as close as I can get to dynamic
+run-time configuration.
+
+I think it would be nice if someone could modify EML to automatically
+provide unique addresses to different slaves of the same type. That
+would allow us to dynamically configure from a small static slave
+database (which was maybe the idea of the original authors?).
+
+Best regards, Rene'
+
+
+
+
+
+
+Today's Topics:
+
+   1. configuration & NOT in declaration (Roland Tollenaar)
+
+
+----------------------------------------------------------------------
+
+Message: 1
+Date: Sun, 25 Nov 2007 11:23:07 +0100
+From: Roland Tollenaar <rwatollenaar at gmail.com>
+Subject: [Ethercatmaster-users] configuration & NOT in declaration
+To: EML users <ethercatmaster-users at lists.berlios.de>
+Message-ID: <47494D0B.2020701 at gmail.com>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+
+Hi,
+
+For practical use it would be beneficial to be able to configure the 
+ethercat slaves at run-time.
+
+Product code,
+Revision code
+Physical start address
+etc.
+
+At the moment (based on the master-test example) the configuration 
+happens as a global declaration which means the above parameters are 
+"cooked" in at compile time.
+
+Is there any manner change this behaviour?
+
+Advice would be much appreciated.
+
+Kind regards,
+
+Roland Tollenaar.
+
+
+------------------------------
+
+_______________________________________________
+Ethercatmaster-users mailing list
+Ethercatmaster-users at lists.berlios.de
+https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+
+End of Ethercatmaster-users Digest, Vol 12, Issue 6
+***************************************************
+
+
+From M.J.G.v.d.Molengraft at tue.nl  Sun Nov 25 20:51:36 2007
+From: M.J.G.v.d.Molengraft at tue.nl (Molengraft, M.J.G. van de)
+Date: Sun, 25 Nov 2007 20:51:36 +0100
+Subject: [Ethercatmaster-users] set slave parameters
+Message-ID: <ED8883F7EB35334EB3CDC3658BF2A74D01FE2A65@EXCHANGE1.campus.tue.nl>
+
+Dear all,
+
+ 
+
+I've read several threads on the list about CoE and the lack of it in
+the current EML implementation.
+
+ 
+
+Is there still a way to set parameters on a slave, e.g. the FIR filter
+parameter on the analog-out EL3102 slave?
+
+ 
+
+Best regards, Rene'
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20071125/80cb4350/attachment.html>
+
+From M.J.G.v.d.Molengraft at tue.nl  Sun Nov 25 21:59:02 2007
+From: M.J.G.v.d.Molengraft at tue.nl (Molengraft, M.J.G. van de)
+Date: Sun, 25 Nov 2007 21:59:02 +0100
+Subject: [Ethercatmaster-users] set slave parameters
+Message-ID: <005101c82fa5$de6ec6fc$61049b83@campus.tue.nl>
+
+Sorry, off course I meant: analog-IN EL3102...
+
+rene
+
+-----Original Message-----
+From: Molengraft, M.J.G. van de <M.J.G.v.d.Molengraft at tue.nl>
+Sent: zondag 25 november 2007 20:51
+To: ethercatmaster-users at lists.berlios.de <ethercatmaster-users at lists.berlios.de>
+Subject: set slave parameters
+
+Dear all,
+
+ 
+
+I?ve read several threads on the list about CoE and the lack of it in the current EML implementation.
+
+ 
+
+Is there still a way to set parameters on a slave, e.g. the FIR filter parameter on the analog-out EL3102 slave?
+
+ 
+
+Best regards, Rene?
+
+ 
+
+
+
+From klaas.gadeyne at fmtc.be  Mon Nov 26 09:37:46 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 26 Nov 2007 09:37:46 +0100 (CET)
+Subject: [Ethercatmaster-users] configuration & NOT in declaration
+ (Roland Tollenaar)
+In-Reply-To: <ED8883F7EB35334EB3CDC3658BF2A74D01FE2A5F@EXCHANGE1.campus.tue.nl>
+References: <ED8883F7EB35334EB3CDC3658BF2A74D01FE2A5F@EXCHANGE1.campus.tue.nl>
+Message-ID: <Pine.LNX.4.64.0711260935090.20135@ampere.labo01.fmtc.be>
+
+On Sun, 25 Nov 2007, Molengraft, M.J.G. van de wrote:
+> In the current implementation, the slave database is built up from
+> statically declared objects. However, the actual configuration can in
+> principle be done dynamically, using the slaves present in the database.
+> However, as the current implementation does not automatically provide
+> unique logical addresses and physical addresses to multiple slaves of
+> the same type, the slave database must contain multiple configuration
+> instances of the same slave type, which is not practical if the
+> multiplicity of slaves of the same type can be high.
+>
+> I have written a simple c-app -called ec_config- that first reads the
+> actual layout (product- and revision codes) from the connected hardware,
+> and next generates a c-file with the necessary configuration data for
+> this hardware. Off course, the real-time app needs to be (re)compiled
+> including the generated file, but only once for a specific hardware
+> layout. Ec_config could also easily generate "standard" slave databases
+> from which every hardware system that fits this database could be
+> dynamically configured at run-time (e.g. if we would put five EL_5101
+> slaves in the database with different addresses as automatically
+> generated by ec_config, we could have up to five EL_5101 slaves in our
+> hardware). At the moment, configuration data is implemented for EK1100,
+> EL1014, EL1008, EL2004, EL2008, EL3102, EL4132 and EL5101. With the
+> current implementation, this is as close as I can get to dynamic
+> run-time configuration.
+
+Patches are welcome!
+
+> I think it would be nice if someone could modify EML to automatically
+> provide unique addresses to different slaves of the same type. That
+> would allow us to dynamically configure from a small static slave
+> database (which was maybe the idea of the original authors?).
+
+It was the idea indeed, but we've never gotten to implementation.
+Again, C-u 8 C-p C-k C-y M-> C-y [*]
+
+regards,
+
+Klaas
+[*] vi users, i'm sorry ;-P
+
+
+From klaas.gadeyne at fmtc.be  Mon Nov 26 09:47:43 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 26 Nov 2007 09:47:43 +0100 (CET)
+Subject: [Ethercatmaster-users] set slave parameters
+In-Reply-To: <ED8883F7EB35334EB3CDC3658BF2A74D01FE2A65@EXCHANGE1.campus.tue.nl>
+References: <ED8883F7EB35334EB3CDC3658BF2A74D01FE2A65@EXCHANGE1.campus.tue.nl>
+Message-ID: <Pine.LNX.4.64.0711260938180.20135@ampere.labo01.fmtc.be>
+
+On Sun, 25 Nov 2007, Molengraft, M.J.G. van de wrote:
+> Dear all,
+>
+> I've read several threads on the list about CoE and the lack of it in
+> the current EML implementation.
+>
+> Is there still a way to set parameters on a slave, e.g. the FIR filter
+> parameter on the analog-out EL3102 slave?
+
+I'm not familiar with the particular module.  I'd suggest sniffing the
+output from twincat and sending the necessary raw messages to the
+module if you don't want to implement CoE on top of the current stack.
+
+As a side note: did anyone already have a look at the CoE part of the
+stack so he could make an estimate of how much time it would take to
+implement CoE?
+
+Klaas
+
+

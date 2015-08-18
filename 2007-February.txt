@@ -1,0 +1,50 @@
+From klaas.gadeyne at fmtc.be  Thu Feb 22 17:53:38 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Thu, 22 Feb 2007 17:53:38 +0100 (CET)
+Subject: [Ethercatmaster-users] Slave Configuration
+In-Reply-To: <41083.82.207.181.42.1172157270.squirrel@webmail.tempus-vivit.net>
+References: <41083.82.207.181.42.1172157270.squirrel@webmail.tempus-vivit.net>
+Message-ID: <Pine.LNX.4.64.0702221747150.10576@ampere.labo01.fmtc.be>
+
+On Thu, 22 Feb 2007, Carsten Schumann wrote:
+
+Hi Carsten,
+Please use the user MailingList for such questions.
+
+> I have recently found your EtherCAT Master project on BerliOS and had a
+> look at the code today. Your approach is looking much more 'clean' than
+> the samples provided by Beckhoff which are included in their EL9800 eval
+> board.
+>
+> Nevertheless i have some questions about the source code which are still
+> unclear to me:
+>
+> 1: After you scan the EtherCAT segment for the number of slaves, each
+> slave is queried and returns its vendor id and revision. After this, the
+> class EtherCAT_SlaveDb is queried for a configuration matching the tupel
+> (vendor x id). But how does this database get the information about
+> supported devices and how is that information loaded into the database?
+
+Currently, this is done manually (see the included test programs in
+SVN).  Configuration data are fetched from twincat.  It would be nice
+if there would be an ethercat slave XML database available from
+Beckhoff including all possible slave data which could be parsed and
+converted then.
+See <http://ethercatmaster.berlios.de/doxygen/html/todo.html> for this
+one and more todo's and feel free to provide patches :-)
+This is (or was at the time I mainly wrote the code) not the case.
+
+> 2: EtherCAT is specified to work within switched networks (of course
+> without hard realtime constraints). In such networks packets in ISO/OSI
+> Layer 2 can get lost under certain circumstances. Especially within the
+> slave discovery phase i did not find any retry mechanisms for such cases.
+> Are you planning to implement them later or do you assume dedicated
+> collision domains?
+
+We have no plans in that direction.
+
+regards,
+
+Klaas
+
+

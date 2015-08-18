@@ -1,0 +1,127 @@
+From Richard.Rauch at vipa.de  Wed Nov  5 13:21:55 2008
+From: Richard.Rauch at vipa.de (Rauch Richard)
+Date: Wed, 5 Nov 2008 13:21:55 +0100
+Subject: [Ethercatmaster-users] where or when is source code available?
+Message-ID: <CB3E1D261CAF044988BE512001C5FFBB017153E5@v-exch-1.vipa.de>
+
+Hi
+
+ 
+
+what is the actual state about license questions? When will be the
+source code available again?
+
+My company has to start EtherCat Master project ASAP. We have to decide,
+if waiting for the open source
+
+or buying a commercial stack.
+
+ 
+
+Thanks a lot
+
+Richard
+
+
+
+Gesellschaft fuer Visualisierung und Prozessautomatisierung mbH
+Sitz:  Ohmstrasse 4 - D-91074 Herzogenaurach
+GF:   Wolfgang Seel
+HR Fuerth B 3077
+UST-ID: DE 132 504 368
+Steuer-Nr.: 216/174/12001
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20081105/0e95f4f7/attachment.html>
+
+From Steven.Kauffmann at fmtc.be  Thu Nov  6 10:47:23 2008
+From: Steven.Kauffmann at fmtc.be (Steven Kauffmann)
+Date: Thu, 06 Nov 2008 10:47:23 +0100
+Subject: [Ethercatmaster-users] where or when is source code available?
+In-Reply-To: <CB3E1D261CAF044988BE512001C5FFBB017153E5@v-exch-1.vipa.de>
+References: <CB3E1D261CAF044988BE512001C5FFBB017153E5@v-exch-1.vipa.de>
+Message-ID: <20081106094738.CF9B148EDDB@server04.site04.wtcm.be>
+
+At 01:21 PM 11/5/2008, Rauch Richard wrote:
+>Content-class: urn:content-classes:message
+>Content-Type: multipart/alternative;
+>         boundary="----_=_NextPart_001_01C93F41.17E629BD"
+>
+>Hi
+>
+>what is the actual state about license questions? When will be the 
+>source code available again?
+>My company has to start EtherCat Master project ASAP. We have to 
+>decide, if waiting for the open source
+>or buying a commercial stack.
+
+There is still no news about the new license. Don't expect that the 
+code will be available soon.
+
+That's all information I can give. Please contact Beckhoff, maybe 
+they can give you more information.
+
+Regards
+
+Steven
+
+>
+>Thanks a lot
+>Richard
+>
+>Gesellschaft fuer Visualisierung und Prozessautomatisierung mbH
+>Sitz: Ohmstrasse 4 - D-91074 Herzogenaurach
+>GF: Wolfgang Seel
+>HR Fuerth B 3077
+>UST-ID: DE 132 504 368
+>Steuer-Nr.: 216/174/12001
+>_______________________________________________
+>Ethercatmaster-users mailing list
+>Ethercatmaster-users at lists.berlios.de
+>https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20081106/bd6fae55/attachment.html>
+
+From Steven.Kauffmann at fmtc.be  Fri Nov 14 09:03:11 2008
+From: Steven.Kauffmann at fmtc.be (Steven Kauffmann)
+Date: Fri, 14 Nov 2008 09:03:11 +0100
+Subject: [Ethercatmaster-users] EML license update
+Message-ID: <20081114080314.60AF748EE10@server04.site04.wtcm.be>
+
+In 2006, The Flanders' Mechatronics Technology Centre (FMTC) made an 
+implementation of the EtherCAT master protocol (further on this 
+implementation is reffered to as EML). FMTC, copyright holder of EML, 
+intended to release this software as open source software under the 
+GPL or LGPL license. Since the EtherCAT technology is protected by 
+patents, FMTC contacted Beckhoff Automation before releasing the 
+source code as open source software.
+
+Beckhoff was willing to license the EtherCAT technology and trade 
+name free of charge to FMTC, however they were also concerned to keep 
+the "EtherCAT Masters" in the market not being fully compatible any 
+longer with the latest version of EtherCAT specification and 
+technology down to a minimum number. The EtherCAT Master License 
+Agreement is a peer-to-peer license between the user of EML 
+(Licensee) and Beckhoff and assures that the right to use EtherCAT 
+Technology is granted and comes free of charge under condition of 
+compatibility of product made by Licensee.
+
+Recently, FMTC has been informed by Beckhoff that the (L)GPL license 
+may not allow the addition of an extra license such as the EtherCAT 
+Master License Agreement. When informed, FMTC immediately removed the 
+EML sources from the public server at 
+http://ethercatmaster.berlios.de and advised current users to verify 
+the situation with Beckhoff before continuing any development based on EML.
+
+Last week Beckhoff and FMTC reached an agreement that allows FMTC to 
+distribute the EML code under any license that is compatible with the 
+EtherCAT Master License Agreement. This makes it possible for FMTC to 
+offer current users of the EML code a new peer-to-peer license that 
+resolves the ambiguity.
+
+Therefore we urge all current users of the EML code that wish such a 
+new license to contact FMTC (info at fmtc dot be) as soon as possible.
+
+
+

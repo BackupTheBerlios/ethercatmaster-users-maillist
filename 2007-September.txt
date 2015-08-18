@@ -1,0 +1,117 @@
+From rwatollenaar at gmail.com  Mon Sep  3 17:12:51 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Mon, 03 Sep 2007 17:12:51 +0200
+Subject: [Ethercatmaster-users] two NIC's
+Message-ID: <46DC2473.90803@gmail.com>
+
+Hi,
+
+I am a bit concerned that it is not possible to run two NICs whereby the 
+one will be real-time and the other not.
+
+This is the stop script given by EML.
+
+/usr/local/rtnet/sbin/rtifconfig rtlo down
+/usr/local/rtnet/sbin/rtifconfig rteth0 down
+rmmod rt_loopback
+rmmod rt_8139too
+rmmod rtpacket
+rmmod rtnet
+
+
+This is the start script
+rmmod 8139too
+mknod /dev/rtnet c 10 240
+insmod /usr/local/rtnet/modules/rtnet.ko
+insmod /usr/local/rtnet/modules/rtpacket.ko
+insmod /usr/local/rtnet/modules/rt_loopback.ko
+insmod /usr/local/rtnet/modules/rt_8139too.ko
+/usr/local/rtnet/sbin/rtifconfig rtlo up
+/usr/local/rtnet/sbin/rtifconfig rteth0 up
+
+
+If I have two cards with realtek chip how can I ensure one is still 
+accessible for normal non-realtime traffic?
+
+Kidn regards,
+
+Roland Tollenaar
+
+
+
+From tabascoeye at gmx.de  Mon Sep  3 18:08:25 2007
+From: tabascoeye at gmx.de (Fabian Koch)
+Date: Mon, 03 Sep 2007 18:08:25 +0200
+Subject: [Ethercatmaster-users] [RTnet-users] two NIC's
+In-Reply-To: <46DC2473.90803@gmail.com>
+References: <46DC2473.90803@gmail.com>
+Message-ID: <46DC3179.1090508@gmx.de>
+
+Hey,
+
+> I am a bit concerned that it is not possible to run two NICs whereby the 
+> one will be real-time and the other not.
+
+no need to be concerned, since it IS possible :o)
+
+> If I have two cards with realtek chip how can I ensure one is still 
+> accessible for normal non-realtime traffic?
+
+Using the module parameter "cards". It accepts an array of zeros and
+ones. e.g.: insmod rt_8139too.ko cards=0,1,0 will use the "middle" card
+of 3.
+
+So the workflow is to first load the RTnet module with the cards
+parameter and then the normal 8139too module which will take whatever
+cards are left.
+
+CU Fabian
+TabascoEye
+
+
+From rwatollenaar at gmail.com  Wed Sep  5 20:52:08 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Wed, 05 Sep 2007 20:52:08 +0200
+Subject: [Ethercatmaster-users] [RTnet-users] two NIC's
+In-Reply-To: <46DC3179.1090508@gmx.de>
+References: <46DC2473.90803@gmail.com> <46DC3179.1090508@gmx.de>
+Message-ID: <46DEFAD8.5010508@gmail.com>
+
+Hi,
+
+>> If I have two cards with realtek chip how can I ensure one is still 
+>> accessible for normal non-realtime traffic?
+> 
+> Using the module parameter "cards". It accepts an array of zeros and
+> ones. e.g.: insmod rt_8139too.ko cards=0,1,0 will use the "middle" card
+> of 3.
+> 
+> So the workflow is to first load the RTnet module with the cards
+> parameter and then the normal 8139too module which will take whatever
+> cards are left.
+
+If the first is realtek and the other has another chip. If I don;t 
+unload the module for the second chip then I presume that it will remain 
+functional as a normal ethrnet interface?
+
+Kind regards,
+
+Roland
+
+
+> 
+> CU Fabian
+> TabascoEye
+> 
+> -------------------------------------------------------------------------
+> This SF.net email is sponsored by: Splunk Inc.
+> Still grepping through log files to find problems?  Stop.
+> Now Search log events and configuration files using AJAX and a browser.
+> Download your FREE copy of Splunk now >>  http://get.splunk.com/
+> _______________________________________________
+> RTnet-users mailing list
+> RTnet-users at lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/rtnet-users
+> 
+
+

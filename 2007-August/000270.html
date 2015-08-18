@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3C46C2D5C4.2010407%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000269.html">
+   <LINK REL="Next"  HREF="000271.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3C46C2D5C4.2010407%40grandegger.com%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.">wg at grandegger.com
+       </A><BR>
+    <I>Wed Aug 15 12:30:28 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000269.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000271.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#270">[ date ]</a>
+              <a href="thread.html#270">[ thread ]</a>
+              <a href="subject.html#270">[ subject ]</a>
+              <a href="author.html#270">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Roland Tollenaar wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> Some more interesting findings (no i-pipe trace yet though).
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hmm, this doesn't convince me yet. Such skews during startup may as well
+</I>&gt;&gt;<i> be triggered by unusual load during runtime (non-RT activity or new RT
+</I>&gt;&gt;<i> components). Did you put your system under adequate non-RT load as well
+</I>&gt;&gt;<i> while measuring the outputs?
+</I>&gt;<i> Running latencytest with my application shows an average latency of 
+</I>&gt;<i> about 40 and a max of 200ns. This was rather shocking so I turned off 
+</I>&gt;<i> rtcan in my application. Now the max latecy is 60ns. Turn off EML and 
+</I>&gt;<i> turn on rtcan, max latecy is 230ns. How is that for strange? But since I 
+</I>&gt;<i> can see the scope output bobbing with 200ns during the latency test, I 
+</I>&gt;<i> can also see that if I run my application without the latency test the 
+</I>&gt;<i> huge max latency disappears entirely. Maybe it is time for the trace but 
+</I>&gt;<i> then again I am still using CAN over the parallel port so will see what 
+</I>&gt;<i> it does on a machine with a PCI CAN adaptor first. Because I think I 
+</I>&gt;<i> know what happens: Due to the external loading the CAN recv interrupt 
+</I>&gt;<i> triggers the Rx ISR briefly before the 1ms task period ends. Due to the 
+</I>&gt;<i> priority of the ISR (huge debate over this) and its atomicness (if I 
+</I>&gt;<i> remember correctly) the reading out of the slow hardware delays the 
+</I>&gt;<i> start of the new task period.
+</I>&gt;<i> 
+</I>&gt;<i> Just thought it was interesting to mention. Btw when the latency appears 
+</I>&gt;<i> there are no overflow messages or anything like that which support the 
+</I>&gt;<i> theory I have about the cause.
+</I>&gt;<i> 
+</I>&gt;<i> Btw2 the 200ns latency spikes do not cause the scope to loose lock on 
+</I>&gt;<i> the saw-tooth so whatever causes that problem is of a different nature 
+</I>&gt;<i> still.
+</I>
+s/ns/us/ ?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000269.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000271.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#270">[ date ]</a>
+              <a href="thread.html#270">[ thread ]</a>
+              <a href="subject.html#270">[ subject ]</a>
+              <a href="author.html#270">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

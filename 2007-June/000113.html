@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] some questions about the usage of eml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3C4673DA65.1030903%40skynet.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000112.html">
+   <LINK REL="Next"  HREF="000114.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] some questions about the usage of eml</H1>
+    <B>Tom Panis</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3C4673DA65.1030903%40skynet.be%3E"
+       TITLE="[Ethercatmaster-users] some questions about the usage of eml">tompanis at skynet.be
+       </A><BR>
+    <I>Sat Jun 16 14:41:09 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000112.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+        <LI>Next message: <A HREF="000114.html">[Ethercatmaster-users] usage of an xml config file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#113">[ date ]</a>
+              <a href="thread.html#113">[ thread ]</a>
+              <a href="subject.html#113">[ subject ]</a>
+              <a href="author.html#113">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+roland Tollenaar wrote:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> After having read and not understood some documentation from the ETG
+</I>&gt;<i> site (yes yes I am a proud member:) I decided I was ready to attempt
+</I>&gt;<i> some modifications to master-test.
+</I>&gt;<i>
+</I>&gt;<i> I don;t have module 4102 so I commented those sections out only
+</I>&gt;<i> bringing up EK1100. This allows the program to execute without
+</I>&gt;<i> crashing. Great.
+</I>&gt;<i>
+</I>&gt;<i> For the other 9 slaves on my network I get the errors:
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_SlaveDb: No such Config, returning NULL!
+</I>&gt;<i> EC_AL Warning: No such slave in db, creating dummy slave
+</I>&gt;<i> AL creating SlaveHandler: pos=4, Product Code=0x7d43052, rev=0x100000
+</I>&gt;<i>
+</I>&gt;<i> where &quot;pos&quot; runs up from 0 to 9 (0 is the buscoupler and returns success:
+</I>&gt;<i>
+</I>&gt;<i> AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, rev=0x10000
+</I>&gt;<i>   
+</I>
+When creating a slave handler the AL will search for the appropriate 
+configurations in the ethercat slave database. This search is based on 
+the product code and the revision number. When there isn't a match, 
+there will be a dummy created. I see in your output that the product 
+code is right, but the revision numbers don't match. The revision number 
+of my modules was 0, your modules have 0x100000 as rev number (You can 
+find that in the output, when there's a dummy created). So you have to 
+change that in the slave configurations. For a EL2004 module, that would 
+be something like this:
+
+EtherCAT_SlaveConfig 
+EC_EL2004_2(0x7d43052,0x100000,1005,&amp;fmmu_config_EL2004_2,&amp;pd_config_EL2004_2);
+&gt;<i> I decided to copy past some of the configurations for which I do have
+</I>&gt;<i> modules that Tom has posted on the list in order to get more slaves
+</I>&gt;<i> connected. However I am not having much luck.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Here is the master-test code as it looks now, below it the full output
+</I>&gt;<i> of the program.
+</I>&gt;<i>
+</I>&gt;<i> Any advice as to what I am doing wrong will be appreciated enormously.
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+I also see you have 4 EL2004 modules, so you have to make 4 different 
+configurations for them. Each module must have a configuration. My 
+tutorial may help you with this.
+
+Tom
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000112.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+	<LI>Next message: <A HREF="000114.html">[Ethercatmaster-users] usage of an xml config file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#113">[ date ]</a>
+              <a href="thread.html#113">[ thread ]</a>
+              <a href="subject.html#113">[ subject ]</a>
+              <a href="author.html#113">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] some questions about the usage of eml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3COFE4C783DC.6A79F04A-ONC125757C.0025139E-C125757C.0025FC5D%40datacon.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000377.html">
+   <LINK REL="Next"  HREF="000379.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] some questions about the usage of eml</H1>
+    <B>henning.richter at besi.com</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3COFE4C783DC.6A79F04A-ONC125757C.0025139E-C125757C.0025FC5D%40datacon.at%3E"
+       TITLE="[Ethercatmaster-users] some questions about the usage of eml">henning.richter at besi.com
+       </A><BR>
+    <I>Tue Mar 17 07:54:59 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000377.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+        <LI>Next message: <A HREF="000379.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#378">[ date ]</a>
+              <a href="thread.html#378">[ thread ]</a>
+              <a href="subject.html#378">[ subject ]</a>
+              <a href="author.html#378">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+                                                                           
+             Klaas Gadeyne                                                 
+             &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">klaas.gadeyne at fm</A>                                             
+             tc.be&gt;                                                     To 
+                                       <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">henning.richter at besi.com</A>            
+             16.03.2009 17:00                                           cc 
+                                       <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ethercatmaster-users at lists.berlios.</A> 
+                                       de                                  
+                                                                   Subject 
+                                       Re: [Ethercatmaster-users] some     
+                                       questions about the usage of eml    
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+
+
+
+
+
+
+&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I use the eml on a linux machine (with xenomai and rtnet) and want to
+</I>&gt;&gt;<i> coummunicate with my slave.
+</I>&gt;&gt;<i> The slave is a NXSTK 50-RE with a netx50 cpu (
+</I>&gt;&gt;<i>
+</I><A HREF="http://de.hilscher.com/products_details_hardware.html?p_id=P_47614930462d6">http://de.hilscher.com/products_details_hardware.html?p_id=P_47614930462d6</A>)
+&gt;&gt;<i> .
+</I>&gt;&gt;<i> The configuration of the slave is known by the master (i added a entry
+</I>to
+&gt;&gt;<i> the slave db from the xml-file).
+</I>&gt;&gt;<i> I connected the slave and the master directly with a TP Cat5 cable.
+</I>&gt;&gt;<i> When I run the master_test application the slave is found in the ring
+</I>but
+&gt;&gt;<i> the state will not be changed (from init to op state).
+</I>&gt;&gt;<i> EC_ESM_OPS::set_state():state trans. failed...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> so where is the mistake?
+</I>
+&gt;<i> If you want some help, you will have to provide more information I'm
+</I>afraid.
+&gt;<i> What does your debugger say, what happens if you try to go to
+</I>pre-operational, ...
+
+&gt;<i> Klaas
+</I>
+
+Hi,
+
+that happens if i try to set the slave to op-state (this also happens if i
+try pre-op-state):
+
+   <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ethercat at rd-ethercat</A>:/usr/src/eml/eml-trunk$ sudo
+   tests/rtnet/master_test rteth0
+   Socket created: socket id: 896
+   Got interface: index: 0
+   Attach netif
+
+   Master initializing
+
+   EtherCAT AL: Ring contains 1 slaves
+   AL creating SlaveHandler: pos=0, adr=0x3ec, Prod. Code=0x8, rev=0x0
+   AL: resetting FMMUs
+   AL: resetting SMs
+   AL: Setting all slaves in init mode
+   Getting slave handler2
+   Setting NETX50 to OP State
+   EC_ESM_Ops::set_state() Warning: State trans. failed (try 0), desired=2,
+   status=1
+   [...]
+   EC_ESM_Ops::set_state() Warning: State trans. failed (try 49),
+   desired=2, status=1
+   EC_ESM_Ops::set_state() failed to set state after 50 triesfailes to set
+   NETX50 to OP State
+   AL initializing
+
+   Test: Set Channel 1 to 5V:
+
+   Test done.
+
+If i set the slave to the init state (as it should be) everything goes
+fine.
+
+   <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ethercat at rd-ethercat</A>:/usr/src/eml/eml-trunk$ sudo
+   tests/rtnet/master_test rteth0
+   Socket created: socket id: 896
+   Got interface: index: 0
+   Attach netif
+
+   Master initializing
+
+   EtherCAT AL: Ring contains 1 slaves
+   AL creating SlaveHandler: pos=0, adr=0x3ec, Prod. Code=0x8, rev=0x0
+   AL: resetting FMMUs
+   AL: resetting SMs
+   AL: Setting all slaves in init mode
+   Getting slave handler2
+   Setting NETX50 to INIT State
+   NETX50 successfully set in INIT State
+   AL initializing
+
+   Test: Set Channel 1 to 5V:
+
+   Test done.
+
+
+The two attachements (hope that will work) show the debug prints of the
+makefile and a part of the source code.
+Hope that helps.
+
+(See attached file: sourcecode.doc)(See attached file: make.doc)
+
+Regards,
+Henning
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: graycol.gif
+Type: image/gif
+Size: 105 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment.gif">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment.gif</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: pic17807.gif
+Type: image/gif
+Size: 1255 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment-0001.gif">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment-0001.gif</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: ecblank.gif
+Type: image/gif
+Size: 45 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment-0002.gif">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment-0002.gif</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: sourcecode.doc
+Type: application/msword
+Size: 100352 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment.doc">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment.doc</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: make.doc
+Type: application/msword
+Size: 111104 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment-0001.doc">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090317/598e8422/attachment-0001.doc</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000377.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+	<LI>Next message: <A HREF="000379.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#378">[ date ]</a>
+              <a href="thread.html#378">[ thread ]</a>
+              <a href="subject.html#378">[ subject ]</a>
+              <a href="author.html#378">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Antwort: Re: Low level device driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20Low%20level%20device%20driver&In-Reply-To=%3C20070404163647.30B9EE2D4B%40server04.site04.wtcm.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000049.html">
+   <LINK REL="Next"  HREF="000051.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Antwort: Re: Low level device driver</H1>
+    <B>Bob Koninckx</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20Low%20level%20device%20driver&In-Reply-To=%3C20070404163647.30B9EE2D4B%40server04.site04.wtcm.be%3E"
+       TITLE="[Ethercatmaster-users] Antwort: Re: Low level device driver">bob.koninckx at fmtc.be
+       </A><BR>
+    <I>Wed Apr  4 18:37:06 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000049.html">[Ethercatmaster-users] Antwort: Re: Low level device driver
+</A></li>
+        <LI>Next message: <A HREF="000051.html">[Ethercatmaster-users]   Antwort: Re: Low level device driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#50">[ date ]</a>
+              <a href="thread.html#50">[ thread ]</a>
+              <a href="subject.html#50">[ subject ]</a>
+              <a href="author.html#50">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>At 18:29 4/04/2007, Klaas Gadeyne wrote:
+&gt;<i>On Wed, 4 Apr 2007, Felix GMX wrote:
+</I>&gt;<i> &gt; Hello,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I found out that this function in the 
+</I>&gt;<i> support.cxx file is waiting for the semaphore 
+</I>&gt;<i> sem_delivery. Which function or where does this 
+</I>&gt;<i> semaphore post? eCos waits for this semaphore 
+</I>&gt;<i> but nowbody post it! eCos is exiting.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; static void ethercat_delivery(cyg_addrword_t)
+</I>&gt;<i> &gt; {
+</I>&gt;<i> &gt;    cyg_netdevtab_entry_t *t;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;    for(;;) {
+</I>&gt;<i> &gt;        // log(EC_LOG_INFO, &quot;delivery thread: waiting for semaphore\n&quot;);
+</I>&gt;<i> &gt;        cyg_semaphore_wait(&amp;sem_delivery); 
+</I>&gt;<i>                                         =&gt; waiting for semaphore???
+</I>&gt;<i> &gt;        // log(EC_LOG_INFO, &quot;delivery thread: woken up by semaphore\n&quot;);
+</I>&gt;<i> &gt;        for (t = &amp;__NETDEVTAB__[0]; t != &amp;__NETDEVTAB_END__; t++) {
+</I>&gt;<i> &gt;            struct eth_drv_sc *sc = (struct eth_drv_sc *)t-&gt;device_instance;
+</I>&gt;<i> &gt;            if (sc-&gt;state &amp; ETH_DRV_NEEDS_DELIVERY) {
+</I>&gt;<i> &gt;                sc-&gt;state &amp;= ~ETH_DRV_NEEDS_DELIVERY;
+</I>&gt;<i> &gt;                (sc-&gt;funs-&gt;deliver) (sc);
+</I>&gt;<i> &gt;            }
+</I>&gt;<i> &gt;        }
+</I>&gt;<i> &gt;    }
+</I>&gt;<i> &gt; }
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; static void ethercat_delivery_request(struct netif * netif)
+</I>&gt;<i> &gt; {
+</I>&gt;<i> &gt;    cyg_semaphore_post(&amp;sem_delivery);    =&gt; 
+</I>&gt;<i> Where does this function invoke???
+</I>&gt;<i> &gt; }
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; extern &quot;C&quot; void if_attach(struct netif * netif)
+</I>&gt;<i> &gt; {
+</I>&gt;<i> &gt;    netif-&gt;service_request_indication = ethercat_delivery_request;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;    // Only attach the selected device
+</I>&gt;<i> &gt;    if(strncmp(netif-&gt;device_name, 
+</I>&gt;<i> CYGDAT_ETHERCATMASTER_ETH_DEVICE, ETHERCAT_DEVICE_NAME_MAX_LENGTH) == 0)
+</I>&gt;<i> &gt;        EtherCAT_DataLinkLayer::instance()-&gt;attach(netif);
+</I>&gt;<i> &gt; }
+</I>&gt;<i>
+</I>&gt;<i>Felix, the delivery thread which posts this semaphore is woken up by
+</I>&gt;<i>the interrupt of an incoming ethercat packet.
+</I>&gt;<i>
+</I>&gt;<i>void
+</I>&gt;<i>eth_drv_dsr(cyg_vector_t vector, cyg_ucount32 count, cyg_addrword_t
+</I>&gt;<i>data)
+</I>&gt;<i>{
+</I>&gt;<i>    struct eth_drv_sc * sc = (struct eth_drv_sc *)(data);
+</I>&gt;<i>    struct netif * netif = &amp;(sc-&gt;sc_arpcom.ac_if);
+</I>&gt;<i>
+</I>&gt;<i>    // diag_printf(&quot;eth_drv_dsr called\n&quot;);
+</I>&gt;<i>
+</I>&gt;<i>    sc-&gt;state |= ETH_DRV_NEEDS_DELIVERY;
+</I>&gt;<i>    (netif-&gt;service_request_indication)(netif);
+</I>&gt;<i>}
+</I>&gt;<i>
+</I>&gt;<i>However, the problem you showed yesterday happens before, in casu when
+</I>&gt;<i>sending the packet.  AFAIS, there is no packet coming back in your
+</I>&gt;<i>case (no interrupt generated, hence no dsr, hence the delivery thread
+</I>&gt;<i>is not woken up).  Please investigate first why the status variable is
+</I>&gt;<i>set to non-nil.
+</I>&gt;<i>
+</I>&gt;<i>Klaas
+</I>
+
+It is probably also a good idea to hook up a spy 
+tool to your network to see what actually happens 
+on the wire. If nothing is send out, you should 
+dig deeper into your driver. If something is sent 
+out but nothing comes back, then your slaves are 
+faulty or the messages are not formatted 
+correctly (endianness problems??). If something 
+comes back, but you don't see it, again, your 
+driver needs further investigation.
+
+Try Ethereal, its easy to use and ETG has plugins 
+for etherCAT available for download.
+
+Bob
+
+
+&gt;<i>_______________________________________________
+</I>&gt;<i>Ethercatmaster-users mailing list
+</I>&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, Bus 4027, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">bob.koninckx at fmtc.be</A>                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders&#146; MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. 
+Reyerslaan 80, B-1030 Brussel, Belgi&#235;
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain 
+confidential information. It is intended
+solely for the intended addressee(s). Any use of 
+the information contained herein by other
+persons is prohibited. FMTC does not accept any 
+liability for the contents of this e-mail
+and/or its attachments.
+********************  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000049.html">[Ethercatmaster-users] Antwort: Re: Low level device driver
+</A></li>
+	<LI>Next message: <A HREF="000051.html">[Ethercatmaster-users]   Antwort: Re: Low level device driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#50">[ date ]</a>
+              <a href="thread.html#50">[ thread ]</a>
+              <a href="subject.html#50">[ subject ]</a>
+              <a href="author.html#50">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

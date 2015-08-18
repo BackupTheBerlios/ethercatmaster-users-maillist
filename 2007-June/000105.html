@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Tutorial for adding slaves to the ethercat	master
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Tutorial%20for%20adding%20slaves%20to%20the%20ethercat%0A%09master&In-Reply-To=%3C466ED730.1030508%40skynet.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000111.html">
+   <LINK REL="Next"  HREF="000109.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Tutorial for adding slaves to the ethercat	master</H1>
+    <B>Tom Panis</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Tutorial%20for%20adding%20slaves%20to%20the%20ethercat%0A%09master&In-Reply-To=%3C466ED730.1030508%40skynet.be%3E"
+       TITLE="[Ethercatmaster-users] Tutorial for adding slaves to the ethercat	master">tompanis at skynet.be
+       </A><BR>
+    <I>Tue Jun 12 19:26:08 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000111.html">[Ethercatmaster-users] getting started
+</A></li>
+        <LI>Next message: <A HREF="000109.html">[Ethercatmaster-users] [Fwd: Re:  getting started]
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#105">[ date ]</a>
+              <a href="thread.html#105">[ thread ]</a>
+              <a href="subject.html#105">[ subject ]</a>
+              <a href="author.html#105">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+I've written a small tutorial for adding some slaves to the ethercat master.
+One big remark: it's still written in Dutch. I haven't got the time to 
+translate it in English, since I'm studying for my exams at the moment. 
+But a translation is on it's way :-)
+
+At some points the tutorial refers to TwinCAT, the EtherCAT 
+configuration program for Windows. You can download a 30-day trial of 
+this program at the Beckhoff website (www.beckhoff.com).
+For those who don't use Windows (can't blame them at all :-) ), I've 
+included the necessary configurations for the EtherCAT network I used.
+
+This network uses :
+one coupler (EK1100)
+one analog output (EL4102)
+one analog input (EL3162)
+two digital outputs (EL2004)
+two digital inputs (EL1014)
+two incremental encoders (EL5101)
+
+Since the information retrieved from TwinCAT for one type device remains 
+the same for all used device of that type, you can just copy-paste the 
+configurations you need.
+Note: the logical addresses and the physical address assigned to each 
+device still need to be modified according to your EtherCAT network.
+
+There are also two scripts included for starting and stopping RTnet. 
+These are the scripts I used, so if you installed rtnet in another 
+location, you may need to modify the paths in the scripts (the default 
+path is /usr/local/rtnet/).
+
+Tom
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Nieuwe slave toevoegen.pdf
+Type: application/pdf
+Size: 376326 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/fae4bb28/attachment.pdf">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/fae4bb28/attachment.pdf</A>&gt;
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: mod_rtnet_stop
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/fae4bb28/attachment.ksh">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/fae4bb28/attachment.ksh</A>&gt;
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: mod_rtnet_start
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/fae4bb28/attachment-0001.ksh">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/fae4bb28/attachment-0001.ksh</A>&gt;
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: slaveconfigurations.hpp
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/fae4bb28/attachment-0002.ksh">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/fae4bb28/attachment-0002.ksh</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000111.html">[Ethercatmaster-users] getting started
+</A></li>
+	<LI>Next message: <A HREF="000109.html">[Ethercatmaster-users] [Fwd: Re:  getting started]
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#105">[ date ]</a>
+              <a href="thread.html#105">[ thread ]</a>
+              <a href="subject.html#105">[ subject ]</a>
+              <a href="author.html#105">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

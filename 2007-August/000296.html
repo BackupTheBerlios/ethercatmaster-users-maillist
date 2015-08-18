@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] mbx question
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20mbx%20question&In-Reply-To=%3C46D54012.9060702%40free.fr%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000295.html">
+   <LINK REL="Next"  HREF="000297.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] mbx question</H1>
+    <B>St&#233;phane ANCELOT</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20mbx%20question&In-Reply-To=%3C46D54012.9060702%40free.fr%3E"
+       TITLE="[Ethercatmaster-users] mbx question">sancelot at free.fr
+       </A><BR>
+    <I>Wed Aug 29 11:44:50 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000295.html">[Ethercatmaster-users] mbx question
+</A></li>
+        <LI>Next message: <A HREF="000297.html">[Ethercatmaster-users] mbx question
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#296">[ date ]</a>
+              <a href="thread.html#296">[ thread ]</a>
+              <a href="subject.html#296">[ subject ]</a>
+              <a href="author.html#296">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Roland Tollenaar a &#233;crit :
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> This is not the busiest of mailing lists so I am going to risk a
+</I>&gt;<i> question. I have nothing to contribute to this thread but would dearly
+</I>&gt;<i> like ot know where the mailbox concept fits into Ethercat. I have come
+</I>&gt;<i> across it a lot but never seem to have required it and consequently
+</I>&gt;<i> don;t know what it does. How does it differ from the normal process data
+</I>&gt;<i> exchange with the three buffers?
+</I>&gt;<i> 
+</I>&gt;<i> Kind regards,
+</I>&gt;<i> 
+</I>&gt;<i> Roland.
+</I>&gt;<i> 
+</I>Mainly used to setup parameters in slaves most of the time supposing a
+non realtime context. If you want to talk to existing canopen
+components, you will need it .
+Best Regards
+Steph
+
+
+
+
+
+
+&gt;<i> St&#233;phane ANCELOT wrote:
+</I>&gt;&gt;<i> Klaas Gadeyne a &#233;crit :
+</I>&gt;&gt;&gt;<i> On Tue, 28 Aug 2007, St&#233;phane ANCELOT wrote:
+</I>&gt;&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;&gt;<i> When using post_mbx msg from the master what do I have to set in
+</I>&gt;&gt;&gt;&gt;<i> from_sh
+</I>&gt;&gt;&gt;&gt;<i> parameter ???
+</I>&gt;&gt;&gt;<i> Hi Stephane,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> See the 2-minutes-ago mail to the list.  The router is actually meant
+</I>&gt;&gt;&gt;<i> for slave-to-slave mbx communication, that's why the function you
+</I>&gt;&gt;&gt;<i> mention needs a slave handler address (I guess it's explained in the
+</I>&gt;&gt;&gt;<i> spec like that).  However, you might problably trick it providing a
+</I>&gt;&gt;&gt;<i> nonsense address if the source of the message isn't important for the
+</I>&gt;&gt;&gt;<i> destination (i.e. it doesn't matter for the destination slave who
+</I>&gt;&gt;&gt;<i> actually sent the message (in your case: the master)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> But again, (I should post this as my sig on the ML), I haven't been
+</I>&gt;&gt;&gt;<i> working on etherCAT for a while anymore and at the time we implemented
+</I>&gt;&gt;&gt;<i> EML, there were no mbx communication slave available yet, so please
+</I>&gt;&gt;&gt;<i> prove me wrong by quoting from the etherCAT specification :-)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Ok, At this time we need only Mailbox communication from master to
+</I>&gt;&gt;<i> slaves (available as stated in the specification) for sdo communication.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In order to do this , we will try to :
+</I>&gt;&gt;<i> setup a mailbox for the master.
+</I>&gt;&gt;<i> implement the mailbox write service derivated from the router code
+</I>&gt;&gt;<i> post_mbxmsg().
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Am I on the right way ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> regards,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Klaas
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000295.html">[Ethercatmaster-users] mbx question
+</A></li>
+	<LI>Next message: <A HREF="000297.html">[Ethercatmaster-users] mbx question
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#296">[ date ]</a>
+              <a href="thread.html#296">[ thread ]</a>
+              <a href="subject.html#296">[ subject ]</a>
+              <a href="author.html#296">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

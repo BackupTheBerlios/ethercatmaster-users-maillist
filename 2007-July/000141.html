@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] RE : Re:  Slaves Parameters!!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20%20Slaves%20Parameters%21%21&In-Reply-To=%3C469B3A04.1070904%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000140.html">
+   <LINK REL="Next"  HREF="000142.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] RE : Re:  Slaves Parameters!!</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20%20Slaves%20Parameters%21%21&In-Reply-To=%3C469B3A04.1070904%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] RE : Re:  Slaves Parameters!!">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Mon Jul 16 11:27:32 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000140.html">[Ethercatmaster-users] Slaves Parameters!!
+</A></li>
+        <LI>Next message: <A HREF="000142.html">[Ethercatmaster-users] RE : Re:  Slaves Parameters!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#141">[ date ]</a>
+              <a href="thread.html#141">[ thread ]</a>
+              <a href="subject.html#141">[ subject ]</a>
+              <a href="author.html#141">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Said,
+
+Afraid not I am as desparate as you are. And its seems like the EML 
+chaps have taken leaven and are bathing in the sun. :(
+
+I have done some disecting below, to determine what we can try next and 
+to make things faster for the EML chaps when they eventually return.
+
+Apparently the frame for simple ethercat communication is supposed to 
+ahve the destination address in the first 48 bits of the frame. Here 
+already our EML frame seems to be incorrect.
+
+EML: ff ff ff ff ff ff
+
+as opposed to
+
+TC: 01 01 05 01 00 00
+
+next come the source (also 48 bit)
+
+EML: 02 00 00 00 00 00
+
+TC: 02 00 7b 56 00 9a
+
+then the Ethertype (16 bit)
+
+EML:88 a4
+TC: 88 a4
+
+(Hey these are the same too!) :)
+
+then comes the ethercat data header (16 bit)
+
+EML: 0f 10
+TC: 2c 10
+
+(first 11 bit are the length, then 1 bit reserved then 4 bit Type 
+[supposed to be 1])
+
+The last 32 bit are the FCS
+
+EML:00 00 00 00
+TC:00 00 00 00
+
+so what is inbetween is are the datagrams:
+
+EML:
+0c 5e 00 00 01 00 03 00 04 00 XXX ff 3f  00 00 0f 00 00 07 00 10 00 02 
+01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+
+	
+TC:
+0b 00 00 00 01 00 05 80 00 00 XXX ff 3f  00 00 0f 00 00 0a 00 00 00 08 
+00 01 80 00 00 00 00 00 07 00 00 00 30 01 02 00 00 00 00 00 00 00 
+
+
+
+Each datagram consists of a 10 byte (80 bit) headerfollowed by 
+unspecified length of data and a 16 bit working counter at the end.
+
+So presumanbly we can compare the headers
+      Cmd   Idx 	   Address
+EML: 0c XXX 5e XXX 00 00 01 00 XXX 03 00 04 00
+TC:  0b XXX 00 XXX 00 00 01 00 XXX 05 80 00 00
+
+So at least the first address is the same, but the command and index 
+differ. What does this mean? I also don;t recognise the address?
+
+
+anyway then we can see that there is the only recognizable data
+
+EML: ff 3f  00 00 0f
+TC:  ff 3f  00 00 0f
+
+And at what point another datagram header follows would have to be 
+derived from the length in the datagram header above. But this is more 
+something for the EML chaps to look at.
+
+Can you tell whether your logical and fixed addresses are the same in 
+the TWINCAT experiment as in the EML experiment? Getting them the same 
+would be a good start to determine where the important differences might be.
+
+HTH.
+
+Roland
+
+said harti wrote:
+&gt;<i> 
+</I>&gt;<i> Exactly Rolland, my outputs respond correctely when i set them with the 
+</I>&gt;<i> twincat tool, and i got this frame :
+</I>&gt;<i> 
+</I>&gt;<i> 0000   01 01 05 01 00 00 02 00 7b 56 00 9a 88 a4 2c 10................
+</I>&gt;<i> 0010   0b 00 00 00 01 00 05 80 00 00 ff 3f  00 00 0f 00.^.........??...
+</I>&gt;<i> 0020   00 0a 00 00 00 08 00 01 80 00 00 00 00 00 07 00................
+</I>&gt;<i> 0030   00 00 30 01 02 00 00 00 00 00 00 00   
+</I>&gt;<i> 
+</I>&gt;<i> do you have some ideas pleaze for how can i resolve this misterious problem ?!!!!
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> */Roland Tollenaar &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">rwatollenaar at gmail.com</A>&gt;/* a &#233;crit :
+</I>&gt;<i> 
+</I>&gt;<i>     Hi Said,
+</I>&gt;<i> 
+</I>&gt;<i>     as mentioned I am having the same problem but I don't have twincat.
+</I>&gt;<i> 
+</I>&gt;<i>     Do your outputs respond properly when you set them with twincat and get
+</I>&gt;<i>     the below frames?
+</I>&gt;<i> 
+</I>&gt;<i>     Regards,
+</I>&gt;<i> 
+</I>&gt;<i>     Roland
+</I>&gt;<i> 
+</I>&gt;<i>     said harti wrote:
+</I>&gt;<i>      &gt; Hello,
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; I did'nt resolve my problem yet, my master_test program turn
+</I>&gt;<i>     perfectely,
+</I>&gt;<i>      &gt; but the LEDs for the EL4102 and the EL2004 don't switch on, (my
+</I>&gt;<i>     code is
+</I>&gt;<i>      &gt; posted on my last message)
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; for the some data transmeted to the beckhoff modules (5v = 03FFF to
+</I>&gt;<i>      &gt; EL4102 and all DO to 1 = 0x0F to EL2004), this is the difference
+</I>&gt;<i>     between
+</I>&gt;<i>      &gt; captered frames
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; 1: between my master and the Beckhoff modules :
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; 0000 ff ff ff ff ff ff 02 00 00 00 00 00 88 a4 0f 10
+</I>&gt;<i>      &gt; ................
+</I>&gt;<i>      &gt; 0010 0c 5e 00 00 01 00 03 00 04 00 ff 3f 00 00 0f 00 .^.........?....
+</I>&gt;<i>      &gt; 0020 00 07 00 10 00 02 01 00 00 00 00 00 00 00 00 00 ................
+</I>&gt;<i>      &gt; 0030 00 00 00 00 00 00 00 00 00 00 00 00 ............
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; and this is the captured frame between the twincat tools on my
+</I>&gt;<i>     laptop
+</I>&gt;<i>      &gt; and the beckhoff modules :
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; 0000 01 01 05 01 00 00 02 00 7b 56 00 9a 88 a4 2c 10 ................
+</I>&gt;<i>      &gt; 0010 0b 00 00 00 01 00 05 80 00 00 ff 3f 00 00 0f 00 .^.........??...
+</I>&gt;<i>      &gt; 0020 00 0a 00 00 00 08 00 01 80 00 00 00 00 00 07 00 ................
+</I>&gt;<i>      &gt; 0030 00 00 30 01 02 00 00 00 00 00 00 00 ............
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; thanks to tell me what i am possibly wrong
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; Best Regards
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; Said HARTI
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt;
+</I>&gt;<i>     ------------------------------------------------------------------------
+</I>&gt;<i>      &gt; D&#233;couvrez une nouvelle fa&#231;on d'obtenir des r&#233;ponses &#224; toutes vos
+</I>&gt;<i>      &gt; questions ! Profitez des connaissances, des opinions et des
+</I>&gt;<i>     exp&#233;riences
+</I>&gt;<i>      &gt; des internautes sur Yahoo! Questions/R&#233;ponses
+</I>&gt;<i>      &gt; .
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt;
+</I>&gt;<i>     ------------------------------------------------------------------------
+</I>&gt;<i>      &gt;
+</I>&gt;<i>      &gt; _______________________________________________
+</I>&gt;<i>      &gt; Ethercatmaster-users mailing list
+</I>&gt;<i>      &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i>      &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez aujourd'hui de 
+</I>&gt;<i> mail ! &lt;<A HREF="http://fr.promotions.yahoo.com/mail/nouveau_yahoomail2.html">http://fr.promotions.yahoo.com/mail/nouveau_yahoomail2.html</A>&gt;
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000140.html">[Ethercatmaster-users] Slaves Parameters!!
+</A></li>
+	<LI>Next message: <A HREF="000142.html">[Ethercatmaster-users] RE : Re:  Slaves Parameters!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#141">[ date ]</a>
+              <a href="thread.html#141">[ thread ]</a>
+              <a href="subject.html#141">[ subject ]</a>
+              <a href="author.html#141">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

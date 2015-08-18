@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] help remove a bug please:
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20help%20remove%20a%20bug%20please%3A&In-Reply-To=%3CPine.LNX.4.64.0710100904260.23359%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000302.html">
+   <LINK REL="Next"  HREF="000303.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] help remove a bug please:</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20help%20remove%20a%20bug%20please%3A&In-Reply-To=%3CPine.LNX.4.64.0710100904260.23359%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] help remove a bug please:">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Wed Oct 10 09:12:45 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000302.html">[Ethercatmaster-users] help remove a bug please:
+</A></li>
+        <LI>Next message: <A HREF="000303.html">[Ethercatmaster-users] EML still alive?!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#307">[ date ]</a>
+              <a href="thread.html#307">[ thread ]</a>
+              <a href="subject.html#307">[ subject ]</a>
+              <a href="author.html#307">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 9 Oct 2007, Roland Tollenaar wrote:
+&gt;<i> I have discovered that EML fails in this part of the code when the
+</I>&gt;<i> check_header function is called. I have tracked the starting point of
+</I>&gt;<i> the error throught hte functions and have copied the reasoning into this
+</I>&gt;<i> mail. Anyone familiar with EML might be able to determine form below
+</I>&gt;<i> where the problem is most likely to be found. I also seem to have found
+</I>&gt;<i> a recursive call of functions which seems dubious to me.
+</I>&gt;<i>
+</I>[...]
+&gt;<i> thus we have to look at check_header....
+</I>&gt;<i>
+</I>&gt;<i> bool
+</I>&gt;<i> EC_Ethernet_Frame::check_header(const unsigned char * a_buffer) const
+</I>&gt;<i> {
+</I>&gt;<i>   const unsigned char * dataptr = a_buffer;
+</I>&gt;<i>   EC_UINT frame_header;
+</I>&gt;<i>   dataptr=nw2host(dataptr,frame_header);
+</I>&gt;<i>
+</I>&gt;<i>   EC_UINT ec_command = 0x1000;
+</I>&gt;<i>   if (ec_command == (frame_header &amp; ec_command))
+</I>&gt;<i>     {
+</I>&gt;<i>       EC_UINT bodylength = 0x07ff;
+</I>&gt;<i>       if (this-&gt;body_length() == (size_t) (frame_header &amp;
+</I>&gt;<i> bodylength))!!!!!!!!!!!!!!!!!Fails on this condition!!!!!!!!!!!!!!!!!!!!
+</I>&gt;<i> 	return true;
+</I>&gt;<i>       else
+</I>&gt;<i> 	log(EC_LOG_ERROR, &quot;Roland: checkheader failed on faulty body length\n&quot;);
+</I>&gt;<i>     }
+</I>&gt;<i>   log(EC_LOG_ERROR, &quot;building frame: checkheader failed\n&quot;);
+</I>&gt;<i>   return false;
+</I>&gt;<i>
+</I>&gt;<i> }
+</I>[...]
+&gt;<i> size_t
+</I>&gt;<i> EC_Frame::body_length(void) const
+</I>&gt;<i> {
+</I>&gt;<i>   int result = 0;
+</I>&gt;<i>   if (m_telegram)
+</I>&gt;<i>     {
+</I>&gt;<i>       EC_Telegram * tg = m_telegram;
+</I>&gt;<i>       result += tg-&gt;length();
+</I>&gt;<i>       while (tg-&gt;next != NULL)
+</I>&gt;<i> 	{
+</I>&gt;<i> 	  tg = tg-&gt;next;
+</I>&gt;<i> 	  result += tg-&gt;length();
+</I>&gt;<i> 	}
+</I>&gt;<i>     }
+</I>&gt;<i>     else
+</I>&gt;<i> 	log(EC_LOG_ERROR, &quot;Roland: m_telegram false in EC_Frame::body_length\n&quot;);
+</I>&gt;<i>   return result;
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> which we have seen before. In fact this looks pretty recursive to me and
+</I>&gt;<i> not good style??
+</I>
+To me, this looks as if an ethercat frame, consisting of a number of
+ethercat telegrams is implemented as a linked list.  Please explain
+what's the problem with this code according to you and suggest how it
+should be implemented &quot;good style&quot;.
+
+&gt;<i>  Whatever the case its either this length() function returning garbage or
+</I>
+Maybe you can show us what garbage?
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000302.html">[Ethercatmaster-users] help remove a bug please:
+</A></li>
+	<LI>Next message: <A HREF="000303.html">[Ethercatmaster-users] EML still alive?!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#307">[ date ]</a>
+              <a href="thread.html#307">[ thread ]</a>
+              <a href="subject.html#307">[ subject ]</a>
+              <a href="author.html#307">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

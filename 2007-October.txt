@@ -1,0 +1,982 @@
+From rwatollenaar at gmail.com  Tue Oct  9 12:12:36 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Tue, 09 Oct 2007 12:12:36 +0200
+Subject: [Ethercatmaster-users] EL5101 incremental encoder
+Message-ID: <470B5414.4060007@gmail.com>
+
+Hi,
+
+I have received the incremental encoder module and have incorporated it 
+into the master-test.cpp to see if I can get it going. Configuring seems 
+to be succeful but I do not get the unit into operational state.
+
+below is the output I get, and the code of master-test.cpp which 
+generates the output.
+
+Advice very much appreciated.!
+
+root at slax:~/appusb-link/Packages/eml/trunk/build-rtnet/tests/rtnet# 
+./master_test rteth0
+Socket created: socket id: 896
+Got interface: index: 0
+Attach netif
+
+Master initializing
+
+EtherCAT AL: Ring contains 11 slaves
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, 
+rev=0x10000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=1, adr=0x3ec, Prod. Code=0x7d43052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=2, adr=0x3ed, Prod. Code=0x7d43052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=3, adr=0x3ee, Prod. Code=0x7d43052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=4, adr=0x3ef, Prod. Code=0x7d43052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=5, adr=0x3f0, Prod. Code=0x3f63052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=6, adr=0x3f1, Prod. Code=0x3f63052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=7, adr=0x3f2, Prod. Code=0x3f63052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=8, adr=0x3f3, Prod. Code=0x3f63052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=9, adr=0x3f4, Prod. Code=0x10243052, rev=0x0
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=10, adr=0x3f5, Prod. Code=0x13ed3052, 
+rev=0x10000
+AL: resetting FMMUs
+AL: resetting SMs
+AL: Setting all slaves in init mode
+Getting slave handler
+Setting EK1100 to OP STATE
+EK1100 succesfully set in OP STATE
+Getting slave handler
+Setting EL2004(1) to OP STATE
+EL2004(1) succesfully set in OP STATE
+Getting slave handler
+Setting EL2004(2) to OP STATE
+EL2004(2) succesfully set in OP STATE
+Getting slave handler
+Setting EL2004(3) to OP STATE
+EL2004(3) succesfully set in OP STATE
+Getting slave handler
+Setting EL2004(4) to OP STATE
+EL2004(4) succesfully set in OP STATE
+Getting slave handler
+Setting EL1014(1) to OP STATE
+EL1014(1) succesfully set in OP STATE
+Getting slave handler
+Setting EL1014(2) to OP STATE
+EL1014(2) succesfully set in OP STATE
+Getting slave handler
+Setting EL1014(3) to OP STATE
+EL1014(3) succesfully set in OP STATE
+Getting slave handler
+Setting EL1014(4) to OP STATE
+EL1014(4) succesfully set in OP STATE
+Getting slave handler
+Setting EL4132 to OP STATE
+EL4132 succesfully set in OP STATE
+Getting slave handler
+Setting EL5101 to OP STATE
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 0), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 1), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 2), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 3), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 4), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 5), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 6), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 7), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 8), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 9), desired=2, 
+status=1
+EC_ESM_Ops::set_state() failed to set state after 10 tries
+failed to set EL5101 in OP STATE
+AL initializing
+
+Test: outputs:
+
+
+
+Then the code:
+
+(full code attached because its neater and easier to read in the 
+attached file, just the config section entered here with some other 
+modules that are present)
+
+
+///SlaveConfig EL1014(3) [Digital Input]
+EtherCAT_FMMU_Config fmmu_config_EL1014_3(1);
+EC_FMMU fmmu0_EL1014_3(0x00010007,1,0,3,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_3(1);
+EC_SyncMan 
+syncman0_EL1014_3(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig 
+EC_EL1014_3(0x03F63052,0x100000,0x03f2,&fmmu_config_EL1014_3, 
+&pd_config_EL1014_3);
+
+///SlaveConfig EL1014(4) [Digital Input]
+EtherCAT_FMMU_Config fmmu_config_EL1014_4(1);
+EC_FMMU fmmu0_EL1014_4(0x00010007,1,4,7,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_4(1);
+EC_SyncMan 
+syncman0_EL1014_4(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig 
+EC_EL1014_4(0x03F63052,0x100000,0x03f3,&fmmu_config_EL1014_4, 
+&pd_config_EL1014_4);
+
+
+
+
+///SlaveConfig EL4132  [Analog Output]
+EtherCAT_FMMU_Config fmmu_config_EL4132(2);
+EC_FMMU fmmu0_EL4132(0x00010008,1,0,0,0x080D,0x00,true,false,true); 
+//input data
+EC_FMMU fmmu1_EL4132(0x00010002,4,0,7,0x1000,0x00,false,true,true); 
+//output data
+
+EC_SyncMan 
+syncman_mbx0_EL4132(0x1800,246,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan 
+syncman_mbx1_EL4132(0x18f6,246,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_MbxConfig mbx_conf_EL4132 = {syncman_mbx0_EL4132, 
+syncman_mbx1_EL4132};
+EtherCAT_PD_Config pd_config_EL4132(2);
+EC_SyncMan 
+syncman0_EL4132(0x1000,4,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan 
+syncman1_EL4132(0x1100,0,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig 
+EC_EL4132(0x10243052,0x00,0x03f4,&fmmu_config_EL4132,&pd_config_EL4132,&mbx_conf_EL4132);
+
+
+///SlaveConfig EL5101(1)  [Incremental Encoder]
+EtherCAT_FMMU_Config fmmu_config_EL5101_1(2);
+EC_FMMU fmmu0_EL5101_1(0x00010003,3,0,7,0x1000,0,false,true,true); 
+//output data
+EC_FMMU fmmu1_EL5101_1(0x00010009,5,0,7,0x1100,0,true,false,true); 
+//input data
+
+EC_SyncMan 
+syncman_mbx0_EL5101_1(0x1800,246,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan 
+syncman_mbx1_EL5101_1(0x18f6,246,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_MbxConfig mbx_conf_EL5101_1 = {syncman_mbx0_EL5101_1, 
+syncman_mbx1_EL5101_1};
+
+EtherCAT_PD_Config pd_config_EL5101_1(2);
+EC_SyncMan 
+syncman0_EL5101_1(0x1000,3,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan 
+syncman1_EL5101_1(0x1100,5,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+
+//EtherCAT_SlaveConfig 
+EC_EL5101_1(0x13ED3052,0x270B0000,0x03f5,&fmmu_config_EL5101_1, 
+&pd_config_EL5101_1, &mbx_conf_EL5101_1);
+EtherCAT_SlaveConfig 
+EC_EL5101_1(0x13ED3052,0x10000,0x03f5,&fmmu_config_EL5101_1, 
+&pd_config_EL5101_1, &mbx_conf_EL5101_1);
+
+
+
+
+Kind regards,
+
+Roland
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: master_test.cpp
+Type: text/x-c++src
+Size: 15513 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20071009/9235a050/attachment.cpp>
+
+From rwatollenaar at gmail.com  Tue Oct  9 18:53:21 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Tue, 09 Oct 2007 18:53:21 +0200
+Subject: [Ethercatmaster-users] help remove a bug please:
+Message-ID: <470BB201.6040307@gmail.com>
+
+Hi,
+
+For me, no matter which machine or which swtich I use, its not possible 
+run the ethrecat communication over a switch to look at the packages. 
+This is very inconvenient.
+
+I have discovered that EML fails in this part of the code when the 
+check_header function is called. I have tracked the starting point of 
+the error throught hte functions and have copied the reasoning into this 
+mail. Anyone familiar with EML might be able to determine form below 
+where the problem is most likely to be found. I also seem to have found 
+a recursive call of functions which seems dubious to me.
+
+TO make it easy i have pointed out in the snippets below where the 
+conditions fail.
+
+
+The first function to holler & complain is:
+
+bool
+EC_Ethernet_Frame::check_header(const unsigned char * a_buffer) const
+{
+   const unsigned char * dataptr = a_buffer;
+   EC_UINT frame_header;
+   dataptr=nw2host(dataptr,frame_header);
+
+   EC_UINT ec_command = 0x1000;
+   if (ec_command == (frame_header & ec_command))
+     {
+       EC_UINT bodylength = 0x07ff;
+       if (this->body_length() == (size_t) (frame_header & bodylength))
+	return true;
+	!!!!!!!!!!Fails on this condition!!!!!!!!!!!!!!!!
+     }
+   log(EC_LOG_ERROR, "building frame: checkheader failed\n");
+   return false;
+}
+
+
+Next falls out in
+
+static bool low_level_input(struct EtherCAT_Frame * frame, struct netif 
+* netif) {
+
+	unsigned char buffer_receive[MAX_ETH_DATA + HEADER_SIZE];
+	struct eth_msg *msg_received = (struct eth_msg *)buffer_receive;
+	//Receive message from socket
+	int sock = netif->socket_private;
+	int len_recv = recv(sock,buffer_receive,sizeof(buffer_receive),0);
+	if(len_recv < 0) {
+		//perror("low_level_input: Cannot receive msg: ");
+		//log(EC_LOG_ERROR, "low_level_input: Cannot receive msg: %d\n",len_recv);
+		return false;
+	}
+
+	if ( ((msg_received->ether_type[0]) != 0x88) || 
+(msg_received->ether_type[1]) != 0xA4) {
+		log(EC_LOG_ERROR, "low_level_input: No EtherCAT msg!\n");
+		return false;
+	}
+
+	// build Ethercat Frame
+	int succes = framebuild(frame,msg_received->data);
+	if (succes != 0){   !!!!!!!!!!!!!!Fails on this 
+condition!!!!!!!!!!!!!!!!!!!!!
+		// FIXME decent error handling here
+		log(EC_LOG_ERROR, "Roland low_level_input: framebuilding failed!\n");
+		return false;
+	}
+
+	return true;
+}
+
+which means we check framebuild:
+
+externC int framebuild(struct EtherCAT_Frame * frame,
+		       const unsigned char * buffer)
+{
+   return (frame->build(buffer));
+}
+
+which means EC_Frame::build returns -1....
+
+
+int
+EC_Frame::build(const unsigned char * a_buffer)
+{
+   if (this->check_header(a_buffer) == true) !!!!!!!!!!!!!!!!!Fails on 
+this condition!!!!!!!!!!!!!!!!!!!
+     {
+       a_buffer += ETHERCAT_ETHERNET_FRAME_HEADER_SIZE;
+       // a_buffer now points to the first telegram
+       // current telegram in frame, initialised to first telegram
+       EC_Telegram * tg = this->get_telegram();
+       while(tg) {
+	if ((a_buffer  = tg->build(a_buffer)) == NULL)
+	  return -1;
+	else
+	  tg = tg->next;
+       }
+       return 0;
+     }
+   else return -1;
+}
+
+thus we have to look at check_header....
+
+bool
+EC_Ethernet_Frame::check_header(const unsigned char * a_buffer) const
+{
+   const unsigned char * dataptr = a_buffer;
+   EC_UINT frame_header;
+   dataptr=nw2host(dataptr,frame_header);
+
+   EC_UINT ec_command = 0x1000;
+   if (ec_command == (frame_header & ec_command))
+     {
+       EC_UINT bodylength = 0x07ff;
+       if (this->body_length() == (size_t) (frame_header & 
+bodylength))!!!!!!!!!!!!!!!!!Fails on this condition!!!!!!!!!!!!!!!!!!!!
+	return true;
+       else
+	log(EC_LOG_ERROR, "Roland: checkheader failed on faulty body length\n");	
+     }
+   log(EC_LOG_ERROR, "building frame: checkheader failed\n");
+   return false;
+	
+}
+
+so we look at body_length().....phew....
+
+size_t
+EC_Frame::body_length(void) const
+{
+   int result = 0;
+   if (m_telegram)
+     {
+       EC_Telegram * tg = m_telegram;
+       result += tg->length();
+       while (tg->next != NULL)
+	{
+	  tg = tg->next;
+	  result += tg->length();
+	}
+     }
+     else
+	log(EC_LOG_ERROR, "Roland: m_telegram false in 
+EC_Frame::body_length\n");!!!!!!!!!!This message never shows!!!!!!!!!!!!!	
+   return result;
+}
+
+which leaves us to look at EC_Telegram::length() and nw2host()
+
+length implemented as such:
+
+size_t length(void) const  { return header_length() + body_length();}
+
+  virtual size_t          header_length(void)const { return 
+ETHERCAT_TELEGRAM_HEADER_SIZE; }
+which seems pretty constant to me, and
+
+size_t
+EC_Frame::body_length(void) const
+{
+   int result = 0;
+   if (m_telegram)
+     {
+       EC_Telegram * tg = m_telegram;
+       result += tg->length();
+       while (tg->next != NULL)
+	{
+	  tg = tg->next;
+	  result += tg->length();
+	}
+     }
+     else
+	log(EC_LOG_ERROR, "Roland: m_telegram false in EC_Frame::body_length\n");
+   return result;
+}
+
+which we have seen before. In fact this looks pretty recursive to me and 
+not good style??
+
+
+  Whatever the case its either this length() function returning garbage or
+
+nw2host is messing up on giving frame_header content and shifting the 
+pointer to the buffer
+
+inline const unsigned char * nw2host(const unsigned char * a_data, 
+EC_UINT& a_value) {
+   cyg_uint16 tmp;
+   memcpy(&tmp, a_data, sizeof(tmp));
+   tmp = CYG_LE16_TO_CPU(tmp);
+
+   a_value = static_cast<EC_UINT>(tmp);
+   return a_data + sizeof(a_value);
+}
+
+BUt I cannot see this happening.
+
+Any tips?
+
+
+Regards,
+
+Roland
+
+
+
+
+
+
+
+
+
+From rwatollenaar at gmail.com  Tue Oct  9 18:56:19 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Tue, 09 Oct 2007 18:56:19 +0200
+Subject: [Ethercatmaster-users] EML still alive?!!
+Message-ID: <470BB2B3.9030506@gmail.com>
+
+Hi,
+
+I am hearing a scary echo on this mailing list, mailing list, mailing 
+list......
+
+even if no one can help with the problem, please show some sign that the 
+list is still being read by SOMEONE.
+
+:)
+
+
+
+RR
+
+
+From M.J.G.v.d.Molengraft at tue.nl  Tue Oct  9 22:46:09 2007
+From: M.J.G.v.d.Molengraft at tue.nl (Molengraft, M.J.G. van de)
+Date: Tue, 9 Oct 2007 22:46:09 +0200
+Subject: [Ethercatmaster-users] EL5101 incremental encoder
+References: <mailman.205.1191949047.19139.ethercatmaster-users@lists.berlios.de>
+Message-ID: <ED8883F7EB35334EB3CDC3658BF2A74DE3FCAF@EXCHANGE1.campus.tue.nl>
+
+Roland,
+ 
+We have the same revision of the EL5101. Our configuration looks like:
+ 
+/* slave config EL5101 */
+EtherCAT_FMMU_Config fmmu_config_EL5101(2);
+EC_FMMU fmmu0_EL5101(0x00010010, 3, 0, 7, 0x1000, 0, false, true, true);
+EC_FMMU fmmu1_EL5101(0x00010013, 5, 0, 7, 0x1100, 0, true, false, true);
+ 
+EC_SyncMan syncman_mbx0_EL5101(0x1800, 48, EC_QUEUED, EC_WRITTEN_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+EC_SyncMan syncman_mbx1_EL5101(0x1886, 48, EC_QUEUED, EC_READ_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+
+EtherCAT_MbxConfig mbx_conf_EL5101 = {syncman_mbx0_EL5101, syncman_mbx1_EL5101};
+ 
+EtherCAT_PD_Config pd_config_EL5101(2);
+
+EC_SyncMan syncman0_EL5101(0x1000, 3, EC_BUFFERED, EC_WRITTEN_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+EC_SyncMan syncman1_EL5101(0x1100, 5, EC_BUFFERED, EC_READ_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+ 
+EtherCAT_SlaveConfig EC_EL5101(0x13ED3052, 0x00010000, 1007, &fmmu_config_EL5101, &pd_config_EL5101, &mbx_conf_EL5101);
+ 
+I think the main difference is in the mailbox size (48 instead of 246) and the mailbox address. I've read all parameters from the slave using TwinCAT. So, maybe you can give these configuration parameters a try...
+ 
+Rene' van de Molengraft
+ 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: winmail.dat
+Type: application/ms-tnef
+Size: 4395 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20071009/a920d506/attachment.bin>
+
+From rwatollenaar at gmail.com  Wed Oct 10 08:35:57 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Wed, 10 Oct 2007 08:35:57 +0200
+Subject: [Ethercatmaster-users] EL5101 incremental encoder
+In-Reply-To: <ED8883F7EB35334EB3CDC3658BF2A74DE3FCAF@EXCHANGE1.campus.tue.nl>
+References: <mailman.205.1191949047.19139.ethercatmaster-users@lists.berlios.de>
+	<ED8883F7EB35334EB3CDC3658BF2A74DE3FCAF@EXCHANGE1.campus.tue.nl>
+Message-ID: <470C72CD.1010709@gmail.com>
+
+Rene',
+
+Thanks for the help. I was aware of the difference in length, I had also 
+seen that from a twincat output in the mean time. But my fixed station 
+address from twincan was 0x1880 not 0x1886. I tried your 0x1886 as well 
+but with no luck.
+
+my entire configuration is
+EK1100
+EL2004
+EL2004
+EL2004
+EL2004
+EL1014
+EL1014
+EL1014
+EL1014
+EL4132
+EL5101
+
+What still differs is the logical start address. Although I have checked 
+for conflicts with other modules I can find none. I also don;t think 
+that errors in the logical start addresses affect getting the module 
+into operational state. ? My physical address is also different to yours 
+but that should also not make a difference.
+
+Any ideas as to what I can look at to get a grip on this problem?
+
+My exact current configuration is now:
+
+///SlaveConfig EL5101(1)  [Incremental Encoder]
+EtherCAT_FMMU_Config fmmu_config_EL5101_1(2);
+EC_FMMU fmmu0_EL5101_1(0x00010006,3,0,7,0x1000,0,false,true,true); 
+//output data
+EC_FMMU fmmu1_EL5101_1(0x0001000C,5,0,7,0x1100,0,true,false,true); 
+//input data
+
+EC_SyncMan 
+syncman_mbx0_EL5101_1(0x1800,48,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan 
+syncman_mbx1_EL5101_1(0x1886,48,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_MbxConfig mbx_conf_EL5101_1 = {syncman_mbx0_EL5101_1, 
+syncman_mbx1_EL5101_1};
+
+EtherCAT_PD_Config pd_config_EL5101_1(2);
+EC_SyncMan 
+syncman0_EL5101_1(0x1000,3,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan 
+syncman1_EL5101_1(0x1100,5,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+
+EtherCAT_SlaveConfig 
+EC_EL5101_1(0x13ED3052,0x00010000,0x03f5,&fmmu_config_EL5101_1, 
+&pd_config_EL5101_1, &mbx_conf_EL5101_1);
+
+
+Regards,
+
+Roland.
+
+Molengraft, M.J.G. van de wrote:
+> Roland,
+>  
+> We have the same revision of the EL5101. Our configuration looks like:
+>  
+> /* slave config EL5101 */
+> EtherCAT_FMMU_Config fmmu_config_EL5101(2);
+> EC_FMMU fmmu0_EL5101(0x00010010, 3, 0, 7, 0x1000, 0, false, true, true);
+> EC_FMMU fmmu1_EL5101(0x00010013, 5, 0, 7, 0x1100, 0, true, false, true);
+>  
+> EC_SyncMan syncman_mbx0_EL5101(0x1800, 48, EC_QUEUED, EC_WRITTEN_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+> EC_SyncMan syncman_mbx1_EL5101(0x1886, 48, EC_QUEUED, EC_READ_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+> 
+> EtherCAT_MbxConfig mbx_conf_EL5101 = {syncman_mbx0_EL5101, syncman_mbx1_EL5101};
+>  
+> EtherCAT_PD_Config pd_config_EL5101(2);
+> 
+> EC_SyncMan syncman0_EL5101(0x1000, 3, EC_BUFFERED, EC_WRITTEN_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+> EC_SyncMan syncman1_EL5101(0x1100, 5, EC_BUFFERED, EC_READ_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+>  
+> EtherCAT_SlaveConfig EC_EL5101(0x13ED3052, 0x00010000, 1007, &fmmu_config_EL5101, &pd_config_EL5101, &mbx_conf_EL5101);
+>  
+> I think the main difference is in the mailbox size (48 instead of 246) and the mailbox address. I've read all parameters from the slave using TwinCAT. So, maybe you can give these configuration parameters a try...
+>  
+> Rene' van de Molengraft
+>  
+> 
+> 
+> ------------------------------------------------------------------------
+> 
+> _______________________________________________
+> Ethercatmaster-users mailing list
+> Ethercatmaster-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+
+From rwatollenaar at gmail.com  Wed Oct 10 08:52:06 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Wed, 10 Oct 2007 08:52:06 +0200
+Subject: [Ethercatmaster-users] EL5101 incremental encoder
+In-Reply-To: <ED8883F7EB35334EB3CDC3658BF2A74DE3FCAF@EXCHANGE1.campus.tue.nl>
+References: <mailman.205.1191949047.19139.ethercatmaster-users@lists.berlios.de>
+	<ED8883F7EB35334EB3CDC3658BF2A74DE3FCAF@EXCHANGE1.campus.tue.nl>
+Message-ID: <470C7696.80507@gmail.com>
+
+Sorry, me again.
+
+I want to do a quick test to see whether by some odd chance the 5101 is 
+not going in operational mode despite the error messages of EML. 
+Initially this seems not to be the case but I may be resetting it all 
+the time by sending 0x00 to it on the three output bytes. A quick glance 
+at the documentation makes me suspect that the first byte of the output 
+data is the control byte, the second two the process data. The 3rd bit 
+of the first byte must be set to 1 for the counter to assume the value 
+of the second two. Correct? In other words sending 0x00 0x00 and 0x00 on 
+the three output bytes should allow me to see the counting take place in 
+three of the 5 input bytes (value and status). Incidentally what are the 
+other 2 input bytes for?
+
+Kind regards,
+
+Roland
+
+Molengraft, M.J.G. van de wrote:
+> Roland,
+>  
+> We have the same revision of the EL5101. Our configuration looks like:
+>  
+> /* slave config EL5101 */
+> EtherCAT_FMMU_Config fmmu_config_EL5101(2);
+> EC_FMMU fmmu0_EL5101(0x00010010, 3, 0, 7, 0x1000, 0, false, true, true);
+> EC_FMMU fmmu1_EL5101(0x00010013, 5, 0, 7, 0x1100, 0, true, false, true);
+>  
+> EC_SyncMan syncman_mbx0_EL5101(0x1800, 48, EC_QUEUED, EC_WRITTEN_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+> EC_SyncMan syncman_mbx1_EL5101(0x1886, 48, EC_QUEUED, EC_READ_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+> 
+> EtherCAT_MbxConfig mbx_conf_EL5101 = {syncman_mbx0_EL5101, syncman_mbx1_EL5101};
+>  
+> EtherCAT_PD_Config pd_config_EL5101(2);
+> 
+> EC_SyncMan syncman0_EL5101(0x1000, 3, EC_BUFFERED, EC_WRITTEN_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+> EC_SyncMan syncman1_EL5101(0x1100, 5, EC_BUFFERED, EC_READ_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+>  
+> EtherCAT_SlaveConfig EC_EL5101(0x13ED3052, 0x00010000, 1007, &fmmu_config_EL5101, &pd_config_EL5101, &mbx_conf_EL5101);
+>  
+> I think the main difference is in the mailbox size (48 instead of 246) and the mailbox address. I've read all parameters from the slave using TwinCAT. So, maybe you can give these configuration parameters a try...
+>  
+> Rene' van de Molengraft
+>  
+> 
+> 
+> ------------------------------------------------------------------------
+> 
+> _______________________________________________
+> Ethercatmaster-users mailing list
+> Ethercatmaster-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+
+From klaas.gadeyne at fmtc.be  Wed Oct 10 09:12:45 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Wed, 10 Oct 2007 09:12:45 +0200 (CEST)
+Subject: [Ethercatmaster-users] help remove a bug please:
+In-Reply-To: <470BB201.6040307@gmail.com>
+References: <470BB201.6040307@gmail.com>
+Message-ID: <Pine.LNX.4.64.0710100904260.23359@ampere.labo01.fmtc.be>
+
+On Tue, 9 Oct 2007, Roland Tollenaar wrote:
+> I have discovered that EML fails in this part of the code when the
+> check_header function is called. I have tracked the starting point of
+> the error throught hte functions and have copied the reasoning into this
+> mail. Anyone familiar with EML might be able to determine form below
+> where the problem is most likely to be found. I also seem to have found
+> a recursive call of functions which seems dubious to me.
+>
+[...]
+> thus we have to look at check_header....
+>
+> bool
+> EC_Ethernet_Frame::check_header(const unsigned char * a_buffer) const
+> {
+>   const unsigned char * dataptr = a_buffer;
+>   EC_UINT frame_header;
+>   dataptr=nw2host(dataptr,frame_header);
+>
+>   EC_UINT ec_command = 0x1000;
+>   if (ec_command == (frame_header & ec_command))
+>     {
+>       EC_UINT bodylength = 0x07ff;
+>       if (this->body_length() == (size_t) (frame_header &
+> bodylength))!!!!!!!!!!!!!!!!!Fails on this condition!!!!!!!!!!!!!!!!!!!!
+> 	return true;
+>       else
+> 	log(EC_LOG_ERROR, "Roland: checkheader failed on faulty body length\n");
+>     }
+>   log(EC_LOG_ERROR, "building frame: checkheader failed\n");
+>   return false;
+>
+> }
+[...]
+> size_t
+> EC_Frame::body_length(void) const
+> {
+>   int result = 0;
+>   if (m_telegram)
+>     {
+>       EC_Telegram * tg = m_telegram;
+>       result += tg->length();
+>       while (tg->next != NULL)
+> 	{
+> 	  tg = tg->next;
+> 	  result += tg->length();
+> 	}
+>     }
+>     else
+> 	log(EC_LOG_ERROR, "Roland: m_telegram false in EC_Frame::body_length\n");
+>   return result;
+> }
+>
+> which we have seen before. In fact this looks pretty recursive to me and
+> not good style??
+
+To me, this looks as if an ethercat frame, consisting of a number of
+ethercat telegrams is implemented as a linked list.  Please explain
+what's the problem with this code according to you and suggest how it
+should be implemented "good style".
+
+>  Whatever the case its either this length() function returning garbage or
+
+Maybe you can show us what garbage?
+
+Klaas
+
+
+From rwatollenaar at gmail.com  Wed Oct 10 09:34:18 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Wed, 10 Oct 2007 09:34:18 +0200
+Subject: [Ethercatmaster-users] READ FIRST !! EL5101 incremental encoder
+In-Reply-To: <ED8883F7EB35334EB3CDC3658BF2A74DE3FCAF@EXCHANGE1.campus.tue.nl>
+References: <mailman.205.1191949047.19139.ethercatmaster-users@lists.berlios.de>
+	<ED8883F7EB35334EB3CDC3658BF2A74DE3FCAF@EXCHANGE1.campus.tue.nl>
+Message-ID: <470C807A.50801@gmail.com>
+
+Hi,
+
+In order to curb any effort which should go into this problem, the 
+latest info.
+
+If I remove the analogue output module then the 5101 DOES go into 
+operational state.
+
+I am investigating further. No indication as to why, yet.
+
+For us all to learn: In this configuration it makes no difference 
+whether I use the 0x1880 or 0x1886 address.
+
+Kind regards,
+
+Roland
+
+Molengraft, M.J.G. van de wrote:
+> Roland,
+>  
+> We have the same revision of the EL5101. Our configuration looks like:
+>  
+> /* slave config EL5101 */
+> EtherCAT_FMMU_Config fmmu_config_EL5101(2);
+> EC_FMMU fmmu0_EL5101(0x00010010, 3, 0, 7, 0x1000, 0, false, true, true);
+> EC_FMMU fmmu1_EL5101(0x00010013, 5, 0, 7, 0x1100, 0, true, false, true);
+>  
+> EC_SyncMan syncman_mbx0_EL5101(0x1800, 48, EC_QUEUED, EC_WRITTEN_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+> EC_SyncMan syncman_mbx1_EL5101(0x1886, 48, EC_QUEUED, EC_READ_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+> 
+> EtherCAT_MbxConfig mbx_conf_EL5101 = {syncman_mbx0_EL5101, syncman_mbx1_EL5101};
+>  
+> EtherCAT_PD_Config pd_config_EL5101(2);
+> 
+> EC_SyncMan syncman0_EL5101(0x1000, 3, EC_BUFFERED, EC_WRITTEN_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+> EC_SyncMan syncman1_EL5101(0x1100, 5, EC_BUFFERED, EC_READ_FROM_MASTER, true, false, false, false, false, false, EC_FIRST_BUFFER, true);
+>  
+> EtherCAT_SlaveConfig EC_EL5101(0x13ED3052, 0x00010000, 1007, &fmmu_config_EL5101, &pd_config_EL5101, &mbx_conf_EL5101);
+>  
+> I think the main difference is in the mailbox size (48 instead of 246) and the mailbox address. I've read all parameters from the slave using TwinCAT. So, maybe you can give these configuration parameters a try...
+>  
+> Rene' van de Molengraft
+>  
+> 
+> 
+> ------------------------------------------------------------------------
+> 
+> _______________________________________________
+> Ethercatmaster-users mailing list
+> Ethercatmaster-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+
+From rwatollenaar at gmail.com  Fri Oct 26 16:52:28 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Fri, 26 Oct 2007 16:52:28 +0200
+Subject: [Ethercatmaster-users] [RTnet-users] [Xenomai-help] EML build
+ question
+In-Reply-To: <4721FA69.4010405@sbcglobal.net>
+References: 46C0A02A.1010706@gmail.com <4721FA69.4010405@sbcglobal.net>
+Message-ID: <4721FF2C.7070602@gmail.com>
+
+Please join the EML help list and post requests through that. I will be 
+happy to assist where possible but am not the right person. The 
+developer of EML can provide better assistance. And if anything comes of 
+it at least there is a trace on the internet others can gain some 
+knowledge of.
+
+
+> I'm a new bee, trying to use EtherCat Master on linux kernel 2.6.22.10 
+> i386, xenomai 2.4-rc4, RTnet (trunk 1139), and Ethercat master library 
+> (trunk 31).
+
+> Could you send me some direction and documents how to build, install 
+> modules.? I being able to build and run kernel 2.6.22.10, xenomai 
+> 2.4-rc4.  But I have problems when I'm building and testing RTnet. I 
+Please give the exact steps you follow when applying rtnet (patch, build 
+etc). And the exact output when you get errors.
+
+
+> could not test anything, for example I could not insmod rt-8139too, run 
+> rtnet start, etc.. I'm struggle for a week but get to nowhere.
+If the building of rtnet is not successful then this comes as no surprise.
+
+
+> 
+> By the way, Please verify that could I start with linux kernel 
+> 2.6.22.10, xenomai 2.4rc4, adeos-ipipe-2.6.22-i368-1.10.9.patch, RTnet 
+> (trunk 1139) 
+I cannot verify this for you. The best place to post this question is on 
+the rtnet-help mailing list. I am using rtnet 0.9.9 IIRC.
+
+ > and Ethercat master library (trunk 31)?
+I am not sure which trunk I am using. I do not have the idea that there 
+is much development going on on EML but may be wrong. This question 
+again you should post on the EML list. AFAIK however the EML library 
+should function independent of the kernel/xenomai combination.
+
+I am using 2.6.16 kernel with corresponding adeos patch, rtnet 0.9.9 and 
+the first EML trunk I got hold of 3 or 4 months back
+
+Roland.
+
+> I got your email from the RTnet-users. I read some posts and understand 
+> you worked on the RTnet - Xenomai - EtherCat Master, that why I sent the 
+> email.
+> 
+> Please help,
+> Dennis
+> 
+
+
+From dennisnguy at sbcglobal.net  Thu Oct 25 19:26:06 2007
+From: dennisnguy at sbcglobal.net (Dennis Nguyen)
+Date: Thu, 25 Oct 2007 10:26:06 -0700
+Subject: [Ethercatmaster-users] Ethercat master package
+Message-ID: <1193333166.3112.17.camel@localhost.localdomain>
+
+Hi,
+
+I'm a new bee.
+Does anyone know if there is a complete EML package which includes Linux
+kernel, xenomai, RTnet, and EML?  I tried to build and test EML with
+Linux kernel 2.6.22.10 - i386, xenomai 2.4-rc4, RTNet trunk 1139, EML
+trunk 31 without success. (I saw a complete eml package from EtherLab
+etherlab.org and wonder if there is a similar package for the EML from
+berlios.de).
+
+Could I use linux kernel 2.6.22.10 - i386, xenomai 2.4-rc4, RTnet trunk
+1139 with EML trunk 31? (I use RealTek 8139 card).
+Where can I find detail instruction to build and run those combination
+to make they work together smoothly?
+
+Thanks in advance!
+Dennis
+
+
+
+From jan.kiszka at web.de  Fri Oct 26 20:10:09 2007
+From: jan.kiszka at web.de (Jan Kiszka)
+Date: Fri, 26 Oct 2007 20:10:09 +0200
+Subject: [Ethercatmaster-users] Ethercat master package
+In-Reply-To: <1193333166.3112.17.camel@localhost.localdomain>
+References: <1193333166.3112.17.camel@localhost.localdomain>
+Message-ID: <47222D81.9000705@web.de>
+
+Dennis Nguyen wrote:
+> Hi,
+> 
+> I'm a new bee.
+> Does anyone know if there is a complete EML package which includes Linux
+> kernel, xenomai, RTnet, and EML?  I tried to build and test EML with
+> Linux kernel 2.6.22.10 - i386, xenomai 2.4-rc4, RTNet trunk 1139, EML
+> trunk 31 without success. (I saw a complete eml package from EtherLab
+
+See RTnet list: "without success" is not precise enough in order to help
+you solving the problem.
+
+> etherlab.org and wonder if there is a similar package for the EML from
+> berlios.de).
+> 
+> Could I use linux kernel 2.6.22.10 - i386, xenomai 2.4-rc4, RTnet trunk
+> 1139 with EML trunk 31? (I use RealTek 8139 card).
+> Where can I find detail instruction to build and run those combination
+> to make they work together smoothly?
+
+Each step of the chain (1. Xenomai, 2. RTnet, 3. EML) must work one
+after the other. Follow the description of the components and check if
+the intermediate steps where successful. If one step fails, ask the
+related community, proving precise procedure and error descriptions.
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20071026/05cc4ac2/attachment.pgp>
+
+From rwatollenaar at gmail.com  Fri Oct 26 21:04:07 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Fri, 26 Oct 2007 21:04:07 +0200
+Subject: [Ethercatmaster-users] Ethercat master package
+In-Reply-To: <1193333166.3112.17.camel@localhost.localdomain>
+References: <1193333166.3112.17.camel@localhost.localdomain>
+Message-ID: <47223A27.3060304@gmail.com>
+
+> Does anyone know if there is a complete EML package which includes Linux
+> kernel, xenomai, RTnet, and EML? 
+I doubt it. All projects (with exception maybe of EML) are under 
+impressive development and no-one AFAIK maintains a package.
+
+
+
+
+> Could I use linux kernel 2.6.22.10 - i386, xenomai 2.4-rc4, RTnet trunk
+> 1139 with EML trunk 31? (I use RealTek 8139 card).
+> Where can I find detail instruction to build and run those combination
+> to make they work together smoothly?
+First patch your kernel with xenomai/adeos and perform all the 
+prescribed tests. Post your problems on the xenomai help list.
+
+Second apply rtnet and perform all the prescribed tests. Post your 
+problems on the rtnet-user list
+
+Third build and test EML and post your problems on the EML test.
+
+Roland.
+
+
+> 
+> Thanks in advance!
+> Dennis
+> 
+> _______________________________________________
+> Ethercatmaster-users mailing list
+> Ethercatmaster-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+> 
+
+

@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Antwort: Re:  Creating Master Error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20%20Creating%20Master%20Error&In-Reply-To=%3COFEF9FE2D8.7688B379-ONC125729D.002D90DE-C125729D.002ECF97%40MAIL.DE.FESTO.NET%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000024.html">
+   <LINK REL="Next"  HREF="000028.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Antwort: Re:  Creating Master Error</H1>
+    <B>Felix Erkert</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20%20Creating%20Master%20Error&In-Reply-To=%3COFEF9FE2D8.7688B379-ONC125729D.002D90DE-C125729D.002ECF97%40MAIL.DE.FESTO.NET%3E"
+       TITLE="[Ethercatmaster-users] Antwort: Re:  Creating Master Error">ERFE at DE.FESTO.COM
+       </A><BR>
+    <I>Tue Mar 13 09:31:13 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000024.html">[Ethercatmaster-users] Creating Master Error
+</A></li>
+        <LI>Next message: <A HREF="000028.html">[Ethercatmaster-users] Antwort: Re:  Creating Master Error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#25">[ date ]</a>
+              <a href="thread.html#25">[ thread ]</a>
+              <a href="subject.html#25">[ subject ]</a>
+              <a href="author.html#25">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Klaas Gadeyne &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">klaas.gadeyne at fmtc.be</A>&gt; schrieb am 12.03.2007 17:30:27:
+
+&gt;<i> On Mon, 12 Mar 2007, Felix Erkert wrote:
+</I>&gt;<i> &gt; Hallo,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I have build eCos with EtherCAT Master Library without errors.
+</I>&gt;<i>
+</I>&gt;<i> Great!  This means you could build the code for an Altera board with
+</I>&gt;<i> nios II processor and an untested NIC, under cygwin.
+</I>&gt;<i> And if I understood it correctly, apart from some cdl dependencies
+</I>&gt;<i> which are/were not yet in place, everything went fine?
+</I>&gt;<i>
+</I>&gt;<i> Given the fact we've only tested this under linux, on i386 with a
+</I>&gt;<i> realtek NIC, it is truly amazing this compiles out of the box :-)
+</I>&gt;<i>
+</I>&gt;<i> &gt; Now I&#180;m testing the ethercat example in the test directory.
+</I>&gt;<i> &gt; I have compiled the example with no errors.  If I start now the
+</I>&gt;<i> &gt; example on the development board the example stops at the
+</I>&gt;<i> &gt; &quot;Creating Master&quot; state.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; int main()
+</I>&gt;<i> &gt; {
+</I>&gt;<i> &gt;  init_slave_db();
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;  printf(&quot;Creating Master\n&quot;);
+</I>&gt;<i> &gt; =&gt;EtherCAT_Master * EM = EtherCAT_Master::instance();       ERROR!!!
+</I>&gt;<i> &gt;  printf(&quot;Getting Slave Handler\n&quot;);
+</I>&gt;<i> &gt;  EtherCAT_SlaveHandler * sh = EM-&gt;get_slave_handler(0x03e9);
+</I>&gt;<i> &gt;  ...
+</I>&gt;<i> &gt; }
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; This is my output:
+</I>&gt;<i> &gt; This Flash does not contain a valid MAC Address
+</I>&gt;<i> &gt; Using the default of 0x12:13:14:15:16:17
+</I>&gt;<i> &gt; Creating Master =&gt; ERROR!!!
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Do you know where is the error or what I do wrong.
+</I>&gt;<i>
+</I>&gt;<i> I don't recall having ever seen such an error.
+</I>&gt;<i>
+</I>&gt;<i> While debugging, I would suggest you increase the
+</I>&gt;<i> CYGNUM_ETHERCATMASTER_LOG_LEVEL variable to 4 in configtool and use your
+</I>&gt;<i> debugger to see where things go wrong...
+</I>&gt;<i>
+</I>&gt;<i> BTW, the test will only work partially if some slave is connected to
+</I>&gt;<i> your altera board (one of the things happening during creation of the
+</I>&gt;<i> master is scanning the network for slaves), and will only work fully
+</I>&gt;<i> if the ethercat evaluation board is connected to your master.
+</I>&gt;<i>
+</I>&gt;<i> Klaas
+</I>
+Hello,
+
+ok, sorry, if I start the ethercat test program, there
+occurs no errors. But if I run the example the EtherCAT_Master::instance()
+function hang up! I have connected a festo ethercat slave, because you
+mean it should be connected an ethercat slave. I haven&#180;t an
+ethercat evaluation board! Why does this example hang up? Have you an idea?
+Are there any hardware specific or eCos specific instructions?
+
+regards
+Felix
+
+
+Bitte beachten Sie meine neue eMail Adresse: <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ERFE at DE.FESTO.COM</A>
+
+My new email address is: <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">ERFE at DE.FESTO.COM</A>
+
+Festo AG &amp; Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra&#223;e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+<A HREF="http://www.festo.com">http://www.festo.com</A>
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000024.html">[Ethercatmaster-users] Creating Master Error
+</A></li>
+	<LI>Next message: <A HREF="000028.html">[Ethercatmaster-users] Antwort: Re:  Creating Master Error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#25">[ date ]</a>
+              <a href="thread.html#25">[ thread ]</a>
+              <a href="subject.html#25">[ subject ]</a>
+              <a href="author.html#25">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

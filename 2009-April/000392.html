@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Loosing time while sending Frames
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Loosing%20time%20while%20sending%20Frames&In-Reply-To=%3COFEC199195.225DFC01-ONC12575A6.00497A1D-C12575A6.004B0CAA%40datacon.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000391.html">
+   <LINK REL="Next"  HREF="000393.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Loosing time while sending Frames</H1>
+    <B>henning.richter at besi.com</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Loosing%20time%20while%20sending%20Frames&In-Reply-To=%3COFEC199195.225DFC01-ONC12575A6.00497A1D-C12575A6.004B0CAA%40datacon.at%3E"
+       TITLE="[Ethercatmaster-users] Loosing time while sending Frames">henning.richter at besi.com
+       </A><BR>
+    <I>Tue Apr 28 15:39:46 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000391.html">[Ethercatmaster-users] Mailbox messages in Decive	Addressing	Telegram
+</A></li>
+        <LI>Next message: <A HREF="000393.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#392">[ date ]</a>
+              <a href="thread.html#392">[ thread ]</a>
+              <a href="subject.html#392">[ subject ]</a>
+              <a href="author.html#392">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi,
+
+once more i have a question.
+
+In the main function of the EML a created and started a xenomai task.
+The cycle time of this task is set to 250 us.
+During this time I am sending one Frame to my slaves each cycle. In all I
+have 3 Frames (Frame1 = 60 byte, Frame 2 = 1217 byte, Frame3 = 1204 byte).
+
+I am also measuring the time the send command from the low_level_output
+function in ethercat_xenomai_drv.c needs.
+This time is between 5 and 10 us. So passing the Frames to the network
+interface is quite fast.
+So far so good, now the problem:
+Measuring the elapsed time between 2 send commands (also @
+low_level_output) gives me values between 150 us and 350.
+This i too much I think.
+
+I also got this times between the single Frames while sniffing with
+wireshark.
+
+I would be glad about any hint where the time might be lost.
+
+
+Henning
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090428/2e2cd42a/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090428/2e2cd42a/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000391.html">[Ethercatmaster-users] Mailbox messages in Decive	Addressing	Telegram
+</A></li>
+	<LI>Next message: <A HREF="000393.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#392">[ date ]</a>
+              <a href="thread.html#392">[ thread ]</a>
+              <a href="subject.html#392">[ subject ]</a>
+              <a href="author.html#392">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

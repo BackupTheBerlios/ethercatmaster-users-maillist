@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] non-persistent outputs ETG suggestions
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20non-persistent%20outputs%20ETG%20suggestions&In-Reply-To=%3C46BB7133.8030202%40skynet.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000242.html">
+   <LINK REL="Next"  HREF="000239.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] non-persistent outputs ETG suggestions</H1>
+    <B>Tom Panis</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20non-persistent%20outputs%20ETG%20suggestions&In-Reply-To=%3C46BB7133.8030202%40skynet.be%3E"
+       TITLE="[Ethercatmaster-users] non-persistent outputs ETG suggestions">tompanis at skynet.be
+       </A><BR>
+    <I>Thu Aug  9 21:55:31 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000242.html">[Ethercatmaster-users] non-persistent outputs ETG suggestions
+</A></li>
+        <LI>Next message: <A HREF="000239.html">[Ethercatmaster-users] non-persistent outputs problem solved
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#246">[ date ]</a>
+              <a href="thread.html#246">[ thread ]</a>
+              <a href="subject.html#246">[ subject ]</a>
+              <a href="author.html#246">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Roland Tollenaar wrote:
+&gt;<i> Hi Tom,
+</I>&gt;<i>
+</I>&gt;<i> I have sent the xml files for you benefit in the future. If you can 
+</I>&gt;<i> get them onto the list for everyone's benefit that would be great.
+</I>
+Thanks.
+
+&gt;<i>
+</I>&gt;<i> But please note I sent an email to the list explaining that the 
+</I>&gt;<i> problem is now sorted. The ETG feedback made me aware of the fact that 
+</I>&gt;<i> the configuration was wrong after all. Should have been EC_BUFFERED 
+</I>&gt;<i> instead of EC_QUEUED.
+</I>
+Note that the buffer type should only be EC_BUFFERED for the newer 
+modules (I thought the revision number of your EL_2004 module was 
+0x00100000). For the modules with revision number 0, it still needs to 
+be EC_QUEUED. That's the reason why everything worked fine with my 
+modules: they have revision number 0.
+
+&gt;<i>
+</I>&gt;<i> Hope this helps.
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000242.html">[Ethercatmaster-users] non-persistent outputs ETG suggestions
+</A></li>
+	<LI>Next message: <A HREF="000239.html">[Ethercatmaster-users] non-persistent outputs problem solved
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#246">[ date ]</a>
+              <a href="thread.html#246">[ thread ]</a>
+              <a href="subject.html#246">[ subject ]</a>
+              <a href="author.html#246">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

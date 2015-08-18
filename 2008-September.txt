@@ -1,0 +1,84 @@
+From rwatollenaar at gmail.com  Sun Sep  7 12:23:49 2008
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Sun, 07 Sep 2008 12:23:49 +0200
+Subject: [Ethercatmaster-users] EML and ethercat
+Message-ID: <48C3ABB5.8070706@gmail.com>
+
+Hello,
+
+looking into the (non-realtime) port to windows, I am just trying to 
+establish what the basic processes are that EML handels.
+
+Using the specs on the one hand and the code on the other, I come to 
+roughly the following:
+
+1-While slaves are in the init state, EML reads out some information of 
+the slave such as Fixed station address (0x0010) using APRD
+
+2-Then the EML master writes the FMMU settings using APWR
+
+3-Then EML writes the SyncManager settings using APWR
+
+4-Subsequenctly the slaves are set to Preoperational state using APWR
+
+5-The sleves are set into Operational state using APWR
+
+6-txandrx frames are sent using LRW
+
+Can anyone confirm that this is correct or correct me where I am missing 
+something?
+
+Kind regards,
+
+Roland.
+
+
+
+From klaas.gadeyne at fmtc.be  Tue Sep 16 09:27:14 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 16 Sep 2008 09:27:14 +0200 (CEST)
+Subject: [Ethercatmaster-users] [ANNOUNCE] EML will be temporarily
+	unavailable
+Message-ID: <alpine.DEB.1.10.0809121815190.3226@ampere.labo01.fmtc.be>
+
+In 2006, The Flanders' Mechatronics Technology Centre (FMTC) made an
+implementation of the EtherCAT master protocol (further on this
+implementation is reffered to as EML).  FMTC, copyright holder of EML,
+intended to release this software as open source software under the
+GPL or LGPL license.  Since the EtherCAT technology is protected by
+patents, FMTC contacted Beckhoff Automation before releasing the
+source code as open source software.
+
+Beckhoff was willing to license the EtherCAT technology and trade name
+free of charge to FMTC, however they were also concerned to keep the
+"EtherCAT Masters" in the market using the tradename "EtherCAT" and
+not being fully compatible any longer with the latest version of
+EtherCAT specification and technology down to a minimum number.  The
+(L)GPL does not offer a mechanism for such a protection, and therefore
+an extra license agreement (EtherCAT Master License Agreement),
+proposed by Beckhoff, was added to the (L)GPL.  The EtherCAT Master
+License Agreement is a peer-to-peer license between the user of EML
+(Licensee) and Beckhoff and assures that the right to use EtherCAT
+Technology is granted and comes free of charge under condition of
+compatibility of product made by Licensee.
+
+Recently, FMTC has been informed by Beckhoff that there is a possible
+conflict between statements in the EtherCAT Master License Agreement
+and the (L)GPL.
+
+Until this situation has been fully cleared out:
+- FMTC will remove the EML sources from the public server at
+   <http://ethercatmaster.berlios.de>
+- FMTC advises current EML users to contact Beckhoff before continuing
+   development based on EML.
+
+We are actively working on a new license that will solve the issue
+and hope the situation is cleared out quickly.  FMTC's (and
+Beckhoff's) objectives remain the same as in 2006, and therefore FMTC
+has no intention to take the EML sources away permanently.
+
+Best regards,
+
+Klaas Gadeyne
+
+

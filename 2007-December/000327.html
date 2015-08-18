@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] undefined reference to `rt_task_create'
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-December/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20undefined%20reference%20to%20%60rt_task_create%27&In-Reply-To=%3C1196720169.22401.12.camel%40dalat.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000328.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] undefined reference to `rt_task_create'</H1>
+    <B>Dennis Nguyen</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20undefined%20reference%20to%20%60rt_task_create%27&In-Reply-To=%3C1196720169.22401.12.camel%40dalat.org%3E"
+       TITLE="[Ethercatmaster-users] undefined reference to `rt_task_create'">dennisnguy at sbcglobal.net
+       </A><BR>
+    <I>Mon Dec  3 23:16:09 CET 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000328.html">[Ethercatmaster-users] undefined reference to `rt_task_create'
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#327">[ date ]</a>
+              <a href="thread.html#327">[ thread ]</a>
+              <a href="subject.html#327">[ subject ]</a>
+              <a href="author.html#327">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I'm using linux x386 kernel 2.6.23.9, xenomai 2.4-rc7,
+adeos-ipipe-2.6.23-i386-1.11-00, rtnet trunk dated 11/27/2007, eml_trunk
+dated 11/27/2007.
+
+I got the undefined reference to `rt_task_...' errors while trying to
+make EML with Tom's test example:
+undefined reference to `rt_task_create'
+undefined reference to `rt_task_set_periodic'
+undefined reference to `rt_task_start'
+undefined reference to `rt_task_join'
+
+I included: #include &lt;native/task.h&gt;, selected &quot;Native API&quot; as module
+from kernel configuration. I have /usr/xenomai/include/native/ task.h
+and /usr/xenomai/lib/libnative.so files.
+(note: I am being able to run the master_test.)
+
+Do I missing something? How to solve the &quot;undefined reference to
+`rt_task_...'&quot;?
+
+Thanks in advance,
+Dennis
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000328.html">[Ethercatmaster-users] undefined reference to `rt_task_create'
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#327">[ date ]</a>
+              <a href="thread.html#327">[ thread ]</a>
+              <a href="subject.html#327">[ subject ]</a>
+              <a href="author.html#327">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

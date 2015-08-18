@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] EtherCAT Distributed Clocks --&gt; line delay calculation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EtherCAT%20Distributed%20Clocks%20--%3E%20line%0A%20delay%20calculation&In-Reply-To=%3Calpine.DEB.1.10.0807310957210.13257%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000346.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] EtherCAT Distributed Clocks --&gt; line delay calculation</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EtherCAT%20Distributed%20Clocks%20--%3E%20line%0A%20delay%20calculation&In-Reply-To=%3Calpine.DEB.1.10.0807310957210.13257%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] EtherCAT Distributed Clocks --&gt; line delay calculation">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Thu Jul 31 09:59:02 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000346.html">[Ethercatmaster-users] EtherCAT Distributed Clocks --&gt; line delay	calculation
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#347">[ date ]</a>
+              <a href="thread.html#347">[ thread ]</a>
+              <a href="subject.html#347">[ subject ]</a>
+              <a href="author.html#347">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, 30 Jul 2008, Thibaut BOYER wrote:
+&gt;<i> I'm working on the implementation of the DCs on an Ethercat Master.
+</I>&gt;<i> There is an ambiguous calculation... According to the EtherCAT spec :
+</I>&gt;<i>
+</I>&gt;<i>   linedelay = [( port time difference - execution delays - port delays
+</I>&gt;<i>   ) - DelayAA of next slave] / 2.
+</I>&gt;<i>   DelayAA : time the frames needs to enter Port 0 and leave Port 0 on
+</I>&gt;<i>   the way back. E.g. if Port 0 and Port 1 are in use :
+</I>&gt;<i>   DelayAA = Receive Port Delay of Port 0 + Execution Delay +
+</I>&gt;<i>   TimeDifference (BA) + Port Delay Transmit of Port 0
+</I>&gt;<i>   BA = Receive Time on Port 1 - Receive Time on Port 0
+</I>&gt;<i>
+</I>&gt;<i>   * Can anyone please explain to me the subtle difference between
+</I>&gt;<i>     &quot;execution delays&quot; and &quot;Execution Delay&quot;.
+</I>&gt;<i>   * I'd also like to know what the spec means with &quot;port delays&quot; ?
+</I>&gt;<i>         o Is that the time each port need to transmit the frame ?
+</I>&gt;<i>         o Is that the sum of the delays of all ports ?
+</I>&gt;<i>         o Is that the transmission delay between the two ports ? (i.e
+</I>&gt;<i>           a delay due to the electronics components)
+</I>&gt;<i>         o Or it's rather the delays' sum of the 2 ports used in this
+</I>&gt;<i>           calculation ?
+</I>
+Hmm, I only have V1.00 of the spec at hand here, and I can't find the stuff your referring to?
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000346.html">[Ethercatmaster-users] EtherCAT Distributed Clocks --&gt; line delay	calculation
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#347">[ date ]</a>
+              <a href="thread.html#347">[ thread ]</a>
+              <a href="subject.html#347">[ subject ]</a>
+              <a href="author.html#347">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

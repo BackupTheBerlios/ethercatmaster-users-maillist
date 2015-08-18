@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%09framebuilding%20failed.&In-Reply-To=%3C46C0587D.20206%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000252.html">
+   <LINK REL="Next"  HREF="000254.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%09framebuilding%20failed.&In-Reply-To=%3C46C0587D.20206%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Mon Aug 13 15:11:25 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000252.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000254.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#253">[ date ]</a>
+              <a href="thread.html#253">[ thread ]</a>
+              <a href="subject.html#253">[ subject ]</a>
+              <a href="author.html#253">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang,
+
+&gt;<i> The RTCAN assertion. Well, in fact, it can happen when the device goes 
+</I>&gt;<i> bus-off or is stopped while a TX message is pending. The next message 
+</I>&gt;<i> after (re-)start will the trigger this message. This is a bug but it 
+</I>&gt;<i> should _not_ harm (either I remove the assertion or I reset properly the 
+</I>&gt;<i> value of dev-&gt;tx_socket).
+</I>Clear. Thanks.
+
+
+&gt;<i> The first one should be pretty clear. The rtskb pool seems to be exhausted.
+</I>Sorry if this is not clear to me. What is the rtskb pool and what are 
+the implications of it being full?
+
+&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:/var/log# cat /proc/rtcan/devices
+</I>&gt;&gt;<i> Name___________ _Baudrate State___ TX_Counter RX_Counter ____Errors
+</I>&gt;&gt;<i> rtcan0          undefined stopped           0          0          0
+</I>&gt;&gt;<i> rtcan1          undefined stopped           0          0          0
+</I>&gt;&gt;<i> rtcan2            1000000 active     16850473   28691571    2367116
+</I>&gt;<i> 
+</I>&gt;<i> Oops, that much errors?
+</I>eeuuh yes, I started up can after having had it disabled for a very long 
+time while I was working on the ethercat. I seem to have forgotten that 
+CAN is not wireless, forgot to plug in the bus. So I think that those 
+errors were picked up then, they did not seem to increase later on.
+
+
+&gt;&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;&gt;<i> rt_dev_recv: aborted because socket was closed
+</I>&gt;<i> 
+</I>&gt;<i> You should handle this error properly.
+</I>You are right. I think I am not closing the threads in the correct 
+sequence, not sure I know how to yet. But can this be the cause of my 
+problem? Where is the conflict/ complication arising between rtcan and 
+eml. I do understand that this is an almost impossible question to find 
+an answer to over two separate lists. :(
+
+
+&gt;<i> 
+</I>&gt;<i> Hm, seems that your shutdown is not implemented properly.
+</I>I'd say this assessment is rather accurate. Will look into it:)
+
+Roland
+
+&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000252.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000254.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input	framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#253">[ date ]</a>
+              <a href="thread.html#253">[ thread ]</a>
+              <a href="subject.html#253">[ subject ]</a>
+              <a href="author.html#253">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Choosing the right master platform
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Choosing%20the%20right%20master%20platform&In-Reply-To=%3Calpine.DEB.1.10.0808181138330.12502%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000355.html">
+   <LINK REL="Next"  HREF="000357.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Choosing the right master platform</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Choosing%20the%20right%20master%20platform&In-Reply-To=%3Calpine.DEB.1.10.0808181138330.12502%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] Choosing the right master platform">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Mon Aug 18 11:44:26 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000355.html">[Ethercatmaster-users] Choosing the right master platform
+</A></li>
+        <LI>Next message: <A HREF="000357.html">[Ethercatmaster-users] Choosing the right master platform
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#356">[ date ]</a>
+              <a href="thread.html#356">[ thread ]</a>
+              <a href="subject.html#356">[ subject ]</a>
+              <a href="author.html#356">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 12 Aug 2008, Klaas Gadeyne wrote:
+&gt;<i> [forwarding an email I got personally, there seem to be some issues with the mailman configuration @ berlios]
+</I>&gt;<i>
+</I>&gt;<i> Hi EtherCAT masters!
+</I>&gt;<i>
+</I>&gt;<i> I am looking for the optimum master implementation for a productive
+</I>&gt;<i> automation environment.
+</I>&gt;<i>
+</I>&gt;<i> Due to our requirements we need to go down to the area of 100us cycle time.
+</I>&gt;<i>
+</I>&gt;<i> Has anybody experience with EML together with the RT_PREEMPT kernel at all?
+</I>
+The &quot;plain linux&quot; port currently uses the linux socket stack.  That will probably be an issue given the cycle times you describe above (you might want to check the xenomai/rtnet-users mailinglist archives for more info about this)
+
+&gt;<i> Does somebody use it in an productive environment?
+</I>
+We are a research centre, but some users seem to use it in a production environment indeed.  They might speak up now :-)
+
+&gt;<i> Is ist realistic to do the job with it at all?
+</I>&gt;<i> Is it more realistic / even necessary / possible at all to do it with
+</I>&gt;<i> Xenomai instead?
+</I>
+Given the cycle times above, I think xenomai would be a good choice.  (or eCos, that is)
+
+&gt;<i> Or is it necessary/recommended to have the master in hardware for such a
+</I>&gt;<i> scenario?
+</I>
+No.
+
+&gt;<i> What are your cycle times, frame sizes, jitters, cpu loads and which
+</I>&gt;<i> hardware are you working on?
+</I>
+I will leave those user experiences to the real users...
+
+&gt;<i> PS: In my first tries (on a plain ubuntu as well as with RT_PREEMPT) I saw
+</I>&gt;<i> a latency peak of about one second every other second.
+</I>&gt;<i> Since the EML code does not do much magic when sending a frame this must be
+</I>&gt;<i> buried inside the network driver or even below.
+</I>&gt;<i> Did you see something similar during your work?
+</I>
+This does not occur with the xenomai version, although a one second latency peak is _REALLY HUGE_!
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000355.html">[Ethercatmaster-users] Choosing the right master platform
+</A></li>
+	<LI>Next message: <A HREF="000357.html">[Ethercatmaster-users] Choosing the right master platform
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#356">[ date ]</a>
+              <a href="thread.html#356">[ thread ]</a>
+              <a href="subject.html#356">[ subject ]</a>
+              <a href="author.html#356">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

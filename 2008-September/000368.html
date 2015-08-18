@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] EML and ethercat
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EML%20and%20ethercat&In-Reply-To=%3C48C3ABB5.8070706%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000369.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] EML and ethercat</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EML%20and%20ethercat&In-Reply-To=%3C48C3ABB5.8070706%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] EML and ethercat">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Sun Sep  7 12:23:49 CEST 2008</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000369.html">[Ethercatmaster-users] [ANNOUNCE] EML will be temporarily	unavailable
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#368">[ date ]</a>
+              <a href="thread.html#368">[ thread ]</a>
+              <a href="subject.html#368">[ subject ]</a>
+              <a href="author.html#368">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+looking into the (non-realtime) port to windows, I am just trying to 
+establish what the basic processes are that EML handels.
+
+Using the specs on the one hand and the code on the other, I come to 
+roughly the following:
+
+1-While slaves are in the init state, EML reads out some information of 
+the slave such as Fixed station address (0x0010) using APRD
+
+2-Then the EML master writes the FMMU settings using APWR
+
+3-Then EML writes the SyncManager settings using APWR
+
+4-Subsequenctly the slaves are set to Preoperational state using APWR
+
+5-The sleves are set into Operational state using APWR
+
+6-txandrx frames are sent using LRW
+
+Can anyone confirm that this is correct or correct me where I am missing 
+something?
+
+Kind regards,
+
+Roland.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000369.html">[Ethercatmaster-users] [ANNOUNCE] EML will be temporarily	unavailable
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#368">[ date ]</a>
+              <a href="thread.html#368">[ thread ]</a>
+              <a href="subject.html#368">[ subject ]</a>
+              <a href="author.html#368">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

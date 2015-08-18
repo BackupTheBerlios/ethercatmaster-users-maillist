@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] how to set outputs ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20how%20to%20set%20outputs%20%3F&In-Reply-To=%3C48B2B312.6020908%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000362.html">
+   <LINK REL="Next"  HREF="000364.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] how to set outputs ?</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20how%20to%20set%20outputs%20%3F&In-Reply-To=%3C48B2B312.6020908%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] how to set outputs ?">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Mon Aug 25 15:26:42 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000362.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+        <LI>Next message: <A HREF="000364.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#363">[ date ]</a>
+              <a href="thread.html#363">[ thread ]</a>
+              <a href="subject.html#363">[ subject ]</a>
+              <a href="author.html#363">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Frederik,
+
+the problem of the outputs coming up and then going off immediately is 
+exactly the problem I had. I solved this in the manner described 
+earlier, namely going from queued to buffered. The problem is that 
+Beckhoff change their hardware which is why the Queued which Tom was 
+using did not work for me. The fact that you have a problem that has the 
+same sympthoms I was observing would lead me to expect that you should 
+be able to solve the problem in the same manner. I am rather surprised 
+that you report this not to be the case.
+
+Incidentally, the frames as sent by TwinCat were not identical to the 
+frames dispatched by EML. From what I could gather, EML was wusing 
+logical read-write, whereas Twincat was operating Logical read and 
+logical write. Perhaps this explains the mismatch you are seeing? I have 
+not noticed messages that were too short IIRC.
+
+
+
+
+Roland.
+
+
+Frederik Bayart wrote:
+&gt;<i>  
+</I>&gt;<i> Hallo Roland,
+</I>&gt;<i> 
+</I>&gt;<i> Using exact the same settings doesn't solve the problem.
+</I>&gt;<i> I changed my source a little bit : 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 		unsigned char msg[128] ;
+</I>&gt;<i>             for(int i = 0 ; i &lt; sizeof(msg); ++i) msg[i] = i;
+</I>&gt;<i> 
+</I>&gt;<i> 		if(AL-&gt;isReady()) { 
+</I>&gt;<i> 				EM-&gt;txandrx_PD(sizeof(msg),msg);
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> The logical start address of the EL2008 is now 0x10003 (See configuration
+</I>&gt;<i> below).
+</I>&gt;<i> I see now that the outputs are activated very briefly and are disabled
+</I>&gt;<i> immediately. Outp 1 and 2 are enabled briefly, so this 
+</I>&gt;<i> is corresponding indeed to logical address 0x10003 where 0x3 is written to
+</I>&gt;<i> according to the code above.
+</I>&gt;<i> I installed a wireshark version with the ethercat plugin. When I take a
+</I>&gt;<i> network dump, I see that the master is sending malformed packets : see pcap
+</I>&gt;<i> file in attachment. The messages are too short although I have increased my
+</I>&gt;<i> msg to 128 bytes.
+</I>&gt;<i> I don't know whether this is a problem of the master or the wireshark
+</I>&gt;<i> plugin.
+</I>&gt;<i> 
+</I>&gt;<i> Any suggestion ?
+</I>&gt;<i> 
+</I>&gt;<i> Frederik
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Configuration of the EL2008 :
+</I>&gt;<i> 
+</I>&gt;<i> //SlaveConfig EL2008
+</I>&gt;<i> EtherCAT_FMMU_Config fmmu_config_EL2008_3(1);
+</I>&gt;<i> EC_FMMU fmmu_EL2008_3(0x00010003      //logical start address
+</I>&gt;<i>                      ,1               //length
+</I>&gt;<i>                      ,0               //logical start bit
+</I>&gt;<i>                      ,7               //logical end bit
+</I>&gt;<i>                      ,0x0f00          //physical start address
+</I>&gt;<i>                      ,0               //physical start bit
+</I>&gt;<i>                      ,false           //read enable
+</I>&gt;<i>                      ,true            //write enable
+</I>&gt;<i>                      ,true            //channel enable
+</I>&gt;<i>                      );
+</I>&gt;<i> EtherCAT_PD_Config pd_config_EL2008_3(1);
+</I>&gt;<i> EC_SyncMan syncman_EL2008_3(0x0f00                  //physical start address
+</I>&gt;<i>                            ,1                       //length
+</I>&gt;<i>                            ,EC_BUFFERED             //buffer type
+</I>&gt;<i> {EC_BUFFERED | EC_QUEUED}
+</I>&gt;<i>                            ,EC_WRITTEN_FROM_MASTER  //direction
+</I>&gt;<i> {EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+</I>&gt;<i>                            ,false                   //AL event enable
+</I>&gt;<i>                            ,true                    //watchdog enable
+</I>&gt;<i>                            ,false                   //write event
+</I>&gt;<i>                            ,false                   //read event
+</I>&gt;<i>                            ,false                   //watchdog trigger
+</I>&gt;<i>                            ,false                   //queued state : not
+</I>&gt;<i> used for buffer type EC_BUFFERED
+</I>&gt;<i>                            ,EC_FIRST_BUFFER         //buffered state
+</I>&gt;<i> {EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER | EC_LOCKED_BUFFER}
+</I>&gt;<i>                            ,true                    //channel enable
+</I>&gt;<i>                            );
+</I>&gt;<i> EtherCAT_SlaveConfig EC_EL2008_3(0x07d83052              //product code
+</I>&gt;<i>                                 ,0x00100000              //revision
+</I>&gt;<i>                                 ,0x03ed                  //fixed station
+</I>&gt;<i> address
+</I>&gt;<i>                                 ,&amp;fmmu_config_EL2008_3
+</I>&gt;<i>                                 ,&amp;pd_config_EL2008_3
+</I>&gt;<i>                                 );
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000362.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+	<LI>Next message: <A HREF="000364.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#363">[ date ]</a>
+              <a href="thread.html#363">[ thread ]</a>
+              <a href="subject.html#363">[ subject ]</a>
+              <a href="author.html#363">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

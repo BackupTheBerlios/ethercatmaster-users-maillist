@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] BeckHoff EL 4132 configuration parameters.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20BeckHoff%20EL%204132%20configuration%20parameters.&In-Reply-To=%3Cbc4264770707130309i4b2dd5b4v4e6bca26819442ad%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000150.html">
+   <LINK REL="Next"  HREF="000137.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] BeckHoff EL 4132 configuration parameters.</H1>
+    <B>roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20BeckHoff%20EL%204132%20configuration%20parameters.&In-Reply-To=%3Cbc4264770707130309i4b2dd5b4v4e6bca26819442ad%40mail.gmail.com%3E"
+       TITLE="[Ethercatmaster-users] BeckHoff EL 4132 configuration parameters.">rolandtollenaar at gmail.com
+       </A><BR>
+    <I>Fri Jul 13 12:09:29 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000150.html">[Ethercatmaster-users] order of consequence?
+</A></li>
+        <LI>Next message: <A HREF="000137.html">[Ethercatmaster-users] BeckHoff EL 4132 configuration	parameters.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#134">[ date ]</a>
+              <a href="thread.html#134">[ thread ]</a>
+              <a href="subject.html#134">[ subject ]</a>
+              <a href="author.html#134">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I have managed to configure for the EL4132, the master_test code is
+posted here for anyone who wants to know the parameters for this
+module and does not have twincat to find them either.
+
+Regards,
+
+Roland.
+
+///SlaveConfig EK1100 [Bus Coupler]
+EtherCAT_FMMU_Config fmmu_config_EK1100(0);
+EtherCAT_PD_Config pd_config_EK1100(0);
+EtherCAT_SlaveConfig
+EC_EK1100(0x044c2c52,0x00010000,0x03e9,&amp;fmmu_config_EK1100,&amp;pd_config_EK1100);
+
+///SlaveConfig EL2004(1) [Digital Output]
+//[A slave configuration consists of a fmmu-config, a process data
+(pd) config and optionally a mailbox config]
+//fmmu (fieldbus memory management unit) config container (handle?)
+EtherCAT_FMMU_Config fmmu_config_EL2004_1(1);//arg=number of FMMU's.
+Some modules take more than one if e.g. they have in and outputs.
+//not sure what this is doing (Seems to be actual fmmu config which
+gets linked to the handle created above)
+EC_FMMU fmmu0_EL2004_1(0x0001000A,1,0,3,0x0F00,0,false,true,true);
+//logical start address, # bytes used, start bit, end bit, physical
+address, physical start bit, read-enable, write-enable,
+activate-module
+//process data config (Again seems to be a handle)
+EtherCAT_PD_Config pd_config_EL2004_1(1); //argument=length
+//synchronisation manager
+EC_SyncMan syncman0_EL2004_1(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+//compile the slave configuration
+EtherCAT_SlaveConfig
+EC_EL2004_1(0x7d43052,0x100000,0x03ec,&amp;fmmu_config_EL2004_1,&amp;pd_config_EL2004_1);
+//product code, revision number, physical address, FMMU-configuration
+instance, process data configuration instance, [optional mailbox
+configutation]
+
+///SlaveConfig EL2004(2) [Digital Output]
+EtherCAT_FMMU_Config fmmu_config_EL2004_2(1);
+EC_FMMU fmmu0_EL2004_2(0x0001000A,1,4,7,0x03ed,0,false,true,true);
+EtherCAT_PD_Config pd_config_EL2004_2(1);
+EC_SyncMan syncman0_EL2004_2(0x03ed,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL2004_2(0x7d43052,0x100000,0x03ed,&amp;fmmu_config_EL2004_2,&amp;pd_config_EL2004_2);
+
+///SlaveConfig EL2004(3) [Digital Output]
+EtherCAT_FMMU_Config fmmu_config_EL2004_3(1);
+EC_FMMU fmmu0_EL2004_3(0x0001000B,1,0,3,0x0F00,0,false,true,true);
+EtherCAT_PD_Config pd_config_EL2004_3(1);
+EC_SyncMan syncman0_EL2004_3(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL2004_3(0x7d43052,0x100000,0x03ee,&amp;fmmu_config_EL2004_3,&amp;pd_config_EL2004_3);
+
+///SlaveConfig EL2004(4) [Digital Output]
+EtherCAT_FMMU_Config fmmu_config_EL2004_4(1);
+EC_FMMU fmmu0_EL2004_4(0x0001000B,1,4,7,0x0F00,0,false,true,true);
+EtherCAT_PD_Config pd_config_EL2004_4(1);
+EC_SyncMan syncman0_EL2004_4(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL2004_4(0x7d43052,0x100000,0x03ef,&amp;fmmu_config_EL2004_4,&amp;pd_config_EL2004_4);
+
+
+///SlaveConfig EL1014(1) [Digital Input]
+EtherCAT_FMMU_Config fmmu_config_EL1014_1(1);
+EC_FMMU fmmu0_EL1014_1(0x0001000C,1,0,3,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_1(1);
+EC_SyncMan syncman0_EL1014_1(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL1014_1(0x03F63052,0x100000,0x03f0,&amp;fmmu_config_EL1014_1,
+&amp;pd_config_EL1014_1);
+
+///SlaveConfig EL1014(2) [Digital Input]
+EtherCAT_FMMU_Config fmmu_config_EL1014_2(1);
+EC_FMMU fmmu0_EL1014_2(0x0001000C,1,4,7,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_2(1);
+EC_SyncMan syncman0_EL1014_2(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL1014_2(0x03F63052,0x100000,0x03f1,&amp;fmmu_config_EL1014_2,
+&amp;pd_config_EL1014_2);
+
+///SlaveConfig EL1014(3) [Digital Input]
+EtherCAT_FMMU_Config fmmu_config_EL1014_3(1);
+EC_FMMU fmmu0_EL1014_3(0x0001000D,1,0,3,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_3(1);
+EC_SyncMan syncman0_EL1014_3(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL1014_3(0x03F63052,0x100000,0x03f2,&amp;fmmu_config_EL1014_3,
+&amp;pd_config_EL1014_3);
+
+///SlaveConfig EL1014(4) [Digital Input]
+EtherCAT_FMMU_Config fmmu_config_EL1014_4(1);
+EC_FMMU fmmu0_EL1014_4(0x0001000D,1,4,7,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_4(1);
+EC_SyncMan syncman0_EL1014_4(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL1014_4(0x03F63052,0x100000,0x03f3,&amp;fmmu_config_EL1014_4,
+&amp;pd_config_EL1014_4);
+
+
+///SlaveConfig EL4132
+EtherCAT_FMMU_Config fmmu_config_EL4132(2);
+EC_FMMU fmmu0_EL4132(0x00080000,1,0,0,0x080D,0x00,true,false,true);
+EC_FMMU fmmu1_EL4132(0x00010003,4,0,7,0x1000,0x00,false,true,true);
+
+EC_SyncMan syncman_mbx0_EL4132(0x1800,246,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan syncman_mbx1_EL4132(0x18f6,246,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_MbxConfig mbx_conf_EL4132 = {syncman_mbx0_EL4132, syncman_mbx1_EL4132};
+
+EtherCAT_PD_Config pd_config_EL4132(2);
+EC_SyncMan syncman0_EL4132(0x1000,4,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan syncman1_EL4132(0x1100,0,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+
+EtherCAT_SlaveConfig
+EC_EL4132(0x10243052,0x00,0x03f4,&amp;fmmu_config_EL4132,&amp;pd_config_EL4132,&amp;mbx_conf_EL4132);
+
+
+
+
+static void init_slave_db() {
+	///create slave database	
+	EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(10);
+//argument=#slaves
+
+	//EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(2);
+	//fmmu_config_EL4102[0] = fmmu0_EL4102;
+	//fmmu_config_EL4102[1] = fmmu1_EL4102;
+	//pd_config_EL4102[0] = syncman0_EL4102;
+	//pd_config_EL4102[1] = syncman1_EL4102;
+
+	///Connect actual fmmu and process data config to respective handles
+for EL 2004 (DO)
+	fmmu_config_EL2004_1[0] = fmmu0_EL2004_1;
+	fmmu_config_EL2004_2[0] = fmmu0_EL2004_2;
+	fmmu_config_EL2004_3[0] = fmmu0_EL2004_3;
+	fmmu_config_EL2004_4[0] = fmmu0_EL2004_4;
+	pd_config_EL2004_1[0]   = syncman0_EL2004_1;
+	pd_config_EL2004_2[0]   = syncman0_EL2004_2;
+	pd_config_EL2004_3[0]   = syncman0_EL2004_3;
+	pd_config_EL2004_4[0]   = syncman0_EL2004_4;
+	
+	///Connect actual fmmu and process data config to respective handles
+for EL 1014 (DI)
+	fmmu_config_EL1014_1[0] =fmmu0_EL1014_1;
+	fmmu_config_EL1014_2[0] =fmmu0_EL1014_2;
+	fmmu_config_EL1014_3[0] =fmmu0_EL1014_3;
+	fmmu_config_EL1014_4[0] =fmmu0_EL1014_4;
+	pd_config_EL1014_1[0]   =syncman0_EL1014_1;
+	pd_config_EL1014_2[0]   =syncman0_EL1014_2;
+	pd_config_EL1014_3[0]   =syncman0_EL1014_3;
+	pd_config_EL1014_4[0]   =syncman0_EL1014_4;
+
+	///Connect actual config to fmmu and processdata config handle for
+EL4132 (analog output modules)
+	fmmu_config_EL4132[0] = fmmu0_EL4132;
+	fmmu_config_EL4132[1] = fmmu1_EL4132;
+	pd_config_EL4132[0]   = syncman0_EL4132;
+	pd_config_EL4132[1]   = syncman1_EL4132;	
+
+	//slave_db-&gt;set_conf(&amp;EC_EL4102,0);
+
+	///Commit the slave config objects to the slave database
+	slave_db-&gt;set_conf(&amp;EC_EK1100,0);
+	slave_db-&gt;set_conf(&amp;EC_EL2004_1,1);
+	slave_db-&gt;set_conf(&amp;EC_EL2004_2,2);
+	slave_db-&gt;set_conf(&amp;EC_EL2004_3,3);
+	slave_db-&gt;set_conf(&amp;EC_EL2004_4,4);
+	slave_db-&gt;set_conf(&amp;EC_EL1014_1,5);
+	slave_db-&gt;set_conf(&amp;EC_EL1014_2,6);
+	slave_db-&gt;set_conf(&amp;EC_EL1014_3,7);
+	slave_db-&gt;set_conf(&amp;EC_EL1014_4,8);
+	slave_db-&gt;set_conf(&amp;EC_EL4132,9);
+	
+}
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000150.html">[Ethercatmaster-users] order of consequence?
+</A></li>
+	<LI>Next message: <A HREF="000137.html">[Ethercatmaster-users] BeckHoff EL 4132 configuration	parameters.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#134">[ date ]</a>
+              <a href="thread.html#134">[ thread ]</a>
+              <a href="subject.html#134">[ subject ]</a>
+              <a href="author.html#134">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

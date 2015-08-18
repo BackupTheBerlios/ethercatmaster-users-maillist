@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Slaves parameters !!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Slaves%20parameters%20%21%21&In-Reply-To=%3C469BD205.6060901%40skynet.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000136.html">
+   <LINK REL="Next"  HREF="000140.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Slaves parameters !!</H1>
+    <B>Tom Panis</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Slaves%20parameters%20%21%21&In-Reply-To=%3C469BD205.6060901%40skynet.be%3E"
+       TITLE="[Ethercatmaster-users] Slaves parameters !!">tompanis at skynet.be
+       </A><BR>
+    <I>Mon Jul 16 22:16:05 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000136.html">[Ethercatmaster-users] Slaves parameters !!
+</A></li>
+        <LI>Next message: <A HREF="000140.html">[Ethercatmaster-users] Slaves Parameters!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#154">[ date ]</a>
+              <a href="thread.html#154">[ thread ]</a>
+              <a href="subject.html#154">[ subject ]</a>
+              <a href="author.html#154">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+said harti wrote:
+&gt;<i>
+</I>&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I try to set some data on the EL4102 (5V for example) and the EL2004 
+</I>&gt;<i> modules (set to 0xFF), my master_test code modification is
+</I>&gt;<i> posted here, the program turn without problem, but i don't see LEDs 
+</I>&gt;<i> modules switch on,
+</I>&gt;<i>
+</I>&gt;<i> Can you please explain me the problem ?
+</I>
+I see in the fmmu configuration of the EL_2004 module, you set the 
+logical address at 0x00010004, but in your local buffer (named msg), you 
+but the process data for this module in the 3rd byte. You should make a 
+bigger buffer and put it in the 5th byte. This because the local buffer 
+corresponds with the logical memory starting from address 0x00010000. 
+With your current configuration, the 3rd and 4th byte of the local 
+buffer are mend for the 2nd channel of the analog output EL_4102 (2 
+bytes for each channel). I talked about this in another message, earlier 
+this day. You might want to take a look there.
+
+But I can't figure out why you can't measure 5V at the first analog 
+output, the configuration seems to be alright and the first two bytes of 
+the local buffer are indeed mend for the 1st channel of the analog output.
+A reason might be, that the program doesn't run long enough. When the 
+program stops, the outputs are back to 0V. So you'll have to measure 
+quick :-). But you should better put it in a periodic thread. I also 
+talked about this in another message, earlier this day. You might want 
+to take a look there.
+&gt;<i>
+</I>&gt;<i> i have compared all parameters for this
+</I>&gt;<i> modules with the twincat tools, and there is no difference.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>         ///Set Channel 1 to 5V
+</I>&gt;<i>         unsigned char msg[3] = {0xff, 0x3f, 0xff};///
+</I>&gt;<i>         if(AL-&gt;isReady()) {
+</I>&gt;<i>
+</I>&gt;<i>             printf(&quot;Test: Set Channel 1 to 5V: \n\n&quot;);
+</I>&gt;<i>             printf(&quot;Test: set the EL2004 to 1: \n\n&quot;);///
+</I>&gt;<i>
+</I>&gt;<i>             int count = 0;
+</I>&gt;<i>             while(count&lt;100000) {
+</I>&gt;<i>                 EM-&gt;txandrx_PD(sizeof(msg),msg);
+</I>&gt;<i>                 count++;
+</I>&gt;<i>             }
+</I>&gt;<i>             printf(&quot;Test done.\n&quot;);
+</I>&gt;<i>         }
+</I>&gt;<i>         
+</I>&gt;<i>         close_socket(ni);
+</I>&gt;<i>         
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000136.html">[Ethercatmaster-users] Slaves parameters !!
+</A></li>
+	<LI>Next message: <A HREF="000140.html">[Ethercatmaster-users] Slaves Parameters!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#154">[ date ]</a>
+              <a href="thread.html#154">[ thread ]</a>
+              <a href="subject.html#154">[ subject ]</a>
+              <a href="author.html#154">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

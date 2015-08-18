@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Delivery Thread Priority???
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Delivery%20Thread%20Priority%3F%3F%3F&In-Reply-To=%3CPine.LNX.4.64.0704121542100.21235%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000061.html">
+   <LINK REL="Next"  HREF="000066.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Delivery Thread Priority???</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Delivery%20Thread%20Priority%3F%3F%3F&In-Reply-To=%3CPine.LNX.4.64.0704121542100.21235%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] Delivery Thread Priority???">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Thu Apr 12 15:56:59 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000061.html">[Ethercatmaster-users] Delivery Thread Priority???
+</A></li>
+        <LI>Next message: <A HREF="000066.html">[Ethercatmaster-users] Antwort: Re:  Delivery Thread Priority???
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#64">[ date ]</a>
+              <a href="thread.html#64">[ thread ]</a>
+              <a href="subject.html#64">[ subject ]</a>
+              <a href="author.html#64">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 12 Apr 2007, Felix Erkert wrote:
+&gt;<i> hello,
+</I>&gt;<i>
+</I>&gt;<i> in the eCos config tool you have to configurate the ethercat master. there
+</I>&gt;<i> are thread priority option. first for the delivery thread and secondly for
+</I>&gt;<i> the route thread priority. In eCos i can give thread priorities from 1 to
+</I>&gt;<i> 32. 1 is the lowest and 32 the highest! Is this right? Which prioritiy
+</I>&gt;<i> should the delivery thread and the route thread have?
+</I>
+No
+&lt;<A HREF="http://ecos.sourceware.org/docs-latest/ref/kernel-thread-create.html">http://ecos.sourceware.org/docs-latest/ref/kernel-thread-create.html</A>&gt;
+
+the delivery thread should obviously have a _higher_ priority than the
+route thread (which is the case in the default configuration).
+
+&gt;<i> I ask me why the ethercat master doesn&#180;t detect a received ethercat frame.
+</I>&gt;<i> The ethercat slave sends a APRD frame back with increased working counter.
+</I>&gt;<i> I thing if the ethercat master increments the working counter, he gets a
+</I>
+Do you mean &quot;ethercat slave&quot;?
+
+&gt;<i> correct ethercat frame and sends the frame correct forward (with working
+</I>&gt;<i> counter + 1).
+</I>
+&gt;<i> if i send a ARP or an other ethernet frame to the slave he recognized the
+</I>&gt;<i> frame and said it is a wrong ethercat frame? There are my logging by
+</I>&gt;<i> sending any ethernet frames:
+</I>&gt;<i>
+</I>&gt;<i> Creating Master
+</I>&gt;<i> lan91cxx_can_send
+</I>&gt;<i> lan91cxx_send
+</I>&gt;<i> lan91cxx_send: allocated packet 0000
+</I>&gt;<i> lan91cxx_isr
+</I>&gt;<i> lan91cxx_deliver
+</I>&gt;<i> lan91cxx_TxEvent
+</I>&gt;<i> lan91cxx_TxEvent:START: fifo 8000 ints 0100
+</I>&gt;<i> lan91cxx_TxEvent:END: fifo 8080 ints 010c
+</I>&gt;<i> lan91cxx_send:END: ints at TX: 010c
+</I>&gt;<i> low_level_input(): Waiting for semafore, timeout = 2 ticks  =&gt; there he waits for a correct incoming ethercat frame
+</I>&gt;<i> lan91cxx_isr                                    =&gt; there he gets any other
+</I>&gt;<i> ethernet frame
+</I>&gt;<i> lan91cxx_deliver
+</I>&gt;<i> lan91cxx_RxEvent
+</I>&gt;<i> RxEvent - FIFOs: 0x0080
+</I>&gt;<i> RxEvent good rx - stat: 0x507f, len: 0x00fb
+</I>&gt;<i> lan91cxx_recv
+</I>&gt;<i> lan91cxx_recv : mlen fb, plen fb
+</I>&gt;<i> low_level_input: No EtherCAT msg!               =&gt; the ethercat master recognize that it isn&#180;t a correct ethercat frame
+</I>&gt;<i> low_level_txandrx: receiving failed
+</I>&gt;<i> DLL::txandrx() Error
+</I>&gt;<i> Error sending counter frame
+</I>&gt;<i> Something went wrong while scanning network
+</I>&gt;<i> EtherCAT_AL:: Can't init network
+</I>
+This seems like the right behaviour to me?  And this means the
+delivery thread _is_ woken up when an ethernet frame arrives...
+I don't really understand what you did I guess...  According to me,
+everything seems to workout fine.  If an ethernet frame is received,
+the delivery thread is woken up and it checks if the received message
+is an etherCAT message (which is not the case).  If (as you reported
+before), your slave would now send a true etherCAT message back,
+everything should work out fine?
+
+ps.  You _do_ use the NIC only for etherCAT traffic I presume...
+
+Klaas
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000061.html">[Ethercatmaster-users] Delivery Thread Priority???
+</A></li>
+	<LI>Next message: <A HREF="000066.html">[Ethercatmaster-users] Antwort: Re:  Delivery Thread Priority???
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#64">[ date ]</a>
+              <a href="thread.html#64">[ thread ]</a>
+              <a href="subject.html#64">[ subject ]</a>
+              <a href="author.html#64">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

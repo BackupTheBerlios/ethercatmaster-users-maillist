@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] some questions about the usage of eml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3C4688CDA2.5070609%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000118.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] some questions about the usage of eml</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3C4688CDA2.5070609%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] some questions about the usage of eml">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Mon Jul  2 12:04:18 CEST 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000118.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#117">[ date ]</a>
+              <a href="thread.html#117">[ thread ]</a>
+              <a href="subject.html#117">[ subject ]</a>
+              <a href="author.html#117">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I am having problems when configuring for the 4 modules instead of only 
+2. Correcting the version number does allow the first two modules to 
+successfully configure in the modified master-test program, and since I 
+am using the configure snippet Tom posted this implies that the error 
+might be in the arguments I supply to the EC_FMMU object constructor.
+
+Must I supply a new logical starting address for the 3rd module (say EL 
+2004) If not then am I correct in assuming that the length, start-bit 
+and end-bit arguments are the same as for modules 1 and 2? Will the 
+physical address and start-bit be the same?
+
+Or might my problem be else-where?
+
+Is it possible to suggest what I am possibly wrong from the above? I 
+cannot post my code snippet now (don';t have access to the code from here).
+
+Regards,
+
+Roland
+
+
+
+
+
+
+Tom Panis wrote:
+&gt;<i> 
+</I>&gt;<i> roland Tollenaar wrote:
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> After having read and not understood some documentation from the ETG
+</I>&gt;&gt;<i> site (yes yes I am a proud member:) I decided I was ready to attempt
+</I>&gt;&gt;<i> some modifications to master-test.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I don;t have module 4102 so I commented those sections out only
+</I>&gt;&gt;<i> bringing up EK1100. This allows the program to execute without
+</I>&gt;&gt;<i> crashing. Great.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> For the other 9 slaves on my network I get the errors:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> EtherCAT_SlaveDb: No such Config, returning NULL!
+</I>&gt;&gt;<i> EC_AL Warning: No such slave in db, creating dummy slave
+</I>&gt;&gt;<i> AL creating SlaveHandler: pos=4, Product Code=0x7d43052, rev=0x100000
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> where &quot;pos&quot; runs up from 0 to 9 (0 is the buscoupler and returns success:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, rev=0x10000
+</I>&gt;&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> When creating a slave handler the AL will search for the appropriate 
+</I>&gt;<i> configurations in the ethercat slave database. This search is based on 
+</I>&gt;<i> the product code and the revision number. When there isn't a match, 
+</I>&gt;<i> there will be a dummy created. I see in your output that the product 
+</I>&gt;<i> code is right, but the revision numbers don't match. The revision number 
+</I>&gt;<i> of my modules was 0, your modules have 0x100000 as rev number (You can 
+</I>&gt;<i> find that in the output, when there's a dummy created). So you have to 
+</I>&gt;<i> change that in the slave configurations. For a EL2004 module, that would 
+</I>&gt;<i> be something like this:
+</I>&gt;<i> 
+</I>&gt;<i> EtherCAT_SlaveConfig 
+</I>&gt;<i> EC_EL2004_2(0x7d43052,0x100000,1005,&amp;fmmu_config_EL2004_2,&amp;pd_config_EL2004_2);
+</I>&gt;&gt;<i> I decided to copy past some of the configurations for which I do have
+</I>&gt;&gt;<i> modules that Tom has posted on the list in order to get more slaves
+</I>&gt;&gt;<i> connected. However I am not having much luck.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Here is the master-test code as it looks now, below it the full output
+</I>&gt;&gt;<i> of the program.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Any advice as to what I am doing wrong will be appreciated enormously.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> I also see you have 4 EL2004 modules, so you have to make 4 different 
+</I>&gt;<i> configurations for them. Each module must have a configuration. My 
+</I>&gt;<i> tutorial may help you with this.
+</I>&gt;<i> 
+</I>&gt;<i> Tom
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000118.html">[Ethercatmaster-users] some questions about the usage of eml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#117">[ date ]</a>
+              <a href="thread.html#117">[ thread ]</a>
+              <a href="subject.html#117">[ subject ]</a>
+              <a href="author.html#117">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

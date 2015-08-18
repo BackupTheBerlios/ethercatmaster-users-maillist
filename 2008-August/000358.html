@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Choosing the right master platform
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Choosing%20the%20right%20master%20platform&In-Reply-To=%3C48ABB79B.3090700%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000357.html">
+   <LINK REL="Next"  HREF="000359.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Choosing the right master platform</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Choosing%20the%20right%20master%20platform&In-Reply-To=%3C48ABB79B.3090700%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] Choosing the right master platform">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Wed Aug 20 08:20:11 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000357.html">[Ethercatmaster-users] Choosing the right master platform
+</A></li>
+        <LI>Next message: <A HREF="000359.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#358">[ date ]</a>
+              <a href="thread.html#358">[ thread ]</a>
+              <a href="subject.html#358">[ subject ]</a>
+              <a href="author.html#358">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Juergen,
+
+&gt;<i> Has anybody experience with EML together with the RT_PREEMPT kernel at all?
+</I>&gt;<i> 
+</I>&gt;<i> Does somebody use it in an productive environment?
+</I>Yes we use it in a production environment.
+
+
+&gt;<i> Is ist realistic to do the job with it at all?
+</I>Depends whether you have the time. It can be rather uncomfortable, and 
+its not entirely bug free. But it works.
+
+
+&gt;<i> Is it more realistic / even necessary / possible at all to do it with
+</I>&gt;<i> Xenomai instead?
+</I>We use xenomai, not ecos.
+
+
+&gt;<i> Or is it necessary/recommended to have the master in hardware for such a
+</I>&gt;<i> scenario?
+</I>Not as far as I know.
+
+&gt;<i> 
+</I>&gt;<i> What are your cycle times, frame sizes, jitters, cpu loads and which
+</I>&gt;<i> hardware are you working on?
+</I>Cycle times are 1ms, latency about 200-250ns. So substantially higher 
+that what you require. 100us should be attainable but you will have to 
+work hard at optimizing your xenomai setup. The ethercat bus should 
+manage this requirement depending on how you laod it.
+
+
+&gt;<i> PS: In my first tries (on a plain ubuntu as well as with RT_PREEMPT) I saw
+</I>&gt;<i> a latency peak of about one second every other second.
+</I>&gt;<i> Since the EML code does not do much magic when sending a frame this must be
+</I>&gt;<i> buried inside the network driver or even below.
+</I>&gt;<i> Did you see something similar during your work?
+</I>No.
+
+
+Roland
+
+
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000357.html">[Ethercatmaster-users] Choosing the right master platform
+</A></li>
+	<LI>Next message: <A HREF="000359.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#358">[ date ]</a>
+              <a href="thread.html#358">[ thread ]</a>
+              <a href="subject.html#358">[ subject ]</a>
+              <a href="author.html#358">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

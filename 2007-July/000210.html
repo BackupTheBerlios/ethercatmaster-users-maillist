@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Ethercatmaster-devel] non-persistent	outputs EML
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BEthercatmaster-devel%5D%20non-persistent%0A%09outputs%20EML&In-Reply-To=%3C46AF0756.80101%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000209.html">
+   <LINK REL="Next"  HREF="000211.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Ethercatmaster-devel] non-persistent	outputs EML</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BEthercatmaster-devel%5D%20non-persistent%0A%09outputs%20EML&In-Reply-To=%3C46AF0756.80101%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] [Ethercatmaster-devel] non-persistent	outputs EML">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Tue Jul 31 11:56:38 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000209.html">[Ethercatmaster-users] [Ethercatmaster-devel] non-persistent	outputs EML
+</A></li>
+        <LI>Next message: <A HREF="000211.html">[Ethercatmaster-users] [Ethercatmaster-devel] non-persistent outputs EML
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#210">[ date ]</a>
+              <a href="thread.html#210">[ thread ]</a>
+              <a href="subject.html#210">[ subject ]</a>
+              <a href="author.html#210">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi
+
+These are the scans. Just in case anyone still doubts that there is a 
+difference between TwinCat and EML.
+
+
+TC  0000  01 01 05 01 00 00 00 0e  7b 56 c4 9a 88 a4 39 10   ........
+EML 0000  ff ff ff ff ff ff 00 00  00 00 00 00 88 a4 11 10   ........
+
+
+TC  0010  0b 00 00 00 01 00 05 80  00 00 ff 3f 00 00 0f 00   ........
+EML 0010  0c 46 00 00 01 00 05 00  00 00 ff 3f 00 00 0f 00   .F......
+
+
+TC  0020  00 0a 00 00 08 01 00 01  80 00 00 00 00 00 0a 00   ........
+EML 0020  00 07 00 10 00 02 01 00  00 00 00 00 00 00 00 00   ........
+
+
+TC  0030  00 00 08 00 01 80 00 00  00 00 00 07 00 00 00 30   ........
+EML 0030  00 00 00 00 00 00 00 00  00 00 00 00               ........
+
+
+TC  0040  01 02 00 00 00 00 00 00  00                        ........ . 
+
+EML N/A
+
+
+Regards,
+
+Roland
+
+Klaas Gadeyne wrote:
+&gt;<i> On Mon, 30 Jul 2007, Roland Tollenaar wrote:
+</I>&gt;<i> 
+</I>&gt;<i> Hi Roland,
+</I>&gt;<i> 
+</I>&gt;<i> [Replying to users only, since I think this it not truly a developers
+</I>&gt;<i> issue. YMMV :-)]
+</I>&gt;<i> 
+</I>&gt;<i> [...]
+</I>&gt;&gt;<i> The frames between twin cat and eml differ substantially, I want to try
+</I>&gt;&gt;<i> to hack the eml frame to look like the twincat frame just to see what it
+</I>&gt;&gt;<i> does. Then by changing (hardcoding) the eml frame byte by byte find out
+</I>&gt;&gt;<i> which byte in the frame is instrumental in the persistent/non-persistent
+</I>&gt;&gt;<i> behaviour.
+</I>&gt;<i> 
+</I>&gt;<i> Funny, according to Said there were no significant differences :-)
+</I>&gt;<i> 
+</I>&gt;<i> First, I would advise you to try interpreting what messages are sent
+</I>&gt;<i> instead of your &quot;brute force attack&quot; [*]:  Look at the telegrams, see how
+</I>&gt;<i> they match with what is written in the spec.  Then interprete what is
+</I>&gt;<i> different in the messages sent by EML and TwinCat and see if it could
+</I>&gt;<i> possibly explain the observed behaviour.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Could one of the developers please tell me in which file of the project
+</I>&gt;&gt;<i> I can best substitute the bytes before the frame is sent?
+</I>&gt;<i> 
+</I>&gt;<i> There is no single file in which data is passed.
+</I>&gt;<i> If you insist on creating raw ethernet frames, the low_level_output()
+</I>&gt;<i> function in 
+</I>&gt;<i> &lt;<A HREF="https://svn.berlios.de/wsvn/ethercatmaster/trunk/src/arch/RTnet/ethercat_xenomai_drv.c?op=file&amp;rev=0&amp;sc=0">https://svn.berlios.de/wsvn/ethercatmaster/trunk/src/arch/RTnet/ethercat_xenomai_drv.c?op=file&amp;rev=0&amp;sc=0</A>&gt; 
+</I>&gt;<i> 
+</I>&gt;<i> is the place to start.
+</I>&gt;<i> 
+</I>&gt;<i> Basically, each frame has (which consist of etherCat telegrams) a dump
+</I>&gt;<i> method, which &quot;dumps&quot; its contents into an (unsigned char *).  That is
+</I>&gt;<i> the data for the ethernet message to send.  That function dumps the
+</I>&gt;<i> frames it gets from the Data Link Layer (DLL) [**] and adds the type
+</I>&gt;<i> to the message.
+</I>&gt;<i> 
+</I>&gt;<i> regards,
+</I>&gt;<i> 
+</I>&gt;<i> Klaas
+</I>&gt;<i> 
+</I>&gt;<i> [*] For instance, even with all exactly the same frames, you might get
+</I>&gt;<i> different responses to the same messages.  E.g. suppose you send a
+</I>&gt;<i> command to a slave that asks it to go from INIT to PREOP.  Next you
+</I>&gt;<i> check whether the transition has succeeded.  Depending on how _fast_
+</I>&gt;<i> you send the 2nd message, your slave might react differently, and
+</I>&gt;<i> hence your master should either continue or retry.
+</I>&gt;<i> [**] If you don't understand some of the jargon here -&gt; see the spec
+</I>&gt;<i> :-)
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000209.html">[Ethercatmaster-users] [Ethercatmaster-devel] non-persistent	outputs EML
+</A></li>
+	<LI>Next message: <A HREF="000211.html">[Ethercatmaster-users] [Ethercatmaster-devel] non-persistent outputs EML
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#210">[ date ]</a>
+              <a href="thread.html#210">[ thread ]</a>
+              <a href="subject.html#210">[ subject ]</a>
+              <a href="author.html#210">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

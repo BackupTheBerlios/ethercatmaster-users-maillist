@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] EL6751 CANopen Configuration !!!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EL6751%20CANopen%20Configuration%20%21%21%21&In-Reply-To=%3C465145.40421.qm%40web37301.mail.mud.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000280.html">
+   <LINK REL="Next"  HREF="000284.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] EL6751 CANopen Configuration !!!</H1>
+    <B>said harti</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EL6751%20CANopen%20Configuration%20%21%21%21&In-Reply-To=%3C465145.40421.qm%40web37301.mail.mud.yahoo.com%3E"
+       TITLE="[Ethercatmaster-users] EL6751 CANopen Configuration !!!">harti_said at yahoo.fr
+       </A><BR>
+    <I>Tue Aug 21 14:39:03 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000280.html">[Ethercatmaster-users] system freezes on calling
+</A></li>
+        <LI>Next message: <A HREF="000284.html">[Ethercatmaster-users] EL6751 CANopen Configuration !!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#281">[ date ]</a>
+              <a href="thread.html#281">[ thread ]</a>
+              <a href="subject.html#281">[ subject ]</a>
+              <a href="author.html#281">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I am trying to intergrate EL6751 CANopen Module to my test plateform, thanks to the Twincat tool, i can configure Mbx_SM, PD_SM, and FMMUs of this module...
+Now, i look for, and try to prepare an CoE frame (MbxHdr, CoEHdr...) in order to communicate with CANopen Slaves via the EL6751 module.
+
+So first, i have set this module to OP State thanks to my code below :
+
+///SlaveConfig EL6751
+
+EtherCAT_FMMU_Config fmmu_config_EL6751(3);
+
+EC_FMMU fmmu0_EL6751(0x00011000,0x0010,0x00,0x07,0x1000,0x00,false,true,true);
+EC_FMMU fmmu1_EL6751(0x00011800,0x0008,0x00,0x07,0x1400,0x00,true,false,true);
+EC_FMMU fmmu2_EL6751(0x00080000,0x0001,0x01,0x01,0x080D,0x00,true,false,true);
+
+EC_SyncMan syncman_mbx0_EL6751(0x1800,558,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan syncman_mbx1_EL6751(0x1A2E,558,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+
+EtherCAT_PD_Config pd_config_EL6751(2);///argument=length
+
+EC_SyncMan syncman0_EL6751(0x1000,16,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan syncman1_EL6751(0x1400,8,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+
+
+EtherCAT_SlaveConfig EC_EL6751(0x1A5F3052,0x00000001,0x03ed,&amp;fmmu_config_EL6751,&amp;pd_config_EL6751,&amp;mbx_conf_EL6751);
+
+EtherCAT_MbxConfig mbx_conf_EL6751 = {syncman_mbx0_EL6751, syncman_mbx1_EL6751};
+
+static void init_slave_db() {
+
+         EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(5);
+
+
+
+///Connect actual fmmu and process data config to respective handlesfor for EL 4102 (AO)
+
+         fmmu_config_EL4102[0] = fmmu0_EL4102;
+         fmmu_config_EL4102[1] = fmmu1_EL4102;
+         pd_config_EL4102[0] = syncman0_EL4102;
+         pd_config_EL4102[1] = syncman1_EL4102;
+
+///Connect actual fmmu and process data config to respective handles for EL 2004 (DO)
+
+         fmmu_config_EL2004[0] = fmmu0_EL2004;///
+         pd_config_EL2004[0] = syncman0_EL2004;///
+
+///Connect actual fmmu and process data config to respective handles for EL 1004 (DI)
+
+         fmmu_config_EL1004[0] = fmmu0_EL1004;///
+         pd_config_EL1004[0] = syncman0_EL1004;///
+
+         ///Connect actual fmmu and process data config to respective handles for EL 6751 (CoE)
+
+         fmmu_config_EL6751[0] = fmmu0_EL6751;
+         fmmu_config_EL6751[1] = fmmu1_EL6751;
+         fmmu_config_EL6751[2] = fmmu2_EL6751;
+
+///Commit the slave config objects to the slave database
+
+     slave_db-&gt;set_conf(&amp;EC_EK1100,0); 
+     slave_db-&gt;set_conf(&amp;EC_EL4102,1);
+     
+
+///Commit the slave config objects to the slave database
+
+         slave_db-&gt;set_conf(&amp;EC_EL2004,2);///
+
+///Commit the slave config objects to the slave database
+
+         slave_db-&gt;set_conf(&amp;EC_EL1004,3);///
+
+///Commit the slave config objects to the slave database
+
+         slave_db-&gt;set_conf(&amp;EC_EL6751,4);///   
+ }
+
+
+The EL6751 module is set to OP state without problem, but if i add those two lines to my code (in order to connect process data config to respective handles for EL6751), it's impossible to set this module to OP state :
+
+pd_config_EL6751[0] = syncman0_EL6751;
+pd_config_EL6751[1] = syncman1_EL6751;
+
+
+1) Please, If you have some adeas about this problem, let me know...
+
+2) My second questuion is about Mailbox. Which EML function i must use to send Mailbox messages (Mbx_Hdr+CoE_Hdr...) ? it's the same one for EtherCAT : txandrx() ???
+
+Said
+
+
+
+       
+---------------------------------
+ Ne gardez plus qu'une seule adresse mail ! Copiez vos mails vers Yahoo! Mail 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070821/8e3e0ed7/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070821/8e3e0ed7/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000280.html">[Ethercatmaster-users] system freezes on calling
+</A></li>
+	<LI>Next message: <A HREF="000284.html">[Ethercatmaster-users] EL6751 CANopen Configuration !!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#281">[ date ]</a>
+              <a href="thread.html#281">[ thread ]</a>
+              <a href="subject.html#281">[ subject ]</a>
+              <a href="author.html#281">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

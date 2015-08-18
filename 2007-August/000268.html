@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3C46C2BB52.5090508%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000267.html">
+   <LINK REL="Next"  HREF="000269.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3C46C2BB52.5090508%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Wed Aug 15 10:37:38 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000267.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000269.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#268">[ date ]</a>
+              <a href="thread.html#268">[ thread ]</a>
+              <a href="subject.html#268">[ subject ]</a>
+              <a href="author.html#268">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> Hmm, this doesn't convince me yet. Such skews during startup may as well
+</I>&gt;<i> be triggered by unusual load during runtime (non-RT activity or new RT
+</I>&gt;<i> components). Did you put your system under adequate non-RT load as well
+</I>&gt;<i> while measuring the outputs?
+</I>could you please just remind me how to do this again? OR can i just run 
+the latency test, it has dummy loading in it does it not?
+
+&gt;&gt;<i> Sorry for the pragmatic qualifications here but in the end its the
+</I>&gt;&gt;<i> stability of the outputs that will determine the behaviour of the
+</I>&gt;&gt;<i> machine so its not a bad way to assess the software. :)
+</I>&gt;<i> 
+</I>&gt;<i> A problem isn't solved until it is also understood.
+</I>You are so right. :(
+
+
+&gt;<i> 
+</I>&gt;&gt;&gt;<i> If the problem persists (or your _really_ want to understand what
+</I>&gt;&gt;&gt;<i> happens), you could try to put an xntrace_user_freeze(0, 1) before the
+</I>&gt;&gt;&gt;<i> line which emits that EML warning, turn on the I-pipe tracer, set a
+</I>&gt;&gt;&gt;<i> large back_trace_points value (a few thousand), enable verbose mode, and
+</I>&gt;&gt;&gt;<i> grab what /proc/ipipe/trace/frozen reports after the hick-up. See [1]
+</I>&gt;&gt;&gt;<i> for more howtos.
+</I>&gt;&gt;<i> Done this before so it should not be a problem. Don't think it is
+</I>&gt;<i> 
+</I>&gt;<i> In that case, I would even more suggest to collect the data, maybe now
+</I>&gt;<i> about the fragile startup case.
+</I>
+Have got it on my todo list. :)
+
+Roland.
+
+
+&gt;<i> 
+</I>&gt;&gt;<i> necessary quite yet as the behaviour at the moment looks good.
+</I>&gt;<i> 
+</I>&gt;<i> Jan
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000267.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000269.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#268">[ date ]</a>
+              <a href="thread.html#268">[ thread ]</a>
+              <a href="subject.html#268">[ subject ]</a>
+              <a href="author.html#268">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

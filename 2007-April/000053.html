@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Antwort: Re: Low level device  driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20Low%20level%20device%20%20driver&In-Reply-To=%3C20070405073010.D2DB2E2D59%40server04.site04.wtcm.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000052.html">
+   <LINK REL="Next"  HREF="000054.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Antwort: Re: Low level device  driver</H1>
+    <B>Bob Koninckx</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20Low%20level%20device%20%20driver&In-Reply-To=%3C20070405073010.D2DB2E2D59%40server04.site04.wtcm.be%3E"
+       TITLE="[Ethercatmaster-users] Antwort: Re: Low level device  driver">bob.koninckx at fmtc.be
+       </A><BR>
+    <I>Thu Apr  5 09:30:11 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000052.html">[Ethercatmaster-users] Antwort: Re: Low level device driver
+</A></li>
+        <LI>Next message: <A HREF="000054.html">[Ethercatmaster-users] Antwort: Re: Low level device  driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#53">[ date ]</a>
+              <a href="thread.html#53">[ thread ]</a>
+              <a href="subject.html#53">[ subject ]</a>
+              <a href="author.html#53">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>At 19:25 4/04/2007, Felix GMX wrote:
+&gt;<i>Hello,
+</I>&gt;<i>
+</I>&gt;<i>So just i have traced the first ethercat frame! 
+</I>&gt;<i>Also the EtherCAT Master sends a correct
+</I>
+
+Are you sure about that? I don't remember your 
+hardware anymore, but if it's a big-endian 
+machine, maybe the payload of the message is 
+formmatted incorrectly. We tried to make our code 
+valid for both big-endian and little endian 
+machines (it is a configuration option IIRC, 
+Klaas ?). Only tested it on little endian though.
+
+Make sure this is ok, by inspecting the message 
+byte-by-byte. I wouldn't be surprised if the EVA 
+board just drops frames it does not understand.
+
+Bob
+
+
+
+&gt;<i>APRD frame in the scan_slaves() function. My 
+</I>&gt;<i>EtherCAT Slave is the EtherCAT EVA Board. How 
+</I>&gt;<i>should i configurate the board in the EtherCAT 
+</I>&gt;<i>Master? Must i change the EtherCAT slave 
+</I>&gt;<i>configuration or is default configuration right?
+</I>&gt;<i>
+</I>&gt;<i>bool EtherCAT_AL::scan_slaves(void)
+</I>&gt;<i>{
+</I>&gt;<i>       // Send APRD telegram to count number of slaves
+</I>&gt;<i>       APRD_Telegram 
+</I>&gt;<i> counter_tg(m_logic_instance-&gt;get_idx(),0x0000,0x0000, 
+</I>&gt;<i> m_logic_instance-&gt;get_wkc(),0x01,(unsigned char) 0x00);
+</I>&gt;<i>       EC_Ethernet_Frame counter_frame(&amp;counter_tg);
+</I>&gt;<i>       bool succeed = m_dll_instance-&gt;txandrx(&amp;counter_frame);
+</I>&gt;<i>       ...
+</I>&gt;<i>}
+</I>&gt;<i>
+</I>&gt;<i>Thats my logging output:
+</I>&gt;<i>...
+</I>&gt;<i>smsc_lan91cxx_init
+</I>&gt;<i>LAN91CXX - supposed BankReg @ 80030e = 3302
+</I>&gt;<i>LAN91CXX - type: 9, rev: 1
+</I>&gt;<i>LAN91CXX - status: 0000
+</I>&gt;<i>LAN91CXX - static ESA: 00:07:ed:0a:58:49
+</I>&gt;<i>lan91cxx_start
+</I>&gt;<i>Creating Master
+</I>&gt;<i>lan91cxx_can_send
+</I>&gt;<i>lan91cxx_send
+</I>&gt;<i>lan91cxx_send: allocated packet 0000
+</I>&gt;<i>lan91cxx_isr
+</I>&gt;<i>lan91cxx_deliver
+</I>&gt;<i>lan91cxx_TxEvent
+</I>&gt;<i>lan91cxx_TxEvent:START: fifo 8000 ints 0100
+</I>&gt;<i>lan91cxx_TxEvent:END: fifo 8080 ints 010c
+</I>&gt;<i>EtherCAT error: Low level device driver 
+</I>&gt;<i>problemlan91cxx_send:END: ints at TX: 010c
+</I>&gt;<i>low_level_input(): Waiting for semafore from recv timed out
+</I>&gt;<i>low_level_txandrx: receiving failed
+</I>&gt;<i>DLL::txandrx() Error
+</I>&gt;<i>Error sending counter frame
+</I>&gt;<i>Something went wrong while scanning network
+</I>&gt;<i>EtherCAT_AL:: Can't init network
+</I>&gt;<i>...
+</I>&gt;<i>_______________________________________________
+</I>&gt;<i>Ethercatmaster-users mailing list
+</I>&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>
+-- 
+
+-----------------------------------------------------------------------
+dr. ir. Bob Koninckx
+Program Manager Modular Machines
+
+Flanders' MECHATRONICS Technology Centre (FMTC)
+Celestijnenlaan 300D, Bus 4027, 3001 Leuven, Belgium
+
+Tel: +32-498-91.94.02
+      +32- 16-32.80.32
+Fax: +32- 16-32.80.64
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">bob.koninckx at fmtc.be</A>                    www.fmtc.be
+-----------------------------------------------------------------------
+
+Flanders&#146; MECHATRONICS Technology Centre vzw
+Maatschappelijke zetel: Diamant Building, A. 
+Reyerslaan 80, B-1030 Brussel, Belgi&#235;
+BTW BE 0860.286.268
+
+*****DISCLAIMER*****
+This e-mail and/or its attachments may contain 
+confidential information. It is intended
+solely for the intended addressee(s). Any use of 
+the information contained herein by other
+persons is prohibited. FMTC does not accept any 
+liability for the contents of this e-mail
+and/or its attachments.
+********************  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000052.html">[Ethercatmaster-users] Antwort: Re: Low level device driver
+</A></li>
+	<LI>Next message: <A HREF="000054.html">[Ethercatmaster-users] Antwort: Re: Low level device  driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#53">[ date ]</a>
+              <a href="thread.html#53">[ thread ]</a>
+              <a href="subject.html#53">[ subject ]</a>
+              <a href="author.html#53">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,733 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] RE : Re: RE : Re: RE : Re: Slaves	Parameters!!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20Slaves%0A%09Parameters%21%21&In-Reply-To=%3Cbc4264770707160918md73deffi99b9966a7c35f1c0%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000145.html">
+   <LINK REL="Next"  HREF="000151.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: Slaves	Parameters!!</H1>
+    <B>roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20Slaves%0A%09Parameters%21%21&In-Reply-To=%3Cbc4264770707160918md73deffi99b9966a7c35f1c0%40mail.gmail.com%3E"
+       TITLE="[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: Slaves	Parameters!!">rolandtollenaar at gmail.com
+       </A><BR>
+    <I>Mon Jul 16 18:18:38 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000145.html">[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: Slaves	Parameters!!
+</A></li>
+        <LI>Next message: <A HREF="000151.html">[Ethercatmaster-users] RE : Re: RE : Re: RE : Re:	Slaves	Parameters!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#148">[ date ]</a>
+              <a href="thread.html#148">[ thread ]</a>
+              <a href="subject.html#148">[ subject ]</a>
+              <a href="author.html#148">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Said,
+
+The inputs are working as they should. Here is my master test code
+whereby if I apply and remove the input on the last module, I can see
+instantaneous response in the value of msg[7]
+
+The ouputs still only flash on briefly once.
+
+Regards,
+
+Roland Tollenaar.
+
+#include &lt;posix/pthread.h&gt;
+#include &lt;signal.h&gt;
+#include &lt;sys/mman.h&gt;
+
+#include &lt;al/ethercat_master.h&gt;
+#include &lt;al/ethercat_AL.h&gt;
+#include &lt;al/ethercat_process_data.h&gt;
+#include &lt;ethercat/ethercat_xenomai_drv.h&gt;
+#include &lt;ethercat/netif.h&gt;
+#include &lt;dll/ethercat_dll.h&gt;
+#include &lt;dll/ethercat_frame.h&gt;
+#include &lt;dll/ethercat_slave_memory.h&gt;
+#include &lt;al/ethercat_slave_conf.h&gt;
+#include &lt;al/ethercat_slave_handler.h&gt;
+
+struct netif *ni;
+
+///SlaveConfig EK1100 [Bus Coupler]
+EtherCAT_FMMU_Config fmmu_config_EK1100(0);
+EtherCAT_PD_Config pd_config_EK1100(0);
+EtherCAT_SlaveConfig
+EC_EK1100(0x044c2c52,0x00010000,0x03e9,&amp;fmmu_config_EK1100,&amp;pd_config_EK1100);
+
+///SlaveConfig EL2004(1) [Digital Output]
+//[A slave configuration consists of a fmmu-config, a process data
+(pd) config and optionally a mailbox config]
+//fmmu (fieldbus memory management unit) config container (handle?)
+EtherCAT_FMMU_Config fmmu_config_EL2004_1(1);//arg=number of FMMU's.
+Some modules take more than one if e.g. they have in and outputs.
+//not sure what this is doing (Seems to be actual fmmu config which
+gets linked to the handle created above)
+EC_FMMU fmmu0_EL2004_1(0x00010000,1,0,3,0x0F00,0,false,true,true);
+//logical start address (start at 0x00010000 otherwise msg sequence
+becomes messy), # bytes used, start bit, end bit, physical address,
+physical start bit, read-enable, write-enable, activate-module
+//On logical start address: the first byte in the process data message
+corresponds to the byte in 0x00010000 , the second with 0x00010001 and
+so on
+//Start inputs logical addresses out of this range, say on 0x00080000
+//process data config (Again seems to be a handle)
+EtherCAT_PD_Config pd_config_EL2004_1(1); //argument=length
+//synchronisation manager
+EC_SyncMan syncman0_EL2004_1(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+//compile the slave configuration
+EtherCAT_SlaveConfig
+EC_EL2004_1(0x7d43052,0x100000,0x03ec,&amp;fmmu_config_EL2004_1,&amp;pd_config_EL2004_1);
+//product code, revision number, physical address, FMMU-configuration
+instance, process data configuration instance, [optional mailbox
+configutation]
+
+///SlaveConfig EL2004(2) [Digital Output]
+EtherCAT_FMMU_Config fmmu_config_EL2004_2(1);
+EC_FMMU fmmu0_EL2004_2(0x00010000,1,4,7,0x0F00,0,false,true,true);
+EtherCAT_PD_Config pd_config_EL2004_2(1);
+EC_SyncMan syncman0_EL2004_2(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL2004_2(0x7d43052,0x100000,0x03ed,&amp;fmmu_config_EL2004_2,&amp;pd_config_EL2004_2);
+
+///SlaveConfig EL2004(3) [Digital Output]
+EtherCAT_FMMU_Config fmmu_config_EL2004_3(1);
+EC_FMMU fmmu0_EL2004_3(0x00010001,1,0,3,0x0F00,0,false,true,true);
+EtherCAT_PD_Config pd_config_EL2004_3(1);
+EC_SyncMan syncman0_EL2004_3(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL2004_3(0x7d43052,0x100000,0x03ee,&amp;fmmu_config_EL2004_3,&amp;pd_config_EL2004_3);
+
+///SlaveConfig EL2004(4) [Digital Output]
+EtherCAT_FMMU_Config fmmu_config_EL2004_4(1);
+EC_FMMU fmmu0_EL2004_4(0x00010001,1,4,7,0x0F00,0,false,true,true);
+EtherCAT_PD_Config pd_config_EL2004_4(1);
+EC_SyncMan syncman0_EL2004_4(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL2004_4(0x7d43052,0x100000,0x03ef,&amp;fmmu_config_EL2004_4,&amp;pd_config_EL2004_4);
+
+
+///SlaveConfig EL1014(1) [Digital Input]
+EtherCAT_FMMU_Config fmmu_config_EL1014_1(1);
+EC_FMMU fmmu0_EL1014_1(0x00010006,1,0,3,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_1(1);
+EC_SyncMan syncman0_EL1014_1(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL1014_1(0x03F63052,0x100000,0x03f0,&amp;fmmu_config_EL1014_1,
+&amp;pd_config_EL1014_1);
+
+///SlaveConfig EL1014(2) [Digital Input]
+EtherCAT_FMMU_Config fmmu_config_EL1014_2(1);
+EC_FMMU fmmu0_EL1014_2(0x00010006,1,4,7,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_2(1);
+EC_SyncMan syncman0_EL1014_2(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL1014_2(0x03F63052,0x100000,0x03f1,&amp;fmmu_config_EL1014_2,
+&amp;pd_config_EL1014_2);
+
+///SlaveConfig EL1014(3) [Digital Input]
+EtherCAT_FMMU_Config fmmu_config_EL1014_3(1);
+EC_FMMU fmmu0_EL1014_3(0x00010007,1,0,3,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_3(1);
+EC_SyncMan syncman0_EL1014_3(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL1014_3(0x03F63052,0x100000,0x03f2,&amp;fmmu_config_EL1014_3,
+&amp;pd_config_EL1014_3);
+
+///SlaveConfig EL1014(4) [Digital Input]
+EtherCAT_FMMU_Config fmmu_config_EL1014_4(1);
+EC_FMMU fmmu0_EL1014_4(0x00010007,1,4,7,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_4(1);
+EC_SyncMan syncman0_EL1014_4(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL1014_4(0x03F63052,0x100000,0x03f3,&amp;fmmu_config_EL1014_4,
+&amp;pd_config_EL1014_4);
+
+
+///SlaveConfig EL4132
+EtherCAT_FMMU_Config fmmu_config_EL4132(2);
+EC_FMMU fmmu0_EL4132(0x00080002,1,0,0,0x080D,0x00,true,false,true);
+EC_FMMU fmmu1_EL4132(0x00010002,4,0,7,0x1000,0x00,false,true,true);
+
+EC_SyncMan syncman_mbx0_EL4132(0x1800,246,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan syncman_mbx1_EL4132(0x18f6,246,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_MbxConfig mbx_conf_EL4132 = {syncman_mbx0_EL4132, syncman_mbx1_EL4132};
+
+EtherCAT_PD_Config pd_config_EL4132(2);
+EC_SyncMan syncman0_EL4132(0x1000,4,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan syncman1_EL4132(0x1100,0,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+
+EtherCAT_SlaveConfig
+EC_EL4132(0x10243052,0x00,0x03f4,&amp;fmmu_config_EL4132,&amp;pd_config_EL4132,&amp;mbx_conf_EL4132);
+
+
+
+
+static void init_slave_db() {
+	///create slave database	
+	EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(10);
+//argument=#slaves
+
+	//EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(2);
+	//fmmu_config_EL4102[0] = fmmu0_EL4102;
+	//fmmu_config_EL4102[1] = fmmu1_EL4102;
+	//pd_config_EL4102[0] = syncman0_EL4102;
+	//pd_config_EL4102[1] = syncman1_EL4102;
+
+	///Connect actual fmmu and process data config to respective handles
+for EL 2004 (DO)
+	fmmu_config_EL2004_1[0] = fmmu0_EL2004_1;
+	fmmu_config_EL2004_2[0] = fmmu0_EL2004_2;
+	fmmu_config_EL2004_3[0] = fmmu0_EL2004_3;
+	fmmu_config_EL2004_4[0] = fmmu0_EL2004_4;
+	pd_config_EL2004_1[0]   = syncman0_EL2004_1;
+	pd_config_EL2004_2[0]   = syncman0_EL2004_2;
+	pd_config_EL2004_3[0]   = syncman0_EL2004_3;
+	pd_config_EL2004_4[0]   = syncman0_EL2004_4;
+	
+	///Connect actual fmmu and process data config to respective handles
+for EL 1014 (DI)
+	fmmu_config_EL1014_1[0] =fmmu0_EL1014_1;
+	fmmu_config_EL1014_2[0] =fmmu0_EL1014_2;
+	fmmu_config_EL1014_3[0] =fmmu0_EL1014_3;
+	fmmu_config_EL1014_4[0] =fmmu0_EL1014_4;
+	pd_config_EL1014_1[0]   =syncman0_EL1014_1;
+	pd_config_EL1014_2[0]   =syncman0_EL1014_2;
+	pd_config_EL1014_3[0]   =syncman0_EL1014_3;
+	pd_config_EL1014_4[0]   =syncman0_EL1014_4;
+
+	///Connect actual config to fmmu and processdata config handle for
+EL4132 (analog output modules)
+	fmmu_config_EL4132[0] = fmmu0_EL4132;
+	fmmu_config_EL4132[1] = fmmu1_EL4132;
+	pd_config_EL4132[0]   = syncman0_EL4132;
+	pd_config_EL4132[1]   = syncman1_EL4132;	
+
+
+
+	///Commit the slave config objects to the slave database
+	slave_db-&gt;set_conf(&amp;EC_EK1100,0);
+	slave_db-&gt;set_conf(&amp;EC_EL2004_1,1);
+	slave_db-&gt;set_conf(&amp;EC_EL2004_2,2);
+	slave_db-&gt;set_conf(&amp;EC_EL2004_3,3);
+	slave_db-&gt;set_conf(&amp;EC_EL2004_4,4);
+	slave_db-&gt;set_conf(&amp;EC_EL1014_1,5);
+	slave_db-&gt;set_conf(&amp;EC_EL1014_2,6);
+	slave_db-&gt;set_conf(&amp;EC_EL1014_3,7);
+	slave_db-&gt;set_conf(&amp;EC_EL1014_4,8);
+	slave_db-&gt;set_conf(&amp;EC_EL4132,9);
+	
+}
+
+static void* run_master(void * arg) {
+	
+	///get network handle
+	ni = init_ec((char*)arg);
+
+	///initialize the slave db (calls the above defined function of course)
+	init_slave_db();
+	
+	if(ni != 0) {
+		printf(&quot;Attach netif \n\n&quot;);
+		EtherCAT_DataLinkLayer::instance()-&gt;attach(ni);  //attach to what?
+		printf(&quot;Master initializing \n\n&quot;);
+		EtherCAT_Master * EM = EtherCAT_Master::instance();
+
+		///EK1100 to operational state
+		printf(&quot;Getting slave handler\n&quot;);
+		EtherCAT_SlaveHandler * sh_ek1100 = EM-&gt;get_slave_handler(0x03e9);
+		printf(&quot;Setting EK1100 to OP STATE\n&quot;);
+		if(sh_ek1100-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EK1100 succesfully set in OP STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EK1100 in OP STATE\n&quot;);
+
+		///EL2004(1) to operational state
+		printf(&quot;Getting slave handler\n&quot;);
+		EtherCAT_SlaveHandler * sh_el2004_1 = EM-&gt;get_slave_handler(0x03ec);
+		printf(&quot;Setting EL2004(1) to OP STATE\n&quot;);
+		if(sh_el2004_1-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL2004(1) succesfully set in OP STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL2004(1) in OP STATE\n&quot;);	
+
+		///EL2004(2) to operational state
+		printf(&quot;Getting slave handler\n&quot;);
+		EtherCAT_SlaveHandler * sh_el2004_2 = EM-&gt;get_slave_handler(0x03ed);
+		printf(&quot;Setting EL2004(2) to OP STATE\n&quot;);
+		if(sh_el2004_2-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL2004(2) succesfully set in OP STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL2004(2) in OP STATE\n&quot;);
+
+		///EL2004(3) to operational state
+		printf(&quot;Getting slave handler\n&quot;);
+		EtherCAT_SlaveHandler * sh_el2004_3 = EM-&gt;get_slave_handler(0x03ee);
+		printf(&quot;Setting EL2004(3) to OP STATE\n&quot;);
+		if(sh_el2004_3-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL2004(3) succesfully set in OP STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL2004(3) in OP STATE\n&quot;);
+
+		///EL2004(4) to operational state
+		printf(&quot;Getting slave handler\n&quot;);
+		EtherCAT_SlaveHandler * sh_el2004_4 = EM-&gt;get_slave_handler(0x03ef);
+		printf(&quot;Setting EL2004(4) to OP STATE\n&quot;);
+		if(sh_el2004_4-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL2004(4) succesfully set in OP STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL2004(4) in OP STATE\n&quot;);
+
+		///EL1014(1) to operational state
+		printf(&quot;Getting slave handler\n&quot;);
+		EtherCAT_SlaveHandler * sh_el1014_1 = EM-&gt;get_slave_handler(0x03f0);
+		printf(&quot;Setting EL1014(1) to OP STATE\n&quot;);
+		if(sh_el1014_1-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL1014(1) succesfully set in OP STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL1014(1) in OP STATE\n&quot;);
+
+		///EL1014(2) to operational state
+		printf(&quot;Getting slave handler\n&quot;);
+		EtherCAT_SlaveHandler * sh_el1014_2 = EM-&gt;get_slave_handler(0x03f1);
+		printf(&quot;Setting EL1014(2) to OP STATE\n&quot;);
+		if(sh_el1014_2-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL1014(2) succesfully set in OP STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL1014(2) in OP STATE\n&quot;);
+
+		///EL1014(3) to operational state
+		printf(&quot;Getting slave handler\n&quot;);
+		EtherCAT_SlaveHandler * sh_el1014_3 = EM-&gt;get_slave_handler(0x03f2);
+		printf(&quot;Setting EL1014(3) to OP STATE\n&quot;);
+		if(sh_el1014_3-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL1014(3) succesfully set in OP STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL1014(3) in OP STATE\n&quot;);
+
+		///EL1014(4) to operational state
+		printf(&quot;Getting slave handler\n&quot;);
+		EtherCAT_SlaveHandler * sh_el1014_4 = EM-&gt;get_slave_handler(0x03f3);
+		printf(&quot;Setting EL1014(4) to OP STATE\n&quot;);
+		if(sh_el1014_4-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL1014(4) succesfully set in OP STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL1014(4) in OP STATE\n&quot;);
+
+		///EL4132 to operational state
+		printf(&quot;Getting slave handler\n&quot;);
+		EtherCAT_SlaveHandler * sh_el4132 = EM-&gt;get_slave_handler(0x03f4);
+		printf(&quot;Setting EL4132 to OP STATE\n&quot;);
+		if(sh_el4132-&gt;to_state(EC_OP_STATE))
+			printf(&quot;EL4132 succesfully set in OP STATE\n&quot;);
+		else
+			printf(&quot;\nfailed to set EL4132 in OP STATE\n&quot;);
+
+
+				
+		printf(&quot;AL initializing \n\n&quot;);
+		EtherCAT_AL * AL = EtherCAT_AL::instance();
+		
+		///Set digital output
+		unsigned char msg[8] = {0xff,0xff, 0xff, 0x3f, 0x00, 0x00, 0x00,
+0x00 };  //first two bytes are the outputs, second two are the analog
+output, 5th is the input of the AO module, last two are DI (1014)
+		if(AL-&gt;isReady()) {
+			printf(&quot;Test: outputs: \n\n&quot;);	
+			int count = 0;
+			while(count&lt;100000) {
+				msg[0]=0xff;
+				msg[1]=0xff;
+				msg[2]=0xff;
+				msg[3]=0x3f;
+				msg[4]=0x00;
+				msg[5]=0x00;
+				
+				if(EM-&gt;txandrx_PD(sizeof(msg),msg)){
+					printf(&quot;msg[7] %d &quot;,msg[7]);
+				}
+				else{
+					printf(&quot;txandrx failed: \n\n&quot;);
+				}
+			
+				count++;
+			}
+		//	printf(&quot;Test done.\n&quot;);
+		}
+		
+
+
+		close_socket(ni);
+		
+	}
+}
+
+void catch_signal(int sig)
+{
+   if(ni != 0)
+		close_socket(ni);
+	exit(1);
+}
+
+int main(int argc, char** argv)
+{
+
+	signal(SIGTERM, catch_signal);
+   signal(SIGINT, catch_signal);
+   signal(SIGHUP, catch_signal);
+	mlockall(MCL_CURRENT|MCL_FUTURE);
+
+	if (argc &lt; 2) {
+        printf(&quot;usage: %s &lt;interface&gt;\n&quot;, argv[0]);
+        return 0;
+    }
+
+	pthread_t xenothread;
+	pthread_attr_t xenothread_attr;
+
+	//Set attributes of thread
+	pthread_attr_init (&amp; xenothread_attr);
+
+	//Start thread
+	if(pthread_create(&amp;xenothread, &amp;xenothread_attr, run_master, argv[1]) != 0) {
+		printf(&quot;Cannot create thread EtherCatThread.\n&quot;);
+		exit(1);
+	}
+   pthread_join( xenothread, 0 );
+	return 0;
+}
+
+
+On 7/16/07, roland Tollenaar &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">rolandtollenaar at gmail.com</A>&gt; wrote:
+&gt;<i> Hi Said,
+</I>&gt;<i>
+</I>&gt;<i> In the latest example Tom posted he places the write in a separate
+</I>&gt;<i> thread. Perhaps that has got something to do with it. Why the 5V stays
+</I>&gt;<i> up I don;t know.
+</I>&gt;<i>
+</I>&gt;<i> What we do know is that since you and I have the same problem, its
+</I>&gt;<i> unlikely to be something wrong with the hardware. :)
+</I>&gt;<i>
+</I>&gt;<i> Roland
+</I>&gt;<i>
+</I>&gt;<i> On 7/16/07, said harti &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">harti_said at yahoo.fr</A>&gt; wrote:
+</I>&gt;<i> &gt; Exactly Rollan,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I have a same question :(,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; How we can make the outputs stay up ?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; my AO (the EL4102) stay up at 5V, but all DO flashing on briefly, and i
+</I>&gt;<i> &gt; don't know how we can make it stay up !!!!   :(
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Regards,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Said
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; roland Tollenaar &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">rolandtollenaar at gmail.com</A>&gt; a &#233;crit :
+</I>&gt;<i> &gt;  Hi Said,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Thanks for this. Using this I managed to establish what was wrong.
+</I>&gt;<i> &gt; Apparently there is a relation between the exact logical start
+</I>&gt;<i> &gt; addresses and the place in the pd buffer.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I now also have all 16 outputs flashing on briefly. Only thing is,
+</I>&gt;<i> &gt; they don't want to stay on. Do you have any idea how to make the
+</I>&gt;<i> &gt; outputs stay up?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Regards,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Roland
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On 7/16/07, said harti wrote:
+</I>&gt;<i> &gt; &gt; I have some good news about our problem,
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; i have change my last code like this :
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; ///Set Channel 1 to 5V
+</I>&gt;<i> &gt; &gt; //unsigned char msg[2] = {0xff, 0x3f};
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; unsigned char msg[5] = {0xff, 0x3f, 0x00, 0x00, 0x0f};
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; if(AL-&gt;isReady()) {
+</I>&gt;<i> &gt; &gt; printf(&quot;Test: Set Channel 1 to 5V: \n\n&quot;);
+</I>&gt;<i> &gt; &gt; printf(&quot;Test: Set all DO to 1 \n\n&quot;);
+</I>&gt;<i> &gt; &gt; int count = 0;
+</I>&gt;<i> &gt; &gt; while(count&lt;100000) {
+</I>&gt;<i> &gt; &gt; EM-&gt;txandrx_PD(sizeof(msg),msg);
+</I>&gt;<i> &gt; &gt; count++;
+</I>&gt;<i> &gt; &gt; }
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; and, now, i got 5v (3FFF) and all DO switch on quickly.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; so, in order to inswer to your question, i have exactly the some logical
+</I>&gt;<i> &gt; &gt; adress, and exactly the some all parameters on TC and EML.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; So, i think, the problem is that i tryed to send a bad message : unsigned
+</I>&gt;<i> &gt; &gt; char msg[3] = {0xff, 0x3f, 0x0f};
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; i have modified this message to : unsigned char msg[5] = {0xff, 0x3f,
+</I>&gt;<i> &gt; 0x00,
+</I>&gt;<i> &gt; &gt; 0x00, 0x0f};
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; and this is the captured frame :
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; 0000 ff ff ff ff ff ff 02 00 00 00 00 00 88 a4 11 10 ................
+</I>&gt;<i> &gt; &gt; 0010 0c 51 00 00 01 00 05 00 04 00 ff 3f 00 00 0f 04 .Q.........?....
+</I>&gt;<i> &gt; &gt; 0020 00 00 00 00 00 01 01 00 00 00 00 00 00 00 00 00 ................
+</I>&gt;<i> &gt; &gt; 0030 00 00 00 00 00 00 00 00 00 00 00 00 ............
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; and if i hope to set the second channel to 5 v too : unsigned char msg[5]
+</I>&gt;<i> &gt; =
+</I>&gt;<i> &gt; &gt; {0xff, 0x3f, 0xff, 0x3f, 0x0f};
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; that's all what i have modified in order to turn on my outputs.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Said
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Roland Tollenaar a &#233;crit :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &gt; Hi Said,
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Afraid not I am as desparate as you are. And its seems like the EML
+</I>&gt;<i> &gt; &gt; chaps have taken leaven and are bathing in the sun. :(
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; I have done some disecting below, to determine what we can try next and
+</I>&gt;<i> &gt; &gt; to make things faster for the EML chaps when they eventually return.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Apparently the frame for simple ethercat communication is supposed to
+</I>&gt;<i> &gt; &gt; ahve the destination address in the first 48 bits of the frame. Here
+</I>&gt;<i> &gt; &gt; already our EML frame seems to be incorrect.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; EML: ff ff ff ff ff ff
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; as opposed to
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; TC: 01 01 05 01 00 00
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; next come the source (also 48 bit)
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; EML: 02 00 00 00 00 00
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; TC: 02 00 7b 56 00 9a
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; then the Ethertype (16 bit)
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; EML:88 a4
+</I>&gt;<i> &gt; &gt; TC: 88 a4
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; (Hey these are the same too!) :)
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; then comes the ethercat data header (16 bit)
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; EML: 0f 10
+</I>&gt;<i> &gt; &gt; TC: 2c 10
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; (first 11 bit are the length, then 1 bit reserved then 4 bit Type
+</I>&gt;<i> &gt; &gt; [supposed to be 1])
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; The last 32 bit are the FCS
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; EML:00 00 00 00
+</I>&gt;<i> &gt; &gt; TC:00 00 00 00
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; so what is inbetween is are the datagrams:
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; EML:
+</I>&gt;<i> &gt; &gt; 0c 5e 00 00 01 00 03 00 04 00 XXX ff 3f 00 00 0f 00 00 07 00 10 00 02
+</I>&gt;<i> &gt; &gt; 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; TC:
+</I>&gt;<i> &gt; &gt; 0b 00 00 00 01 00 05 80 00 00 XXX ff 3f 00 00 0f 00 00 0a 00 00 00 08
+</I>&gt;<i> &gt; &gt; 00 01 80 00 00 00 00 00 07 00 00 00 30 01 02 00 00 00 00 00 00 00
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Each datagram consists of a 10 byte (80 bit) headerfollowed by
+</I>&gt;<i> &gt; &gt; unspecified length of data and a 16 bit working counter at the end.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; So presumanbly we can compare the headers
+</I>&gt;<i> &gt; &gt; Cmd Idx Address
+</I>&gt;<i> &gt; &gt; EML: 0c XXX 5e XXX 00 00 01 00 XXX 03 00 04 00
+</I>&gt;<i> &gt; &gt; TC: 0b XXX 00 XXX 00 00 01 00 XXX 05 80 00 00
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; So at least the first address is the same, but the command and index
+</I>&gt;<i> &gt; &gt; differ. What does this mean? I also don;t recognise the address?
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; anyway then we can see that there is the only recognizable data
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; EML: ff 3f 00 00 0f
+</I>&gt;<i> &gt; &gt; TC: ff 3f 00 00 0f
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; And at what point another datagram header follows would have to be
+</I>&gt;<i> &gt; &gt; derived from the length in the datagram header above. But this is more
+</I>&gt;<i> &gt; &gt; something for the EML chaps to look at.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Can you tell whether your logical and fixed addresses are the same in
+</I>&gt;<i> &gt; &gt; the TWINCAT experiment as in the EML experiment? Getting them the same
+</I>&gt;<i> &gt; &gt; would be a good start to determine where the important differences might
+</I>&gt;<i> &gt; be.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; HTH.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Roland
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; said harti wrote:
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; Exactly Rolland, my outputs respond correctely when i set them with the
+</I>&gt;<i> &gt; &gt; &gt; twincat tool, and i got this frame :
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; 0000 01 01 05 01 00 00 02 00 7b 56 00 9a 88 a4 2c 10................
+</I>&gt;<i> &gt; &gt; &gt; 0010 0b 00 00 00 01 00 05 80 00 00 ff 3f 00 00 0f 00.^.........??...
+</I>&gt;<i> &gt; &gt; &gt; 0020 00 0a 00 00 00 08 00 01 80 00 00 00 00 00 07 00................
+</I>&gt;<i> &gt; &gt; &gt; 0030 00 00 30 01 02 00 00 00 00 00 00 00
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; do you have some ideas pleaze for how can i resolve this misterious
+</I>&gt;<i> &gt; &gt; problem ?!!!!
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; */Roland Tollenaar /* a &#233;crit :
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; Hi Said,
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; as mentioned I am having the same problem but I don't have twincat.
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; Do your outputs respond properly when you set them with twincat and get
+</I>&gt;<i> &gt; &gt; &gt; the below frames?
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; Regards,
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; Roland
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; said harti wrote:
+</I>&gt;<i> &gt; &gt; &gt; &gt; Hello,
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; I did'nt resolve my problem yet, my master_test program turn
+</I>&gt;<i> &gt; &gt; &gt; perfectely,
+</I>&gt;<i> &gt; &gt; &gt; &gt; but the LEDs for the EL4102 and the EL2004 don't switch on, (my
+</I>&gt;<i> &gt; &gt; &gt; code is
+</I>&gt;<i> &gt; &gt; &gt; &gt; posted on my last message)
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; for the some data transmeted to the beckhoff modules (5v = 03FFF to
+</I>&gt;<i> &gt; &gt; &gt; &gt; EL4102 and all DO to 1 = 0x0F to EL2004), this is the difference
+</I>&gt;<i> &gt; &gt; &gt; between
+</I>&gt;<i> &gt; &gt; &gt; &gt; captered frames
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; 1: between my master and the Beckhoff modules :
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; 0000 ff ff ff ff ff ff 02 00 00 00 00 00 88 a4 0f 10
+</I>&gt;<i> &gt; &gt; &gt; &gt; ................
+</I>&gt;<i> &gt; &gt; &gt; &gt; 0010 0c 5e 00 00 01 00 03 00 04 00 ff 3f 00 00 0f 00 .^.........?....
+</I>&gt;<i> &gt; &gt; &gt; &gt; 0020 00 07 00 10 00 02 01 00 00 00 00 00 00 00 00 00 ................
+</I>&gt;<i> &gt; &gt; &gt; &gt; 0030 00 00 00 00 00 00 00 00 00 00 00 00 ............
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; and this is the captured frame between the twincat tools on my
+</I>&gt;<i> &gt; &gt; &gt; laptop
+</I>&gt;<i> &gt; &gt; &gt; &gt; and the beckhoff modules :
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; 0000 01 01 05 01 00 00 02 00 7b 56 00 9a 88 a4 2c 10 ................
+</I>&gt;<i> &gt; &gt; &gt; &gt; 0010 0b 00 00 00 01 00 05 80 00 00 ff 3f 00 00 0f 00 .^.........??...
+</I>&gt;<i> &gt; &gt; &gt; &gt; 0020 00 0a 00 00 00 08 00 01 80 00 00 00 00 00 07 00 ................
+</I>&gt;<i> &gt; &gt; &gt; &gt; 0030 00 00 30 01 02 00 00 00 00 00 00 00 ............
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; thanks to tell me what i am possibly wrong
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; Best Regards
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; Said HARTI
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; ------------------------------------------------------------------------
+</I>&gt;<i> &gt; &gt; &gt; &gt; D&#233;couvrez une nouvelle fa&#231;on d'obtenir des r&#233;ponses &#224; toutes vos
+</I>&gt;<i> &gt; &gt; &gt; &gt; questions ! Profitez des connaissances, des opinions et des
+</I>&gt;<i> &gt; &gt; &gt; exp&#233;riences
+</I>&gt;<i> &gt; &gt; &gt; &gt; des internautes sur Yahoo! Questions/R&#233;ponses
+</I>&gt;<i> &gt; &gt; &gt; &gt; .
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; ------------------------------------------------------------------------
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; _______________________________________________
+</I>&gt;<i> &gt; &gt; &gt; &gt; Ethercatmaster-users mailing list
+</I>&gt;<i> &gt; &gt; &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; ------------------------------------------------------------------------
+</I>&gt;<i> &gt; &gt; &gt; Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez aujourd'hui de
+</I>&gt;<i> &gt; &gt; &gt; mail !
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; ________________________________
+</I>&gt;<i> &gt; &gt; Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez aujourd'hui de
+</I>&gt;<i> &gt; &gt; mail !
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;  ________________________________
+</I>&gt;<i> &gt;  Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez aujourd'hui de
+</I>&gt;<i> &gt; mail !
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000145.html">[Ethercatmaster-users] RE : Re: RE : Re: RE : Re: Slaves	Parameters!!
+</A></li>
+	<LI>Next message: <A HREF="000151.html">[Ethercatmaster-users] RE : Re: RE : Re: RE : Re:	Slaves	Parameters!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#148">[ date ]</a>
+              <a href="thread.html#148">[ thread ]</a>
+              <a href="subject.html#148">[ subject ]</a>
+              <a href="author.html#148">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

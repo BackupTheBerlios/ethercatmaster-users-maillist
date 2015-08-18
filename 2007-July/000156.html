@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Read from the EL1004 module !!!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Read%20from%20the%20EL1004%20module%20%21%21%21&In-Reply-To=%3C469CEB9F.9070305%40skynet.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000155.html">
+   <LINK REL="Next"  HREF="000157.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Read from the EL1004 module !!!</H1>
+    <B>Tom Panis</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Read%20from%20the%20EL1004%20module%20%21%21%21&In-Reply-To=%3C469CEB9F.9070305%40skynet.be%3E"
+       TITLE="[Ethercatmaster-users] Read from the EL1004 module !!!">tompanis at skynet.be
+       </A><BR>
+    <I>Tue Jul 17 18:17:35 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000155.html">[Ethercatmaster-users] Read from the EL1004 module !!!
+</A></li>
+        <LI>Next message: <A HREF="000157.html">[Ethercatmaster-users] RE : Re:  Read from the EL1004 module !!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#156">[ date ]</a>
+              <a href="thread.html#156">[ thread ]</a>
+              <a href="subject.html#156">[ subject ]</a>
+              <a href="author.html#156">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+said harti wrote:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> As you see in my test program, i want to see on my scren the DI EL1004 
+</I>&gt;<i> value,
+</I>&gt;<i>
+</I>&gt;<i> but when i apply or remove the Digital Input on, i don't see any 
+</I>&gt;<i> instantaneous response any where !!!
+</I>&gt;<i>
+</I>&gt;<i> Anyone can tell me please how can i do in order to get the DI value on 
+</I>&gt;<i> my scren ????
+</I>
+You made the same mistake as you did with the digital outputs. In your 
+fmmu configuration, you set the logical startaddress at 0x00010800, but 
+you don't check at the corresponding place in your local buffer. Using 
+the following fmmu configuration, you should see the digital inputs at 
+byte 10 of your local buffer (I assume you haven't used this logical 
+address yet):
+
+EC_FMMU 
+fmmu0_EL1004(0x0001000A,0x0001,0x00,0x03,0x1000,0x00,true,false,true);
+
+&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i>
+</I>&gt;<i> Said
+</I>&gt;<i> ///SlaveConfig EL1004 :
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_FMMU_Config fmmu_config_EL1004(1);
+</I>&gt;<i> EC_FMMU
+</I>&gt;<i> fmmu0_EL1004(0x00010800,0x0001,0x00,0x03,0x1000,0x00,true,false,true);
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_PD_Config pd_config_EL1004(1);
+</I>&gt;<i> EC_SyncMan 
+</I>&gt;<i> syncman0_EL1004(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i>
+</I>&gt;<i> EtherCAT_SlaveConfig 
+</I>&gt;<i> EC_EL1004(0x03EC3052,0x00100000,0x03ec,&amp;fmmu_config_EL1004,&amp;pd_config_EL1004);
+</I>&gt;<i> EtherCAT_AL * AL = EtherCAT_AL::instance();
+</I>&gt;<i>        
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>         ///Set Channel 1 to 5V
+</I>&gt;<i>
+</I>&gt;<i>         //unsigned char msg[5] = {0xff, 0x3f, 0xff, 0x3f, 0x0f};///
+</I>&gt;<i>         //unsigned char msg[18];
+</I>&gt;<i> unsigned char msg[20]={0xff, 0x3f, 0xff, 0x3f, 0x0f,0x00, 0x00, 0x00, 
+</I>&gt;<i> 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+</I>&gt;<i>         if(AL-&gt;isReady()) {
+</I>&gt;<i>
+</I>&gt;<i>             printf(&quot;Test: Set Channel 1 to 5V: \n\n&quot;);
+</I>&gt;<i>             printf(&quot;Test: Mettre le module TOR &#224; 1: \n\n&quot;);///
+</I>&gt;<i>
+</I>&gt;<i>             printf(&quot;Lecture sans ecriture: \n\n&quot;);///
+</I>&gt;<i>
+</I>&gt;<i>             int count = 0;
+</I>&gt;<i>             while(count&lt;100) {
+</I>&gt;<i>
+</I>&gt;<i>                 msg[0]=0xff;
+</I>&gt;<i>                 msg[1]=0x3f;
+</I>&gt;<i>                 msg[2]=0xff;
+</I>&gt;<i>                 msg[3]=0x3f;
+</I>&gt;<i>                 msg[4]=0x0f;
+</I>&gt;<i>
+</I>&gt;<i>                   if(EM-&gt;txandrx_PD(sizeof(msg),msg)){
+</I>&gt;<i>                     //printf(&quot;msg = 0x&quot;);           
+</I>&gt;<i>                     for (int i=0;i&lt;20;i++)
+</I>&gt;<i>                         printf(&quot;0X%x &quot;, msg[i]);
+</I>&gt;<i>                     printf (&quot;\n&quot;);       
+</I>&gt;<i>                 }//EM-&gt;txandrx_PD(sizeof(msg),msg);
+</I>&gt;<i>                     else{
+</I>&gt;<i>                         printf(&quot;txandrx failed : \n\n&quot;);
+</I>&gt;<i>                         }
+</I>&gt;<i>
+</I>&gt;<i>                 count++;
+</I>&gt;<i>             }
+</I>&gt;<i>
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> D&#233;couvrez une nouvelle fa&#231;on d'obtenir des r&#233;ponses &#224; toutes vos 
+</I>&gt;<i> questions ! Profitez des connaissances, des opinions et des 
+</I>&gt;<i> exp&#233;riences des internautes sur Yahoo! Questions/R&#233;ponses 
+</I>&gt;<i> &lt;<A HREF="http://fr.rd.yahoo.com/evt=42054/*http://fr.answers.yahoo.com">http://fr.rd.yahoo.com/evt=42054/*http://fr.answers.yahoo.com</A>&gt;.
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i>   
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000155.html">[Ethercatmaster-users] Read from the EL1004 module !!!
+</A></li>
+	<LI>Next message: <A HREF="000157.html">[Ethercatmaster-users] RE : Re:  Read from the EL1004 module !!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#156">[ date ]</a>
+              <a href="thread.html#156">[ thread ]</a>
+              <a href="subject.html#156">[ subject ]</a>
+              <a href="author.html#156">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

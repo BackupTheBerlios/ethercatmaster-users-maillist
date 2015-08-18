@@ -1,0 +1,1594 @@
+From rolandtollenaar at gmail.com  Tue Jun 12 12:38:16 2007
+From: rolandtollenaar at gmail.com (roland Tollenaar)
+Date: Tue, 12 Jun 2007 10:38:16 +0000
+Subject: [Ethercatmaster-users] getting started
+Message-ID: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>
+
+Hi,
+
+I have now got my BeckHoff remoteIO stuff consisting of
+
+EK1100 (buscoupler)
+EL2004 (DO)
+EL2004 (DO)
+EL2004 (DO)
+EL2004 (DO)
+EL1014 (DI)
+EL1014 (DI)
+EL1014 (DI)
+EL1014 (DI)
+EL4132 (AO)
+
+rtnet is tested and working on a xenomai platform.
+
+EML is compiled and installed.
+
+The remote IO group is connected to the PC by the ethernet cable
+(obviously) and I have 24V applied across pins 1 and 5 on the
+buscoupler. AFAIK this is all that is required in terms of wiring.
+
+But what now??
+
+I have no clue how to get communication going between the Beckhoff
+remote IO and my master. The tests that come with the EML library
+(master_test and eval_test) fail miserably. Can't initilize network, a
+lot of other errors ending with  a segmentation fault. I have
+understood that they are for a very particular kind of configuration
+and it is not surprising that they fail on my setup.
+
+Could I please get some tips and advice as to how I could best get the
+communication up?
+
+I do not have TwinCat so I hope that it is not required for any
+initial parameter setting of the remoteIO.
+
+Thanks a lot
+
+Kind regards,
+
+Roland Tollenaar
+
+
+From klaas.gadeyne at fmtc.be  Tue Jun 12 14:13:29 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 12 Jun 2007 14:13:29 +0200 (CEST)
+Subject: [Ethercatmaster-users] getting started
+In-Reply-To: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>
+References: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>
+Message-ID: <Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>
+
+On Tue, 12 Jun 2007, roland Tollenaar wrote:
+> Hi,
+>
+> I have now got my BeckHoff remoteIO stuff consisting of
+> rtnet is tested and working on a xenomai platform.
+> EML is compiled and installed.
+>
+> The remote IO group is connected to the PC by the ethernet cable
+> (obviously) and I have 24V applied across pins 1 and 5 on the
+> buscoupler. AFAIK this is all that is required in terms of wiring.
+>
+> But what now??
+>
+> I have no clue how to get communication going between the Beckhoff
+> remote IO and my master. The tests that come with the EML library
+> (master_test and eval_test) fail miserably. Can't initilize network, a
+> lot of other errors ending with  a segmentation fault. I have
+> understood that they are for a very particular kind of configuration
+> and it is not surprising that they fail on my setup.
+>
+> Could I please get some tips and advice as to how I could best get the
+> communication up?
+
+Please post relevant output from running the test programs.  Normally,
+you should get further when running the master_test now.
+
+regards,
+
+Klaas
+
+
+From rolandtollenaar at gmail.com  Tue Jun 12 14:52:19 2007
+From: rolandtollenaar at gmail.com (roland Tollenaar)
+Date: Tue, 12 Jun 2007 12:52:19 +0000
+Subject: [Ethercatmaster-users] getting started
+In-Reply-To: <Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>
+References: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>
+	<Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>
+Message-ID: <bc4264770706120552h6cd86480sfa3327a401fe3162@mail.gmail.com>
+
+Hi Klaas,
+
+> Please post relevant output from running the test programs.  Normally,
+> you should get further when running the master_test now.
+
+This is the output if I do not run
+
+>>./rtnet start
+
+before running master_test.:
+
+
+root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+Socket created: socket id: 3
+Cannot get interface index: No such device
+Socket initialisation failed
+root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test eth0
+Socket created: socket id: 3
+Got interface: index: 0
+Cannot set timout: Invalid argument
+Continue without timeout
+Attach netif
+
+Master initializing
+
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_output(): Cannot Send
+low_level_txandrx: failed: MAX_TRIES_TX: Giving up
+DLL::txandrx() Error
+Error sending counter frame
+Something went wrong while scanning network
+EtherCAT_AL:: Can't init network
+Getting slave handler
+EtherCAT_AL: No such slave, returning NULL
+Setting EK1100 to OP STATE
+Segmentation fault
+root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+
+
+If I run rtnet start the output is
+
+Waiting for slaves.........
+
+(My slave IP is set to 10.0.0.2) I have not yet discovered what the
+correct IP of the remote IO station is ?
+
+I end the "Waiting for slaves...." with ^C.
+
+Then run master_test, the output is:
+
+root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+Socket created: socket id: 896
+Got interface: index: 0
+Attach netif
+
+Master initializing
+
+low_level_txandrx: failed: MAX_TRIES_TX: Giving up
+DLL::txandrx() Error
+Error sending counter frame
+Something went wrong while scanning network
+EtherCAT_AL:: Can't init network
+Getting slave handler
+EtherCAT_AL: No such slave, returning NULL
+Setting EK1100 to OP STATE
+Segmentation fault
+root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+
+Hope this tells us what I am doing wrong?
+
+
+Kind regards.
+
+Roland.
+
+
+
+
+>
+> regards,
+>
+> Klaas
+>
+
+
+From jan.kiszka at web.de  Tue Jun 12 14:59:35 2007
+From: jan.kiszka at web.de (Jan Kiszka)
+Date: Tue, 12 Jun 2007 14:59:35 +0200
+Subject: [Ethercatmaster-users] getting started
+In-Reply-To: <bc4264770706120552h6cd86480sfa3327a401fe3162@mail.gmail.com>
+References: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>	<Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>
+	<bc4264770706120552h6cd86480sfa3327a401fe3162@mail.gmail.com>
+Message-ID: <466E98B7.6070500@web.de>
+
+roland Tollenaar wrote:
+> Hi Klaas,
+> 
+>> Please post relevant output from running the test programs.  Normally,
+>> you should get further when running the master_test now.
+> 
+> This is the output if I do not run
+> 
+>>> ./rtnet start
+> 
+> before running master_test.:
+> 
+> 
+> root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+> Socket created: socket id: 3
+> Cannot get interface index: No such device
+> Socket initialisation failed
+
+Did you configure rteth0? Something like modprobe <my-rt-nic-driver>,
+modprobe rtpacket, rtifconfig rteth0 up?
+
+> root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test eth0
+
+eth0 is obviously wrong. You want to use RTnet, don't you?
+
+> Socket created: socket id: 3
+> Got interface: index: 0
+> Cannot set timout: Invalid argument
+> Continue without timeout
+> Attach netif
+> 
+> Master initializing
+> 
+> low_level_output(): Cannot Send
+> low_level_output(): Cannot Send
+> low_level_output(): Cannot Send
+> low_level_output(): Cannot Send
+> low_level_output(): Cannot Send
+> low_level_output(): Cannot Send
+> low_level_output(): Cannot Send
+> low_level_output(): Cannot Send
+> low_level_output(): Cannot Send
+> low_level_output(): Cannot Send
+> low_level_txandrx: failed: MAX_TRIES_TX: Giving up
+> DLL::txandrx() Error
+> Error sending counter frame
+> Something went wrong while scanning network
+> EtherCAT_AL:: Can't init network
+> Getting slave handler
+> EtherCAT_AL: No such slave, returning NULL
+> Setting EK1100 to OP STATE
+> Segmentation fault
+> root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+> 
+> 
+> If I run rtnet start the output is
+> 
+> Waiting for slaves.........
+
+Don't use this for EtherCAT setup, RTmac/TDMA is otherwise brought up
+which makes no sense here. Isn't the EML documentation covering the
+required RTnet start-up sequence?
+
+> 
+> (My slave IP is set to 10.0.0.2) I have not yet discovered what the
+> correct IP of the remote IO station is ?
+> 
+> I end the "Waiting for slaves...." with ^C.
+> 
+> Then run master_test, the output is:
+> 
+> root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+> Socket created: socket id: 896
+> Got interface: index: 0
+> Attach netif
+> 
+> Master initializing
+
+Due to RTmac/TDMA, the master will not be able to send any packet on the
+wire...
+
+> 
+> low_level_txandrx: failed: MAX_TRIES_TX: Giving up
+> DLL::txandrx() Error
+> Error sending counter frame
+> Something went wrong while scanning network
+> EtherCAT_AL:: Can't init network
+> Getting slave handler
+> EtherCAT_AL: No such slave, returning NULL
+> Setting EK1100 to OP STATE
+> Segmentation fault
+> root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+> 
+> Hope this tells us what I am doing wrong?
+> 
+> 
+> Kind regards.
+> 
+> Roland.
+> 
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/372991fb/attachment.pgp>
+
+From klaas.gadeyne at fmtc.be  Tue Jun 12 15:28:21 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 12 Jun 2007 15:28:21 +0200 (CEST)
+Subject: [Ethercatmaster-users] getting started
+In-Reply-To: <466E98B7.6070500@web.de>
+References: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>
+	<Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>
+	<bc4264770706120552h6cd86480sfa3327a401fe3162@mail.gmail.com>
+	<466E98B7.6070500@web.de>
+Message-ID: <Pine.LNX.4.64.0706121526240.26451@ampere.labo01.fmtc.be>
+
+On Tue, 12 Jun 2007, Jan Kiszka wrote:
+> roland Tollenaar wrote:
+[...]
+> Don't use this for EtherCAT setup, RTmac/TDMA is otherwise brought up
+> which makes no sense here. Isn't the EML documentation covering the
+> required RTnet start-up sequence?
+
+Tom, please add this to your todo list for the summer :-)
+
+Klaas
+
+
+
+From rolandtollenaar at gmail.com  Tue Jun 12 15:42:11 2007
+From: rolandtollenaar at gmail.com (roland Tollenaar)
+Date: Tue, 12 Jun 2007 13:42:11 +0000
+Subject: [Ethercatmaster-users] getting started
+In-Reply-To: <466E98B7.6070500@web.de>
+References: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>
+	<Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>
+	<bc4264770706120552h6cd86480sfa3327a401fe3162@mail.gmail.com>
+	<466E98B7.6070500@web.de>
+Message-ID: <bc4264770706120642v2081c609ib079c071bb182b5a@mail.gmail.com>
+
+Hi,
+
+> > This is the output if I do not run
+> >
+> >>> ./rtnet start
+> >
+> > before running master_test.:
+> >
+> >
+> > root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+> > Socket created: socket id: 3
+> > Cannot get interface index: No such device
+> > Socket initialisation failed
+>
+> Did you configure rteth0? Something like modprobe <my-rt-nic-driver>,
+> modprobe rtpacket, rtifconfig rteth0 up?
+
+Where does it say something about this? AFAIK only the rtnet_conf in
+/rtnet/etc must be set up but its not clear to me how to set this up
+for the beckhoff node......
+As stated, if the Beckhoff node is to be the slave in the
+configuration, what ip adress does it have?
+
+
+>
+> > root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test eth0
+>
+> eth0 is obviously wrong. You want to use RTnet, don't you?
+I know, just thought I would post it for completeness.
+
+
+> > If I run rtnet start the output is
+> >
+> > Waiting for slaves.........
+>
+> Don't use this for EtherCAT setup, RTmac/TDMA is otherwise brought up
+> which makes no sense here.
+Ah, see this is news that I can use!!
+
+Isn't the EML documentation covering the
+> required RTnet start-up sequence?
+As Klaas points out, not yet.......
+
+> > root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+> > Socket created: socket id: 896
+> > Got interface: index: 0
+> > Attach netif
+> >
+> > Master initializing
+>
+> Due to RTmac/TDMA, the master will not be able to send any packet on the
+> wire...
+Ok.........
+
+I know that I am infamous for not reading the correct documentation
+before asking silly questions, but I get the impression that there is
+information about starting up rtnet without RTmac/TDMA which i do not
+know about. Where can I find out?
+
+
+Regards,
+
+Roland.
+
+>
+> >
+> > low_level_txandrx: failed: MAX_TRIES_TX: Giving up
+> > DLL::txandrx() Error
+> > Error sending counter frame
+> > Something went wrong while scanning network
+> > EtherCAT_AL:: Can't init network
+> > Getting slave handler
+> > EtherCAT_AL: No such slave, returning NULL
+> > Setting EK1100 to OP STATE
+> > Segmentation fault
+> > root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+> >
+> > Hope this tells us what I am doing wrong?
+> >
+> >
+> > Kind regards.
+> >
+> > Roland.
+> >
+>
+> Jan
+>
+>
+>
+
+
+From rolandtollenaar at gmail.com  Tue Jun 12 15:43:55 2007
+From: rolandtollenaar at gmail.com (roland Tollenaar)
+Date: Tue, 12 Jun 2007 13:43:55 +0000
+Subject: [Ethercatmaster-users] getting started
+In-Reply-To: <Pine.LNX.4.64.0706121526240.26451@ampere.labo01.fmtc.be>
+References: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>
+	<Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>
+	<bc4264770706120552h6cd86480sfa3327a401fe3162@mail.gmail.com>
+	<466E98B7.6070500@web.de>
+	<Pine.LNX.4.64.0706121526240.26451@ampere.labo01.fmtc.be>
+Message-ID: <bc4264770706120643q52b593bal4087508854d7add3@mail.gmail.com>
+
+Hi,
+
+On 6/12/07, Klaas Gadeyne <klaas.gadeyne at fmtc.be> wrote:
+> On Tue, 12 Jun 2007, Jan Kiszka wrote:
+> > roland Tollenaar wrote:
+> [...]
+> > Don't use this for EtherCAT setup, RTmac/TDMA is otherwise brought up
+> > which makes no sense here. Isn't the EML documentation covering the
+> > required RTnet start-up sequence?
+>
+> Tom, please add this to your todo list for the summer :-)
+
+Actually, is there any possibility that I could get a sneak preview of
+this sooner? :)
+
+
+RR
+
+
+
+
+>
+> Klaas
+>
+>
+
+
+From jan.kiszka at web.de  Tue Jun 12 16:55:04 2007
+From: jan.kiszka at web.de (Jan Kiszka)
+Date: Tue, 12 Jun 2007 16:55:04 +0200
+Subject: [Ethercatmaster-users] getting started
+In-Reply-To: <bc4264770706120642v2081c609ib079c071bb182b5a@mail.gmail.com>
+References: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>	
+	<Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>	
+	<bc4264770706120552h6cd86480sfa3327a401fe3162@mail.gmail.com>	
+	<466E98B7.6070500@web.de>
+	<bc4264770706120642v2081c609ib079c071bb182b5a@mail.gmail.com>
+Message-ID: <466EB3C8.2080406@web.de>
+
+roland Tollenaar wrote:
+> Hi,
+> 
+>> > This is the output if I do not run
+>> >
+>> >>> ./rtnet start
+>> >
+>> > before running master_test.:
+>> >
+>> >
+>> > root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+>> ./master_test rteth0
+>> > Socket created: socket id: 3
+>> > Cannot get interface index: No such device
+>> > Socket initialisation failed
+>>
+>> Did you configure rteth0? Something like modprobe <my-rt-nic-driver>,
+>> modprobe rtpacket, rtifconfig rteth0 up?
+> 
+> Where does it say something about this? AFAIK only the rtnet_conf in
+> /rtnet/etc must be set up but its not clear to me how to set this up
+> for the beckhoff node......
+> As stated, if the Beckhoff node is to be the slave in the
+> configuration, what ip adress does it have?
+
+No IP addresses involved here.
+
+> 
+> 
+>>
+>> > root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+>> ./master_test eth0
+>>
+>> eth0 is obviously wrong. You want to use RTnet, don't you?
+> I know, just thought I would post it for completeness.
+> 
+> 
+>> > If I run rtnet start the output is
+>> >
+>> > Waiting for slaves.........
+>>
+>> Don't use this for EtherCAT setup, RTmac/TDMA is otherwise brought up
+>> which makes no sense here.
+> Ah, see this is news that I can use!!
+> 
+> Isn't the EML documentation covering the
+>> required RTnet start-up sequence?
+> As Klaas points out, not yet.......
+> 
+>> > root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+>> ./master_test rteth0
+>> > Socket created: socket id: 896
+>> > Got interface: index: 0
+>> > Attach netif
+>> >
+>> > Master initializing
+>>
+>> Due to RTmac/TDMA, the master will not be able to send any packet on the
+>> wire...
+> Ok.........
+> 
+> I know that I am infamous for not reading the correct documentation
+> before asking silly questions, but I get the impression that there is
+> information about starting up rtnet without RTmac/TDMA which i do not
+> know about. Where can I find out?
+> 
+
+So far, you seem to have done the right thing asking here. Here is the
+required setup:
+
+Load modules: <Xenomai>, rtnet, rtpacket, rt_<your-nic>
+Configure rteth0: rtifconfig rteth0 up
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/86b62c47/attachment.pgp>
+
+From rolandtollenaar at gmail.com  Tue Jun 12 20:05:22 2007
+From: rolandtollenaar at gmail.com (roland Tollenaar)
+Date: Tue, 12 Jun 2007 18:05:22 +0000
+Subject: [Ethercatmaster-users] getting started
+In-Reply-To: <466EB3C8.2080406@web.de>
+References: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>
+	<Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>
+	<bc4264770706120552h6cd86480sfa3327a401fe3162@mail.gmail.com>
+	<466E98B7.6070500@web.de>
+	<bc4264770706120642v2081c609ib079c071bb182b5a@mail.gmail.com>
+	<466EB3C8.2080406@web.de>
+Message-ID: <bc4264770706121105o53940a13i38ca56069fd9115d@mail.gmail.com>
+
+Hi,
+
+>
+> So far, you seem to have done the right thing asking here. Here is the
+> required setup:
+>
+> Load modules: <Xenomai>, rtnet, rtpacket, rt_<your-nic>
+> Configure rteth0: rtifconfig rteth0 up
+
+Thanks. This makes sense to me. Will try.
+
+Roland
+
+>
+> Jan
+>
+>
+>
+
+
+From tompanis at skynet.be  Tue Jun 12 19:26:08 2007
+From: tompanis at skynet.be (Tom Panis)
+Date: Tue, 12 Jun 2007 19:26:08 +0200
+Subject: [Ethercatmaster-users] Tutorial for adding slaves to the ethercat
+	master
+Message-ID: <466ED730.1030508@skynet.be>
+
+Hi all,
+
+I've written a small tutorial for adding some slaves to the ethercat master.
+One big remark: it's still written in Dutch. I haven't got the time to 
+translate it in English, since I'm studying for my exams at the moment. 
+But a translation is on it's way :-)
+
+At some points the tutorial refers to TwinCAT, the EtherCAT 
+configuration program for Windows. You can download a 30-day trial of 
+this program at the Beckhoff website (www.beckhoff.com).
+For those who don't use Windows (can't blame them at all :-) ), I've 
+included the necessary configurations for the EtherCAT network I used.
+
+This network uses :
+one coupler (EK1100)
+one analog output (EL4102)
+one analog input (EL3162)
+two digital outputs (EL2004)
+two digital inputs (EL1014)
+two incremental encoders (EL5101)
+
+Since the information retrieved from TwinCAT for one type device remains 
+the same for all used device of that type, you can just copy-paste the 
+configurations you need.
+Note: the logical addresses and the physical address assigned to each 
+device still need to be modified according to your EtherCAT network.
+
+There are also two scripts included for starting and stopping RTnet. 
+These are the scripts I used, so if you installed rtnet in another 
+location, you may need to modify the paths in the scripts (the default 
+path is /usr/local/rtnet/).
+
+Tom
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Nieuwe slave toevoegen.pdf
+Type: application/pdf
+Size: 376326 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/fae4bb28/attachment.pdf>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: mod_rtnet_stop
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/fae4bb28/attachment.ksh>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: mod_rtnet_start
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/fae4bb28/attachment-0001.ksh>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: slaveconfigurations.hpp
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070612/fae4bb28/attachment-0002.ksh>
+
+From rolandtollenaar at gmail.com  Wed Jun 13 12:31:51 2007
+From: rolandtollenaar at gmail.com (roland Tollenaar)
+Date: Wed, 13 Jun 2007 10:31:51 +0000
+Subject: [Ethercatmaster-users] getting started
+In-Reply-To: <bc4264770706121105o53940a13i38ca56069fd9115d@mail.gmail.com>
+References: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>
+	<Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>
+	<bc4264770706120552h6cd86480sfa3327a401fe3162@mail.gmail.com>
+	<466E98B7.6070500@web.de>
+	<bc4264770706120642v2081c609ib079c071bb182b5a@mail.gmail.com>
+	<466EB3C8.2080406@web.de>
+	<bc4264770706121105o53940a13i38ca56069fd9115d@mail.gmail.com>
+Message-ID: <bc4264770706130331w42795787qc8e9340e3d629ea5@mail.gmail.com>
+
+Hi,
+
+With the modified start of rtnet things look a bit better but not 100%
+
+This is the output of master test now.
+
+One problem, after the mastertest crashes it seems as though rtpacket
+runs away holding on to rtnet in some form. It is not possible to
+unload it and only a reboot will allow me to start the normal network
+connection again. Any ideas why and how I can kill it?
+
+It would help my understanding if some comments could be inserted into
+the output below to explain what is happening. To me it looks as
+though there is some successful communication with the slave but why I
+am told that there are 10 slaves (if there is only one) and that the
+EEPROM is busy (why is it busy?) I have no idea.
+
+Very obviously it fails on trying to set the 4102 to operational
+state. I don;t have that module in my configuration and i assume that
+most complaints are caused by similar discrepancies.
+
+Kind regards,
+
+Roland.
+
+
+root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet# ./master_test rteth0
+Socket created: socket id: 896
+Got interface: index: 0
+Attach netif
+
+Master initializing
+
+EtherCAT AL: Ring contains 10 slaves
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, rev=0x10000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=1, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=2, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=3, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=4, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=5, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=6, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=7, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=8, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=9, Product Code=0x10243052, rev=0x0
+AL: resetting FMMUs
+AL: resetting SMs
+AL: Setting all slaves in init mode
+Getting slave handler
+Setting EK1100 to OP STATE
+EK1100 succesfully set in OP STATE
+Getting slave handler
+EtherCAT_AL: No such slave, returning NULL
+Setting EL4102 to OP STATE
+Segmentation fault
+root at slax:/usr/local/eml-trunk/build_rtnet/tests/rtnet#
+
+
+
+
+
+
+On 6/12/07, roland Tollenaar <rolandtollenaar at gmail.com> wrote:
+> Hi,
+>
+> >
+> > So far, you seem to have done the right thing asking here. Here is the
+> > required setup:
+> >
+> > Load modules: <Xenomai>, rtnet, rtpacket, rt_<your-nic>
+> > Configure rteth0: rtifconfig rteth0 up
+>
+> Thanks. This makes sense to me. Will try.
+>
+> Roland
+>
+> >
+> > Jan
+> >
+> >
+> >
+>
+
+
+From jan.kiszka at web.de  Wed Jun 13 12:45:57 2007
+From: jan.kiszka at web.de (Jan Kiszka)
+Date: Wed, 13 Jun 2007 12:45:57 +0200
+Subject: [Ethercatmaster-users] getting started
+In-Reply-To: <bc4264770706130331w42795787qc8e9340e3d629ea5@mail.gmail.com>
+References: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>	
+	<Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>	
+	<bc4264770706120552h6cd86480sfa3327a401fe3162@mail.gmail.com>	
+	<466E98B7.6070500@web.de>	
+	<bc4264770706120642v2081c609ib079c071bb182b5a@mail.gmail.com>	
+	<466EB3C8.2080406@web.de>	
+	<bc4264770706121105o53940a13i38ca56069fd9115d@mail.gmail.com>
+	<bc4264770706130331w42795787qc8e9340e3d629ea5@mail.gmail.com>
+Message-ID: <466FCAE5.8050602@web.de>
+
+roland Tollenaar wrote:
+> Hi,
+> 
+> With the modified start of rtnet things look a bit better but not 100%
+> 
+> This is the output of master test now.
+> 
+> One problem, after the mastertest crashes it seems as though rtpacket
+> runs away holding on to rtnet in some form. It is not possible to
+> unload it and only a reboot will allow me to start the normal network
+> connection again. Any ideas why and how I can kill it?
+
+Likely a stalled file descriptor, check /proc/xenomai/rtdm/open_fildes.
+Use "echo fd-number > /proc/xenomai/rtdm/open_fildes" to enforce closing
+it. Xenomai 2.4 will do this automatically, BTW.
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070613/6932d5ff/attachment.pgp>
+
+From klaas.gadeyne at fmtc.be  Wed Jun 13 13:42:49 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Wed, 13 Jun 2007 13:42:49 +0200 (CEST)
+Subject: [Ethercatmaster-users] getting started
+In-Reply-To: <bc4264770706130331w42795787qc8e9340e3d629ea5@mail.gmail.com>
+References: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>
+	<Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>
+	<bc4264770706120552h6cd86480sfa3327a401fe3162@mail.gmail.com>
+	<466E98B7.6070500@web.de>
+	<bc4264770706120642v2081c609ib079c071bb182b5a@mail.gmail.com>
+	<466EB3C8.2080406@web.de>
+	<bc4264770706121105o53940a13i38ca56069fd9115d@mail.gmail.com>
+	<bc4264770706130331w42795787qc8e9340e3d629ea5@mail.gmail.com>
+Message-ID: <Pine.LNX.4.64.0706131321330.3716@ampere.labo01.fmtc.be>
+
+On Wed, 13 Jun 2007, roland Tollenaar wrote:
+> Hi,
+>
+> With the modified start of rtnet things look a bit better but not 100%
+
+A bit, I would say "a lot" :-)
+
+> This is the output of master test now.
+
+I would suggest you to replace the slave code at the top of
+master_test.cpp by the header code Tom sent in his email yesterday.
+That way your master test program is going to recognise far more
+slaves than it does now.
+Eventually, I think this should become (in a first step) a eml header
+file (something like beckhoff_slaves_config.hpp)
+Patches are welcome :-)
+
+> One problem, after the mastertest crashes it seems as though rtpacket
+> runs away holding on to rtnet in some form. It is not possible to
+> unload it and only a reboot will allow me to start the normal network
+> connection again. Any ideas why and how I can kill it?
+
+See Jan's note about it.
+
+> It would help my understanding if some comments could be inserted into
+> the output below to explain what is happening. To me it looks as
+> though there is some successful communication with the slave but why I
+> am told that there are 10 slaves (if there is only one) and that the
+> EEPROM is busy (why is it busy?) I have no idea.
+
+There truly are 10 slaves in your network (there's only one buscoupler
+who has a "physical" ethernet connection though)
+
+> Very obviously it fails on trying to set the 4102 to operational
+> state. I don;t have that module in my configuration and i assume that
+> most complaints are caused by similar discrepancies.
+
+Exactly, so as a matter of fact, EML does exactly what you ask it
+right now (see above to get one step further).
+
+
+> EtherCAT AL: Ring contains 10 slaves
+> EEPROM busy
+> EEPROM busy
+
+These eeprom busy errors typically happen when the slave doesn't react
+fast enough to a particular request.  The master then retries a fixed
+number of times, before giving up.
+
+> AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, rev=0x10000
+
+This one was recognised
+
+> EtherCAT_SlaveDb: No such Config, returning NULL!
+
+This one not, but it might be if you use Tom's code (as stated
+above).  IIRC, for your analog input module, you'll have to follow
+Tom's guidelines though
+
+[...]
+> EtherCAT_SlaveDb: No such Config, returning NULL!
+> EC_AL Warning: No such slave in db, creating dummy slave
+> AL creating SlaveHandler: pos=9, Product Code=0x10243052, rev=0x0
+> AL: resetting FMMUs
+> AL: resetting SMs
+> AL: Setting all slaves in init mode
+> Getting slave handler
+> Setting EK1100 to OP STATE
+> EK1100 succesfully set in OP STATE
+> Getting slave handler
+> EtherCAT_AL: No such slave, returning NULL
+> Setting EL4102 to OP STATE
+> Segmentation fault
+
+As stated before, this is due to Tom's code that currently doesn't
+check if the slave pointer is NULL.
+
+All together, it seems like everything is working properly (i.e.~as
+expected given the source code :)!
+Best regards,
+
+Klaas
+
+
+
+From rwatollenaar at gmail.com  Wed Jun 13 15:37:05 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Wed, 13 Jun 2007 15:37:05 +0200
+Subject: [Ethercatmaster-users] [Fwd: Re:  getting started]
+Message-ID: <466FF301.9000909@gmail.com>
+
+Sorry, forgot the reply to all....
+
+Hi
+
+> Likely a stalled file descriptor, check /proc/xenomai/rtdm/open_fildes.
+> Use "echo fd-number > /proc/xenomai/rtdm/open_fildes" to enforce closing
+
+Thanks. But I am not sure I understand. is fd_number a number I must
+fill in or is it a parameter known to the shell? If I must fill it in,
+where do I find it.
+
+
+> it. Xenomai 2.4 will do this automatically, BTW.
+Its always the same, I must just wait longer before trying these things. :)
+
+Regards,
+
+Roland
+
+
+
+> 
+> Jan
+> 
+
+
+
+From jan.kiszka at web.de  Wed Jun 13 15:44:00 2007
+From: jan.kiszka at web.de (Jan Kiszka)
+Date: Wed, 13 Jun 2007 15:44:00 +0200
+Subject: [Ethercatmaster-users] [Fwd: Re:  getting started]
+In-Reply-To: <466FF301.9000909@gmail.com>
+References: <466FF301.9000909@gmail.com>
+Message-ID: <466FF4A0.8030108@web.de>
+
+Roland Tollenaar wrote:
+> Sorry, forgot the reply to all....
+> 
+
+/me too.
+
+> Hi
+> 
+>> Likely a stalled file descriptor, check /proc/xenomai/rtdm/open_fildes.
+>> Use "echo fd-number > /proc/xenomai/rtdm/open_fildes" to enforce closing
+> 
+> Thanks. But I am not sure I understand. is fd_number a number I must
+> fill in or is it a parameter known to the shell? If I must fill it in,
+> where do I find it.
+> 
+
+It's the fd number shown when dumping that /proc entry, usually 0 if it
+was the only RTDM application.
+
+> 
+>> it. Xenomai 2.4 will do this automatically, BTW.
+> Its always the same, I must just wait longer before trying these things. :)
+> 
+
+I know, I just wanted to make you jealous not being able to upgrade.  ;)
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070613/a6cf212c/attachment.pgp>
+
+From rwatollenaar at gmail.com  Wed Jun 13 17:45:40 2007
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Wed, 13 Jun 2007 17:45:40 +0200
+Subject: [Ethercatmaster-users] getting started
+In-Reply-To: <Pine.LNX.4.64.0706131321330.3716@ampere.labo01.fmtc.be>
+References: <bc4264770706120338i5221d24cib491c9407f58f5ba@mail.gmail.com>
+	<Pine.LNX.4.64.0706121410580.26451@ampere.labo01.fmtc.be>
+	<bc4264770706120552h6cd86480sfa3327a401fe3162@mail.gmail.com>
+	<466E98B7.6070500@web.de>
+	<bc4264770706120642v2081c609ib079c071bb182b5a@mail.gmail.com>
+	<466EB3C8.2080406@web.de>
+	<bc4264770706121105o53940a13i38ca56069fd9115d@mail.gmail.com>
+	<bc4264770706130331w42795787qc8e9340e3d629ea5@mail.gmail.com>
+	<Pine.LNX.4.64.0706131321330.3716@ampere.labo01.fmtc.be>
+Message-ID: <46701124.3070300@gmail.com>
+
+Hi,
+
+Thanks. I will attempt to put in Tom's configuration code.
+
+There is still very little documentation on this so I am trying to 
+gather from the code what the usage principle is of the library. Is 
+there any manner this could be given briefly on the list.
+
+Roughly the way I understand it is:
+
+1-get handle to reall-time network (init_ec)
+2-configure saleves
+3-Instantiate Master (Ethercat_Master)
+4-Set slaves to operational mode
+5-interact?
+
+Interact being sending and retrieving process data.
+
+Is this kind of the structure?
+
+Regards.
+
+Roland
+
+
+Klaas Gadeyne wrote:
+> On Wed, 13 Jun 2007, roland Tollenaar wrote:
+>> Hi,
+>>
+>> With the modified start of rtnet things look a bit better but not 100%
+> 
+> A bit, I would say "a lot" :-)
+> 
+>> This is the output of master test now.
+> 
+> I would suggest you to replace the slave code at the top of
+> master_test.cpp by the header code Tom sent in his email yesterday.
+> That way your master test program is going to recognise far more
+> slaves than it does now.
+> Eventually, I think this should become (in a first step) a eml header
+> file (something like beckhoff_slaves_config.hpp)
+> Patches are welcome :-)
+> 
+>> One problem, after the mastertest crashes it seems as though rtpacket
+>> runs away holding on to rtnet in some form. It is not possible to
+>> unload it and only a reboot will allow me to start the normal network
+>> connection again. Any ideas why and how I can kill it?
+> 
+> See Jan's note about it.
+> 
+>> It would help my understanding if some comments could be inserted into
+>> the output below to explain what is happening. To me it looks as
+>> though there is some successful communication with the slave but why I
+>> am told that there are 10 slaves (if there is only one) and that the
+>> EEPROM is busy (why is it busy?) I have no idea.
+> 
+> There truly are 10 slaves in your network (there's only one buscoupler
+> who has a "physical" ethernet connection though)
+> 
+>> Very obviously it fails on trying to set the 4102 to operational
+>> state. I don;t have that module in my configuration and i assume that
+>> most complaints are caused by similar discrepancies.
+> 
+> Exactly, so as a matter of fact, EML does exactly what you ask it
+> right now (see above to get one step further).
+> 
+> 
+>> EtherCAT AL: Ring contains 10 slaves
+>> EEPROM busy
+>> EEPROM busy
+> 
+> These eeprom busy errors typically happen when the slave doesn't react
+> fast enough to a particular request.  The master then retries a fixed
+> number of times, before giving up.
+> 
+>> AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, 
+>> rev=0x10000
+> 
+> This one was recognised
+> 
+>> EtherCAT_SlaveDb: No such Config, returning NULL!
+> 
+> This one not, but it might be if you use Tom's code (as stated
+> above).  IIRC, for your analog input module, you'll have to follow
+> Tom's guidelines though
+> 
+> [...]
+>> EtherCAT_SlaveDb: No such Config, returning NULL!
+>> EC_AL Warning: No such slave in db, creating dummy slave
+>> AL creating SlaveHandler: pos=9, Product Code=0x10243052, rev=0x0
+>> AL: resetting FMMUs
+>> AL: resetting SMs
+>> AL: Setting all slaves in init mode
+>> Getting slave handler
+>> Setting EK1100 to OP STATE
+>> EK1100 succesfully set in OP STATE
+>> Getting slave handler
+>> EtherCAT_AL: No such slave, returning NULL
+>> Setting EL4102 to OP STATE
+>> Segmentation fault
+> 
+> As stated before, this is due to Tom's code that currently doesn't
+> check if the slave pointer is NULL.
+> 
+> All together, it seems like everything is working properly (i.e.~as
+> expected given the source code :)!
+> Best regards,
+> 
+> Klaas
+> 
+> 
+
+
+From rolandtollenaar at gmail.com  Sat Jun 16 11:43:54 2007
+From: rolandtollenaar at gmail.com (roland Tollenaar)
+Date: Sat, 16 Jun 2007 09:43:54 +0000
+Subject: [Ethercatmaster-users] some questions about the usage of eml
+Message-ID: <bc4264770706160243u79190decte50a9aa4c8212ae3@mail.gmail.com>
+
+Hi,
+
+After having read and not understood some documentation from the ETG
+site (yes yes I am a proud member:) I decided I was ready to attempt
+some modifications to master-test.
+
+I don;t have module 4102 so I commented those sections out only
+bringing up EK1100. This allows the program to execute without
+crashing. Great.
+
+For the other 9 slaves on my network I get the errors:
+
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=4, Product Code=0x7d43052, rev=0x100000
+
+where "pos" runs up from 0 to 9 (0 is the buscoupler and returns success:
+
+AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, rev=0x10000)
+
+I decided to copy past some of the configurations for which I do have
+modules that Tom has posted on the list in order to get more slaves
+connected. However I am not having much luck.
+
+
+Here is the master-test code as it looks now, below it the full output
+of the program.
+
+Any advice as to what I am doing wrong will be appreciated enormously.
+
+
+Kind regards,
+
+Roland Tollenaar.
+
+
+
+struct netif *ni;
+
+///SlaveConfig EK1100
+EtherCAT_FMMU_Config fmmu_config_EK1100(0);
+EtherCAT_PD_Config pd_config_EK1100(0);
+EtherCAT_SlaveConfig
+EC_EK1100(0x044c2c52,0x00010000,0x03e9,&fmmu_config_EK1100,&pd_config_EK1100);
+
+///SlaveConfig EL2004(1)
+EtherCAT_FMMU_Config fmmu_config_EL2004_1(1);
+EC_FMMU fmmu0_EL2004_1(0x0001000A,1,0,3,0x0F00,0,false,true,true);
+EtherCAT_PD_Config pd_config_EL2004_1(1);
+EC_SyncMan syncman0_EL2004_1(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL2004_1(0x7d43052,0,1004,&fmmu_config_EL2004_1,&pd_config_EL2004_1);
+
+///SlaveConfig EL2004(2)
+EtherCAT_FMMU_Config fmmu_config_EL2004_2(1);
+EC_FMMU fmmu0_EL2004_2(0x0001000A,1,4,7,0x0F00,0,false,true,true);
+EtherCAT_PD_Config pd_config_EL2004_2(1);
+EC_SyncMan syncman0_EL2004_2(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL2004_2(0x7d43052,0,1005,&fmmu_config_EL2004_2,&pd_config_EL2004_2);
+
+///SlaveConfig EL1014(1)
+EtherCAT_FMMU_Config fmmu_config_EL1014_1(1);
+EC_FMMU fmmu0_EL1014_1(0x0001000B,1,0,3,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_1(1);
+EC_SyncMan syncman0_EL1014_1(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL1014_1(0x03F63052,0,1006,&fmmu_config_EL1014_1,
+&pd_config_EL1014_1);
+
+///SlaveConfig EL1014(2)
+EtherCAT_FMMU_Config fmmu_config_EL1014_2(1);
+EC_FMMU fmmu0_EL1014_2(0x0001000B,1,4,7,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_2(1);
+EC_SyncMan syncman0_EL1014_2(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig
+EC_EL1014_2(0x03F63052,0,1007,&fmmu_config_EL1014_2,
+&pd_config_EL1014_2);
+
+
+///SlaveConfig EL4102
+//EtherCAT_FMMU_Config fmmu_config_EL4102(2);
+//EC_FMMU fmmu0_EL4102(0x00080000,0x0001,0x00,0x00,0x080D,0x00,true,false,true);
+//EC_FMMU fmmu1_EL4102(0x00010000,0x0004,0x00,0x07,0x1000,0x00,false,true,true);
+
+//EC_SyncMan syncman_mbx0_EL4102(0x1800,246,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+//EC_SyncMan syncman_mbx1_EL4102(0x18f6,246,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+//EtherCAT_MbxConfig mbx_conf_EL4102 = {syncman_mbx0_EL4102,
+syncman_mbx1_EL4102};
+
+//EtherCAT_PD_Config pd_config_EL4102(2);
+//EC_SyncMan
+// syncman0_EL4102(0x1000,4,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+//EC_SyncMan
+// syncman1_EL4102(0x1100,0,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+//EtherCAT_SlaveConfig
+EC_EL4102(0x10063052,0x00000000,0x03ea,&fmmu_config_EL4102,&pd_config_EL4102,&mbx_conf_EL4102);
+
+
+static void init_slave_db() {
+	EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(5);
+	//EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(2);
+	//fmmu_config_EL4102[0] = fmmu0_EL4102;
+	//fmmu_config_EL4102[1] = fmmu1_EL4102;
+	//pd_config_EL4102[0] = syncman0_EL4102;
+	//pd_config_EL4102[1] = syncman1_EL4102;
+	fmmu_config_EL2004_1[0] = fmmu0_EL2004_1;
+	fmmu_config_EL2004_2[0] = fmmu0_EL2004_2;
+	pd_config_EL2004_1[0]   = syncman0_EL2004_1;
+	pd_config_EL2004_2[0]   = syncman0_EL2004_2;
+	//slave_db->set_conf(&EC_EL4102,0);
+	slave_db->set_conf(&EC_EK1100,0);
+	slave_db->set_conf(&EC_EL2004_1,1);
+	slave_db->set_conf(&EC_EL2004_2,2);
+	slave_db->set_conf(&EC_EL1014_1,3);
+	slave_db->set_conf(&EC_EL1014_2,4);
+	
+}
+
+static void* run_master(void * arg) {
+	
+	ni = init_ec((char*)arg);
+	init_slave_db();
+	if(ni != 0) {
+		printf("Attach netif \n\n");
+		EtherCAT_DataLinkLayer::instance()->attach(ni);
+		printf("Master initializing \n\n");
+		EtherCAT_Master * EM = EtherCAT_Master::instance();
+//goto out;
+		printf("Getting slave handler\n");
+		EtherCAT_SlaveHandler * sh_ek1100 = EM->get_slave_handler(0x03e9);
+		//sleep(1);
+		printf("Setting EK1100 to OP STATE\n");
+		if(sh_ek1100->to_state(EC_OP_STATE))
+			printf("EK1100 succesfully set in OP STATE\n");
+		else
+			printf("\nfailed to set EK1100 in OP STATE\n");
+		printf("Getting slave handler\n");
+		//EtherCAT_SlaveHandler * sh_el4102 = EM->get_slave_handler(0x03ea);
+		//printf("Setting EL4102 to OP STATE\n");
+		//if(sh_el4102->to_state(EC_OP_STATE))
+		//	printf("EL4102 succesfully set in OP STATE\n");
+		//else
+		//	printf("\nfailed to set EL4102 in OP STATE!!\n");
+		
+		printf("AL initializing \n\n");
+		EtherCAT_AL * AL = EtherCAT_AL::instance();
+		
+		/////Set Channel 1 to 5V
+		//unsigned char msg[2] = {0xff, 0x3f};
+		//if(AL->isReady()) {
+		//	printf("Test: Set Channel 1 to 5V: \n\n");
+		//	int count = 0;
+		//	while(count<100000) {
+		//		EM->txandrx_PD(sizeof(msg),msg);
+		//		count++;
+		//	}
+		//	printf("Test done.\n");
+		//}
+		
+//out: ;
+
+		close_socket(ni);
+		
+	}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+And the output:
+root at slax:/mnt/appusb/Packages/eml/trunk/build-rtnet/tests/rtnet#
+./master_test rteth0
+Socket created: socket id: 896
+Got interface: index: 0
+Attach netif
+
+Master initializing
+
+EtherCAT AL: Ring contains 10 slaves
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, rev=0x10000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=1, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=2, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=3, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=4, Product Code=0x7d43052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=5, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=6, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=7, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=8, Product Code=0x3f63052, rev=0x100000
+EEPROM busy
+EEPROM busy
+EtherCAT_SlaveDb: No such Config, returning NULL!
+EC_AL Warning: No such slave in db, creating dummy slave
+AL creating SlaveHandler: pos=9, Product Code=0x10243052, rev=0x0
+AL: resetting FMMUs
+AL: resetting SMs
+AL: Setting all slaves in init mode
+Getting slave handler
+Setting EK1100 to OP STATE
+EK1100 succesfully set in OP STATE
+Getting slave handler
+AL initializing
+
+
+From tompanis at skynet.be  Sat Jun 16 14:41:09 2007
+From: tompanis at skynet.be (Tom Panis)
+Date: Sat, 16 Jun 2007 14:41:09 +0200
+Subject: [Ethercatmaster-users] some questions about the usage of eml
+In-Reply-To: <bc4264770706160243u79190decte50a9aa4c8212ae3@mail.gmail.com>
+References: <bc4264770706160243u79190decte50a9aa4c8212ae3@mail.gmail.com>
+Message-ID: <4673DA65.1030903@skynet.be>
+
+
+
+roland Tollenaar wrote:
+> Hi,
+>
+> After having read and not understood some documentation from the ETG
+> site (yes yes I am a proud member:) I decided I was ready to attempt
+> some modifications to master-test.
+>
+> I don;t have module 4102 so I commented those sections out only
+> bringing up EK1100. This allows the program to execute without
+> crashing. Great.
+>
+> For the other 9 slaves on my network I get the errors:
+>
+> EtherCAT_SlaveDb: No such Config, returning NULL!
+> EC_AL Warning: No such slave in db, creating dummy slave
+> AL creating SlaveHandler: pos=4, Product Code=0x7d43052, rev=0x100000
+>
+> where "pos" runs up from 0 to 9 (0 is the buscoupler and returns success:
+>
+> AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, rev=0x10000
+>   
+
+When creating a slave handler the AL will search for the appropriate 
+configurations in the ethercat slave database. This search is based on 
+the product code and the revision number. When there isn't a match, 
+there will be a dummy created. I see in your output that the product 
+code is right, but the revision numbers don't match. The revision number 
+of my modules was 0, your modules have 0x100000 as rev number (You can 
+find that in the output, when there's a dummy created). So you have to 
+change that in the slave configurations. For a EL2004 module, that would 
+be something like this:
+
+EtherCAT_SlaveConfig 
+EC_EL2004_2(0x7d43052,0x100000,1005,&fmmu_config_EL2004_2,&pd_config_EL2004_2);
+> I decided to copy past some of the configurations for which I do have
+> modules that Tom has posted on the list in order to get more slaves
+> connected. However I am not having much luck.
+>
+>
+> Here is the master-test code as it looks now, below it the full output
+> of the program.
+>
+> Any advice as to what I am doing wrong will be appreciated enormously.
+>
+>   
+
+I also see you have 4 EL2004 modules, so you have to make 4 different 
+configurations for them. Each module must have a configuration. My 
+tutorial may help you with this.
+
+Tom
+
+
+From sancelot at free.fr  Wed Jun 27 10:29:28 2007
+From: sancelot at free.fr (=?ISO-8859-1?Q?St=E9phane_ANCELOT?=)
+Date: Wed, 27 Jun 2007 08:29:28 +0000
+Subject: [Ethercatmaster-users] usage of an xml config file
+In-Reply-To: <4673DA65.1030903@skynet.be>
+References: <bc4264770706160243u79190decte50a9aa4c8212ae3@mail.gmail.com>
+	<4673DA65.1030903@skynet.be>
+Message-ID: <46821FE8.2090805@free.fr>
+
+Hi,
+It looks like it is possible to create the master setup using the xml
+file provided by beckhof setup tool . I may develop a parser for
+ethercat master.
+
+regarding the implementation of an xml parser for it, do you have some
+preference either for using a c program parsing the xml file and able to
+create on the fly the network setup in the C ethercat  master
+
+or a parser that generates an obj code that you link with ethercat master ?
+
+Best Regards
+S.Ancelot
+
+
+From klaas.gadeyne at fmtc.be  Wed Jun 27 10:29:54 2007
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Wed, 27 Jun 2007 10:29:54 +0200 (CEST)
+Subject: [Ethercatmaster-users] usage of an xml config file
+In-Reply-To: <46821FE8.2090805@free.fr>
+References: <bc4264770706160243u79190decte50a9aa4c8212ae3@mail.gmail.com>
+	<4673DA65.1030903@skynet.be> <46821FE8.2090805@free.fr>
+Message-ID: <Pine.LNX.4.64.0706271005300.22622@ampere.labo01.fmtc.be>
+
+On Wed, 27 Jun 2007, St?phane ANCELOT wrote:
+Hi Stephane,
+
+[cc: and further follow-up to developers-ML]
+
+> It looks like it is possible to create the master setup using the xml
+> file provided by beckhof setup tool . I may develop a parser for
+> ethercat master.
+
+Great news!
+
+> regarding the implementation of an xml parser for it, do you have some
+> preference either for using a c program parsing the xml file and able to
+> create on the fly the network setup in the C ethercat  master
+[1]
+
+> or a parser that generates an obj code that you link with ethercat master ?
+[2]
+
+I see both advantages and disadvantages to both solutions
+
+[1] PRO: would allow you to reduce the size of the resulting binary for
+     deeply embedded masters by just including the necessary
+     definitions (and e.g. keep the necessary xml-files in flash)
+
+[2] PRO: it would ofcourse be nice if EML comes with support for a lot
+     of devices out of the box, especially for those (RT-)linux users
+     having few constraints in terms of memory space.
+     CON: Given the fact that there are quite some xml-files out there
+     (see e.g.~a recent post of Roland about a different revision
+     number for a specific module), it might prove hard to provide the
+     user with object code that just works for (almost) every single
+     device.
+
+There might be other points to.
+
+Do you already have an idea which "parser-helper" library to use?
+
+FWIW, for the RTT part of orocos project, both the xerces-c library
+and the tinyxml library (included in the orocos source code) were
+used for parsing orocos "property files". 
+See e.g. <http://osdir.com/ml/science.robotics.orocos.devel/2006-08/msg00248.html>
+Both have pro's and cons (mainly size vs. functionality).
+
+Considering the fact that EML also has an eCos port, and the xerces-c
+parser requires support for exceptions not present in the standard
+toolchains available for eCos (see
+e.g.~<http://zylin.com/pipermail/zylin-discuss_zylin.com/2006-October/000317.html>)
+my first choice would be the tinyXML parser. [*]
+
+best regards,
+
+Klaas
+
+[*] Note that I finally succeeded using xerces-c for orocos-on-ecos,
+     but it really is a pain in the ass.
+
+From sancelot at free.fr  Wed Jun 27 12:58:48 2007
+From: sancelot at free.fr (=?ISO-8859-1?Q?St=E9phane_ANCELOT?=)
+Date: Wed, 27 Jun 2007 10:58:48 +0000
+Subject: [Ethercatmaster-users] usage of an xml config file
+In-Reply-To: <Pine.LNX.4.64.0706271005300.22622@ampere.labo01.fmtc.be>
+References: <bc4264770706160243u79190decte50a9aa4c8212ae3@mail.gmail.com>
+	<4673DA65.1030903@skynet.be> <46821FE8.2090805@free.fr>
+	<Pine.LNX.4.64.0706271005300.22622@ampere.labo01.fmtc.be>
+Message-ID: <468242E8.1050107@free.fr>
+
+Hi,
+>Klaas Gadeyne a ?crit :
+> On Wed, 27 Jun 2007, St?phane ANCELOT wrote:
+> Hi Stephane,
+.
+.
+.
+> 
+> There might be other points to.
+> 
+> Do you already have an idea which "parser-helper" library to use?
+> 
+
+No,not at the moment,  however, in term of facility I know it will be
+fast for me to develop either first a python xml parser or an xslt that
+generates C code to integrate. I have had a look at tinyxml it does not
+seem more complicated to use.
+
+Best Regards
+Steph
+> FWIW, for the RTT part of orocos project, both the xerces-c library
+> and the tinyxml library (included in the orocos source code) were
+> used for parsing orocos "property files". See e.g.
+> <http://osdir.com/ml/science.robotics.orocos.devel/2006-08/msg00248.html>
+> Both have pro's and cons (mainly size vs. functionality).
+> 
+> Considering the fact that EML also has an eCos port, and the xerces-c
+> parser requires support for exceptions not present in the standard
+> toolchains available for eCos (see
+> e.g.~<http://zylin.com/pipermail/zylin-discuss_zylin.com/2006-October/000317.html>)
+> 
+> my first choice would be the tinyXML parser. [*]
+> 
+> best regards,
+> 
+> Klaas
+> 
+> [*] Note that I finally succeeded using xerces-c for orocos-on-ecos,
+>     but it really is a pain in the ass.
+
+
+

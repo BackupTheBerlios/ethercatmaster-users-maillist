@@ -1,0 +1,280 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Loosing time while sending Frames
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Loosing%20time%20while%20sending%20Frames&In-Reply-To=%3COFB65B2275.4EC68E13-ONC12575AC.0028AFCC-C12575AC.002A48E0%40datacon.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000396.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Loosing time while sending Frames</H1>
+    <B>henning.richter at besi.com</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Loosing%20time%20while%20sending%20Frames&In-Reply-To=%3COFB65B2275.4EC68E13-ONC12575AC.0028AFCC-C12575AC.002A48E0%40datacon.at%3E"
+       TITLE="[Ethercatmaster-users] Loosing time while sending Frames">henning.richter at besi.com
+       </A><BR>
+    <I>Mon May  4 09:41:53 CEST 2009</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000396.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#395">[ date ]</a>
+              <a href="thread.html#395">[ thread ]</a>
+              <a href="subject.html#395">[ subject ]</a>
+              <a href="author.html#395">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+&gt;&gt;<i> In the main function of the EML a created and started a xenomai task.
+</I>&gt;&gt;<i> The cycle time of this task is set to 250 us.
+</I>&gt;&gt;<i> During this time I am sending one Frame to my slaves each cycle. In all
+</I>I
+&gt;&gt;<i> have 3 Frames (Frame1 = 60 byte, Frame 2 = 1217 byte, Frame3 = 1204
+</I>byte).
+&gt;&gt;<i>
+</I>&gt;&gt;<i> I am also measuring the time the send command from the low_level_output
+</I>&gt;&gt;<i> function in ethercat_xenomai_drv.c needs.
+</I>&gt;&gt;<i> This time is between 5 and 10 us. So passing the Frames to the network
+</I>&gt;&gt;<i> interface is quite fast.
+</I>&gt;&gt;<i> So far so good, now the problem:
+</I>&gt;&gt;<i> Measuring the elapsed time between 2 send commands (also @
+</I>&gt;&gt;<i> low_level_output) gives me values between 150 us and 350.
+</I>&gt;&gt;<i> This i too much I think.
+</I>
+Apart from Jan's suggestions, does that mean that your xenomai task indeed
+&quot;overruns&quot;?  Can you show some code?
+
+Klaas
+
+
+So here is some code:
+
+
+void signalhandler(int signo, EC_Ethernet_Frame &amp;frame)
+   {
+   /* Do something every INTERVAL microseconds */
+
+///------------------------SEND FRAMES------------------------------------
+
+//       rtStart = rt_timer_read();
+   bool send = EtherCAT_DataLinkLayer::instance()-&gt;txandrx(&amp;frame);
+//       rtEnd = rt_timer_read();
+//       printf(&quot;txandrx Frame: %ld\n&quot;,(rt_timer_ticks2ns
+(rtEnd-rtStart))/1000);
+
+   }
+
+
+void run_cyclic(void * arg)
+   {
+   printf(&quot;run_cyclic started&quot;);
+
+   // prepare master
+   if (!startupMaster((char*)arg))
+         {
+         printf(&quot;failed to start master.&quot;);
+         return;
+         }
+///--------------build Frames and Datagrams-----------------
+
+   //Initialisation of some variables;             (left out here)
+
+   ///Mailbox-Kommunikation mit BK1250
+   ///NPWR Telegram an BK1250 in Mailbox --&gt; MbxOut (written from master)
+
+   ///get mbx config bk1250 --Mailbox WRITE--
+   // get length of SM0
+   EtherCAT_SlaveHandler * sh_bk1250 = g_pEMcyclic-&gt;get_slave_handler
+(0x03f0);
+   const EC_UINT datalen = sh_bk1250-&gt;get_mbx_config()-&gt;SM0.Length;
+   const EC_UINT datalen2 = 68;
+   const EC_UINT datalen3 = 46;
+
+   int fc;
+   index = 0x01;
+   int anz = 20;
+   class NPWR_Telegram *telegram[anz];
+   EC_Telegram *ECT=NULL;
+
+
+///-----------------1. Frame---------------
+   rtStart = rt_timer_read();
+   Logical_Addressing_Telegram *LAT = new LWR_Telegram
+(0x00,0x00010006,0xFFFF,1,pucharmsg1);
+   EC_Ethernet_Frame oFrame(LAT);
+   ECT = oFrame.get_telegram();	///get first telegram
+
+   NPRD_Telegram NPRDtelegram1(0x03,0x03ee,0x1000,0xffff,1,&amp;puchargetmsg2);
+   ECT=ECT-&gt;next=&amp;NPRDtelegram1;	///pointer to next Telegram
+
+   NPWR_Telegram NPWRtelegram1(0x09,0x03f0,0x1000,0xffff,1,pucharmsg2);
+   ECT=ECT-&gt;next=&amp;NPWRtelegram1;	///pointer to next Telegram
+
+   rtEnd = rt_timer_read();
+   printf(&quot;Frame1 gebaut in %ld us\n&quot;,(rt_timer_ticks2ns(rtEnd -
+rtStart))/1000);
+
+///-------------------------2.
+Frame-------------------------------------------
+
+   rtStart = rt_timer_read();
+   ///Mailbox --WRITE---
+   unsigned char uchWrBuffer2[datalen3];
+   for(int i=0; i&lt;datalen3; ++i) uchWrBuffer2[i] = 0;
+   EC_MbxMsgHdr mbxheader2(datalen3-6,0x03f0,0x03,EC_EoE);
+   EtherCAT_MbxMsg wrmbxmsg2(mbxheader2,mbxfillmsg);
+   unsigned char *pDump = wrmbxmsg2.dump(uchWrBuffer2);
+   NPWR_Telegram MbxWRtelegram
+(0x0c,0x03f0,0x1c00,0x0ffff,datalen3,uchWrBuffer2);
+
+   EC_Ethernet_Frame oFrame2(&amp;MbxWRtelegram);
+   NPRD_Telegram NPRDtelegram2(0x0c,0x03f0,0x1600,0xffff,1,&amp;puchargetmsg2);
+   ECT=oFrame2.get_telegram();	///pointer to next Telegram
+
+   for( fc=0;fc&lt;4*anz;fc++){
+       telegram[fc] = new NPWR_Telegram
+(index,0x03ec,0x0f00,0xffff,1,pucharmsg11);
+       ECT=ECT-&gt;next=telegram[fc];
+       index++;
+   }
+
+   ECT=ECT-&gt;next=&amp;NPRDtelegram2;
+   rtEnd = rt_timer_read();
+
+   printf(&quot;Frame2 gebaut in %ld us\n&quot;,(rt_timer_ticks2ns(rtEnd -
+rtStart))/1000);
+
+///---------------------3. Frame------------------------------------
+
+   rtStart = rt_timer_read();
+   unsigned char uchWrBuffer[datalen2];
+   for ( int i = 0; i &lt; datalen2; ++i ) uchWrBuffer[i] = 0;
+   //length of mbxmsg,address,priority,type
+   EC_MbxMsgHdr mbxheader(datalen2-6,0x03f0,0x03,EC_EoE);
+   EtherCAT_MbxMsg wrmbxmsg(mbxheader,ucharmbxwrmsg4);
+   pDump = wrmbxmsg.dump(uchWrBuffer);
+   NPWR_Telegram MbxFillTelegram
+(0x0c,0x03f0,0x1c44,0x0ffff,datalen2,uchWrBuffer);
+
+   NPRD_Telegram NPRDtelegram3(0x02,0x03ee,0x1000,0xffff,1,&amp;puchargetmsg3);
+   EC_Ethernet_Frame oFrame3(&amp;MbxFillTelegram);
+   ECT=oFrame3.get_telegram();	///pointer to next Telegram
+   ECT=ECT-&gt;next=&amp;NPRDtelegram3;
+   for(fc=0;fc&lt;4*anz;fc++){
+     telegram[fc] = new NPWR_Telegram
+(index,0x03ec,0x0f00,0xffff,1,pucharmsg7);
+     ECT=ECT-&gt;next=telegram[fc];
+     index++;
+   }
+
+   rtEnd = rt_timer_read();
+   printf(&quot;Frame3 gebaut in %ld us\n&quot;,(rt_timer_ticks2ns(rtEnd -
+rtStart))/1000);
+
+///---------------------4. Frame------------------------------------
+
+   rtStart = rt_timer_read();
+   ///Mailbox --READ---
+   unsigned char uchRdBuffer[datalen];
+   EC_MbxMsgHdr rdmbxheader(datalen-6,0x03f0,3,EC_EoE);
+   EtherCAT_MbxMsg rdmbxmsg(rdmbxheader,uchargetmsg4);
+   pDump = rdmbxmsg.dump(uchRdBuffer);
+
+   NPRD_Telegram MbxRDtelegram
+(0x0c,0x03f0,0x1e00,0xffff,datalen,uchargetmsg4);
+   EC_Ethernet_Frame oFrame4(&amp;MbxRDtelegram);
+   ECT=oFrame4.get_telegram();
+   for(fc=0;fc&lt;4*anz;fc++){
+     telegram[fc] = new NPWR_Telegram
+(index,0x03ec,0x0f00,0xffff,1,pucharmsg7);
+     ECT=ECT-&gt;next=telegram[fc];
+     index++;
+   }
+   rtEnd = rt_timer_read();
+   printf(&quot;Frame4 gebaut in %ld us\n&quot;,(rt_timer_ticks2ns(rtEnd -
+rtStart))/1000);
+
+
+
+#define DURATION 40000 // secs
+#define CYCLETIME 250  // us
+
+   rt_task_set_periodic(NULL, TM_NOW, CYCLETIME *1000); // us to ns (for
+xenomai)
+
+   for (unsigned long ulCount = DURATION*(1000000/CYCLETIME); ulCount &gt; 0;
+--ulCount)
+   //for (unsigned long ulCount = 0; ulCount &lt; 100; ++ulCount)
+   {
+
+       rt_task_wait_period(NULL);
+       signalhandler(0,oFrame);
+       signalhandler(0,oFrame2);
+       signalhandler(0,oFrame3);
+       signalhandler(0,oFrame4);
+   }
+   printf(&quot;\n\n&quot;);
+
+   }
+
+
+int main(int argc, char** argv)
+   {
+   signal(SIGTERM, catch_signal);
+   signal(SIGINT, catch_signal);
+   signal(SIGHUP, catch_signal);
+   mlockall(MCL_CURRENT|MCL_FUTURE);
+
+   RT_TASK my_rt_task;
+
+   rt_task_create(&amp;my_rt_task,&quot;myRtTask&quot;,0,90,T_JOINABLE);
+
+   //Start thread
+   rt_task_start(&amp;my_rt_task, &amp;run_cyclic, argv[1]);
+
+   //wait until finished
+   rt_task_join(&amp;my_rt_task);
+
+   rt_task_delete(&amp;my_rt_task);
+
+   return 0;
+}
+
+
+Henning
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090504/dede33a9/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20090504/dede33a9/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000396.html">[Ethercatmaster-users] Loosing time while sending Frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#395">[ date ]</a>
+              <a href="thread.html#395">[ thread ]</a>
+              <a href="subject.html#395">[ subject ]</a>
+              <a href="author.html#395">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

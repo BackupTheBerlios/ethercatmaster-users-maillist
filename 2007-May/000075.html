@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Period of two in a row sending frames
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-May/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Period%20of%20two%20in%20a%20row%20sending%20frames&In-Reply-To=%3COFF1BA7D23.F4AC4AFC-ONC12572D5.003BD8B1-C12572D5.003EAC33%40MAIL.DE.FESTO.NET%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000074.html">
+   <LINK REL="Next"  HREF="000076.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Period of two in a row sending frames</H1>
+    <B>Felix Erkert</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Period%20of%20two%20in%20a%20row%20sending%20frames&In-Reply-To=%3COFF1BA7D23.F4AC4AFC-ONC12572D5.003BD8B1-C12572D5.003EAC33%40MAIL.DE.FESTO.NET%3E"
+       TITLE="[Ethercatmaster-users] Period of two in a row sending frames">ERFE at DE.FESTO.COM
+       </A><BR>
+    <I>Tue May  8 13:24:32 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000074.html">[Ethercatmaster-users] [Xenomai-help] HELP!!
+</A></li>
+        <LI>Next message: <A HREF="000076.html">[Ethercatmaster-users] Period of two in a row sending frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#75">[ date ]</a>
+              <a href="thread.html#75">[ thread ]</a>
+              <a href="subject.html#75">[ subject ]</a>
+              <a href="author.html#75">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I have still the same problem! My ethercat master cycle times is about in
+millisecounds, but it should be in microsecounds (I use the EVA-Board and
+eCos to measure the cycle times). On the EVA-Board, I connected the input
+pins with the output pins. So the first frame set an input pin and the next
+frame reads the output pin. My oscilloscop is measured the time how long a
+pin is set! Thats my application.
+
+- cycle time = period between two frames
+
+static void timeMeasure( cyg_addrword_t )
+{
+    unsigned char msg[2] = { 0x00, 0x00 };
+    unsigned int counter = 0;
+
+    // EtherCAT_Master zeiger holen
+    EtherCAT_Master * EM = EtherCAT_Master::instance();
+    while(true)
+    {
+        // Signal setzen
+        cyg_thread_delay( (cyg_tick_count_t)0 );
+        if( counter &gt;= 0 )
+        {
+            if( msg[0] == 0x00 )
+            {
+                msg[0] = 0x01;
+            }
+            else if( msg[0] == 0x01 )
+            {
+                msg[0] = 0x00;
+            }
+            counter = 0;
+        }
+        counter++;
+        // Signal r&#252;cksetzen
+        EM-&gt;txandrx_PD( 2, msg );
+    }
+}
+
+1.) I send process data (0x01, 0x00). These process datas set an input pin
+and the appropriate output pin (Because the input pin and the output pin
+are connected together)
+2.) The next process data frame sends (0x00,0x00) and fetchs the output
+process data.
+3.) Now I measured how long the pin is set! The time is in millisecounds.
+But it should be in microsecounds.
+
+=&gt; So i have measured how long it takes to sending two frames in a row!!!
+
+Can you test this Thread/Application with your Master and your EVA-Board!
+What cylce times (How long is the period between two frames) do you get?
+
+regards,
+Felix Erkert
+
+
+Festo AG &amp; Co. KG
+Felix Erkert
+
+Abteilung TV-ND
+Business Unit NIC Netware Devices
+
+
+Ruiter Stra&#223;e 82
+D - 73734 Esslingen
+
+Tel: ++49 (0) 711-347-57193
+Fax:
+
+<A HREF="http://www.festo.com">http://www.festo.com</A>
+
+Der Inhalt dieses E-Mails ist ausschliesslich fuer den bezeichneten
+Adressaten bestimmt. Jede Form der Kenntnisnahme, Veroeffentlichung,
+Vervielfaeltigung oder Weitergabe des Inhalts dieses E-Mails durch
+unberechtigte Dritte ist unzulaessig. Wir bitten Sie, sich mit dem Absender
+des E-Mails in Verbindung zu setzen, falls Sie nicht der Adressat dieses
+E-Mails sind und das Material von Ihrem Computer zu loeschen.
+
+This e-mail and any attachments are confidential and intended solely for
+the addressee. The perusal, publication, copying or dissemination of the
+contents of this e-mail by unauthorised third parties is prohibited. If you
+are not the intended recipient of this e-mail, please delete it and
+immediately notify the sender.
+
+Rechtsform: Kommanditgesellschaft
+Sitz: Esslingen a.N.
+Registergericht Stuttgart HRA 211583
+Umsatzsteuerident-Nummer: DE 145339206
+
+Persoenlich haftende Gesellschafterin:Festo Aktiengesellschaft
+Sitz: Stuttgart
+Registergericht Stuttgart HRB 18535
+
+Vorstand:
+Dr. Ekkehard Gericke,
+Lothar Kempf,
+Dipl.-Ing. Rudi Menrad
+Dr. Thomas Rubbe
+Dr. Eberhard Veit (Sprecher)
+Dr. Ulrich Walker
+Aufsichtsratsvorsitzender:
+Dr. Wilfried Stoll
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000074.html">[Ethercatmaster-users] [Xenomai-help] HELP!!
+</A></li>
+	<LI>Next message: <A HREF="000076.html">[Ethercatmaster-users] Period of two in a row sending frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#75">[ date ]</a>
+              <a href="thread.html#75">[ thread ]</a>
+              <a href="subject.html#75">[ subject ]</a>
+              <a href="author.html#75">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

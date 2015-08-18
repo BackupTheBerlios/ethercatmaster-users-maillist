@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3CPine.LNX.4.64.0708160956010.18303%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000279.html">
+   <LINK REL="Next"  HREF="000280.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3CPine.LNX.4.64.0708160956010.18303%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Thu Aug 16 10:30:41 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000279.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000280.html">[Ethercatmaster-users] system freezes on calling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#275">[ date ]</a>
+              <a href="thread.html#275">[ thread ]</a>
+              <a href="subject.html#275">[ subject ]</a>
+              <a href="author.html#275">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 14 Aug 2007, Roland Tollenaar wrote:
+[Again dropping cc:'s for EML specific issues, and adding eml-devel]
+
+[...]
+&gt;&gt;<i> What do you mean with &quot;inputs functioning perfectly&quot;?
+</I>&gt;<i>
+</I>&gt;<i> The digital inputs are packed into the frame as are the digital outputs
+</I>&gt;<i> and analog output process data. The outputs function as they should but
+</I>&gt;<i> the warning complains mainly about the retrieving part of the ethercat
+</I>&gt;<i> cycle. Hence my comment that the digital inputs also function as they
+</I>&gt;<i> should that is to say the data arrives correctly and uncorrupted. AFAI
+</I>&gt;<i> understand from ETG the index is not changed by the ESC's so I would
+</I>&gt;<i> expect the check always return true. But even if it does not what does
+</I>&gt;<i> that mean? Can it mean that EML is losing some frames that have been
+</I>&gt;<i> transmitted? I.e. the index is incremented with every transmit and the
+</I>&gt;<i> message with the same index is expected on the next read but instead it
+</I>&gt;<i> is only getting one later? If so, what could cause this?
+</I>
+Probably something like this happens: One frame somehow gets lost
+(wireshark should confirm this), the next txandrx happens before the
+timeout of the first txandrx, and the first txandrx accepts a message
+that it shouldn't be accepting.
+
+HOWEVER, if you look at the txandrx code I copy pasted in a previous
+mail (berlios seems to be down), you can see that this shouldn't be
+happening since Tom apparently uses a _global_ lock for this, unless I
+overlook something (which is probably the case)...
+
+So, given the implementation with the global lock (one can discuss
+whether it's optimal, feel free to provide a patch) I don't understand
+how this happens.
+
+////////////////////////////////////////////////////////////////////////
+// For thread safety: txandrx() can be called from multiple threads...
+static pthread_mutex_t txandrx_mut;
+
+static bool ec_rtdm_txandrx(struct EtherCAT_Frame * frame, struct
+netif * netif) {
+         int tries = 0;
+         while (tries &lt; MAX_TRIES_TX) {
+                 pthread_mutex_lock (&amp;txandrx_mut);
+                 if (low_level_output(frame,netif)){
+                         if (low_level_input(frame,netif)){
+                                 pthread_mutex_unlock(&amp;txandrx_mut);
+                                 return true;
+                         }
+                         else{
+                                 //log(EC_LOG_ERROR,
+ 				&quot;low_level_txandrx: receiving
+ 				failed\n&quot;);
+                                 pthread_mutex_unlock(&amp;txandrx_mut);
+                         }
+                 }
+                 else{
+                         //log(EC_LOG_ERROR, &quot;low_level_txandrx:
+ 			sending failed\n&quot;);
+                         pthread_mutex_unlock(&amp;txandrx_mut);
+                 }
+                 tries++;
+         }
+         log(EC_LOG_FATAL, &quot;low_level_txandrx: failed: MAX_TRIES_TX:
+ 	Giving up\n&quot;);
+         return false;
+}
+///////////////////////////////////////////////////////////////////////
+
+Unless of course (thinking doesn't hurt), I think other problems could occur
+with this implementation.
+
+[I've only had a short look at Tom's code, so feel free to correct
+me...]
+   Since the locking of the mutex happens inside the while loop, this
+   construction seems not particularly threadsafe.  If I look at the
+   implementation of low_level_input(), the receiving part on the raw
+   socket is implemented like this:
+
+   int len_recv = recv(sock,buffer_receive,sizeof(buffer_receive),0);
+
+   Looking at the top of the driver file, the socket timeout is set to
+
+// Maximum tries to send and receive a message
+#define MAX_TRIES_TX 10
+// Timeout for receiving and transmitting messages is 10ms
+#define TIMEOUT_NSEC 1000 * 100
+
+   [I think s/10ms/100us/g]
+
+   while you're are trying to send at a 1ms period.  So IMO this can
+   cause race conditions...
+
+   - Thread sends message, frame somehow gets lost, but timeout is set to
+   100 us
+   - After 1 ms, thread is woken up again, tries to send msg (should
+   fail since mutex is locked).
+
+   I can't predict exactly what will be happening, but by just looking
+   at the code, I would say, this ain't gonna work...
+
+Does your problem also occur, if your PD thread only sends at a 2ms
+rate (or if you decrease MAX_TRIES_TX to 5 for instance)
+
+[...]
+&gt;<i> What I did was simply put a printf line into EML to output index and
+</I>&gt;<i> m_idx to screen. So unfortunately this does not tell us where the shift
+</I>&gt;<i> is acquired.
+</I>
+Not a plain simple printf() I might hope?
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000279.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000280.html">[Ethercatmaster-users] system freezes on calling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#275">[ date ]</a>
+              <a href="thread.html#275">[ thread ]</a>
+              <a href="subject.html#275">[ subject ]</a>
+              <a href="author.html#275">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

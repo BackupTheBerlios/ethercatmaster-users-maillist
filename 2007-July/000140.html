@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Slaves Parameters!!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Slaves%20Parameters%21%21&In-Reply-To=%3C573629.80084.qm%40web37305.mail.mud.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000154.html">
+   <LINK REL="Next"  HREF="000141.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Slaves Parameters!!</H1>
+    <B>said harti</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Slaves%20Parameters%21%21&In-Reply-To=%3C573629.80084.qm%40web37305.mail.mud.yahoo.com%3E"
+       TITLE="[Ethercatmaster-users] Slaves Parameters!!">harti_said at yahoo.fr
+       </A><BR>
+    <I>Mon Jul 16 10:20:37 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000154.html">[Ethercatmaster-users] Slaves parameters !!
+</A></li>
+        <LI>Next message: <A HREF="000141.html">[Ethercatmaster-users] RE : Re:  Slaves Parameters!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#140">[ date ]</a>
+              <a href="thread.html#140">[ thread ]</a>
+              <a href="subject.html#140">[ subject ]</a>
+              <a href="author.html#140">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I did'nt resolve my problem yet, my master_test program turn perfectely, but the LEDs for the EL4102 and the EL2004 don't switch on, (my code is posted on my last message)
+
+for the some data transmeted to the beckhoff modules (5v = 03FFF to EL4102 and all DO to 1 = 0x0F to EL2004), this is the difference between captered frames 
+
+1: between my master and the Beckhoff modules :
+
+0000   ff   ff   ff   ff   ff   ff   02 00 00 00 00 00 88 a4 0f 10  ................
+0010   0c 5e 00 00 01 00 03 00 04 00 ff   3f  00 00 0f 00  .^.........?....
+0020   00 07 00 10 00 02 01 00 00 00 00 00 00 00 00 00  ................
+0030   00 00 00 00 00 00 00 00 00 00 00 00                    ............
+
+
+and this is the captured frame between the twincat tools on my laptop and the beckhoff modules :
+
+0000   01 01 05 01 00 00 02 00 7b 56 00 9a 88 a4 2c 10  ................
+0010   0b 00 00 00 01 00 05 80 00 00 ff   3f  00 00 0f 00  .^.........??...
+0020   00 0a 00 00 00 08 00 01 80 00 00 00 00 00 07 00  ................
+0030   00 00 30 01 02 00 00 00 00 00 00 00                    ............
+
+thanks to tell me what i am possibly wrong
+
+Best Regards
+
+Said HARTI
+
+ 		
+---------------------------------
+ D&#233;couvrez une nouvelle fa&#231;on d'obtenir des r&#233;ponses &#224; toutes vos questions ! Profitez des connaissances, des opinions et des exp&#233;riences des internautes sur Yahoo! Questions/R&#233;ponses.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070716/6678446f/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070716/6678446f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000154.html">[Ethercatmaster-users] Slaves parameters !!
+</A></li>
+	<LI>Next message: <A HREF="000141.html">[Ethercatmaster-users] RE : Re:  Slaves Parameters!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#140">[ date ]</a>
+              <a href="thread.html#140">[ thread ]</a>
+              <a href="subject.html#140">[ subject ]</a>
+              <a href="author.html#140">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

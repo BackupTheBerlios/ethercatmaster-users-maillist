@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] non-persistent outputs, post mortem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20non-persistent%20outputs%2C%20post%20mortem&In-Reply-To=%3C46BACFC8.5080404%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000239.html">
+   <LINK REL="Next"  HREF="000244.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] non-persistent outputs, post mortem</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20non-persistent%20outputs%2C%20post%20mortem&In-Reply-To=%3C46BACFC8.5080404%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] non-persistent outputs, post mortem">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Thu Aug  9 10:26:48 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000239.html">[Ethercatmaster-users] non-persistent outputs problem solved
+</A></li>
+        <LI>Next message: <A HREF="000244.html">[Ethercatmaster-users] XML configuration File and the master test	program
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#243">[ date ]</a>
+              <a href="thread.html#243">[ thread ]</a>
+              <a href="subject.html#243">[ subject ]</a>
+              <a href="author.html#243">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Said,
+
+So your outputs are also working now?
+
+&gt;<i> But can you please explain me the exact differnce between EC_QUEUED and 
+</I>&gt;<i> EC_BUFFERED ?
+</I>I am nothing of an authority on the topic, but outside of BeckHoff and 
+ETG no-one here is so I will give it my best shot.
+
+Apparently data transfer on the slave can take place via two 
+configurations of the Syncmanager. A single buffer where a handshaking 
+procedure of some kind is used and where the writing side (either master 
+or slave) must complete writing before the reading side can read. The 
+other method uses tree buffers where there is always consistent data 
+available for the reading side to read and space fr the writing side to 
+write simultaneously.
+
+you will find some explanantion of this in the documentation I sent you 
+earlier.
+
+If anyone has other ideas or a better explanation I am also interested 
+in knowing the exact difference. Tom?
+
+
+Roland
+
+
+
+&gt;<i> 
+</I>&gt;<i> Said
+</I>&gt;<i> 
+</I>&gt;<i> */roland Tollenaar &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">rolandtollenaar at gmail.com</A>&gt;/* a &#233;crit :
+</I>&gt;<i> 
+</I>&gt;<i>     Hi All,
+</I>&gt;<i> 
+</I>&gt;<i>     I think the problem is finally sorted. The ETG suggestions contained
+</I>&gt;<i>     the clue, our configuration settings for the symcmanager were
+</I>&gt;<i>     incorrect. EC_QUEUED must be EC_BUFFERED.
+</I>&gt;<i> 
+</I>&gt;<i>     An easy solution considering the amount of distress the problem
+</I>&gt;<i>     caused, but, there it is.
+</I>&gt;<i> 
+</I>&gt;<i>     Hope this helps others in the future. I'll be glad to expound or offer
+</I>&gt;<i>     whatever assistance I can with anyone experiencing this problem. Even
+</I>&gt;<i>     to people who top-quote their emails. ;)
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>     Regards,
+</I>&gt;<i> 
+</I>&gt;<i>     Roland.
+</I>&gt;<i>     _______________________________________________
+</I>&gt;<i>     Ethercatmaster-users mailing list
+</I>&gt;<i>     <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i>     <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> Stockage illimit&#233; de vos mails avec Yahoo! Mail. Changez aujourd'hui de 
+</I>&gt;<i> mail ! &lt;<A HREF="http://fr.promotions.yahoo.com/mail/nouveau_yahoomail2.html">http://fr.promotions.yahoo.com/mail/nouveau_yahoomail2.html</A>&gt;
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000239.html">[Ethercatmaster-users] non-persistent outputs problem solved
+</A></li>
+	<LI>Next message: <A HREF="000244.html">[Ethercatmaster-users] XML configuration File and the master test	program
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#243">[ date ]</a>
+              <a href="thread.html#243">[ thread ]</a>
+              <a href="subject.html#243">[ subject ]</a>
+              <a href="author.html#243">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

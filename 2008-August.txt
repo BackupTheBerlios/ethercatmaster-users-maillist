@@ -1,0 +1,1565 @@
+From rwatollenaar at gmail.com  Sun Aug  3 15:07:30 2008
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Sun, 03 Aug 2008 15:07:30 +0200
+Subject: [Ethercatmaster-users] setting up an ethercat slave
+Message-ID: <4895AD92.1050905@gmail.com>
+
+Hello,
+
+could someone shed some light on the basic steps of EML to set up 
+Logical ReadWrite cyclic data exchange. I.e. not mailbox communication.
+
+The way I understand it, all that is necessary in terms of ethernet 
+frame exchange between master and slave is:
+
+1-FMMU setup exchange, i.e. master sending the logical address / 
+physical starting address etc.
+
+2-txandrx
+
+Is this correct or are there other message exchanges required?
+
+If the above is correct, is there any information that Master needs to 
+retrieve from the slaves in the FMMU setup stage (e.g. fixed station 
+address, Revision number?).
+
+Any input much appreciated.
+
+Kind regards,
+
+Roland
+
+
+
+
+From klaas.gadeyne at fmtc.be  Mon Aug  4 10:24:45 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 4 Aug 2008 10:24:45 +0200 (CEST)
+Subject: [Ethercatmaster-users] setting up an ethercat slave
+In-Reply-To: <4895AD92.1050905@gmail.com>
+References: <4895AD92.1050905@gmail.com>
+Message-ID: <alpine.DEB.1.10.0808041017240.31776@ampere.labo01.fmtc.be>
+
+On Sun, 3 Aug 2008, Roland Tollenaar wrote:
+> could someone shed some light on the basic steps of EML to set up
+> Logical ReadWrite cyclic data exchange. I.e. not mailbox communication.
+>
+> The way I understand it, all that is necessary in terms of ethernet
+> frame exchange between master and slave is:
+>
+> 1-FMMU setup exchange, i.e. master sending the logical address /
+> physical starting address etc.
+>
+> 2-txandrx
+>
+> Is this correct or are there other message exchanges required?
+
+Depends on what you do exactly in step 1/
+
+> If the above is correct, is there any information that Master needs to
+> retrieve from the slaves in the FMMU setup stage (e.g. fixed station
+> address, Revision number?).
+
+You first have to perform some init steps (initialization, assign fixed network addresses (so you *can* do the FMMU setup), put the slave in operational mode, ...).  Some of these are normally done by the AL (or the EtherCAT_Master class).
+
+Klaas
+
+
+From rwatollenaar at gmail.com  Mon Aug  4 13:14:07 2008
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Mon, 04 Aug 2008 13:14:07 +0200
+Subject: [Ethercatmaster-users] setting up an ethercat slave
+In-Reply-To: <alpine.DEB.1.10.0808041017240.31776@ampere.labo01.fmtc.be>
+References: <4895AD92.1050905@gmail.com>
+	<alpine.DEB.1.10.0808041017240.31776@ampere.labo01.fmtc.be>
+Message-ID: <4896E47F.6030205@gmail.com>
+
+Hi Klaas,
+
+Thanks for the response.
+
+> Depends on what you do exactly in step 1/
+All the initialisation and setting up to go into operational state.
+> 
+>> If the above is correct, is there any information that Master needs to
+>> retrieve from the slaves in the FMMU setup stage (e.g. fixed station
+>> address, Revision number?).
+> 
+> You first have to perform some init steps (initialization, assign fixed 
+> network addresses (so you *can* do the FMMU setup), put the slave in 
+> operational mode, ...).  Some of these are normally done by the AL (or 
+> the EtherCAT_Master class).
+What step takes place in which part of the EML? I.e
+
+1-Which EML call does the initialisation?
+2-Which EML call assigns the fixed station address?
+(I thought this was a hardware feature of the slave that does not 
+require assignment by the master?)
+3-Which call brings the slave into operational state?
+
+
+I actually missed the part in the EC specifications where it says how 
+states are set and changed. I am still looking for the kind of 
+distinction between the type of communication as exists in for example 
+the CANOpen specifications. NMT, SDO, PDO etc. Does the ethercat 
+specification possess this kind of distinction? Is this distinction 
+reflected somehow in the EML or is it all "under the hood"?
+
+Does EML send UDP frames in its interaction? Or plain ethernet frames?
+
+Kind regards,
+
+Roland
+
+
+> 
+> Klaas
+> 
+
+
+From klaas.gadeyne at fmtc.be  Mon Aug  4 15:42:26 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 4 Aug 2008 15:42:26 +0200 (CEST)
+Subject: [Ethercatmaster-users] setting up an ethercat slave
+In-Reply-To: <4896E47F.6030205@gmail.com>
+References: <4895AD92.1050905@gmail.com>
+	<alpine.DEB.1.10.0808041017240.31776@ampere.labo01.fmtc.be>
+	<4896E47F.6030205@gmail.com>
+Message-ID: <alpine.DEB.1.10.0808041536120.31776@ampere.labo01.fmtc.be>
+
+[..]
+>> You first have to perform some init steps (initialization, assign fixed
+>> network addresses (so you *can* do the FMMU setup), put the slave in
+>> operational mode, ...).  Some of these are normally done by the AL (or
+>> the EtherCAT_Master class).
+> What step takes place in which part of the EML? I.e
+>
+> 1-Which EML call does the initialisation?
+> 2-Which EML call assigns the fixed station address?
+> (I thought this was a hardware feature of the slave that does not
+> require assignment by the master?)
+
+All this is done during the constructor of the master (use your debugger!)
+
+> 3-Which call brings the slave into operational state?
+
+Check the example programs:
+
+EtherCAT_SlaveHandler * sh_ek1100 = EM->get_slave_handler(0x03e9);
+printf("Setting EK1100 to OP STATE\n");
+if(sh_ek1100->to_state(EC_OP_STATE))
+       printf("EK1100 succesfully set in OP STATE\n");
+else
+       printf("\nfailed to set EK1100 in OP STATE\n");
+
+> I actually missed the part in the EC specifications where it says how
+> states are set and changed. I am still looking for the kind of
+> distinction between the type of communication as exists in for example
+> the CANOpen specifications. NMT, SDO, PDO etc. Does the ethercat
+> specification possess this kind of distinction?
+
+Although I haven't seen the spec in a long time, I think it is well described (e.g. just as in canopen: process data can only be sent to slaves in OP state).
+
+> Is this distinction reflected somehow in the EML or is it all "under the hood"?
+
+I don't understand this question.
+
+> Does EML send UDP frames in its interaction? Or plain ethernet frames?
+
+Plain ethernet frames.
+
+Klaas
+
+
+From wheeler at willowgarage.com  Tue Aug  5 09:10:07 2008
+From: wheeler at willowgarage.com (Rob Wheeler)
+Date: Tue, 5 Aug 2008 00:10:07 -0700
+Subject: [Ethercatmaster-users] Issues building RTnet application
+Message-ID: <894886ec0808050010p72e11375h44ede9cafe5a86fd@mail.gmail.com>
+
+Hello list,
+
+I've hit upon a few small nits building an application to run under
+RTnet.  The first is the install location of the include files. The
+ethercat include files reference other ethercat include files such as:
+
+#include "ethercat/ethercat_defs.h"
+
+However, the include files are installed under
+include/ethercat/arch-RTnet/ethercat.  This small patch installs the
+necessary headers under include/ethercat
+
+Index: src/CMakeLists.txt
+===================================================================
+--- src/CMakeLists.txt       (revision 36)
++++ src/CMakeLists.txt       (working copy)
+@@ -47,7 +47,7 @@
+
+   # arch specific headers
+   FILE( GLOB ARCH_RTNET_INCLS
+${EML_SOURCE_DIR}/include/ethercat/arch-RTnet/ethercat/[^.]*.h )
+-  INSTALL_FILES( /include/ethercat/arch-RTnet/ FILES ${ARCH_RTNET_INCLS})
++  INSTALL_FILES( /include/ethercat/ FILES ${ARCH_RTNET_INCLS})
+
+ ENDIF(BUILD_FOR_RTNET)
+
+The second issue I hit upon was that ethercat_log.h #defines log to be
+printf.  I was unfortunate enough to include ethercat header files in
+some other code that has a C++ member function named log.  For the
+time being I renamed the macro to ec_log and had to patch up numerous
+locations within EML where log was actually being used.  Perhaps
+making log into an inline function would be preferable.
+
+-R
+
+On Thu, Jul 31, 2008 at 12:59 AM, Klaas Gadeyne <klaas.gadeyne at fmtc.be> wrote:
+> On Wed, 30 Jul 2008, Thibaut BOYER wrote:
+>> I'm working on the implementation of the DCs on an Ethercat Master.
+>> There is an ambiguous calculation... According to the EtherCAT spec :
+>>
+>>   linedelay = [( port time difference - execution delays - port delays
+>>   ) - DelayAA of next slave] / 2.
+>>   DelayAA : time the frames needs to enter Port 0 and leave Port 0 on
+>>   the way back. E.g. if Port 0 and Port 1 are in use :
+>>   DelayAA = Receive Port Delay of Port 0 + Execution Delay +
+>>   TimeDifference (BA) + Port Delay Transmit of Port 0
+>>   BA = Receive Time on Port 1 - Receive Time on Port 0
+>>
+>>   * Can anyone please explain to me the subtle difference between
+>>     "execution delays" and "Execution Delay".
+>>   * I'd also like to know what the spec means with "port delays" ?
+>>         o Is that the time each port need to transmit the frame ?
+>>         o Is that the sum of the delays of all ports ?
+>>         o Is that the transmission delay between the two ports ? (i.e
+>>           a delay due to the electronics components)
+>>         o Or it's rather the delays' sum of the 2 ports used in this
+>>           calculation ?
+>
+> Hmm, I only have V1.00 of the spec at hand here, and I can't find the stuff your referring to?
+>
+> Klaas
+> _______________________________________________
+> Ethercatmaster-users mailing list
+> Ethercatmaster-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+>
+
+
+From klaas.gadeyne at fmtc.be  Tue Aug  5 11:14:11 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 5 Aug 2008 11:14:11 +0200 (CEST)
+Subject: [Ethercatmaster-users] Issues building RTnet application
+In-Reply-To: <894886ec0808050010p72e11375h44ede9cafe5a86fd@mail.gmail.com>
+References: <894886ec0808050010p72e11375h44ede9cafe5a86fd@mail.gmail.com>
+Message-ID: <alpine.DEB.1.10.0808050939010.9990@ampere.labo01.fmtc.be>
+
+On Tue, 5 Aug 2008, Rob Wheeler wrote:
+> Hello list,
+>
+> I've hit upon a few small nits building an application to run under
+> RTnet.  The first is the install location of the include files. The
+> ethercat include files reference other ethercat include files such as:
+>
+> #include "ethercat/ethercat_defs.h"
+>
+> However, the include files are installed under
+> include/ethercat/arch-RTnet/ethercat.  This small patch installs the
+> necessary headers under include/ethercat
+>
+> Index: src/CMakeLists.txt
+> ===================================================================
+> --- src/CMakeLists.txt       (revision 36)
+> +++ src/CMakeLists.txt       (working copy)
+> @@ -47,7 +47,7 @@
+>
+>   # arch specific headers
+>   FILE( GLOB ARCH_RTNET_INCLS
+> ${EML_SOURCE_DIR}/include/ethercat/arch-RTnet/ethercat/[^.]*.h )
+> -  INSTALL_FILES( /include/ethercat/arch-RTnet/ FILES ${ARCH_RTNET_INCLS})
+> +  INSTALL_FILES( /include/ethercat/ FILES ${ARCH_RTNET_INCLS})
+>
+> ENDIF(BUILD_FOR_RTNET)
+
+[kgad at ampere ~/SVN/eml-trunk]$
+  svn diff src/CMakeLists.txt
+Index: src/CMakeLists.txt
+===================================================================
+--- src/CMakeLists.txt  (revision 32)
++++ src/CMakeLists.txt  (working copy)
+@@ -15,7 +15,7 @@
+
+    # arch specific headers
+    FILE( GLOB ARCH_INCLS ${EML_SOURCE_DIR}/include/ethercat/arch-eCos/ethercat/[^.]*.h )
+-  INSTALL_FILES( /include/ethercat/arch-eCos/ FILES ${ETHERCAT_INCLS})
++  INSTALL_FILES( /include/ethercat/ FILES ${ETHERCAT_INCLS})
+  ENDIF (BUILD_FOR_ECOS)
+
+  IF (BUILD_FOR_RTNET)
+@@ -47,7 +47,7 @@
+
+    # arch specific headers
+    FILE( GLOB ARCH_RTNET_INCLS ${EML_SOURCE_DIR}/include/ethercat/arch-RTnet/ethercat/[^.]*.h )
+-  INSTALL_FILES( /include/ethercat/arch-RTnet/ FILES ${ARCH_RTNET_INCLS})
++  INSTALL_FILES( /include/ethercat/ FILES ${ARCH_RTNET_INCLS})
+
+  ENDIF(BUILD_FOR_RTNET)
+
+@@ -78,7 +78,7 @@
+
+    # arch specific headers
+    FILE( GLOB ARCH_POSIX_INCLS ${EML_SOURCE_DIR}/include/ethercat/arch-RTnet/ethercat/[^.]*.h )
+-  INSTALL_FILES( /include/ethercat/arch-RTnet/ FILES ${ARCH_POSIX_INCLS})
++  INSTALL_FILES( /include/ethercat/ FILES ${ARCH_POSIX_INCLS})
+
+  ENDIF(BUILD_FOR_POSIX)
+
+[kgad at ampere ~/SVN/eml-trunk]$
+  svn commit -m "fix install path issue.  Thanks Rob Wheeler" src/CMakeLists.txt
+Sending        src/CMakeLists.txt
+Transmitting file data .
+Committed revision 37.
+
+> The second issue I hit upon was that ethercat_log.h #defines log to be
+> printf.  I was unfortunate enough to include ethercat header files in
+> some other code that has a C++ member function named log.  For the
+> time being I renamed the macro to ec_log and had to patch up numerous
+> locations within EML where log was actually being used.  Perhaps
+> making log into an inline function would be preferable.
+
+log is really *really* a *very* bad name in a language that has no namespaces.
+
+This was an excellent occassion to test the eclipse refactor/rename functionality :-)
+r39 contains (should contain) now ec_log instead.  I'm awaiting the eclipse option "make this define an inline function" before trying you last suggestion :-)
+
+Thanks for your remarks!
+
+Klaas
+
+
+
+From klaas.gadeyne at fmtc.be  Fri Aug  8 10:59:32 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Fri, 8 Aug 2008 10:59:32 +0200 (CEST)
+Subject: [Ethercatmaster-users] [Announce] FMTC changes EML license to
+	Lesser GPL
+Message-ID: <alpine.DEB.1.10.0808081056480.23184@ampere.labo01.fmtc.be>
+
+The Flanders' Mechatronics Technology Centre changes the EML license from GPL into the more industry-friendly Lesser-GPL. All code available through the Berlios SVN server is adapted from r40 on.
+
+Klaas
+
+ps.  Note that the additional part of the license still holds: the right to use EtherCAT Technology is granted and comes free of charge under condition of compatibility of product made by Licensee. People intending to distribute/sell products based on the library, have to sign an agreement to guarantee that products using software based on EML *stay compatible with the actual EtherCAT specification* (which are released themselves as an open standard) as the (only) precondition to have the right to use EtherCAT Technology, IP and trade marks.
+
+
+
+
+
+From klaas.gadeyne at fmtc.be  Tue Aug 12 16:33:52 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 12 Aug 2008 16:33:52 +0200 (CEST)
+Subject: [Ethercatmaster-users] Choosing the right master platform
+Message-ID: <alpine.DEB.1.10.0808121632340.27427@ampere.labo01.fmtc.be>
+
+[forwarding an email I got personally, there seem to be some issues with the mailman configuration @ berlios]
+
+Hi EtherCAT masters!
+
+I am looking for the optimum master implementation for a productive
+automation environment.
+
+Due to our requirements we need to go down to the area of 100us cycle time.
+
+Has anybody experience with EML together with the RT_PREEMPT kernel at all?
+
+Does somebody use it in an productive environment?
+Is ist realistic to do the job with it at all?
+Is it more realistic / even necessary / possible at all to do it with
+Xenomai instead?
+Or is it necessary/recommended to have the master in hardware for such a
+scenario?
+
+What are your cycle times, frame sizes, jitters, cpu loads and which
+hardware are you working on?
+
+Thank you all
+
+Juergen
+
+PS: In my first tries (on a plain ubuntu as well as with RT_PREEMPT) I saw
+a latency peak of about one second every other second.
+Since the EML code does not do much magic when sending a frame this must be
+buried inside the network driver or even below.
+Did you see something similar during your work?
+
+
+
+
+From klaas.gadeyne at fmtc.be  Mon Aug 18 11:44:26 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 18 Aug 2008 11:44:26 +0200 (CEST)
+Subject: [Ethercatmaster-users] Choosing the right master platform
+In-Reply-To: <alpine.DEB.1.10.0808121632340.27427@ampere.labo01.fmtc.be>
+References: <alpine.DEB.1.10.0808121632340.27427@ampere.labo01.fmtc.be>
+Message-ID: <alpine.DEB.1.10.0808181138330.12502@ampere.labo01.fmtc.be>
+
+On Tue, 12 Aug 2008, Klaas Gadeyne wrote:
+> [forwarding an email I got personally, there seem to be some issues with the mailman configuration @ berlios]
+>
+> Hi EtherCAT masters!
+>
+> I am looking for the optimum master implementation for a productive
+> automation environment.
+>
+> Due to our requirements we need to go down to the area of 100us cycle time.
+>
+> Has anybody experience with EML together with the RT_PREEMPT kernel at all?
+
+The "plain linux" port currently uses the linux socket stack.  That will probably be an issue given the cycle times you describe above (you might want to check the xenomai/rtnet-users mailinglist archives for more info about this)
+
+> Does somebody use it in an productive environment?
+
+We are a research centre, but some users seem to use it in a production environment indeed.  They might speak up now :-)
+
+> Is ist realistic to do the job with it at all?
+> Is it more realistic / even necessary / possible at all to do it with
+> Xenomai instead?
+
+Given the cycle times above, I think xenomai would be a good choice.  (or eCos, that is)
+
+> Or is it necessary/recommended to have the master in hardware for such a
+> scenario?
+
+No.
+
+> What are your cycle times, frame sizes, jitters, cpu loads and which
+> hardware are you working on?
+
+I will leave those user experiences to the real users...
+
+> PS: In my first tries (on a plain ubuntu as well as with RT_PREEMPT) I saw
+> a latency peak of about one second every other second.
+> Since the EML code does not do much magic when sending a frame this must be
+> buried inside the network driver or even below.
+> Did you see something similar during your work?
+
+This does not occur with the xenomai version, although a one second latency peak is _REALLY HUGE_!
+
+Klaas
+
+
+From manut at linutronix.de  Mon Aug 18 13:37:21 2008
+From: manut at linutronix.de (Manuel Traut)
+Date: Mon, 18 Aug 2008 13:37:21 +0200
+Subject: [Ethercatmaster-users] Choosing the right master platform
+In-Reply-To: <alpine.DEB.1.10.0808181138330.12502@ampere.labo01.fmtc.be>
+References: <alpine.DEB.1.10.0808121632340.27427@ampere.labo01.fmtc.be>
+	<alpine.DEB.1.10.0808181138330.12502@ampere.labo01.fmtc.be>
+Message-ID: <20080818133721.2a5646d5@tc4200.traut>
+
+On Mon, 18 Aug 2008 11:44:26 +0200 (CEST)
+Klaas Gadeyne <klaas.gadeyne at fmtc.be> wrote:
+
+> On Tue, 12 Aug 2008, Klaas Gadeyne wrote:
+> > [forwarding an email I got personally, there seem to be some issues
+> > with the mailman configuration @ berlios]
+> >
+> > Hi EtherCAT masters!
+
+Hi,
+
+> > I am looking for the optimum master implementation for a productive
+> > automation environment.
+> >
+> > Due to our requirements we need to go down to the area of 100us
+> > cycle time.
+> >
+> > Has anybody experience with EML together with the RT_PREEMPT kernel
+> > at all?
+
+yes, i use it since ~1 year.
+
+> The "plain linux" port currently uses the linux socket stack.  That
+> will probably be an issue given the cycle times you describe above
+
+I also write the telegrames to a raw socket.
+
+> > Is ist realistic to do the job with it at all?
+
+It depends on CPU Power, generally it should be possible with
+RT_PREEMPT.
+
+> > What are your cycle times, frame sizes, jitters, cpu loads and which
+> > hardware are you working on?
+> I will leave those user experiences to the real users...
+> 
+
+250 microsecs cycletime
+~20 Bytes processdata (shouldn't change the measurements results much,
+  as long the processdata fits in one ethernet frame)
+jitter, not measured yet
+cpu loads ~30%
+Core2Duo, 2 x 1.8 GHz
+
+> > PS: In my first tries (on a plain ubuntu as well as with
+> > RT_PREEMPT) I saw a latency peak of about one second every other
+> > second. Since the EML code does not do much magic when sending a
+> > frame this must be buried inside the network driver or even below.
+> > Did you see something similar during your work?
+> 
+> This does not occur with the xenomai version, although a one second
+> latency peak is _REALLY HUGE_!
+
+What network card are you using? Some "inteligent" NICs doesn't produce
+an interrupt for each package they receive.
+
+  Manuel
+
+
+From rwatollenaar at gmail.com  Wed Aug 20 08:20:11 2008
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Wed, 20 Aug 2008 08:20:11 +0200
+Subject: [Ethercatmaster-users] Choosing the right master platform
+In-Reply-To: <alpine.DEB.1.10.0808121632340.27427@ampere.labo01.fmtc.be>
+References: <alpine.DEB.1.10.0808121632340.27427@ampere.labo01.fmtc.be>
+Message-ID: <48ABB79B.3090700@gmail.com>
+
+Hi Juergen,
+
+> Has anybody experience with EML together with the RT_PREEMPT kernel at all?
+> 
+> Does somebody use it in an productive environment?
+Yes we use it in a production environment.
+
+
+> Is ist realistic to do the job with it at all?
+Depends whether you have the time. It can be rather uncomfortable, and 
+its not entirely bug free. But it works.
+
+
+> Is it more realistic / even necessary / possible at all to do it with
+> Xenomai instead?
+We use xenomai, not ecos.
+
+
+> Or is it necessary/recommended to have the master in hardware for such a
+> scenario?
+Not as far as I know.
+
+> 
+> What are your cycle times, frame sizes, jitters, cpu loads and which
+> hardware are you working on?
+Cycle times are 1ms, latency about 200-250ns. So substantially higher 
+that what you require. 100us should be attainable but you will have to 
+work hard at optimizing your xenomai setup. The ethercat bus should 
+manage this requirement depending on how you laod it.
+
+
+> PS: In my first tries (on a plain ubuntu as well as with RT_PREEMPT) I saw
+> a latency peak of about one second every other second.
+> Since the EML code does not do much magic when sending a frame this must be
+> buried inside the network driver or even below.
+> Did you see something similar during your work?
+No.
+
+
+Roland
+
+
+> 
+> 
+> _______________________________________________
+> Ethercatmaster-users mailing list
+> Ethercatmaster-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+> 
+
+
+From fbayart at triphase.com  Fri Aug 22 17:18:47 2008
+From: fbayart at triphase.com (Frederik Bayart)
+Date: Fri, 22 Aug 2008 17:18:47 +0200
+Subject: [Ethercatmaster-users] how to set outputs ?
+Message-ID: <3BAF6399A0B7E644851E85779E60AC79618A@dl145.triphase.local>
+
+Hallo,
+
+Below I inserted the code of my master test. I have some input (EL1004,
+EL1008) and output (EL2008) modules. The program reads the input
+correctly, however I don't succeed to set the outputs. I looked already
+in the archives of this mailinglist, but I didn't found what I'm still
+doing wrong. Does anybody has a suggestion ?
+
+Thanks and kind regards,
+
+Frederik
+
+ 
+#include <posix/pthread.h>
+#include <signal.h>
+#include <sys/mman.h>
+
+#include <al/ethercat_master.h>
+#include <al/ethercat_AL.h>
+#include <al/ethercat_process_data.h>
+#include <ethercat/ethercat_xenomai_drv.h>
+#include <ethercat/netif.h>
+#include <dll/ethercat_dll.h>
+#include <dll/ethercat_frame.h>
+#include <dll/ethercat_slave_memory.h>
+#include <al/ethercat_slave_conf.h>
+#include <al/ethercat_slave_handler.h>
+
+struct netif *ni;
+
+//SlaveConfig EK1100
+EtherCAT_FMMU_Config fmmu_config_EK1100(0);
+EtherCAT_PD_Config pd_config_EK1100(0);
+EtherCAT_SlaveConfig
+EC_EK1100(0x044c2c52,0x00110000,0x03e9,&fmmu_config_EK1100,&pd_config_EK
+1100);
+
+//SlaveConfig EL1004
+EtherCAT_FMMU_Config fmmu_config_EL1004_1(1);
+EC_FMMU fmmu_EL1004_1(0x00010002      //logical start address
+                     ,1               //length
+                     ,0               //logical start bit
+                     ,3               //logical end bit
+                     ,0x1000          //physical start address
+                     ,0               //physical start bit
+                     ,true            //read enable
+                     ,false           //write enable
+                     ,true            //channel enable
+                     );
+EtherCAT_PD_Config pd_config_EL1004_1(1);
+EC_SyncMan syncman_EL1004_1(0x1000                  //physical start
+address
+                           ,1                       //length
+                           ,EC_BUFFERED             //buffer type
+{EC_BUFFERED | EC_QUEUED}
+                           ,EC_READ_FROM_MASTER     //direction
+{EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+                           ,true                    //AL event enable
+                           ,false                   //watchdog enable
+                           ,false                   //write event
+                           ,false                   //read event
+                           ,false                   //watchdog trigger
+                           ,false                   //queued state : not
+used for buffer type EC_BUFFERED
+                           ,EC_FIRST_BUFFER         //buffered state
+{EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER |
+EC_LOCKED_BUFFER}
+                           ,true                    //channel enable
+                           );
+EtherCAT_SlaveConfig EC_EL1004_1(0x03ec3052              //product code
+                                ,0x00100000              //revision
+                                ,0x03ea                  //fixed station
+address
+                                ,&fmmu_config_EL1004_1
+                                ,&pd_config_EL1004_1
+                                );
+
+//SlaveConfig EL1008
+EtherCAT_FMMU_Config fmmu_config_EL1008_2(1);
+EC_FMMU fmmu_EL1008_2(0x00010002      //logical start address
+                     ,2               //length
+                     ,4               //logical start bit
+                     ,3               //logical end bit
+                     ,0x1000          //physical start address
+                     ,0               //physical start bit
+                     ,true            //read enable
+                     ,false           //write enable
+                     ,true            //channel enable
+                     );
+EtherCAT_PD_Config pd_config_EL1008_2(1);
+EC_SyncMan syncman_EL1008_2(0x1000                  //physical start
+address
+                           ,1                       //length
+                           ,EC_BUFFERED             //buffer type
+{EC_BUFFERED | EC_QUEUED}
+                           ,EC_READ_FROM_MASTER     //direction
+{EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+                           ,true                    //AL event enable
+                           ,false                   //watchdog enable
+                           ,false                   //write event
+                           ,false                   //read event
+                           ,false                   //watchdog trigger
+                           ,false                   //queued state : not
+used for buffer type EC_BUFFERED
+                           ,EC_FIRST_BUFFER         //buffered state
+{EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER |
+EC_LOCKED_BUFFER}
+                           ,true                    //channel enable
+                           );
+EtherCAT_SlaveConfig EC_EL1008_2(0x03f03052              //product code
+                                ,0x00100000              //revision
+                                ,0x03eb                  //fixed station
+address
+                                ,&fmmu_config_EL1008_2
+                                ,&pd_config_EL1008_2
+                                );
+
+//SlaveConfig EL2008
+EtherCAT_FMMU_Config fmmu_config_EL2008_3(1);
+EC_FMMU fmmu_EL2008_3(0x00010000      //logical start address
+                     ,1               //length
+                     ,0               //logical start bit
+                     ,7               //logical end bit
+                     ,0x0f00          //physical start address
+                     ,0               //physical start bit
+                     ,false           //read enable
+                     ,true            //write enable
+                     ,true            //channel enable
+                     );
+EtherCAT_PD_Config pd_config_EL2008_3(1);
+EC_SyncMan syncman_EL2008_3(0x0f00                  //physical start
+address
+                           ,1                       //length
+                           ,EC_QUEUED               //buffer type
+{EC_BUFFERED | EC_QUEUED}
+                           ,EC_WRITTEN_FROM_MASTER  //direction
+{EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+                           ,true                    //AL event enable
+                           ,false                   //watchdog enable
+                           ,false                   //write event
+                           ,false                   //read event
+                           ,false                   //watchdog trigger
+                           ,false                   //queued state : not
+used for buffer type EC_BUFFERED
+                           ,EC_FIRST_BUFFER         //buffered state
+{EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER |
+EC_LOCKED_BUFFER}
+                           ,true                    //channel enable
+                           );
+EtherCAT_SlaveConfig EC_EL2008_3(0x07d83052              //product code
+                                ,0x00100000              //revision
+                                ,0x03ec                  //fixed station
+address
+                                ,&fmmu_config_EL2008_3
+                                ,&pd_config_EL2008_3
+                                );
+
+//SlaveConfig EL1008
+EtherCAT_FMMU_Config fmmu_config_EL1008_4(1);
+EC_FMMU fmmu_EL1008_4(0x00010003      //logical start address
+                     ,2               //length
+                     ,4               //logical start bit
+                     ,3               //logical end bit
+                     ,0x1000          //physical start address
+                     ,0               //physical start bit
+                     ,true            //read enable
+                     ,false           //write enable
+                     ,true            //channel enable
+                     );
+EtherCAT_PD_Config pd_config_EL1008_4(1);
+EC_SyncMan syncman_EL1008_4(0x1000                  //physical start
+address
+                           ,1                       //length
+                           ,EC_BUFFERED             //buffer type
+{EC_BUFFERED | EC_QUEUED}
+                           ,EC_READ_FROM_MASTER     //direction
+{EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+                           ,true                    //AL event enable
+                           ,false                   //watchdog enable
+                           ,false                   //write event
+                           ,false                   //read event
+                           ,false                   //watchdog trigger
+                           ,false                   //queued state : not
+used for buffer type EC_BUFFERED
+                           ,EC_FIRST_BUFFER         //buffered state
+{EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER |
+EC_LOCKED_BUFFER}
+                           ,true                    //channel enable
+                           );
+EtherCAT_SlaveConfig EC_EL1008_4(0x03f03052              //product code
+                                ,0x00100000              //revision
+                                ,0x03ed                  //fixed station
+address
+                                ,&fmmu_config_EL1008_4
+                                ,&pd_config_EL1008_4
+                                );
+
+static void init_slave_db() {
+	EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(5);
+	fmmu_config_EL1004_1[0]=fmmu_EL1004_1;
+	fmmu_config_EL1008_2[0]=fmmu_EL1008_2;
+	fmmu_config_EL2008_3[0]=fmmu_EL2008_3;
+	fmmu_config_EL1008_4[0]=fmmu_EL1008_4;
+	pd_config_EL1004_1[0] = syncman_EL1004_1;
+	pd_config_EL1008_2[0] = syncman_EL1008_2;
+	pd_config_EL2008_3[0] = syncman_EL2008_3;
+	pd_config_EL1008_4[0] = syncman_EL1008_4;
+	slave_db->set_conf(&EC_EK1100,0);
+	slave_db->set_conf(&EC_EL1004_1,1);
+	slave_db->set_conf(&EC_EL1008_2,2);
+	slave_db->set_conf(&EC_EL2008_3,3);
+	slave_db->set_conf(&EC_EL1008_4,4);
+}
+
+static void* run_master(void * arg) {
+	
+	ni = init_ec((char*)arg);
+	init_slave_db();
+	if(ni != 0) {
+		EtherCAT_DataLinkLayer::instance()->attach(ni);
+		EtherCAT_Master * EM = EtherCAT_Master::instance();
+		EtherCAT_SlaveHandler * sh_ek1100 =
+EM->get_slave_handler(0x03e9);
+		//sleep(1);
+		printf("Setting EK1100 to OP STATE\n");
+		if(sh_ek1100->to_state(EC_OP_STATE))
+			printf("EK1100 succesfully set in OP STATE\n");
+		else
+			printf("\nfailed to set EK1100 in OP STATE\n");
+
+		EtherCAT_SlaveHandler * sh_el1004_1 =
+EM->get_slave_handler(0x03ea);
+		if(sh_el1004_1->to_state(EC_OP_STATE))
+			printf("EL1004_1 succesfully set in OP
+STATE\n");
+		else
+			printf("\nfailed to set EL1004_1 in OP
+STATE!!\n");
+
+		EtherCAT_SlaveHandler * sh_el1008_2 =
+EM->get_slave_handler(0x03eb);
+		if(sh_el1008_2->to_state(EC_OP_STATE))
+			printf("EL1008_2 succesfully set in OP
+STATE\n");
+		else
+			printf("\nfailed to set EL1008_2 in OP
+STATE!!\n");
+
+		EtherCAT_SlaveHandler * sh_el2008_3 =
+EM->get_slave_handler(0x03ec);
+		if(sh_el2008_3->to_state(EC_OP_STATE))
+			printf("EL2008_3 succesfully set in OP
+STATE\n");
+		else
+			printf("\nfailed to set EL2008_3 in OP
+STATE!!\n");
+
+		EtherCAT_SlaveHandler * sh_el1008_4 =
+EM->get_slave_handler(0x03ed);
+		if(sh_el1008_4->to_state(EC_OP_STATE))
+			printf("EL1008_4 succesfully set in OP
+STATE\n");
+		else
+			printf("\nfailed to set EL1008_4 in OP
+STATE!!\n");
+
+		EtherCAT_AL * AL = EtherCAT_AL::instance();
+		
+		unsigned char msg[5] = {0xff, 0xff, 0xff, 0xff, 0xff};
+		if(AL->isReady()) {
+				EM->txandrx_PD(sizeof(msg),msg);
+				sleep(1);
+				EM->txandrx_PD(sizeof(msg),msg);
+
+      for(int i = 0 ; i < sizeof(msg); ++i)
+      {
+        printf("msg[%d]=0x%02x\n",i,msg[i]);
+      }
+		}
+		
+		close_socket(ni);
+		
+	}
+}
+
+void catch_signal(int sig)
+{
+   if(ni != 0)
+		close_socket(ni);
+	exit(1);
+}
+
+int main(int argc, char** argv)
+{
+
+	signal(SIGTERM, catch_signal);
+   signal(SIGINT, catch_signal);
+   signal(SIGHUP, catch_signal);
+	mlockall(MCL_CURRENT|MCL_FUTURE);
+
+	if (argc < 2) {
+        printf("usage: %s <interface>\n", argv[0]);
+        return 0;
+    }
+
+	pthread_t xenothread;
+	pthread_attr_t xenothread_attr;
+
+	//Set attributes of thread
+	pthread_attr_init (& xenothread_attr);
+
+	//Start thread
+	if(pthread_create(&xenothread, &xenothread_attr, run_master,
+argv[1]) != 0) {
+		printf("Cannot create thread EtherCatThread.\n");
+		exit(1);
+	}
+   pthread_join( xenothread, 0 );
+	return 0;
+}
+
+
+From klaas.gadeyne at fmtc.be  Fri Aug 22 18:27:09 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Fri, 22 Aug 2008 18:27:09 +0200 (CEST)
+Subject: [Ethercatmaster-users] how to set outputs ?
+In-Reply-To: <3BAF6399A0B7E644851E85779E60AC79618A@dl145.triphase.local>
+References: <3BAF6399A0B7E644851E85779E60AC79618A@dl145.triphase.local>
+Message-ID: <alpine.DEB.1.10.0808221808530.27091@ampere.labo01.fmtc.be>
+
+On Fri, 22 Aug 2008, Frederik Bayart wrote:
+> Hallo,
+>
+> Below I inserted the code of my master test. I have some input (EL1004,
+> EL1008) and output (EL2008) modules. The program reads the input
+> correctly, however I don't succeed to set the outputs. I looked already
+> in the archives of this mailinglist, but I didn't found what I'm still
+> doing wrong. Does anybody has a suggestion ?
+
+At first (fast) sight, your code looks OK (and I suggest your printf("") statements say that the el2008 module gets in the operational state succesfully) . 
+AFAIK Roland has used those modules already, maybe he knows the gotcha or can give you the configuration data he used.
+
+HTH,
+
+Klaas
+
+ps. I've added the dutch docu of Tom Panis to the subversion repository.  Did you start from those already?
+
+
+
+From rwatollenaar at gmail.com  Sat Aug 23 08:57:56 2008
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Sat, 23 Aug 2008 08:57:56 +0200
+Subject: [Ethercatmaster-users] how to set outputs ?
+In-Reply-To: <3BAF6399A0B7E644851E85779E60AC79618A@dl145.triphase.local>
+References: <3BAF6399A0B7E644851E85779E60AC79618A@dl145.triphase.local>
+Message-ID: <48AFB4F4.3010909@gmail.com>
+
+Hi Frederik,
+
+I think your problem might be that you have to use EC_BUFFERED instead 
+of EC_QUEUED
+
+
+So where you have:
+
+> //SlaveConfig EL2008
+> EtherCAT_FMMU_Config fmmu_config_EL2008_3(1);
+> EC_FMMU fmmu_EL2008_3(0x00010000      //logical start address
+>                      ,1               //length
+>                      ,0               //logical start bit
+>                      ,7               //logical end bit
+>                      ,0x0f00          //physical start address
+>                      ,0               //physical start bit
+>                      ,false           //read enable
+>                      ,true            //write enable
+>                      ,true            //channel enable
+>                      );
+> EtherCAT_PD_Config pd_config_EL2008_3(1);
+> EC_SyncMan syncman_EL2008_3(0x0f00                  //physical start
+> address
+>                            ,1                       //length
+>                            ,EC_QUEUED               //buffer type
+> {EC_BUFFERED | EC_QUEUED}
+>                            ,EC_WRITTEN_FROM_MASTER  //direction
+> {EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+>                            ,true                    //AL event enable
+>                            ,false                   //watchdog enable
+>                            ,false                   //write event
+>                            ,false                   //read event
+>                            ,false                   //watchdog trigger
+>                            ,false                   //queued state : not
+> used for buffer type EC_BUFFERED
+>                            ,EC_FIRST_BUFFER         //buffered state
+> {EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER |
+> EC_LOCKED_BUFFER}
+>                            ,true                    //channel enable
+>                            );
+
+
+I use:
+
+///SlaveConfig EL2004(3) [Digital Output]
+EtherCAT_FMMU_Config fmmu_config_EL2004_3(1);
+EC_FMMU fmmu0_EL2004_3(0x00010001,1,0,3,0x0F00,0,false,true,true);
+EtherCAT_PD_Config pd_config_EL2004_3(1);
+EC_SyncMan 
+Syncman0_EL2004_3(0x0F00,1,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig 
+EC_EL2004_3(0x7d43052,0x100000,0x03ee,&fmmu_config_EL2004_3,&pd_config_EL2004_3);
+
+
+HTH,
+
+Roland Tollenaar.
+
+
+
+
+
+
+
+> EtherCAT_SlaveConfig EC_EL2008_3(0x07d83052              //product code
+>                                 ,0x00100000              //revision
+>                                 ,0x03ec                  //fixed station
+> address
+>                                 ,&fmmu_config_EL2008_3
+>                                 ,&pd_config_EL2008_3
+>                                 );
+> 
+> //SlaveConfig EL1008
+> EtherCAT_FMMU_Config fmmu_config_EL1008_4(1);
+> EC_FMMU fmmu_EL1008_4(0x00010003      //logical start address
+>                      ,2               //length
+>                      ,4               //logical start bit
+>                      ,3               //logical end bit
+>                      ,0x1000          //physical start address
+>                      ,0               //physical start bit
+>                      ,true            //read enable
+>                      ,false           //write enable
+>                      ,true            //channel enable
+>                      );
+> EtherCAT_PD_Config pd_config_EL1008_4(1);
+> EC_SyncMan syncman_EL1008_4(0x1000                  //physical start
+> address
+>                            ,1                       //length
+>                            ,EC_BUFFERED             //buffer type
+> {EC_BUFFERED | EC_QUEUED}
+>                            ,EC_READ_FROM_MASTER     //direction
+> {EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+>                            ,true                    //AL event enable
+>                            ,false                   //watchdog enable
+>                            ,false                   //write event
+>                            ,false                   //read event
+>                            ,false                   //watchdog trigger
+>                            ,false                   //queued state : not
+> used for buffer type EC_BUFFERED
+>                            ,EC_FIRST_BUFFER         //buffered state
+> {EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER |
+> EC_LOCKED_BUFFER}
+>                            ,true                    //channel enable
+>                            );
+> EtherCAT_SlaveConfig EC_EL1008_4(0x03f03052              //product code
+>                                 ,0x00100000              //revision
+>                                 ,0x03ed                  //fixed station
+> address
+>                                 ,&fmmu_config_EL1008_4
+>                                 ,&pd_config_EL1008_4
+>                                 );
+> 
+> static void init_slave_db() {
+> 	EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(5);
+> 	fmmu_config_EL1004_1[0]=fmmu_EL1004_1;
+> 	fmmu_config_EL1008_2[0]=fmmu_EL1008_2;
+> 	fmmu_config_EL2008_3[0]=fmmu_EL2008_3;
+> 	fmmu_config_EL1008_4[0]=fmmu_EL1008_4;
+> 	pd_config_EL1004_1[0] = syncman_EL1004_1;
+> 	pd_config_EL1008_2[0] = syncman_EL1008_2;
+> 	pd_config_EL2008_3[0] = syncman_EL2008_3;
+> 	pd_config_EL1008_4[0] = syncman_EL1008_4;
+> 	slave_db->set_conf(&EC_EK1100,0);
+> 	slave_db->set_conf(&EC_EL1004_1,1);
+> 	slave_db->set_conf(&EC_EL1008_2,2);
+> 	slave_db->set_conf(&EC_EL2008_3,3);
+> 	slave_db->set_conf(&EC_EL1008_4,4);
+> }
+> 
+> static void* run_master(void * arg) {
+> 	
+> 	ni = init_ec((char*)arg);
+> 	init_slave_db();
+> 	if(ni != 0) {
+> 		EtherCAT_DataLinkLayer::instance()->attach(ni);
+> 		EtherCAT_Master * EM = EtherCAT_Master::instance();
+> 		EtherCAT_SlaveHandler * sh_ek1100 =
+> EM->get_slave_handler(0x03e9);
+> 		//sleep(1);
+> 		printf("Setting EK1100 to OP STATE\n");
+> 		if(sh_ek1100->to_state(EC_OP_STATE))
+> 			printf("EK1100 succesfully set in OP STATE\n");
+> 		else
+> 			printf("\nfailed to set EK1100 in OP STATE\n");
+> 
+> 		EtherCAT_SlaveHandler * sh_el1004_1 =
+> EM->get_slave_handler(0x03ea);
+> 		if(sh_el1004_1->to_state(EC_OP_STATE))
+> 			printf("EL1004_1 succesfully set in OP
+> STATE\n");
+> 		else
+> 			printf("\nfailed to set EL1004_1 in OP
+> STATE!!\n");
+> 
+> 		EtherCAT_SlaveHandler * sh_el1008_2 =
+> EM->get_slave_handler(0x03eb);
+> 		if(sh_el1008_2->to_state(EC_OP_STATE))
+> 			printf("EL1008_2 succesfully set in OP
+> STATE\n");
+> 		else
+> 			printf("\nfailed to set EL1008_2 in OP
+> STATE!!\n");
+> 
+> 		EtherCAT_SlaveHandler * sh_el2008_3 =
+> EM->get_slave_handler(0x03ec);
+> 		if(sh_el2008_3->to_state(EC_OP_STATE))
+> 			printf("EL2008_3 succesfully set in OP
+> STATE\n");
+> 		else
+> 			printf("\nfailed to set EL2008_3 in OP
+> STATE!!\n");
+> 
+> 		EtherCAT_SlaveHandler * sh_el1008_4 =
+> EM->get_slave_handler(0x03ed);
+> 		if(sh_el1008_4->to_state(EC_OP_STATE))
+> 			printf("EL1008_4 succesfully set in OP
+> STATE\n");
+> 		else
+> 			printf("\nfailed to set EL1008_4 in OP
+> STATE!!\n");
+> 
+> 		EtherCAT_AL * AL = EtherCAT_AL::instance();
+> 		
+> 		unsigned char msg[5] = {0xff, 0xff, 0xff, 0xff, 0xff};
+> 		if(AL->isReady()) {
+> 				EM->txandrx_PD(sizeof(msg),msg);
+> 				sleep(1);
+> 				EM->txandrx_PD(sizeof(msg),msg);
+> 
+>       for(int i = 0 ; i < sizeof(msg); ++i)
+>       {
+>         printf("msg[%d]=0x%02x\n",i,msg[i]);
+>       }
+> 		}
+> 		
+> 		close_socket(ni);
+> 		
+> 	}
+> }
+> 
+> void catch_signal(int sig)
+> {
+>    if(ni != 0)
+> 		close_socket(ni);
+> 	exit(1);
+> }
+> 
+> int main(int argc, char** argv)
+> {
+> 
+> 	signal(SIGTERM, catch_signal);
+>    signal(SIGINT, catch_signal);
+>    signal(SIGHUP, catch_signal);
+> 	mlockall(MCL_CURRENT|MCL_FUTURE);
+> 
+> 	if (argc < 2) {
+>         printf("usage: %s <interface>\n", argv[0]);
+>         return 0;
+>     }
+> 
+> 	pthread_t xenothread;
+> 	pthread_attr_t xenothread_attr;
+> 
+> 	//Set attributes of thread
+> 	pthread_attr_init (& xenothread_attr);
+> 
+> 	//Start thread
+> 	if(pthread_create(&xenothread, &xenothread_attr, run_master,
+> argv[1]) != 0) {
+> 		printf("Cannot create thread EtherCatThread.\n");
+> 		exit(1);
+> 	}
+>    pthread_join( xenothread, 0 );
+> 	return 0;
+> }
+> _______________________________________________
+> Ethercatmaster-users mailing list
+> Ethercatmaster-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+> 
+
+
+From frederik.bayart at triphase.com  Mon Aug 25 14:21:38 2008
+From: frederik.bayart at triphase.com (Frederik Bayart)
+Date: Mon, 25 Aug 2008 14:21:38 +0200
+Subject: [Ethercatmaster-users] how to set outputs ?
+In-Reply-To: <48AFB4F4.3010909@gmail.com>
+References: <3BAF6399A0B7E644851E85779E60AC79618A@dl145.triphase.local>
+	<48AFB4F4.3010909@gmail.com>
+Message-ID: <000001c906ad$1fe574d0$0800a8c0@triphase.local>
+
+ 
+Hallo Roland,
+
+Using exact the same settings doesn't solve the problem.
+I changed my source a little bit : 
+
+
+		unsigned char msg[128] ;
+            for(int i = 0 ; i < sizeof(msg); ++i) msg[i] = i;
+
+		if(AL->isReady()) { 
+				EM->txandrx_PD(sizeof(msg),msg);
+
+
+The logical start address of the EL2008 is now 0x10003 (See configuration
+below).
+I see now that the outputs are activated very briefly and are disabled
+immediately. Outp 1 and 2 are enabled briefly, so this 
+is corresponding indeed to logical address 0x10003 where 0x3 is written to
+according to the code above.
+I installed a wireshark version with the ethercat plugin. When I take a
+network dump, I see that the master is sending malformed packets : see pcap
+file in attachment. The messages are too short although I have increased my
+msg to 128 bytes.
+I don't know whether this is a problem of the master or the wireshark
+plugin.
+
+Any suggestion ?
+
+Frederik
+
+
+Configuration of the EL2008 :
+
+//SlaveConfig EL2008
+EtherCAT_FMMU_Config fmmu_config_EL2008_3(1);
+EC_FMMU fmmu_EL2008_3(0x00010003      //logical start address
+                     ,1               //length
+                     ,0               //logical start bit
+                     ,7               //logical end bit
+                     ,0x0f00          //physical start address
+                     ,0               //physical start bit
+                     ,false           //read enable
+                     ,true            //write enable
+                     ,true            //channel enable
+                     );
+EtherCAT_PD_Config pd_config_EL2008_3(1);
+EC_SyncMan syncman_EL2008_3(0x0f00                  //physical start address
+                           ,1                       //length
+                           ,EC_BUFFERED             //buffer type
+{EC_BUFFERED | EC_QUEUED}
+                           ,EC_WRITTEN_FROM_MASTER  //direction
+{EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+                           ,false                   //AL event enable
+                           ,true                    //watchdog enable
+                           ,false                   //write event
+                           ,false                   //read event
+                           ,false                   //watchdog trigger
+                           ,false                   //queued state : not
+used for buffer type EC_BUFFERED
+                           ,EC_FIRST_BUFFER         //buffered state
+{EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER | EC_LOCKED_BUFFER}
+                           ,true                    //channel enable
+                           );
+EtherCAT_SlaveConfig EC_EL2008_3(0x07d83052              //product code
+                                ,0x00100000              //revision
+                                ,0x03ed                  //fixed station
+address
+                                ,&fmmu_config_EL2008_3
+                                ,&pd_config_EL2008_3
+                                );
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: ethercat2.pcap
+Type: application/octet-stream
+Size: 12443 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20080825/2733e32f/attachment.obj>
+
+From rwatollenaar at gmail.com  Mon Aug 25 15:26:42 2008
+From: rwatollenaar at gmail.com (Roland Tollenaar)
+Date: Mon, 25 Aug 2008 15:26:42 +0200
+Subject: [Ethercatmaster-users] how to set outputs ?
+In-Reply-To: <000001c906ad$1fe574d0$0800a8c0@triphase.local>
+References: <3BAF6399A0B7E644851E85779E60AC79618A@dl145.triphase.local>	<48AFB4F4.3010909@gmail.com>
+	<000001c906ad$1fe574d0$0800a8c0@triphase.local>
+Message-ID: <48B2B312.6020908@gmail.com>
+
+Hi Frederik,
+
+the problem of the outputs coming up and then going off immediately is 
+exactly the problem I had. I solved this in the manner described 
+earlier, namely going from queued to buffered. The problem is that 
+Beckhoff change their hardware which is why the Queued which Tom was 
+using did not work for me. The fact that you have a problem that has the 
+same sympthoms I was observing would lead me to expect that you should 
+be able to solve the problem in the same manner. I am rather surprised 
+that you report this not to be the case.
+
+Incidentally, the frames as sent by TwinCat were not identical to the 
+frames dispatched by EML. From what I could gather, EML was wusing 
+logical read-write, whereas Twincat was operating Logical read and 
+logical write. Perhaps this explains the mismatch you are seeing? I have 
+not noticed messages that were too short IIRC.
+
+
+
+
+Roland.
+
+
+Frederik Bayart wrote:
+>  
+> Hallo Roland,
+> 
+> Using exact the same settings doesn't solve the problem.
+> I changed my source a little bit : 
+> 
+> 
+> 		unsigned char msg[128] ;
+>             for(int i = 0 ; i < sizeof(msg); ++i) msg[i] = i;
+> 
+> 		if(AL->isReady()) { 
+> 				EM->txandrx_PD(sizeof(msg),msg);
+> 
+> 
+> The logical start address of the EL2008 is now 0x10003 (See configuration
+> below).
+> I see now that the outputs are activated very briefly and are disabled
+> immediately. Outp 1 and 2 are enabled briefly, so this 
+> is corresponding indeed to logical address 0x10003 where 0x3 is written to
+> according to the code above.
+> I installed a wireshark version with the ethercat plugin. When I take a
+> network dump, I see that the master is sending malformed packets : see pcap
+> file in attachment. The messages are too short although I have increased my
+> msg to 128 bytes.
+> I don't know whether this is a problem of the master or the wireshark
+> plugin.
+> 
+> Any suggestion ?
+> 
+> Frederik
+> 
+> 
+> Configuration of the EL2008 :
+> 
+> //SlaveConfig EL2008
+> EtherCAT_FMMU_Config fmmu_config_EL2008_3(1);
+> EC_FMMU fmmu_EL2008_3(0x00010003      //logical start address
+>                      ,1               //length
+>                      ,0               //logical start bit
+>                      ,7               //logical end bit
+>                      ,0x0f00          //physical start address
+>                      ,0               //physical start bit
+>                      ,false           //read enable
+>                      ,true            //write enable
+>                      ,true            //channel enable
+>                      );
+> EtherCAT_PD_Config pd_config_EL2008_3(1);
+> EC_SyncMan syncman_EL2008_3(0x0f00                  //physical start address
+>                            ,1                       //length
+>                            ,EC_BUFFERED             //buffer type
+> {EC_BUFFERED | EC_QUEUED}
+>                            ,EC_WRITTEN_FROM_MASTER  //direction
+> {EC_READ_FROM_MASTER | EC_WRITTEN_FROM_MASTER}
+>                            ,false                   //AL event enable
+>                            ,true                    //watchdog enable
+>                            ,false                   //write event
+>                            ,false                   //read event
+>                            ,false                   //watchdog trigger
+>                            ,false                   //queued state : not
+> used for buffer type EC_BUFFERED
+>                            ,EC_FIRST_BUFFER         //buffered state
+> {EC_FIRST_BUFFER | EC_SECOND_BUFFER | EC_THIRD_BUFFER | EC_LOCKED_BUFFER}
+>                            ,true                    //channel enable
+>                            );
+> EtherCAT_SlaveConfig EC_EL2008_3(0x07d83052              //product code
+>                                 ,0x00100000              //revision
+>                                 ,0x03ed                  //fixed station
+> address
+>                                 ,&fmmu_config_EL2008_3
+>                                 ,&pd_config_EL2008_3
+>                                 );
+> 
+> 
+> 
+> ------------------------------------------------------------------------
+> 
+> _______________________________________________
+> Ethercatmaster-users mailing list
+> Ethercatmaster-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/ethercatmaster-users
+
+
+From klaas.gadeyne at fmtc.be  Tue Aug 26 11:21:26 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Tue, 26 Aug 2008 11:21:26 +0200 (CEST)
+Subject: [Ethercatmaster-users] how to set outputs ?
+In-Reply-To: <000001c906ad$1fe574d0$0800a8c0@triphase.local>
+References: <3BAF6399A0B7E644851E85779E60AC79618A@dl145.triphase.local>
+	<48AFB4F4.3010909@gmail.com>
+	<000001c906ad$1fe574d0$0800a8c0@triphase.local>
+Message-ID: <alpine.DEB.1.10.0808261118150.15754@ampere.labo01.fmtc.be>
+
+On Mon, 25 Aug 2008, Frederik Bayart wrote:
+> Hallo Roland,
+>
+> Using exact the same settings doesn't solve the problem.
+> I changed my source a little bit :
+>
+>
+> 		unsigned char msg[128] ;
+>            for(int i = 0 ; i < sizeof(msg); ++i) msg[i] = i;
+>
+> 		if(AL->isReady()) {
+> 				EM->txandrx_PD(sizeof(msg),msg);
+>
+>
+> The logical start address of the EL2008 is now 0x10003 (See configuration
+> below).
+> I see now that the outputs are activated very briefly and are disabled
+> immediately. Outp 1 and 2 are enabled briefly, so this
+> is corresponding indeed to logical address 0x10003 where 0x3 is written to
+> according to the code above.
+> I installed a wireshark version with the ethercat plugin. When I take a
+> network dump, I see that the master is sending malformed packets : see pcap
+> file in attachment. The messages are too short although I have increased my
+> msg to 128 bytes.
+> I don't know whether this is a problem of the master or the wireshark
+> plugin.
+
+FWIW: The first message sent seems to be a valid EtherCAT frame (2x6 address bytes, 2bytes for the ethertype, and 15 data bytes), so I don't understand why this is considered as a malformed packet (unless the specs would have changed).  Moreover, it seems that the "malformed" frames are correctly understood by your slaves to.
+
+
+From wheeler at willowgarage.com  Wed Aug 27 02:13:21 2008
+From: wheeler at willowgarage.com (Rob Wheeler)
+Date: Tue, 26 Aug 2008 17:13:21 -0700
+Subject: [Ethercatmaster-users] how to set outputs ?
+In-Reply-To: <alpine.DEB.1.10.0808261118150.15754@ampere.labo01.fmtc.be>
+References: <3BAF6399A0B7E644851E85779E60AC79618A@dl145.triphase.local>
+	<48AFB4F4.3010909@gmail.com>
+	<000001c906ad$1fe574d0$0800a8c0@triphase.local>
+	<alpine.DEB.1.10.0808261118150.15754@ampere.labo01.fmtc.be>
+Message-ID: <894886ec0808261713h19f8541fi2d213600d454aac4@mail.gmail.com>
+
+On Tue, Aug 26, 2008 at 2:21 AM, Klaas Gadeyne <klaas.gadeyne at fmtc.be> wrote:
+> On Mon, 25 Aug 2008, Frederik Bayart wrote:
+>> I installed a wireshark version with the ethercat plugin. When I take a
+>> network dump, I see that the master is sending malformed packets : see pcap
+>> file in attachment. The messages are too short although I have increased my
+>> msg to 128 bytes.
+>> I don't know whether this is a problem of the master or the wireshark
+>> plugin.
+>
+> FWIW: The first message sent seems to be a valid EtherCAT frame (2x6 address bytes, 2bytes for the ethertype, and 15 data bytes), so I don't understand why this is considered as a malformed packet (unless the specs would have changed).  Moreover, it seems that the "malformed" frames are correctly understood by your slaves to.
+
+The wireshark plugin ("packet-ethercat-datagram.c") has the following
+comment in it:
+
+   /* If the data portion of an EtherCAT datagram is less than 44 bytes, then
+      it must have been padded with an additional n number of bytes to reach a
+      total Ethernet frame length of 64 bytes (Ethernet header + Ethernet Data +
+      FCS). Hence at least 44 bytes data shall always be available in any
+      EtherCAT datagram. */
+
+followed by the line:
+
+tvb_ensure_bytes_exist(tvb, offset, 44);
+
+You might want to try commenting out that line and see if your
+wireshark problem is "fixed".
+
+-R
+
+
+From klaas.gadeyne at fmtc.be  Wed Aug 27 08:56:16 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Wed, 27 Aug 2008 08:56:16 +0200 (CEST)
+Subject: [Ethercatmaster-users] how to set outputs ?
+In-Reply-To: <894886ec0808261713h19f8541fi2d213600d454aac4@mail.gmail.com>
+References: <3BAF6399A0B7E644851E85779E60AC79618A@dl145.triphase.local>
+	<48AFB4F4.3010909@gmail.com>
+	<000001c906ad$1fe574d0$0800a8c0@triphase.local>
+	<alpine.DEB.1.10.0808261118150.15754@ampere.labo01.fmtc.be>
+	<894886ec0808261713h19f8541fi2d213600d454aac4@mail.gmail.com>
+Message-ID: <alpine.DEB.1.10.0808270850040.15754@ampere.labo01.fmtc.be>
+
+On Tue, 26 Aug 2008, Rob Wheeler wrote:
+> On Tue, Aug 26, 2008 at 2:21 AM, Klaas Gadeyne <klaas.gadeyne at fmtc.be> wrote:
+>> On Mon, 25 Aug 2008, Frederik Bayart wrote:
+>>> I installed a wireshark version with the ethercat plugin. When I take a
+>>> network dump, I see that the master is sending malformed packets : see pcap
+>>> file in attachment. The messages are too short although I have increased my
+>>> msg to 128 bytes.
+>>> I don't know whether this is a problem of the master or the wireshark
+>>> plugin.
+>>
+>> FWIW: The first message sent seems to be a valid EtherCAT frame (2x6 address bytes, 2bytes for the ethertype, and 15 data bytes), so I don't understand why this is considered as a malformed packet (unless the specs would have changed).  Moreover, it seems that the "malformed" frames are correctly understood by your slaves to.
+>
+> The wireshark plugin ("packet-ethercat-datagram.c") has the following
+> comment in it:
+>
+>   /* If the data portion of an EtherCAT datagram is less than 44 bytes, then
+>      it must have been padded with an additional n number of bytes to reach a
+>      total Ethernet frame length of 64 bytes (Ethernet header + Ethernet Data +
+>      FCS). Hence at least 44 bytes data shall always be available in any
+>      EtherCAT datagram. */
+>
+> followed by the line:
+>
+> tvb_ensure_bytes_exist(tvb, offset, 44);
+>
+> You might want to try commenting out that line and see if your
+> wireshark problem is "fixed".
+
+Did some quick look-ups:
+- In the Ethercat Spec (Ethercat Communication Specification 1.0, 2004) I used to implement EML back in the middle ages, there's no mention of that 64 bytes.
+- However, in the EtherCAT spec I just downloaded from ethercat.org (Ethercat specification V1.0, Part 3, DLL specification), this *is* mentioned in section 4.3, DLL overview.
+
+Conclusions:
+- Ethercat.org seems to have difficulties maintaining a one-to-one relationship between version numbers and specificitions :-((
+- EML is not in sync anymore with the latest spec, I'll submit a bug for this.
+
+Thx for pointing this out!
+
+Klaas
+
+
+
+From frederik.bayart at triphase.com  Thu Aug 28 12:02:41 2008
+From: frederik.bayart at triphase.com (Frederik Bayart)
+Date: Thu, 28 Aug 2008 12:02:41 +0200
+Subject: [Ethercatmaster-users] how to set outputs ?
+In-Reply-To: <alpine.DEB.1.10.0808270850040.15754@ampere.labo01.fmtc.be>
+References: <3BAF6399A0B7E644851E85779E60AC79618A@dl145.triphase.local><48AFB4F4.3010909@gmail.com><000001c906ad$1fe574d0$0800a8c0@triphase.local><alpine.DEB.1.10.0808261118150.15754@ampere.labo01.fmtc.be><894886ec0808261713h19f8541fi2d213600d454aac4@mail.gmail.com>
+	<alpine.DEB.1.10.0808270850040.15754@ampere.labo01.fmtc.be>
+Message-ID: <000c01c908f5$35e85c80$0800a8c0@triphase.local>
+
+ I will submit a patch for this on the developers mailing list
+
+Frederik
+
+> -----Original Message-----
+> From: ethercatmaster-users-bounces at lists.berlios.de 
+> [mailto:ethercatmaster-users-bounces at lists.berlios.de] On 
+> Behalf Of Klaas Gadeyne
+> Sent: woensdag 27 augustus 2008 8:56
+> To: Rob Wheeler
+> Cc: EML users
+> Subject: Re: [Ethercatmaster-users] how to set outputs ?
+
+> 
+> Did some quick look-ups:
+> - In the Ethercat Spec (Ethercat Communication Specification 
+> 1.0, 2004) I used to implement EML back in the middle ages, 
+> there's no mention of that 64 bytes.
+> - However, in the EtherCAT spec I just downloaded from 
+> ethercat.org (Ethercat specification V1.0, Part 3, DLL 
+> specification), this *is* mentioned in section 4.3, DLL overview.
+> 
+> Conclusions:
+> - Ethercat.org seems to have difficulties maintaining a 
+> one-to-one relationship between version numbers and 
+> specificitions :-((
+> - EML is not in sync anymore with the latest spec, I'll 
+> submit a bug for this.
+> 
+> Thx for pointing this out!
+> 
+> Klaas
+
+
+

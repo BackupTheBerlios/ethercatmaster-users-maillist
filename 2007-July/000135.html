@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Slaves parameters !!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Slaves%20parameters%20%21%21&In-Reply-To=%3C285844.40209.qm%40web37302.mail.mud.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000138.html">
+   <LINK REL="Next"  HREF="000136.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Slaves parameters !!</H1>
+    <B>said harti</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Slaves%20parameters%20%21%21&In-Reply-To=%3C285844.40209.qm%40web37302.mail.mud.yahoo.com%3E"
+       TITLE="[Ethercatmaster-users] Slaves parameters !!">harti_said at yahoo.fr
+       </A><BR>
+    <I>Fri Jul 13 14:24:45 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000138.html">[Ethercatmaster-users] BeckHoff EL 4132 configuration	parameters.
+</A></li>
+        <LI>Next message: <A HREF="000136.html">[Ethercatmaster-users] Slaves parameters !!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#135">[ date ]</a>
+              <a href="thread.html#135">[ thread ]</a>
+              <a href="subject.html#135">[ subject ]</a>
+              <a href="author.html#135">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi,
+
+I try to set some data on the EL4102 (5V for example) and the EL2004 modules (set to 0xFF), my master_test code modification is
+posted here, the program turn without problem, but i don't see LEDs modules switch on,
+
+Can you please explain me the problem ?
+
+i have compared all parameters for this
+modules with the twincat tools, and there is no difference.
+
+
+#include &lt;posix/pthread.h&gt;
+#include &lt;signal.h&gt;
+#include &lt;sys/mman.h&gt;
+
+#include &lt;al/ethercat_master.h&gt;
+#include &lt;al/ethercat_AL.h&gt;
+#include &lt;al/ethercat_process_data.h&gt;
+#include &lt;ethercat/ethercat_xenomai_drv.h&gt;
+#include &lt;ethercat/netif.h&gt;
+#include &lt;dll/ethercat_dll.h&gt;
+#include &lt;dll/ethercat_frame.h&gt;
+#include &lt;dll/ethercat_slave_memory.h&gt;
+#include &lt;al/ethercat_slave_conf.h&gt;
+#include &lt;al/ethercat_slave_handler.h&gt;
+
+struct netif *ni;
+
+///SlaveConfig EK1100
+EtherCAT_FMMU_Config fmmu_config_EK1100(0);
+EtherCAT_PD_Config pd_config_EK1100(0);
+EtherCAT_SlaveConfig EC_EK1100(0x044c2c52,0x00010000,0x03e9,&amp;fmmu_config_EK1100,&amp;pd_config_EK1100);
+
+///SlaveConfig EL4102
+
+///[A slave configuration consists of a fmmu-config, a process data (pd) config and optionally a mailbox config]
+
+EtherCAT_FMMU_Config fmmu_config_EL4102(2);///arg=number of FMMU's.Some modules take more than one if e.g. they have in and outputs.
+///not sure what this is doing (Seems to be actual fmmu config which gets linked to the handle created above)
+///fmmu (fieldbus memory management unit) config container (handle?)
+
+///logical start address, # bytes used, start bit, end bit, physical address, physical start bit, read-enable, write-enable, activate-module
+
+EC_FMMU fmmu0_EL4102(0x00080000,0x0001,0x00,0x00,0x080D,0x00,true,false,true);
+EC_FMMU fmmu1_EL4102(0x00010000,0x0004,0x00,0x07,0x1000,0x00,false,true,true);
+
+EC_SyncMan syncman_mbx0_EL4102(0x1800,246,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan syncman_mbx1_EL4102(0x18f6,246,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_MbxConfig mbx_conf_EL4102 = {syncman_mbx0_EL4102, syncman_mbx1_EL4102};
+
+///process data config (Again seems to be a handle)
+
+EtherCAT_PD_Config pd_config_EL4102(2);///argument=length
+EC_SyncMan syncman0_EL4102(0x1000,4,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan syncman1_EL4102(0x1100,0,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+
+///compile the slave configuration
+
+EtherCAT_SlaveConfig EC_EL4102(0x10063052,0x00000000,0x03ea,&amp;fmmu_config_EL4102,&amp;pd_config_EL4102,&amp;mbx_conf_EL4102);
+
+///Modif
+///SlaveConfig EL2004
+EtherCAT_FMMU_Config fmmu_config_EL2004(1);
+EC_FMMU
+fmmu0_EL2004(0x00010004,0x0001,0x00,0x03,0x0F00,0x00,false,true,true);
+
+EtherCAT_PD_Config pd_config_EL2004(1);
+EC_SyncMan syncman0_EL2004(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig EC_EL2004(0x7d43052,0x00100000,0x03eb,&amp;fmmu_config_EL2004,&amp;pd_config_EL2004);
+///Fin Modif
+static void init_slave_db() {
+
+///create slave database
+
+         EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(3); ///argument=#slaves
+
+///Connect actual fmmu and process data config to respective handlesfor EL 4102 (AO)
+
+         fmmu_config_EL4102[0] = fmmu0_EL4102;
+         fmmu_config_EL4102[1] = fmmu1_EL4102;
+         pd_config_EL4102[0] = syncman0_EL4102;
+         pd_config_EL4102[1] = syncman1_EL4102;
+
+///Connect actual fmmu and process data config to respective handles for EL 2004 (DO)
+
+         fmmu_config_EL2004[0] = fmmu0_EL2004;///
+         pd_config_EL2004[0] = syncman0_EL2004;///
+
+///Commit the slave config objects to the slave database
+
+     slave_db-&gt;set_conf(&amp;EC_EK1100,0);
+         slave_db-&gt;set_conf(&amp;EC_EL4102,1);
+         //slave_db-&gt;set_conf(&amp;EC_EK1100,1);
+
+///Commit the slave config objects to the slave database
+
+         slave_db-&gt;set_conf(&amp;EC_EL2004,2);///
+
+
+ }
+
+static void* run_master(void * arg) {
+    
+    ni = init_ec((char*)arg);
+    init_slave_db();
+    if(ni != 0) {
+        printf(&quot;Attach netif \n\n&quot;);
+        EtherCAT_DataLinkLayer::instance()-&gt;attach(ni);
+        printf(&quot;Master initializing \n\n&quot;);
+        EtherCAT_Master * EM = EtherCAT_Master::instance();
+        printf(&quot;Getting slave handler\n&quot;);
+        EtherCAT_SlaveHandler * sh_ek1100 = EM-&gt;get_slave_handler(0x03e9);
+        //sleep(1);
+        printf(&quot;Setting EK1100 to OP STATE\n&quot;);
+        if(sh_ek1100-&gt;to_state(EC_OP_STATE))
+            printf(&quot;EK1100 succesfully set in OP STATE\n&quot;);
+        else
+            printf(&quot;\nfailed to set EK1100 in OP STATE\n&quot;);
+        printf(&quot;Getting slave handler\n&quot;);
+        EtherCAT_SlaveHandler * sh_el4102 = EM-&gt;get_slave_handler(0x03ea);
+        printf(&quot;Setting EL4102 to OP STATE\n&quot;);
+        if(sh_el4102-&gt;to_state(EC_OP_STATE))
+            printf(&quot;EL4102 succesfully set in OP STATE\n&quot;);
+        else
+            printf(&quot;\nfailed to set EL4102 in OP STATE!!\n&quot;);
+        
+///Modif
+           printf(&quot;Getting slave handler\n&quot;);
+                EtherCAT_SlaveHandler * sh_el2004 = EM-&gt;get_slave_handler(0x03eb);
+        printf(&quot;Setting EL2004 to OP STATE\n&quot;);
+                 if(sh_el2004-&gt;to_state(EC_OP_STATE))
+                         printf(&quot;EL2004 succesfully set in OP STATE\n&quot;);
+                 else
+                         printf(&quot;\nFailed to set EL2004 in OP STATE\n&quot;);
+///fin Modif
+        printf(&quot;AL initializing \n\n&quot;);
+        EtherCAT_AL * AL = EtherCAT_AL::instance();
+        
+        ///Set Channel 1 to 5V
+        unsigned char msg[3] = {0xff, 0x3f, 0xff};///
+        if(AL-&gt;isReady()) {
+
+            printf(&quot;Test: Set Channel 1 to 5V: \n\n&quot;);
+            printf(&quot;Test: set the EL2004 to 1: \n\n&quot;);///
+
+            int count = 0;
+            while(count&lt;100000) {
+                EM-&gt;txandrx_PD(sizeof(msg),msg);
+                count++;
+            }
+            printf(&quot;Test done.\n&quot;);
+        }
+        
+        close_socket(ni);
+        
+    }
+}
+
+void catch_signal(int sig)
+{
+   if(ni != 0)
+        close_socket(ni);
+    exit(1);
+}
+
+int main(int argc, char** argv)
+{
+
+    signal(SIGTERM, catch_signal);
+   signal(SIGINT, catch_signal);
+   signal(SIGHUP, catch_signal);
+    mlockall(MCL_CURRENT|MCL_FUTURE);
+
+    if (argc &lt; 2) {
+        printf(&quot;usage: %s &lt;interface&gt;\n&quot;, argv[0]);
+        return 0;
+    }
+
+    pthread_t xenothread;
+    pthread_attr_t xenothread_attr;
+
+    //Set attributes of thread
+    pthread_attr_init (&amp; xenothread_attr);
+
+    //Start thread
+    if(pthread_create(&amp;xenothread, &amp;xenothread_attr, run_master, argv[1]) != 0) {
+        printf(&quot;Cannot create thread EtherCatThread.\n&quot;);
+        exit(1);
+    }
+   pthread_join( xenothread, 0 );
+    return 0;
+}
+
+
+Best Regards
+
+Said
+
+
+ 	      
+---------------------------------
+ Ne gardez plus qu'une seule adresse mail ! Copiez vos mails vers Yahoo! Mail 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070713/a215c742/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070713/a215c742/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000138.html">[Ethercatmaster-users] BeckHoff EL 4132 configuration	parameters.
+</A></li>
+	<LI>Next message: <A HREF="000136.html">[Ethercatmaster-users] Slaves parameters !!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#135">[ date ]</a>
+              <a href="thread.html#135">[ thread ]</a>
+              <a href="subject.html#135">[ subject ]</a>
+              <a href="author.html#135">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

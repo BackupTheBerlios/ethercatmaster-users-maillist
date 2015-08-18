@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] setting up an ethercat slave
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20setting%20up%20an%20ethercat%20slave&In-Reply-To=%3C4896E47F.6030205%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000349.html">
+   <LINK REL="Next"  HREF="000351.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] setting up an ethercat slave</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20setting%20up%20an%20ethercat%20slave&In-Reply-To=%3C4896E47F.6030205%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] setting up an ethercat slave">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Mon Aug  4 13:14:07 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000349.html">[Ethercatmaster-users] setting up an ethercat slave
+</A></li>
+        <LI>Next message: <A HREF="000351.html">[Ethercatmaster-users] setting up an ethercat slave
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#350">[ date ]</a>
+              <a href="thread.html#350">[ thread ]</a>
+              <a href="subject.html#350">[ subject ]</a>
+              <a href="author.html#350">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Klaas,
+
+Thanks for the response.
+
+&gt;<i> Depends on what you do exactly in step 1/
+</I>All the initialisation and setting up to go into operational state.
+&gt;<i> 
+</I>&gt;&gt;<i> If the above is correct, is there any information that Master needs to
+</I>&gt;&gt;<i> retrieve from the slaves in the FMMU setup stage (e.g. fixed station
+</I>&gt;&gt;<i> address, Revision number?).
+</I>&gt;<i> 
+</I>&gt;<i> You first have to perform some init steps (initialization, assign fixed 
+</I>&gt;<i> network addresses (so you *can* do the FMMU setup), put the slave in 
+</I>&gt;<i> operational mode, ...).  Some of these are normally done by the AL (or 
+</I>&gt;<i> the EtherCAT_Master class).
+</I>What step takes place in which part of the EML? I.e
+
+1-Which EML call does the initialisation?
+2-Which EML call assigns the fixed station address?
+(I thought this was a hardware feature of the slave that does not 
+require assignment by the master?)
+3-Which call brings the slave into operational state?
+
+
+I actually missed the part in the EC specifications where it says how 
+states are set and changed. I am still looking for the kind of 
+distinction between the type of communication as exists in for example 
+the CANOpen specifications. NMT, SDO, PDO etc. Does the ethercat 
+specification possess this kind of distinction? Is this distinction 
+reflected somehow in the EML or is it all &quot;under the hood&quot;?
+
+Does EML send UDP frames in its interaction? Or plain ethernet frames?
+
+Kind regards,
+
+Roland
+
+
+&gt;<i> 
+</I>&gt;<i> Klaas
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000349.html">[Ethercatmaster-users] setting up an ethercat slave
+</A></li>
+	<LI>Next message: <A HREF="000351.html">[Ethercatmaster-users] setting up an ethercat slave
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#350">[ date ]</a>
+              <a href="thread.html#350">[ thread ]</a>
+              <a href="subject.html#350">[ subject ]</a>
+              <a href="author.html#350">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

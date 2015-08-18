@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3C46C1EE69.3020301%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000263.html">
+   <LINK REL="Next"  HREF="000265.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20%5BXenomai-help%5D%20EML%20conflict%20with%20RTCAN%3F%0A%20low_level_input%20framebuilding%20failed.&In-Reply-To=%3C46C1EE69.3020301%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Tue Aug 14 20:03:21 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000263.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+        <LI>Next message: <A HREF="000265.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#264">[ date ]</a>
+              <a href="thread.html#264">[ thread ]</a>
+              <a href="subject.html#264">[ subject ]</a>
+              <a href="author.html#264">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+&gt;<i> How many threads do you have sending process data, and what are there
+</I>&gt;<i> priorities? (/proc/xenomai/sched IIRC)
+</I>I have 3 rt tasks running. Only one sends and receives process data. The 
+priorities are:
+rt_task1 99
+rt_task2 75
+rt_task3 1
+
+Period times are
+1ms
+3ms
+indefinite(holds a blocking rt_can recv call to catch any incoming CAN 
+messages)
+
+
+&gt;<i> 
+</I>&gt;&gt;<i> EC_Telegram::index_check() : index not the same,
+</I>&gt;&gt;<i> low_level_input() :  framebuilding failed.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Or something pretty closely to that effect.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Despite EML warning that the frame could not be built, the inputs (which
+</I>&gt;&gt;<i> rely on the framebuilding being succesful pretty stringently) seem to
+</I>&gt;&gt;<i> function perfectly. It seems as though EML is emitting a false warning.
+</I>&gt;<i> 
+</I>&gt;<i> What do you mean with &quot;inputs functioning perfectly&quot;?
+</I>
+The digital inputs are packed into the frame as are the digital outputs 
+and analog output process data. The outputs function as they should but 
+the warning complains mainly about the retrieving part of the ethercat 
+cycle. Hence my comment that the digital inputs also function as they 
+should that is to say the data arrives correctly and uncorrupted. AFAI 
+understand from ETG the index is not changed by the ESC's so I would 
+expect the check always return true. But even if it does not what does 
+that mean? Can it mean that EML is losing some frames that have been 
+transmitted? I.e. the index is incremented with every transmit and the 
+message with the same index is expected on the next read but instead it 
+is only getting one later? If so, what could cause this?
+
+&gt;&gt;<i> I have now killed the warning from EML with the following hack:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In EC_Telegram::check_index() I have effectively killed the check by
+</I>&gt;&gt;<i> snubbing the holler and always returning true. Now the application no
+</I>&gt;&gt;<i> longer emits warnings and everything functions well (or so it seems). I
+</I>&gt;&gt;<i> have a sawtooth analog output on a scope which triggers well.
+</I>&gt;<i> 
+</I>&gt;<i> Should I have read s/input/output/g in the above?
+</I>No, output. The output is incremented up in task 1 and reset to -10V 
+when it reaches 10V. The steps take place at exactly 1ms with impressive 
+accuracy and consistency. This saw tooth wave is so stable that my scope 
+has no problem locking onto it and it remains stationary (allowing me to 
+admire the accurate 1ms steps :) ). Now and then if I try hard the wave 
+flimmers i.e. the triggering is lost) which I think indicates that the 
+1ms task did not increment the analog output on time. Whatever happens 
+to cause this (rtcan ?, we know that it displays some latency breaking 
+behaviour when the buffer is full. But there is no evidence that there 
+is any buffer overflow at present anymore) might make an ethernet frame 
+go lost Ah!, a delayed read **** which causes the index shift and 
+consequently the irritating messages.
+
+**** It occurs to me to ask whether there is an incomming buffer for 
+ethercat frames that is maybe read out in such a manner (e.g. FIFO) that 
+if a message can get &quot;buried&quot; and once a slip has occurred the index 
+shift stays resident. ?? If anyone would care to enlighten me on how 
+this part of EML works and whether this hypothesis is a possibility or 
+not I would be much obliged.
+
+
+&gt;&gt;<i> I have also made the index that is supposedly not the same visible. For
+</I>&gt;&gt;<i> the EML chaps: index and m_idx and the output seems to be something like
+</I>&gt;&gt;<i> this
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> index    m_idx
+</I>&gt;&gt;<i> 0    1
+</I>&gt;&gt;<i> 0    0
+</I>&gt;&gt;<i> 1    2
+</I>&gt;&gt;<i> 2    3
+</I>&gt;&gt;<i> 2    3
+</I>&gt;&gt;<i> 3    4
+</I>&gt;&gt;<i> 4    5
+</I>&gt;&gt;<i> :    :
+</I>&gt;&gt;<i> :    :
+</I>&gt;&gt;<i> 253    254
+</I>&gt;&gt;<i> 0    2
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> or something to that effect. Can anyone comment on this?
+</I>&gt;<i> 
+</I>&gt;<i> Is the above the index in the output captured with wireshark or
+</I>&gt;<i> something else?
+</I>No EML and switches are no friends of each other when the frame gets 
+long I suspect. EML bombs out when I introduce a switch. I would be much 
+obliged to anyone who would tell me how to set up any timeout delay 
+measurement in EML.
+What I did was simply put a printf line into EML to output index and 
+m_idx to screen. So unfortunately this does not tell us where the shift 
+is acquired.
+
+
+Thanks. I'll give below a try.
+
+Roland.
+
+&gt;<i> 
+</I>&gt;<i> AFAIS from the code shouldn't be affected by latency of the PD
+</I>&gt;<i> thread.  You might uncomment the following log statements to get more
+</I>&gt;<i> info too (I wonder why they are commented out anyway, Tom?)
+</I>&gt;<i> 
+</I>&gt;<i> static bool ec_rtdm_txandrx(struct EtherCAT_Frame * frame, struct
+</I>&gt;<i> netif * netif) {
+</I>&gt;<i>         int tries = 0;
+</I>&gt;<i>         while (tries &lt; MAX_TRIES_TX) {
+</I>&gt;<i>                 pthread_mutex_lock (&amp;txandrx_mut);
+</I>&gt;<i>                 if (low_level_output(frame,netif)){
+</I>&gt;<i>                         if (low_level_input(frame,netif)){
+</I>&gt;<i>                                 pthread_mutex_unlock(&amp;txandrx_mut);
+</I>&gt;<i>                                 return true;
+</I>&gt;<i>                         }
+</I>&gt;<i>                         else{
+</I>&gt;<i>                                 //log(EC_LOG_ERROR,
+</I>&gt;<i>                 &quot;low_level_txandrx: receiving
+</I>&gt;<i>                 failed\n&quot;);
+</I>&gt;<i>                                 pthread_mutex_unlock(&amp;txandrx_mut);
+</I>&gt;<i>                         }
+</I>&gt;<i>                 }
+</I>&gt;<i>                 else{
+</I>&gt;<i>                         //log(EC_LOG_ERROR, &quot;low_level_txandrx:
+</I>&gt;<i>             sending failed\n&quot;);
+</I>&gt;<i>                         pthread_mutex_unlock(&amp;txandrx_mut);
+</I>&gt;<i>                 }
+</I>&gt;<i>                 tries++;
+</I>&gt;<i>         }
+</I>&gt;<i>         log(EC_LOG_FATAL, &quot;low_level_txandrx: failed: MAX_TRIES_TX:
+</I>&gt;<i>     Giving up\n&quot;);
+</I>&gt;<i>         return false;
+</I>&gt;<i> 
+</I>&gt;<i> Klaas
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000263.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+	<LI>Next message: <A HREF="000265.html">[Ethercatmaster-users] [Xenomai-help] EML conflict with RTCAN? low_level_input framebuilding failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#264">[ date ]</a>
+              <a href="thread.html#264">[ thread ]</a>
+              <a href="subject.html#264">[ subject ]</a>
+              <a href="author.html#264">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

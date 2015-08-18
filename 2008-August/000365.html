@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] how to set outputs ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20how%20to%20set%20outputs%20%3F&In-Reply-To=%3C894886ec0808261713h19f8541fi2d213600d454aac4%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000364.html">
+   <LINK REL="Next"  HREF="000366.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] how to set outputs ?</H1>
+    <B>Rob Wheeler</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20how%20to%20set%20outputs%20%3F&In-Reply-To=%3C894886ec0808261713h19f8541fi2d213600d454aac4%40mail.gmail.com%3E"
+       TITLE="[Ethercatmaster-users] how to set outputs ?">wheeler at willowgarage.com
+       </A><BR>
+    <I>Wed Aug 27 02:13:21 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000364.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+        <LI>Next message: <A HREF="000366.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#365">[ date ]</a>
+              <a href="thread.html#365">[ thread ]</a>
+              <a href="subject.html#365">[ subject ]</a>
+              <a href="author.html#365">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, Aug 26, 2008 at 2:21 AM, Klaas Gadeyne &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">klaas.gadeyne at fmtc.be</A>&gt; wrote:
+&gt;<i> On Mon, 25 Aug 2008, Frederik Bayart wrote:
+</I>&gt;&gt;<i> I installed a wireshark version with the ethercat plugin. When I take a
+</I>&gt;&gt;<i> network dump, I see that the master is sending malformed packets : see pcap
+</I>&gt;&gt;<i> file in attachment. The messages are too short although I have increased my
+</I>&gt;&gt;<i> msg to 128 bytes.
+</I>&gt;&gt;<i> I don't know whether this is a problem of the master or the wireshark
+</I>&gt;&gt;<i> plugin.
+</I>&gt;<i>
+</I>&gt;<i> FWIW: The first message sent seems to be a valid EtherCAT frame (2x6 address bytes, 2bytes for the ethertype, and 15 data bytes), so I don't understand why this is considered as a malformed packet (unless the specs would have changed).  Moreover, it seems that the &quot;malformed&quot; frames are correctly understood by your slaves to.
+</I>
+The wireshark plugin (&quot;packet-ethercat-datagram.c&quot;) has the following
+comment in it:
+
+   /* If the data portion of an EtherCAT datagram is less than 44 bytes, then
+      it must have been padded with an additional n number of bytes to reach a
+      total Ethernet frame length of 64 bytes (Ethernet header + Ethernet Data +
+      FCS). Hence at least 44 bytes data shall always be available in any
+      EtherCAT datagram. */
+
+followed by the line:
+
+tvb_ensure_bytes_exist(tvb, offset, 44);
+
+You might want to try commenting out that line and see if your
+wireshark problem is &quot;fixed&quot;.
+
+-R
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000364.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+	<LI>Next message: <A HREF="000366.html">[Ethercatmaster-users] how to set outputs ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#365">[ date ]</a>
+              <a href="thread.html#365">[ thread ]</a>
+              <a href="subject.html#365">[ subject ]</a>
+              <a href="author.html#365">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

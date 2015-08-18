@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] EML on windows?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EML%20on%20windows%3F&In-Reply-To=%3C488F4213.2060307%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000344.html">
+   <LINK REL="Next"  HREF="000346.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] EML on windows?</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EML%20on%20windows%3F&In-Reply-To=%3C488F4213.2060307%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] EML on windows?">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Tue Jul 29 18:15:15 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000344.html">[Ethercatmaster-users] EML on windows?
+</A></li>
+        <LI>Next message: <A HREF="000346.html">[Ethercatmaster-users] EtherCAT Distributed Clocks --&gt; line delay	calculation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#345">[ date ]</a>
+              <a href="thread.html#345">[ thread ]</a>
+              <a href="subject.html#345">[ subject ]</a>
+              <a href="author.html#345">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> [please use the ML for these kinds of questions]
+</I>Sorry. No Problem.
+
+
+&gt;<i> 
+</I>&gt;&gt;<i> Is there any compacter kind of test code available that was used in 
+</I>&gt;&gt;<i> the development phase of the EML to play with?  Simple, unflexible 
+</I>&gt;&gt;<i> code that simply sends the raw Ethernet frames according to the specs 
+</I>&gt;&gt;<i> out to a socket?
+</I>&gt;<i> 
+</I>&gt;<i> I had some for the ecos port (not using sockets) before it was migrated 
+</I>&gt;<i> to Berlios, but that seems to be lost (ie. I deleted the old repository 
+</I>&gt;<i> here :-(.
+</I>Aahh! What a pity!
+
+
+&gt;<i> AFAIS, the closest shot is to use the DLL directly, see 
+</I>&gt;<i> &lt;<A HREF="http://ethercatmaster.berlios.de/doxygen/html/classEtherCAT__DataLinkLayer.html">http://ethercatmaster.berlios.de/doxygen/html/classEtherCAT__DataLinkLayer.html</A>&gt; 
+</I>Thanks but afraid this does not help. I am trying to find out what the 
+ethernet frames look like just before they are sent. In the code where 
+we use the EML we do work directly with the dll. Unless I am 
+misunderstanding you entirely.
+
+
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> The EML is good for sure, and it works for sure but, its  practically 
+</I>&gt;&gt;<i> impossible to obtain a concise view of what it is doing. It is so 
+</I>&gt;&gt;<i> thoroughly abstracted that its ,well, kind of emulsified.
+</I>&gt;&gt;<i> Which is great of course for its purpose, but not exactly instructive.
+</I>&gt;<i> 
+</I>&gt;<i> Your patches are very welcome :-)
+</I>What, to make the EML more instructive? I presume the EML was not 
+written to be instructive rather than effective, flexible etc. Which I 
+will presume it to be.
+
+I just want to see how best to connect to a slave in a straightforward 
+frame x frame manner. And do some simple tests. Guess I'll have to do 
+this the hard way. Glory be, why does Beckhoff not jsut simply supply a 
+neat C++ API for their equipment :(
+
+Thanks anyway.
+
+Regards,
+
+Roland.
+
+
+
+
+&gt;<i> 
+</I>&gt;<i> Klaas
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000344.html">[Ethercatmaster-users] EML on windows?
+</A></li>
+	<LI>Next message: <A HREF="000346.html">[Ethercatmaster-users] EtherCAT Distributed Clocks --&gt; line delay	calculation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#345">[ date ]</a>
+              <a href="thread.html#345">[ thread ]</a>
+              <a href="subject.html#345">[ subject ]</a>
+              <a href="author.html#345">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

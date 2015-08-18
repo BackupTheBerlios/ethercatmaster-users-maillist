@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] setting up an ethercat slave
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20setting%20up%20an%20ethercat%20slave&In-Reply-To=%3Calpine.DEB.1.10.0808041536120.31776%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000350.html">
+   <LINK REL="Next"  HREF="000352.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] setting up an ethercat slave</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20setting%20up%20an%20ethercat%20slave&In-Reply-To=%3Calpine.DEB.1.10.0808041536120.31776%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] setting up an ethercat slave">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Mon Aug  4 15:42:26 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000350.html">[Ethercatmaster-users] setting up an ethercat slave
+</A></li>
+        <LI>Next message: <A HREF="000352.html">[Ethercatmaster-users] Issues building RTnet application
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#351">[ date ]</a>
+              <a href="thread.html#351">[ thread ]</a>
+              <a href="subject.html#351">[ subject ]</a>
+              <a href="author.html#351">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>[..]
+&gt;&gt;<i> You first have to perform some init steps (initialization, assign fixed
+</I>&gt;&gt;<i> network addresses (so you *can* do the FMMU setup), put the slave in
+</I>&gt;&gt;<i> operational mode, ...).  Some of these are normally done by the AL (or
+</I>&gt;&gt;<i> the EtherCAT_Master class).
+</I>&gt;<i> What step takes place in which part of the EML? I.e
+</I>&gt;<i>
+</I>&gt;<i> 1-Which EML call does the initialisation?
+</I>&gt;<i> 2-Which EML call assigns the fixed station address?
+</I>&gt;<i> (I thought this was a hardware feature of the slave that does not
+</I>&gt;<i> require assignment by the master?)
+</I>
+All this is done during the constructor of the master (use your debugger!)
+
+&gt;<i> 3-Which call brings the slave into operational state?
+</I>
+Check the example programs:
+
+EtherCAT_SlaveHandler * sh_ek1100 = EM-&gt;get_slave_handler(0x03e9);
+printf(&quot;Setting EK1100 to OP STATE\n&quot;);
+if(sh_ek1100-&gt;to_state(EC_OP_STATE))
+       printf(&quot;EK1100 succesfully set in OP STATE\n&quot;);
+else
+       printf(&quot;\nfailed to set EK1100 in OP STATE\n&quot;);
+
+&gt;<i> I actually missed the part in the EC specifications where it says how
+</I>&gt;<i> states are set and changed. I am still looking for the kind of
+</I>&gt;<i> distinction between the type of communication as exists in for example
+</I>&gt;<i> the CANOpen specifications. NMT, SDO, PDO etc. Does the ethercat
+</I>&gt;<i> specification possess this kind of distinction?
+</I>
+Although I haven't seen the spec in a long time, I think it is well described (e.g. just as in canopen: process data can only be sent to slaves in OP state).
+
+&gt;<i> Is this distinction reflected somehow in the EML or is it all &quot;under the hood&quot;?
+</I>
+I don't understand this question.
+
+&gt;<i> Does EML send UDP frames in its interaction? Or plain ethernet frames?
+</I>
+Plain ethernet frames.
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000350.html">[Ethercatmaster-users] setting up an ethercat slave
+</A></li>
+	<LI>Next message: <A HREF="000352.html">[Ethercatmaster-users] Issues building RTnet application
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#351">[ date ]</a>
+              <a href="thread.html#351">[ thread ]</a>
+              <a href="subject.html#351">[ subject ]</a>
+              <a href="author.html#351">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

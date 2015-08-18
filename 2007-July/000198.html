@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] RE : Re: RE : Re: CoE (CANopen over	EtherCAT) : EL6751 parameters!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20CoE%20%28CANopen%20over%0A%09EtherCAT%29%20%3A%20EL6751%20parameters%21&In-Reply-To=%3C554085.66188.qm%40web37308.mail.mud.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000193.html">
+   <LINK REL="Next"  HREF="000205.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] RE : Re: RE : Re: CoE (CANopen over	EtherCAT) : EL6751 parameters!</H1>
+    <B>said harti</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20RE%20%3A%20Re%3A%20RE%20%3A%20Re%3A%20CoE%20%28CANopen%20over%0A%09EtherCAT%29%20%3A%20EL6751%20parameters%21&In-Reply-To=%3C554085.66188.qm%40web37308.mail.mud.yahoo.com%3E"
+       TITLE="[Ethercatmaster-users] RE : Re: RE : Re: CoE (CANopen over	EtherCAT) : EL6751 parameters!">harti_said at yahoo.fr
+       </A><BR>
+    <I>Thu Jul 26 11:19:02 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000193.html">[Ethercatmaster-users] RE : Re: CoE (CANopen over EtherCAT) : EL6751 parameters!
+</A></li>
+        <LI>Next message: <A HREF="000205.html">[Ethercatmaster-users] RE : Re: RE : Re: CoE (CANopen over EtherCAT) : EL6751 parameters!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#198">[ date ]</a>
+              <a href="thread.html#198">[ thread ]</a>
+              <a href="subject.html#198">[ subject ]</a>
+              <a href="author.html#198">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Klaas,
+ 
+I have a CANopen application which run on  CANopen card and communicate with CANopen drives, and i hope to  use  CoE.
+
+ In order to send CANopen frame encapsuled on EtherCAT frame to my drives, i need to know exactely the role of the EL6751 module,(i am going to read the EL6751.chm documentation), 
+ 
+ In order to anderstand EtherCAT and CoE process i have same questions :(
+ 
+ My first question is : 
+ 
+In your opinion, What's comunication process that i must add or implement to the EML in order to run CoE process  ?
+ 
+ and precisely :
+ 
+ how the synchronization process is doing between the EtherCAT bus and the CANopen bus ? (this Synchronization is realised by the EL6751 hard? ...)
+ 
+ What's type of frame that The EL6751 need to communicate with CANopen noeuds ? (just a standard CANopen frame...) ? 
+
+I think that i must simply take my CANopen frame ==&gt; encapsulate it on the EtherCAT frame ==&gt; so the result is a CoE frame,==&gt; which i must send normaly on the EtherCAT bus, ==&gt; and at the EL6751 module, this CANopen frame is extracted and sented to the CANopen drive normaly by this modules ? are you agree with me ? or the process is more hard then i think ????!!
+
+Thanks a lot.
+ 
+ Said
+
+Klaas Gadeyne &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">klaas.gadeyne at fmtc.be</A>&gt; a &#233;crit : On Wed, 25 Jul 2007, said harti wrote:
+[The note abouth top-quoting
+
+is for everybody]
+
+&gt;<i> I must implement CoE my self on the master_test program (by using CoE functions installed with EML) ? or i must implement the CoE on the EML in general ?
+</I>
+The second one.   EML contains merely a couple of structs regarding
+CoE, nothing has been implemented yet.
+
+Klaas
+
+
+       
+---------------------------------
+ Ne gardez plus qu'une seule adresse mail ! Copiez vos mails vers Yahoo! Mail 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070726/b65cd7de/attachment.html">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20070726/b65cd7de/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000193.html">[Ethercatmaster-users] RE : Re: CoE (CANopen over EtherCAT) : EL6751 parameters!
+</A></li>
+	<LI>Next message: <A HREF="000205.html">[Ethercatmaster-users] RE : Re: RE : Re: CoE (CANopen over EtherCAT) : EL6751 parameters!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#198">[ date ]</a>
+              <a href="thread.html#198">[ thread ]</a>
+              <a href="subject.html#198">[ subject ]</a>
+              <a href="author.html#198">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

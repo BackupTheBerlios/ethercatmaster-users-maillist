@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Antwort: Re: Low level device  driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20Low%20level%20device%20%20driver&In-Reply-To=%3CPine.LNX.4.64.0704051121170.3108%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000056.html">
+   <LINK REL="Next"  HREF="000058.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Antwort: Re: Low level device  driver</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Antwort%3A%20Re%3A%20Low%20level%20device%20%20driver&In-Reply-To=%3CPine.LNX.4.64.0704051121170.3108%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] Antwort: Re: Low level device  driver">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Thu Apr  5 11:36:31 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000056.html">[Ethercatmaster-users] Antwort: Re: Low level device   driver
+</A></li>
+        <LI>Next message: <A HREF="000058.html">[Ethercatmaster-users]   Antwort: Re: Low level device  driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#57">[ date ]</a>
+              <a href="thread.html#57">[ thread ]</a>
+              <a href="subject.html#57">[ subject ]</a>
+              <a href="author.html#57">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 5 Apr 2007, Felix GMX wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> - The NiosII Processor System is a Little Endian System!
+</I>&gt;<i>
+</I>&gt;<i> - Thats my traced EtherCAT frame (Why are there so many &quot;0&quot; at the end):
+</I>&gt;<i>
+</I>&gt;<i>   0000   ff ff ff ff ff ff 00 07 ed 0a 58 49 88 a4 0d 10              ..........XI....
+</I>&gt;<i>   0010   01 c0 00 00 00 00 01 00 00 00 3a 74 00 00 00 00  ..........:t....
+</I>&gt;<i>   0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+</I>&gt;<i>   0030   00 00 00 00 00 00 00 00 00 00 00 00                    ............
+</I>&gt;<i>
+</I>&gt;<i>   Destination: ff ff ff ff ff ff
+</I>&gt;<i>   Source:       00 07 ed 0a 58 49
+</I>&gt;<i>   Type:          88a4
+</I>&gt;<i>
+</I>&gt;<i>   EtherCAT Protcol: 'APRD', Len: 1, Adp 0x0, Ado 0x0, Wc 116
+</I>&gt;<i>    Sub Frame: Cmd: 'APRD' (1), Len: 1, Adp 0x0, Ado 0x0, Cnt 116
+</I>&gt;<i>       Header
+</I>&gt;<i>        Command:    APRD (0x01)
+</I>&gt;<i>        Index:            0xc0
+</I>&gt;<i>        Slave Addr:    0x0000
+</I>&gt;<i>        Offset Addr:   0x0000
+</I>&gt;<i>        Length:          1(0x1) - No Roundtrip - Last Sub Command
+</I>&gt;<i>        Interrupt:        0x0000
+</I>&gt;<i>       Data      : 3A(0x3a)
+</I>&gt;<i>       Working Cnt: 116
+</I>
+IIRC :-) most fields seem fine apart from
+- the data
+- the working counter (should be 0 for the outgoing message).
+
+We recently found a &quot;bug&quot; with an uninitialized value when we changed
+to another compiler.  Can you try the following patch on ethercat_AL.cxx
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at einstein</A>:~/SVN/eml-trunk/src/al #
+   svn diff -r10:11
+Index: ethercat_AL.cxx
+===================================================================
+--- ethercat_AL.cxx     (revision 10)
++++ ethercat_AL.cxx     (revision 11)
+@@ -77,6 +77,7 @@
+  {
+    m_dll_instance = EtherCAT_DataLinkLayer::instance();
+    m_slave_db = EtherCAT_SlaveDb::instance();
++  m_logic_instance = EC_Logic::instance();
+    if (init() == false){
+      // Can't use exceptions, since not supported by eCOS f.i.
+      log(EC_LOG_FATAL, &quot;EtherCAT_AL:: Can't init network\n&quot;);
+@@ -115,8 +116,9 @@
+  EtherCAT_AL::scan_slaves(void)
+  {
+    // Send APRD telegram to count number of slaves
++  unsigned char counter_tg_data[1] = { 0x00 };
+    APRD_Telegram counter_tg(m_logic_instance-&gt;get_idx(),0x0000,0x0000,
+-                          m_logic_instance-&gt;get_wkc(),0x01,(unsigned char) 0x00);
++  m_logic_instance-&gt;get_wkc(),0x01,counter_tg_data);
+    EC_Ethernet_Frame counter_frame(&amp;counter_tg);
+    bool succeed = m_dll_instance-&gt;txandrx(&amp;counter_frame);
+    if (succeed == false){
+
+&gt;<i> - What does the EtherCAT Master do if he doesn&#180;t get a frame back?
+</I>
+I concludes there are no slaves in the network and goes back to sleep
+:<i>-)
+</I>
+&gt;<i> - What does IIRC mean and where can I find this switches (DI, DO, DIO, AO etc.)?
+</I>
+It's a round button with numbers for each application with you have to
+set using a screw driver.  But you should have found this information
+in your manual!
+
+Klaas
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000056.html">[Ethercatmaster-users] Antwort: Re: Low level device   driver
+</A></li>
+	<LI>Next message: <A HREF="000058.html">[Ethercatmaster-users]   Antwort: Re: Low level device  driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#57">[ date ]</a>
+              <a href="thread.html#57">[ thread ]</a>
+              <a href="subject.html#57">[ subject ]</a>
+              <a href="author.html#57">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

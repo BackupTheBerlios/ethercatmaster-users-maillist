@@ -1,0 +1,60 @@
+From frederik.bayart at triphase.com  Wed Oct  1 11:46:51 2008
+From: frederik.bayart at triphase.com (frederik.bayart at triphase.com)
+Date: Wed, 1 Oct 2008 02:46:51 -0700 (PDT)
+Subject: [Ethercatmaster-users] CAN(open) over EtherCAT
+Message-ID: <01ddd2e93f674aea1c58655acb9d81df.squirrel@webmail.triphase.com>
+
+Hallo,
+
+Is there anybody who has already used the CANopen functionality ? Is it
+working ?
+
+I didn't find any documentation about the usage of this functionality.
+Is there anybody who can share an example or give som more information ?
+
+Best regards,
+
+Frederik
+
+
+
+From ehrhart.dev at free.fr  Fri Oct 10 14:08:51 2008
+From: ehrhart.dev at free.fr (ehrhart.dev at free.fr)
+Date: Fri, 10 Oct 2008 14:08:51 +0200
+Subject: [Ethercatmaster-users] [ANNOUNCE] EML will be temporarily
+	unavailable
+Message-ID: <1223640531.48ef45d3b805b@imp.free.fr>
+
+Hi,
+I just find out the project. I recently use Orocos RTT toolkit, and some post
+link to the EML project.
+Beckoff (french reseller more exactly) says that a soluce is going to be
+elaborated in the next days, concerning the license problem. Any exciting news
+about it ??
+
+Thanks a lot.
+Manfred
+
+
+From klaas.gadeyne at fmtc.be  Mon Oct 13 10:36:44 2008
+From: klaas.gadeyne at fmtc.be (Klaas Gadeyne)
+Date: Mon, 13 Oct 2008 10:36:44 +0200 (CEST)
+Subject: [Ethercatmaster-users] [ANNOUNCE] EML will be temporarily
+ unavailable
+In-Reply-To: <1223640531.48ef45d3b805b@imp.free.fr>
+References: <1223640531.48ef45d3b805b@imp.free.fr>
+Message-ID: <alpine.DEB.2.00.0810131036140.22793@ampere.labo01.fmtc.be>
+
+On Fri, 10 Oct 2008, ehrhart.dev at free.fr wrote:
+> Hi,
+> I just find out the project. I recently use Orocos RTT toolkit, and some post
+> link to the EML project.
+> Beckoff (french reseller more exactly) says that a soluce is going to be
+> elaborated in the next days, concerning the license problem. Any exciting news
+> about it ??
+
+Not yet.  As soon as there is news, I will post it to the ML.
+
+Klaas
+
+

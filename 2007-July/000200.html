@@ -1,0 +1,371 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] EL6751 parameters !
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EL6751%20parameters%20%21&In-Reply-To=%3C46A8B0C3.8080102%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000199.html">
+   <LINK REL="Next"  HREF="000201.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] EL6751 parameters !</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EL6751%20parameters%20%21&In-Reply-To=%3C46A8B0C3.8080102%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] EL6751 parameters !">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Thu Jul 26 16:33:39 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000199.html">[Ethercatmaster-users] EL6751 parameters !
+</A></li>
+        <LI>Next message: <A HREF="000201.html">[Ethercatmaster-users] RE : Re:  EL6751 parameters !
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#200">[ date ]</a>
+              <a href="thread.html#200">[ thread ]</a>
+              <a href="subject.html#200">[ subject ]</a>
+              <a href="author.html#200">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Said,
+
+Although I am very interested in CoE and could use it in my current 
+project I have opted to run the CANOpen over another interface to avoid 
+the complication with EML. This list is not yet very active (I don't 
+doubt that ti should become quite popular in the future) so perhaps its 
+an idea to approach ETG for at least the basic manner in which CAN rides 
+in Ethercat frames?
+
+What documentation have you got on ethercat? Have you been in contact 
+with ETG?
+
+I am sorry I cannot help otherwise.
+
+Regards,
+
+Roland.
+
+
+said harti wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> klaas has tell me that i must implement CoE in order to communicate with 
+</I>&gt;<i> CANopen nodes. I am looking hardly for this in order to define steps and 
+</I>&gt;<i> works to do.
+</I>&gt;<i> 
+</I>&gt;<i> But first, i try to set the EL6751 to OP STATE like others modules, but 
+</I>&gt;<i> i get this error :
+</I>&gt;<i> 
+</I>&gt;<i> ...
+</I>&gt;<i> Getting slave handler
+</I>&gt;<i> Setting EL1004 to OP STATE
+</I>&gt;<i> EL1004 succesfully set in OP STATE
+</I>&gt;<i> Getting slave handler
+</I>&gt;<i> Setting EL6751 to OP STATE
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 0), desired=2 
+</I>&gt;<i> status=1
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 1), desired=2 
+</I>&gt;<i> status=1
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 2), desired=2 
+</I>&gt;<i> status=1
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 3), desired=2 
+</I>&gt;<i> status=1
+</I>&gt;<i> 
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 0), desired=4 
+</I>&gt;<i> status=2
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 1), desired=4 
+</I>&gt;<i> status=2
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 2), desired=4 
+</I>&gt;<i> status=2
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 3), desired=4 
+</I>&gt;<i> status=2
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 4), desired=4 
+</I>&gt;<i> status=2
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 5), desired=4 
+</I>&gt;<i> status=2
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 6), desired=4 
+</I>&gt;<i> status=2
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 7), desired=4 
+</I>&gt;<i> status=2
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 8), desired=4 
+</I>&gt;<i> status=2
+</I>&gt;<i> EC_ESM_Ops::set_state() Warning: State trans. failed (try 9), desired=4 
+</I>&gt;<i> status=2
+</I>&gt;<i> 
+</I>&gt;<i> EC_ESM_Ops::set_state() failed to set state after 10 tries
+</I>&gt;<i> 
+</I>&gt;<i> Failed to set EL6751 in OP STATE
+</I>&gt;<i> AL initializing
+</I>&gt;<i> 
+</I>&gt;<i> Test: Set AO Channel 1 to 5v :
+</I>&gt;<i> 
+</I>&gt;<i> Test done.
+</I>&gt;<i> 
+</I>&gt;<i> this is my master_test config :
+</I>&gt;<i> 
+</I>&gt;<i> ...
+</I>&gt;<i> #include &lt;al/ethercat_slave_conf.h&gt;
+</I>&gt;<i> #include &lt;al/ethercat_slave_handler.h&gt;
+</I>&gt;<i> 
+</I>&gt;<i> struct netif *ni;
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ///SlaveConfig EK1100
+</I>&gt;<i> EtherCAT_FMMU_Config fmmu_config_EK1100(0);
+</I>&gt;<i> EtherCAT_PD_Config pd_config_EK1100(0);
+</I>&gt;<i> EtherCAT_SlaveConfig
+</I>&gt;<i>  EC_EK1100(0x044c2c52,0x00010000,0x03e9,&amp;fmmu_config_EK1100,&amp;pd_config_EK1100);
+</I>&gt;<i> 
+</I>&gt;<i> ///SlaveConfig EL4102
+</I>&gt;<i> 
+</I>&gt;<i> EtherCAT_FMMU_Config fmmu_config_EL4102(2);///arg=number of FMMU's.Some 
+</I>&gt;<i> modules take more than one if e.g. they have in and outputs.///not sure 
+</I>&gt;<i> what this is doing (Seems to be actual fmmu config which gets linked to 
+</I>&gt;<i> the handle created above)
+</I>&gt;<i> 
+</I>&gt;<i> EC_FMMU 
+</I>&gt;<i> fmmu0_EL4102(0x00080000,0x0001,0x00,0x00,0x080D,0x00,true,false,true);
+</I>&gt;<i> EC_FMMU 
+</I>&gt;<i> fmmu1_EL4102(0x00010000,0x0004,0x00,0x07,0x1000,0x00,false,true,true);
+</I>&gt;<i> 
+</I>&gt;<i> EC_SyncMan 
+</I>&gt;<i> syncman_mbx0_EL4102(0x1800,246,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> EC_SyncMan 
+</I>&gt;<i> syncman_mbx1_EL4102(0x18f6,246,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> EtherCAT_MbxConfig mbx_conf_EL4102 = {syncman_mbx0_EL4102,
+</I>&gt;<i>  syncman_mbx1_EL4102};
+</I>&gt;<i> 
+</I>&gt;<i> EtherCAT_PD_Config pd_config_EL4102(2);///argument=length
+</I>&gt;<i> EC_SyncMan 
+</I>&gt;<i> syncman0_EL4102(0x1000,4,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> EC_SyncMan 
+</I>&gt;<i> syncman1_EL4102(0x1100,0,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> 
+</I>&gt;<i> ///compile the slave configuration
+</I>&gt;<i> 
+</I>&gt;<i> EtherCAT_SlaveConfig 
+</I>&gt;<i> EC_EL4102(0x10063052,0x00000000,0x03ea,&amp;fmmu_config_EL4102,&amp;pd_config_EL4102,&amp;mbx_conf_EL4102);
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ///SlaveConfig EL2004
+</I>&gt;<i> EtherCAT_FMMU_Config fmmu_config_EL2004(1);
+</I>&gt;<i> 
+</I>&gt;<i> EC_FMMU 
+</I>&gt;<i> fmmu0_EL2004(0x00010004,0x0001,0x00,0x03,0x0F00,0x00,false,true,true);
+</I>&gt;<i> 
+</I>&gt;<i> EtherCAT_PD_Config pd_config_EL2004(1);EC_SyncMan 
+</I>&gt;<i> syncman0_EL2004(0x0F00,1,EC_QUEUED,EC_WRITTEN_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> EtherCAT_SlaveConfig 
+</I>&gt;<i> EC_EL2004(0x7d43052,0x00100000,0x03eb,&amp;fmmu_config_EL2004,&amp;pd_config_EL2004);
+</I>&gt;<i> 
+</I>&gt;<i> ///SlaveConfig EL1004
+</I>&gt;<i> EtherCAT_FMMU_Config fmmu_config_EL1004(1);
+</I>&gt;<i> 
+</I>&gt;<i> EC_FMMU 
+</I>&gt;<i> fmmu0_EL1004(0x0001000A,0x0001,0x00,0x03,0x1000,0x00,true,false,true);
+</I>&gt;<i> EtherCAT_PD_Config pd_config_EL1004(1);
+</I>&gt;<i> EC_SyncMan 
+</I>&gt;<i> syncman0_EL1004(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,true,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> 
+</I>&gt;<i> EtherCAT_SlaveConfig 
+</I>&gt;<i> EC_EL1004(0x03EC3052,0x00100000,0x03ec,&amp;fmmu_config_EL1004,&amp;pd_config_EL1004);
+</I>&gt;<i> 
+</I>&gt;<i> ///SlaveConfig EL6751
+</I>&gt;<i> 
+</I>&gt;<i> EtherCAT_FMMU_Config fmmu_config_EL6751(3);
+</I>&gt;<i> 
+</I>&gt;<i> EC_FMMU 
+</I>&gt;<i> fmmu0_EL6751(0x00011000,0x0010,0x00,0x07,0x1000,0x00,false,true,true);
+</I>&gt;<i> EC_FMMU 
+</I>&gt;<i> fmmu1_EL6751(0x00011800,0x0008,0x00,0x07,0x1400,0x00,true,false,true);
+</I>&gt;<i> EC_FMMU 
+</I>&gt;<i> fmmu2_EL6751(0x00080000,0x0001,0x00,0x01,0x080D,0x00,true,false,true);
+</I>&gt;<i> 
+</I>&gt;<i> EC_SyncMan 
+</I>&gt;<i> syncman_mbx0_EL6751(0x1800,558,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> EC_SyncMan 
+</I>&gt;<i> syncman_mbx1_EL6751(0x1A2E,558,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> 
+</I>&gt;<i> EtherCAT_PD_Config pd_config_EL6751(2);///argument=length
+</I>&gt;<i> 
+</I>&gt;<i> EC_SyncMan 
+</I>&gt;<i> syncman0_EL6751(0x1000,16,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> EC_SyncMan 
+</I>&gt;<i> syncman1_EL6751(0x1400,8,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> EtherCAT_SlaveConfig 
+</I>&gt;<i> EC_EL6751(0x1A5F3052,0x00000001,0x03ed,&amp;fmmu_config_EL6751,&amp;pd_config_EL6751,&amp;mbx_conf_EL6751);
+</I>&gt;<i> 
+</I>&gt;<i> EtherCAT_MbxConfig mbx_conf_EL6751 = {syncman_mbx0_EL6751, 
+</I>&gt;<i> syncman_mbx1_EL6751};
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> static void init_slave_db() {
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>          EtherCAT_SlaveDb * slave_db = EtherCAT_SlaveDb::instance(4);
+</I>&gt;<i>  ///argument=#slaves
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ///Connect actual fmmu and process data config to respective handlesfor 
+</I>&gt;<i> for EL 4102 (AO)
+</I>&gt;<i> 
+</I>&gt;<i>          fmmu_config_EL4102[0] = fmmu0_EL4102;
+</I>&gt;<i>          fmmu_config_EL4102[1] = fmmu1_EL4102;
+</I>&gt;<i>          pd_config_EL4102[0] = syncman0_EL4102;
+</I>&gt;<i>          pd_config_EL4102[1] = syncman1_EL4102;
+</I>&gt;<i> 
+</I>&gt;<i> ///Connect actual fmmu and process data config to respective handles for 
+</I>&gt;<i> EL 2004 (DO)
+</I>&gt;<i> 
+</I>&gt;<i>          fmmu_config_EL2004[0] = fmmu0_EL2004;///
+</I>&gt;<i>          pd_config_EL2004[0] = syncman0_EL2004;///
+</I>&gt;<i> 
+</I>&gt;<i> ///Connect actual fmmu and process data config to respective handles for 
+</I>&gt;<i> EL 1004 (DI)
+</I>&gt;<i> 
+</I>&gt;<i>          fmmu_config_EL1004[0] = fmmu0_EL1004;///
+</I>&gt;<i>          pd_config_EL1004[0] = syncman0_EL1004;///
+</I>&gt;<i> 
+</I>&gt;<i>          ///Connect actual fmmu and process data config to respective 
+</I>&gt;<i> handles for EL 6751 (CoE)
+</I>&gt;<i> 
+</I>&gt;<i>          fmmu_config_EL6751[0] = fmmu0_EL6751;///
+</I>&gt;<i>          fmmu_config_EL6751[1] = fmmu1_EL6751;///
+</I>&gt;<i>          fmmu_config_EL6751[2] = fmmu2_EL6751;///
+</I>&gt;<i> 
+</I>&gt;<i>          pd_config_EL6751[0] = syncman0_EL6751;///
+</I>&gt;<i>          pd_config_EL6751[1] = syncman1_EL6751;///
+</I>&gt;<i> 
+</I>&gt;<i> ///Commit the slave config objects to the slave database
+</I>&gt;<i> 
+</I>&gt;<i>      slave_db-&gt;set_conf(&amp;EC_EK1100,0);
+</I>&gt;<i>          slave_db-&gt;set_conf(&amp;EC_EL4102,1);
+</I>&gt;<i>          //slave_db-&gt;set_conf(&amp;EC_EK1100,1);
+</I>&gt;<i> 
+</I>&gt;<i> ///Commit the slave config objects to the slave database
+</I>&gt;<i> 
+</I>&gt;<i>          slave_db-&gt;set_conf(&amp;EC_EL2004,2);///
+</I>&gt;<i> 
+</I>&gt;<i> ///Commit the slave config objects to the slave database
+</I>&gt;<i> 
+</I>&gt;<i>          slave_db-&gt;set_conf(&amp;EC_EL1004,3);///
+</I>&gt;<i> 
+</I>&gt;<i> ///Commit the slave config objects to the slave database
+</I>&gt;<i> 
+</I>&gt;<i>          slave_db-&gt;set_conf(&amp;EC_EL6751,4);///
+</I>&gt;<i>  }
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> static void* run_master(void * arg) {
+</I>&gt;<i>    
+</I>&gt;<i>     ni = init_ec((char*)arg);
+</I>&gt;<i>     init_slave_db();
+</I>&gt;<i> 
+</I>&gt;<i>     if(ni != 0) {
+</I>&gt;<i> 
+</I>&gt;<i>         printf(&quot;Attach netif \n\n&quot;);
+</I>&gt;<i>         EtherCAT_DataLinkLayer::instance()-&gt;attach(ni);
+</I>&gt;<i>         printf(&quot;Master initializing \n\n&quot;);
+</I>&gt;<i>         EtherCAT_Master * EM = EtherCAT_Master::instance();
+</I>&gt;<i>         printf(&quot;Getting slave handler\n&quot;);
+</I>&gt;<i>         EtherCAT_SlaveHandler * sh_ek1100 = EM-&gt;get_slave_handler(0x03e9);
+</I>&gt;<i>         //sleep(1);
+</I>&gt;<i>         printf(&quot;Setting EK1100 to OP STATE\n&quot;);
+</I>&gt;<i>         if(sh_ek1100-&gt;to_state(EC_OP_STATE))
+</I>&gt;<i>             printf(&quot;EK1100 succesfully set in OP STATE\n&quot;);
+</I>&gt;<i>         else
+</I>&gt;<i>             printf(&quot;\nfailed to set EK1100 in OP STATE\n&quot;);
+</I>&gt;<i> 
+</I>&gt;<i>         printf(&quot;Getting slave handler\n&quot;);
+</I>&gt;<i>         EtherCAT_SlaveHandler * sh_el4102 = EM-&gt;get_slave_handler(0x03ea);
+</I>&gt;<i>         printf(&quot;Setting EL4102 to OP STATE\n&quot;);
+</I>&gt;<i>         if(sh_el4102-&gt;to_state(EC_OP_STATE))
+</I>&gt;<i>             printf(&quot;EL4102 succesfully set in OP STATE\n&quot;);
+</I>&gt;<i>         else
+</I>&gt;<i>             printf(&quot;\nfailed to set EL4102 in OP STATE!!\n&quot;);
+</I>&gt;<i>        
+</I>&gt;<i> ///Modif
+</I>&gt;<i>            printf(&quot;Getting slave handler\n&quot;);
+</I>&gt;<i>                 EtherCAT_SlaveHandler * sh_el2004 = 
+</I>&gt;<i> EM-&gt;get_slave_handler(0x03eb);
+</I>&gt;<i>         printf(&quot;Setting EL2004 to OP STATE\n&quot;);
+</I>&gt;<i>                  if(sh_el2004-&gt;to_state(EC_OP_STATE))
+</I>&gt;<i>                          printf(&quot;EL2004 succesfully set in OP STATE\n&quot;);
+</I>&gt;<i>                  else
+</I>&gt;<i>                          printf(&quot;\nFailed to set EL2004 in OP STATE\n&quot;);
+</I>&gt;<i> 
+</I>&gt;<i>                printf(&quot;Getting slave handler\n&quot;);
+</I>&gt;<i>                 EtherCAT_SlaveHandler * sh_el1004 = 
+</I>&gt;<i> EM-&gt;get_slave_handler(0x03ec);
+</I>&gt;<i>         printf(&quot;Setting EL1004 to OP STATE\n&quot;);
+</I>&gt;<i>                  if(sh_el1004-&gt;to_state(EC_OP_STATE))
+</I>&gt;<i>                          printf(&quot;EL1004 succesfully set in OP STATE\n&quot;);
+</I>&gt;<i>                  else
+</I>&gt;<i>                          printf(&quot;\nFailed to set EL1004 in OP STATE\n&quot;);
+</I>&gt;<i> 
+</I>&gt;<i>                  printf(&quot;Getting slave handler\n&quot;);
+</I>&gt;<i>                 EtherCAT_SlaveHandler * sh_el6751 = 
+</I>&gt;<i> EM-&gt;get_slave_handler(0x03ed);
+</I>&gt;<i>         printf(&quot;Setting EL6751 to OP STATE\n&quot;);
+</I>&gt;<i>                  if(sh_el6751-&gt;to_state(EC_OP_STATE))
+</I>&gt;<i>                          printf(&quot;EL6751 succesfully set in OP STATE\n&quot;);
+</I>&gt;<i>                  else
+</I>&gt;<i>                          printf(&quot;\nFailed to set EL6751 in OP STATE\n&quot;);
+</I>&gt;<i> 
+</I>&gt;<i>      
+</I>&gt;<i> 
+</I>&gt;<i> Please, If you have some ideas about this error let me know. (Logical 
+</I>&gt;<i> Address...)
+</I>&gt;<i>  
+</I>&gt;<i> Best regards,
+</I>&gt;<i> 
+</I>&gt;<i> Said HARTI
+</I>&gt;<i> 
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> Ne gardez plus qu'une seule adresse mail ! Copiez vos mails 
+</I>&gt;<i> &lt;<A HREF="http://www.trueswitch.com/yahoo-fr/">http://www.trueswitch.com/yahoo-fr/</A>&gt; vers Yahoo! Mail
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000199.html">[Ethercatmaster-users] EL6751 parameters !
+</A></li>
+	<LI>Next message: <A HREF="000201.html">[Ethercatmaster-users] RE : Re:  EL6751 parameters !
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#200">[ date ]</a>
+              <a href="thread.html#200">[ thread ]</a>
+              <a href="subject.html#200">[ subject ]</a>
+              <a href="author.html#200">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

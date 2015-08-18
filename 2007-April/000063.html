@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] Patch Bug???
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Patch%20Bug%3F%3F%3F&In-Reply-To=%3CPine.LNX.4.64.0704121538480.21235%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000062.html">
+   <LINK REL="Next"  HREF="000061.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] Patch Bug???</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20Patch%20Bug%3F%3F%3F&In-Reply-To=%3CPine.LNX.4.64.0704121538480.21235%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] Patch Bug???">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Thu Apr 12 15:41:08 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000062.html">[Ethercatmaster-users] Patch Bug???
+</A></li>
+        <LI>Next message: <A HREF="000061.html">[Ethercatmaster-users] Delivery Thread Priority???
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#63">[ date ]</a>
+              <a href="thread.html#63">[ thread ]</a>
+              <a href="subject.html#63">[ subject ]</a>
+              <a href="author.html#63">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Felix,
+
+&gt;&gt;<i> Is it right that the patch installs the eth_drv.c in &lt;eCos install
+</I>&gt;&gt;<i> directory&gt;\packages\io\eth\current\ethercatmaster
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> diff -uN ethercatmaster/eth_drv.c ethercatmaster/eth_drv.c
+</I>&gt;&gt;<i> --- ethercatmaster/eth_drv.c  1970-01-01 01:00:00.000000000 +0100
+</I>&gt;&gt;<i> +++ ethercatmaster/eth_drv.c  2006-02-23 14:16:16.000000000 +0100
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Should the eth_drv.c not be in the Source directory???
+</I>&gt;<i>
+</I>&gt;<i> Yes.  You've found a bug!  This should be
+</I>&gt;<i>
+</I>&gt;<i> --- src/ethercatmaster/eth_drv.c  1970-01-01 01:00:00.000000000 +0100
+</I>&gt;<i> +++ src/ethercatmaster/eth_drv.c  2006-02-23 14:16:16.000000000 +0100
+</I>&gt;<i>
+</I>&gt;<i> Don't know how this got in :-(
+</I>
+Can you try &lt;<A HREF="http://ethercatmaster.berlios.de/files/eml-0.2.tar.bz2">http://ethercatmaster.berlios.de/files/eml-0.2.tar.bz2</A>&gt;
+Same installation instructions as for 0.1
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">kgad at ampere</A> /tmp/eml-0.2/eml-0.2]$
+  cat ChangeLog
+2007-04-12  Klaas Gadeyne  &lt;first dot last at fmtc dot be&gt;
+
+         * release 0.2:  Fix problem with low level device driver patch
+         &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/000062.html">https://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/000062.html</A>&gt;
+         and initialization problem
+         &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/000057.html">https://lists.berlios.de/pipermail/ethercatmaster-users/2007-April/000057.html</A>&gt;
+
+2006-02-21  Klaas Gadeyne  &lt;first dot last at fmtc dot be&gt;
+
+         * release 0.1: original code
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000062.html">[Ethercatmaster-users] Patch Bug???
+</A></li>
+	<LI>Next message: <A HREF="000061.html">[Ethercatmaster-users] Delivery Thread Priority???
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#63">[ date ]</a>
+              <a href="thread.html#63">[ thread ]</a>
+              <a href="subject.html#63">[ subject ]</a>
+              <a href="author.html#63">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] getting started
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20getting%20started&In-Reply-To=%3C46701124.3070300%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000108.html">
+   <LINK REL="Next"  HREF="000105.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] getting started</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20getting%20started&In-Reply-To=%3C46701124.3070300%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] getting started">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Wed Jun 13 17:45:40 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000108.html">[Ethercatmaster-users] getting started
+</A></li>
+        <LI>Next message: <A HREF="000105.html">[Ethercatmaster-users] Tutorial for adding slaves to the ethercat	master
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#111">[ date ]</a>
+              <a href="thread.html#111">[ thread ]</a>
+              <a href="subject.html#111">[ subject ]</a>
+              <a href="author.html#111">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+Thanks. I will attempt to put in Tom's configuration code.
+
+There is still very little documentation on this so I am trying to 
+gather from the code what the usage principle is of the library. Is 
+there any manner this could be given briefly on the list.
+
+Roughly the way I understand it is:
+
+1-get handle to reall-time network (init_ec)
+2-configure saleves
+3-Instantiate Master (Ethercat_Master)
+4-Set slaves to operational mode
+5-interact?
+
+Interact being sending and retrieving process data.
+
+Is this kind of the structure?
+
+Regards.
+
+Roland
+
+
+Klaas Gadeyne wrote:
+&gt;<i> On Wed, 13 Jun 2007, roland Tollenaar wrote:
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> With the modified start of rtnet things look a bit better but not 100%
+</I>&gt;<i> 
+</I>&gt;<i> A bit, I would say &quot;a lot&quot; :-)
+</I>&gt;<i> 
+</I>&gt;&gt;<i> This is the output of master test now.
+</I>&gt;<i> 
+</I>&gt;<i> I would suggest you to replace the slave code at the top of
+</I>&gt;<i> master_test.cpp by the header code Tom sent in his email yesterday.
+</I>&gt;<i> That way your master test program is going to recognise far more
+</I>&gt;<i> slaves than it does now.
+</I>&gt;<i> Eventually, I think this should become (in a first step) a eml header
+</I>&gt;<i> file (something like beckhoff_slaves_config.hpp)
+</I>&gt;<i> Patches are welcome :-)
+</I>&gt;<i> 
+</I>&gt;&gt;<i> One problem, after the mastertest crashes it seems as though rtpacket
+</I>&gt;&gt;<i> runs away holding on to rtnet in some form. It is not possible to
+</I>&gt;&gt;<i> unload it and only a reboot will allow me to start the normal network
+</I>&gt;&gt;<i> connection again. Any ideas why and how I can kill it?
+</I>&gt;<i> 
+</I>&gt;<i> See Jan's note about it.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> It would help my understanding if some comments could be inserted into
+</I>&gt;&gt;<i> the output below to explain what is happening. To me it looks as
+</I>&gt;&gt;<i> though there is some successful communication with the slave but why I
+</I>&gt;&gt;<i> am told that there are 10 slaves (if there is only one) and that the
+</I>&gt;&gt;<i> EEPROM is busy (why is it busy?) I have no idea.
+</I>&gt;<i> 
+</I>&gt;<i> There truly are 10 slaves in your network (there's only one buscoupler
+</I>&gt;<i> who has a &quot;physical&quot; ethernet connection though)
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Very obviously it fails on trying to set the 4102 to operational
+</I>&gt;&gt;<i> state. I don;t have that module in my configuration and i assume that
+</I>&gt;&gt;<i> most complaints are caused by similar discrepancies.
+</I>&gt;<i> 
+</I>&gt;<i> Exactly, so as a matter of fact, EML does exactly what you ask it
+</I>&gt;<i> right now (see above to get one step further).
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> EtherCAT AL: Ring contains 10 slaves
+</I>&gt;&gt;<i> EEPROM busy
+</I>&gt;&gt;<i> EEPROM busy
+</I>&gt;<i> 
+</I>&gt;<i> These eeprom busy errors typically happen when the slave doesn't react
+</I>&gt;<i> fast enough to a particular request.  The master then retries a fixed
+</I>&gt;<i> number of times, before giving up.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, 
+</I>&gt;&gt;<i> rev=0x10000
+</I>&gt;<i> 
+</I>&gt;<i> This one was recognised
+</I>&gt;<i> 
+</I>&gt;&gt;<i> EtherCAT_SlaveDb: No such Config, returning NULL!
+</I>&gt;<i> 
+</I>&gt;<i> This one not, but it might be if you use Tom's code (as stated
+</I>&gt;<i> above).  IIRC, for your analog input module, you'll have to follow
+</I>&gt;<i> Tom's guidelines though
+</I>&gt;<i> 
+</I>&gt;<i> [...]
+</I>&gt;&gt;<i> EtherCAT_SlaveDb: No such Config, returning NULL!
+</I>&gt;&gt;<i> EC_AL Warning: No such slave in db, creating dummy slave
+</I>&gt;&gt;<i> AL creating SlaveHandler: pos=9, Product Code=0x10243052, rev=0x0
+</I>&gt;&gt;<i> AL: resetting FMMUs
+</I>&gt;&gt;<i> AL: resetting SMs
+</I>&gt;&gt;<i> AL: Setting all slaves in init mode
+</I>&gt;&gt;<i> Getting slave handler
+</I>&gt;&gt;<i> Setting EK1100 to OP STATE
+</I>&gt;&gt;<i> EK1100 succesfully set in OP STATE
+</I>&gt;&gt;<i> Getting slave handler
+</I>&gt;&gt;<i> EtherCAT_AL: No such slave, returning NULL
+</I>&gt;&gt;<i> Setting EL4102 to OP STATE
+</I>&gt;&gt;<i> Segmentation fault
+</I>&gt;<i> 
+</I>&gt;<i> As stated before, this is due to Tom's code that currently doesn't
+</I>&gt;<i> check if the slave pointer is NULL.
+</I>&gt;<i> 
+</I>&gt;<i> All together, it seems like everything is working properly (i.e.~as
+</I>&gt;<i> expected given the source code :)!
+</I>&gt;<i> Best regards,
+</I>&gt;<i> 
+</I>&gt;<i> Klaas
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000108.html">[Ethercatmaster-users] getting started
+</A></li>
+	<LI>Next message: <A HREF="000105.html">[Ethercatmaster-users] Tutorial for adding slaves to the ethercat	master
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#111">[ date ]</a>
+              <a href="thread.html#111">[ thread ]</a>
+              <a href="subject.html#111">[ subject ]</a>
+              <a href="author.html#111">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

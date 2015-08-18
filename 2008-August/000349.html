@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] setting up an ethercat slave
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20setting%20up%20an%20ethercat%20slave&In-Reply-To=%3Calpine.DEB.1.10.0808041017240.31776%40ampere.labo01.fmtc.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000348.html">
+   <LINK REL="Next"  HREF="000350.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] setting up an ethercat slave</H1>
+    <B>Klaas Gadeyne</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20setting%20up%20an%20ethercat%20slave&In-Reply-To=%3Calpine.DEB.1.10.0808041017240.31776%40ampere.labo01.fmtc.be%3E"
+       TITLE="[Ethercatmaster-users] setting up an ethercat slave">klaas.gadeyne at fmtc.be
+       </A><BR>
+    <I>Mon Aug  4 10:24:45 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000348.html">[Ethercatmaster-users] setting up an ethercat slave
+</A></li>
+        <LI>Next message: <A HREF="000350.html">[Ethercatmaster-users] setting up an ethercat slave
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#349">[ date ]</a>
+              <a href="thread.html#349">[ thread ]</a>
+              <a href="subject.html#349">[ subject ]</a>
+              <a href="author.html#349">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, 3 Aug 2008, Roland Tollenaar wrote:
+&gt;<i> could someone shed some light on the basic steps of EML to set up
+</I>&gt;<i> Logical ReadWrite cyclic data exchange. I.e. not mailbox communication.
+</I>&gt;<i>
+</I>&gt;<i> The way I understand it, all that is necessary in terms of ethernet
+</I>&gt;<i> frame exchange between master and slave is:
+</I>&gt;<i>
+</I>&gt;<i> 1-FMMU setup exchange, i.e. master sending the logical address /
+</I>&gt;<i> physical starting address etc.
+</I>&gt;<i>
+</I>&gt;<i> 2-txandrx
+</I>&gt;<i>
+</I>&gt;<i> Is this correct or are there other message exchanges required?
+</I>
+Depends on what you do exactly in step 1/
+
+&gt;<i> If the above is correct, is there any information that Master needs to
+</I>&gt;<i> retrieve from the slaves in the FMMU setup stage (e.g. fixed station
+</I>&gt;<i> address, Revision number?).
+</I>
+You first have to perform some init steps (initialization, assign fixed network addresses (so you *can* do the FMMU setup), put the slave in operational mode, ...).  Some of these are normally done by the AL (or the EtherCAT_Master class).
+
+Klaas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000348.html">[Ethercatmaster-users] setting up an ethercat slave
+</A></li>
+	<LI>Next message: <A HREF="000350.html">[Ethercatmaster-users] setting up an ethercat slave
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#349">[ date ]</a>
+              <a href="thread.html#349">[ thread ]</a>
+              <a href="subject.html#349">[ subject ]</a>
+              <a href="author.html#349">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

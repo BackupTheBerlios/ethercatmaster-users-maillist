@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] some questions about the usage of eml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3C469637DE.904%40skynet.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000185.html">
+   <LINK REL="Next"  HREF="000133.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] some questions about the usage of eml</H1>
+    <B>Tom Panis</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20some%20questions%20about%20the%20usage%20of%20eml&In-Reply-To=%3C469637DE.904%40skynet.be%3E"
+       TITLE="[Ethercatmaster-users] some questions about the usage of eml">tompanis at skynet.be
+       </A><BR>
+    <I>Thu Jul 12 16:17:02 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000185.html">[Ethercatmaster-users] Non-persistent output of Beckhoff EL2004 moduels [Was: Re: netif.h]
+</A></li>
+        <LI>Next message: <A HREF="000133.html">[Ethercatmaster-users] order of consequence?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#130">[ date ]</a>
+              <a href="thread.html#130">[ thread ]</a>
+              <a href="subject.html#130">[ subject ]</a>
+              <a href="author.html#130">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Roland Tollenaar wrote:
+&gt;<i> Hi Tom,
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The address 0x0F00 you're referring to, isn't the fixes station 
+</I>&gt;&gt;<i> address, it's the physical start address. It's a memory address of 
+</I>&gt;&gt;<i> the module. For the EL2004 module: data written to this address is 
+</I>&gt;&gt;<i> controlling the output of the module. You never write directly to 
+</I>&gt;&gt;<i> this address, you write to a logical address, in your example above: 
+</I>&gt;&gt;<i> 0x0001000B. The FMMU (in combination with the Synchronisation 
+</I>&gt;&gt;<i> Manager) writes this data to the memory of the module, in this case 
+</I>&gt;&gt;<i> 0x0F00. The FMMU needs to know both the logical start address and the 
+</I>&gt;&gt;<i> physical start address since it connects both addresses. The 
+</I>&gt;&gt;<i> Synchronisation Manager makes sure that data isn't read from or 
+</I>&gt;&gt;<i> written to the physical memory address (0x0F00) at the same time. As 
+</I>&gt;&gt;<i> you see, the Synchronisation Manager also needs this address, so is 
+</I>&gt;&gt;<i> knows which part of the memory it has to synchronise
+</I>&gt;<i>
+</I>&gt;<i> How must one know that this must be 0x0F00 and not something else? Is 
+</I>&gt;<i> it correct that this is the same for all modules?
+</I>
+I found these addresses in TwinCAT. I haven't tested if you can take 
+another address. But then the problem is, that you have to make sure 
+that you don't use a part of the module's memory that's already being 
+used for something else. So I think it's best and safe to always take 
+this address for this type of module.
+This address is the same for every module of the same type (unless it's 
+possible to chose this address yourself). For the EL2004 modules it's 
+0x0F00, for EL1014 modules it's 0x1000.
+
+Maybe you can test if it's possible to take another address. I can't 
+test it for the moment, since I haven't got the hardware over here.
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i> I have also written to ETG (when I assumed you were on holiday) to try
+</I>&gt;&gt;&gt;<i> find out more about the addressing and address spaces. 
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Indeed, I was on a little holiday :-)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The documentation available about ethercat even for a reputable 
+</I>&gt;&gt;&gt;<i> member of
+</I>&gt;&gt;&gt;<i> the ETG such as myself, is well, sparse.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This documentation on ETG just describes the EherCAT protocol. The 
+</I>&gt;&gt;<i> documentation from the Beckhoff modules has to come from Beckhoff 
+</I>&gt;&gt;<i> itself.
+</I>&gt;&gt;<i> For each module, there's a little information on there website, but I 
+</I>&gt;<i> I will check this out.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i> Finally, if I my dump all questions here, my current problem is that I
+</I>&gt;&gt;&gt;<i> cannot figure out from you examples how to read access  the EL 1014
+</I>&gt;&gt;&gt;<i> and how to write the digital outputs to the EL2004. Do you have code
+</I>&gt;&gt;&gt;<i> examples for the list showing how this is done using the EML?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'll explain this in your other mail
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Roland.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Kind regards,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> (And thanks very very much for the reply without which progress I have
+</I>&gt;&gt;&gt;<i> found is slow)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Roland
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On 7/12/07, Tom Panis &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">tompanis at skynet.be</A>&gt; wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi Tom,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Sorry for the tremendous delay. I can only work on this in stolen 
+</I>&gt;&gt;&gt;&gt;<i> hours.
+</I>&gt;&gt;&gt;&gt;&gt;<i> I have managed to improve matters a bit wrt the situation I sketched
+</I>&gt;&gt;&gt;&gt;&gt;<i> previously. I was forgetting to commit the configuration settings 
+</I>&gt;&gt;&gt;&gt;&gt;<i> with
+</I>&gt;&gt;&gt;&gt;&gt;<i> the call set_conf.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> However I did have the addressing wrong.
+</I>&gt;&gt;&gt;&gt;&gt;<i> I do understand I think what you are saying about the start 
+</I>&gt;&gt;&gt;&gt;&gt;<i> addresses.
+</I>&gt;&gt;&gt;&gt;&gt;<i> i am posting as i think it should be. Could you please check, confirm
+</I>&gt;&gt;&gt;&gt;&gt;<i> and let us know where I am getting things wrong?
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Everything seems to be right. I can't find a mistake in the 
+</I>&gt;&gt;&gt;&gt;<i> addressing.
+</I>&gt;&gt;&gt;&gt;<i> Have you tested this configuration? Can you put these modules in
+</I>&gt;&gt;&gt;&gt;<i> Operational State?
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Tom
+</I>&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Ethercatmaster-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">Ethercatmaster-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">https://lists.berlios.de/mailman/listinfo/ethercatmaster-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000185.html">[Ethercatmaster-users] Non-persistent output of Beckhoff EL2004 moduels [Was: Re: netif.h]
+</A></li>
+	<LI>Next message: <A HREF="000133.html">[Ethercatmaster-users] order of consequence?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#130">[ date ]</a>
+              <a href="thread.html#130">[ thread ]</a>
+              <a href="subject.html#130">[ subject ]</a>
+              <a href="author.html#130">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>

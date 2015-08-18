@@ -1,0 +1,276 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Ethercatmaster-users] EL5101 incremental encoder
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/ethercatmaster-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EL5101%20incremental%20encoder&In-Reply-To=%3C470B5414.4060007%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000302.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Ethercatmaster-users] EL5101 incremental encoder</H1>
+    <B>Roland Tollenaar</B> 
+    <A HREF="mailto:ethercatmaster-users%40lists.berlios.de?Subject=Re%3A%20%5BEthercatmaster-users%5D%20EL5101%20incremental%20encoder&In-Reply-To=%3C470B5414.4060007%40gmail.com%3E"
+       TITLE="[Ethercatmaster-users] EL5101 incremental encoder">rwatollenaar at gmail.com
+       </A><BR>
+    <I>Tue Oct  9 12:12:36 CEST 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000302.html">[Ethercatmaster-users] help remove a bug please:
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#301">[ date ]</a>
+              <a href="thread.html#301">[ thread ]</a>
+              <a href="subject.html#301">[ subject ]</a>
+              <a href="author.html#301">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I have received the incremental encoder module and have incorporated it 
+into the master-test.cpp to see if I can get it going. Configuring seems 
+to be succeful but I do not get the unit into operational state.
+
+below is the output I get, and the code of master-test.cpp which 
+generates the output.
+
+Advice very much appreciated.!
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">root at slax</A>:~/appusb-link/Packages/eml/trunk/build-rtnet/tests/rtnet# 
+./master_test rteth0
+Socket created: socket id: 896
+Got interface: index: 0
+Attach netif
+
+Master initializing
+
+EtherCAT AL: Ring contains 11 slaves
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=0, adr=0x3e9, Prod. Code=0x44c2c52, 
+rev=0x10000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=1, adr=0x3ec, Prod. Code=0x7d43052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=2, adr=0x3ed, Prod. Code=0x7d43052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=3, adr=0x3ee, Prod. Code=0x7d43052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=4, adr=0x3ef, Prod. Code=0x7d43052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=5, adr=0x3f0, Prod. Code=0x3f63052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=6, adr=0x3f1, Prod. Code=0x3f63052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=7, adr=0x3f2, Prod. Code=0x3f63052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=8, adr=0x3f3, Prod. Code=0x3f63052, 
+rev=0x100000
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=9, adr=0x3f4, Prod. Code=0x10243052, rev=0x0
+EEPROM busy
+EEPROM busy
+AL creating SlaveHandler: pos=10, adr=0x3f5, Prod. Code=0x13ed3052, 
+rev=0x10000
+AL: resetting FMMUs
+AL: resetting SMs
+AL: Setting all slaves in init mode
+Getting slave handler
+Setting EK1100 to OP STATE
+EK1100 succesfully set in OP STATE
+Getting slave handler
+Setting EL2004(1) to OP STATE
+EL2004(1) succesfully set in OP STATE
+Getting slave handler
+Setting EL2004(2) to OP STATE
+EL2004(2) succesfully set in OP STATE
+Getting slave handler
+Setting EL2004(3) to OP STATE
+EL2004(3) succesfully set in OP STATE
+Getting slave handler
+Setting EL2004(4) to OP STATE
+EL2004(4) succesfully set in OP STATE
+Getting slave handler
+Setting EL1014(1) to OP STATE
+EL1014(1) succesfully set in OP STATE
+Getting slave handler
+Setting EL1014(2) to OP STATE
+EL1014(2) succesfully set in OP STATE
+Getting slave handler
+Setting EL1014(3) to OP STATE
+EL1014(3) succesfully set in OP STATE
+Getting slave handler
+Setting EL1014(4) to OP STATE
+EL1014(4) succesfully set in OP STATE
+Getting slave handler
+Setting EL4132 to OP STATE
+EL4132 succesfully set in OP STATE
+Getting slave handler
+Setting EL5101 to OP STATE
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 0), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 1), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 2), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 3), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 4), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 5), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 6), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 7), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 8), desired=2, 
+status=1
+EC_ESM_Ops::set_state() Warning: State trans. failed (try 9), desired=2, 
+status=1
+EC_ESM_Ops::set_state() failed to set state after 10 tries
+failed to set EL5101 in OP STATE
+AL initializing
+
+Test: outputs:
+
+
+
+Then the code:
+
+(full code attached because its neater and easier to read in the 
+attached file, just the config section entered here with some other 
+modules that are present)
+
+
+///SlaveConfig EL1014(3) [Digital Input]
+EtherCAT_FMMU_Config fmmu_config_EL1014_3(1);
+EC_FMMU fmmu0_EL1014_3(0x00010007,1,0,3,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_3(1);
+EC_SyncMan 
+syncman0_EL1014_3(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig 
+EC_EL1014_3(0x03F63052,0x100000,0x03f2,&amp;fmmu_config_EL1014_3, 
+&amp;pd_config_EL1014_3);
+
+///SlaveConfig EL1014(4) [Digital Input]
+EtherCAT_FMMU_Config fmmu_config_EL1014_4(1);
+EC_FMMU fmmu0_EL1014_4(0x00010007,1,4,7,0x1000,0,true,false,true);
+EtherCAT_PD_Config pd_config_EL1014_4(1);
+EC_SyncMan 
+syncman0_EL1014_4(0x1000,1,EC_BUFFERED,EC_READ_FROM_MASTER,false,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig 
+EC_EL1014_4(0x03F63052,0x100000,0x03f3,&amp;fmmu_config_EL1014_4, 
+&amp;pd_config_EL1014_4);
+
+
+
+
+///SlaveConfig EL4132  [Analog Output]
+EtherCAT_FMMU_Config fmmu_config_EL4132(2);
+EC_FMMU fmmu0_EL4132(0x00010008,1,0,0,0x080D,0x00,true,false,true); 
+//input data
+EC_FMMU fmmu1_EL4132(0x00010002,4,0,7,0x1000,0x00,false,true,true); 
+//output data
+
+EC_SyncMan 
+syncman_mbx0_EL4132(0x1800,246,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan 
+syncman_mbx1_EL4132(0x18f6,246,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_MbxConfig mbx_conf_EL4132 = {syncman_mbx0_EL4132, 
+syncman_mbx1_EL4132};
+EtherCAT_PD_Config pd_config_EL4132(2);
+EC_SyncMan 
+syncman0_EL4132(0x1000,4,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan 
+syncman1_EL4132(0x1100,0,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_SlaveConfig 
+EC_EL4132(0x10243052,0x00,0x03f4,&amp;fmmu_config_EL4132,&amp;pd_config_EL4132,&amp;mbx_conf_EL4132);
+
+
+///SlaveConfig EL5101(1)  [Incremental Encoder]
+EtherCAT_FMMU_Config fmmu_config_EL5101_1(2);
+EC_FMMU fmmu0_EL5101_1(0x00010003,3,0,7,0x1000,0,false,true,true); 
+//output data
+EC_FMMU fmmu1_EL5101_1(0x00010009,5,0,7,0x1100,0,true,false,true); 
+//input data
+
+EC_SyncMan 
+syncman_mbx0_EL5101_1(0x1800,246,EC_QUEUED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan 
+syncman_mbx1_EL5101_1(0x18f6,246,EC_QUEUED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EtherCAT_MbxConfig mbx_conf_EL5101_1 = {syncman_mbx0_EL5101_1, 
+syncman_mbx1_EL5101_1};
+
+EtherCAT_PD_Config pd_config_EL5101_1(2);
+EC_SyncMan 
+syncman0_EL5101_1(0x1000,3,EC_BUFFERED,EC_WRITTEN_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+EC_SyncMan 
+syncman1_EL5101_1(0x1100,5,EC_BUFFERED,EC_READ_FROM_MASTER,true,false,false,false,false,false,EC_FIRST_BUFFER,true);
+
+//EtherCAT_SlaveConfig 
+EC_EL5101_1(0x13ED3052,0x270B0000,0x03f5,&amp;fmmu_config_EL5101_1, 
+&amp;pd_config_EL5101_1, &amp;mbx_conf_EL5101_1);
+EtherCAT_SlaveConfig 
+EC_EL5101_1(0x13ED3052,0x10000,0x03f5,&amp;fmmu_config_EL5101_1, 
+&amp;pd_config_EL5101_1, &amp;mbx_conf_EL5101_1);
+
+
+
+
+Kind regards,
+
+Roland
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: master_test.cpp
+Type: text/x-c++src
+Size: 15513 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20071009/9235a050/attachment.cpp">https://lists.berlios.de/pipermail/ethercatmaster-users/attachments/20071009/9235a050/attachment.cpp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000302.html">[Ethercatmaster-users] help remove a bug please:
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#301">[ date ]</a>
+              <a href="thread.html#301">[ thread ]</a>
+              <a href="subject.html#301">[ subject ]</a>
+              <a href="author.html#301">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/ethercatmaster-users">More information about the Ethercatmaster-users
+mailing list</a><br>
+</body></html>
